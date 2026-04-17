@@ -1,0 +1,13 @@
+book_filename: "hpc-course"
+output_dir: "_book"
+
+rmd_files:
+  - index.Rmd
+  - 01-intro.Rmd
+  - 02-linux.Rmd
+  - 03-slurm.Rmd
+  - 04-compiling.Rmd
+  - 05-parallel.Rmd
+  - 06-containers.Rmd
+  - 07-capstone.Rmd
+  - 08-appendix.Rmd

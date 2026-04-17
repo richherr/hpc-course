@@ -1,0 +1,27 @@
+body {
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+h1, h2, h3 {
+  color: #243447;
+}
+
+blockquote {
+  border-left: 4px solid #4f81bd;
+  padding-left: 1em;
+  color: #444;
+  margin-left: 0;
+}
+
+code, pre {
+  font-size: 0.95em;
+}
+
+.book .book-summary {
+  background: #fafafa;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal pre {
+  border-radius: 6px;
+}
