@@ -2,12 +2,41 @@
 
 ## Overview
 
-This appendix provides a quick reference for common HPC commands and workflows.
+This appendix provides a compact quick reference for common commands and workflow patterns used throughout the course.
 
 ## SSH
 
 ```bash
-ssh username@ls6.tacc.utexas.edu
+ssh your_username@ls6.tacc.utexas.edu
+```
+
+## Basic Linux
+
+```bash
+pwd
+ls -l
+cd
+mkdir project
+cp file1 file2
+mv old new
+rm file
+```
+
+## Permissions
+
+```bash
+chmod +x script.sh
+chmod 755 script.sh
+```
+
+## Environment and Modules
+
+```bash
+echo $PATH
+module avail
+module load gcc
+module list
+module unload gcc
 ```
 
 ## SLURM
@@ -15,15 +44,8 @@ ssh username@ls6.tacc.utexas.edu
 ```bash
 sbatch job.slurm
 squeue -u $USER
+sacct
 scancel <jobid>
-```
-
-## Modules
-
-```bash
-module avail
-module load gcc
-module list
 ```
 
 ## Compilation
@@ -31,6 +53,7 @@ module list
 ```bash
 gcc program.c -o program -O2
 g++ program.cpp -o program
+make
 ```
 
 ## MPI
@@ -54,6 +77,20 @@ module load apptainer
 apptainer exec image.sif command
 ```
 
-## Key Idea
+## Rendering the Book
 
-Keep this file open as a reference while working on HPC systems.
+```r
+bookdown::render_book("index.Rmd")
+```
+
+## Publishing to GitHub Pages
+
+```bash
+git add .
+git commit -m "Update site"
+git push
+```
+
+## Final Reminder
+
+Use this appendix as a working reference while building, testing, and teaching from the course.

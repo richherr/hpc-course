@@ -1,1 +1,56 @@
-# HPC Course
+# High-Performance Computing on Lonestar6
+
+## Overview
+
+This course introduces high-performance computing (HPC) using the Lonestar6 system at the Texas Advanced Computing Center (TACC).
+
+The course is designed as both:
+
+- a textbook
+- a lab manual
+- a practical workflow guide
+
+We move from:
+
+- basic system access
+- to Linux fundamentals
+- to SLURM job scheduling
+- to compiling software
+- to parallel computing
+- to containers
+- to a capstone project
+- to a practical appendix
+
+## Learning Objectives
+
+By the end of the course, students should be able to:
+
+- explain the difference between login nodes and compute nodes
+- navigate Linux confidently on a shared cluster
+- manage files, permissions, and environment variables
+- load software through modules
+- submit and monitor SLURM batch jobs
+- debug basic job failures
+- compile C and C++ software for HPC systems
+- understand the role of MPI, OpenMP, and containers in modern HPC workflows
+
+## Course Design
+
+Each chapter includes:
+
+- overview
+- mental model
+- commands
+- walkthrough
+- common mistakes
+- lab
+- stretch goal
+
+## Suggested Use
+
+This material works well for:
+
+- upper-level undergraduate instruction
+- graduate onboarding
+- research-computing workshops
+- self-paced training for new cluster users

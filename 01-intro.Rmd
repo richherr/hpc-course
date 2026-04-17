@@ -1,3 +1,289 @@
-# Chapter 01-intro
+# Introduction to High-Performance Computing (HPC)
 
-Content placeholder.
+## Overview
+
+High-performance computing (HPC) allows us to solve problems that are too large, too slow, or too complex for an ordinary desktop or laptop computer.
+
+In this course, we will use the **Lonestar6 (LS6)** system at TACC as our working environment.
+
+We will move from:
+
+- basic system access
+- to job submission
+- to compiling and running software
+- to modern workflows using containers
+
+## What is HPC?
+
+At a high level, HPC is about:
+
+- **More compute power**
+- **More memory**
+- **Parallel execution**
+
+Instead of one machine, we use a **cluster**.
+
+## Mental Model: The Cluster
+
+Think of an HPC system as a collection of computers working together.
+
+### Key Components
+
+- **Node** → a single computer in the cluster
+- **Core** → a CPU processing unit within a node
+- **Memory (RAM)** → typically shared by processes on a node
+- **Interconnect** → the high-speed network connecting nodes
+
+## Mental Model: Login Nodes vs Compute Nodes
+
+This is one of the most important distinctions in HPC.
+
+### Login Nodes
+
+Used for:
+
+- editing files
+- compiling code
+- loading modules
+- moving data
+- submitting jobs
+
+Not used for:
+
+- heavy computation
+- long-running analyses
+- large training runs
+
+### Compute Nodes
+
+Used for:
+
+- actual program execution
+- scheduled workloads
+- parallel jobs
+- batch jobs
+- interactive compute sessions
+
+> ⚠️ **Important Rule**
+>
+> Serious computation should not be run on the login nodes.
+
+## Lonestar6 in Practice
+
+On Lonestar6, users typically connect with SSH, work in a Linux shell, manage files across storage areas, and submit workloads to **SLURM**.
+
+## Connecting to the System
+
+Use SSH to connect to LS6.
+
+```bash
+ssh your_username@ls6.tacc.utexas.edu
+```
+
+## First Prompt
+
+You may see something like:
+
+```bash
+[username@login1 ~]$
+```
+
+This tells you:
+
+- who you are
+- which machine you are on
+- your current directory
+
+## Storage Areas
+
+You will often work with several storage areas:
+
+- `$HOME` → personal home directory
+- `$WORK` → project-oriented work storage
+- `$SCRATCH` → high-performance temporary storage
+
+### Check where you are
+
+```bash
+pwd
+```
+
+### List files
+
+```bash
+ls
+```
+
+## Basic Linux Commands
+
+### Move around
+
+```bash
+cd my_directory
+cd ..
+cd ~
+```
+
+### Create a directory
+
+```bash
+mkdir project1
+```
+
+### Copy a file
+
+```bash
+cp file1.txt file2.txt
+```
+
+### Move or rename a file
+
+```bash
+mv oldname.txt newname.txt
+```
+
+### Remove a file
+
+```bash
+rm file1.txt
+```
+
+## Editing Files
+
+Two common editors are:
+
+```bash
+nano myfile.txt
+```
+
+and
+
+```bash
+vim myfile.txt
+```
+
+## Transfer Files
+
+From your local system:
+
+```bash
+scp myfile.txt your_username@ls6.tacc.utexas.edu:~
+```
+
+## First Small Script
+
+Create a file:
+
+```bash
+nano hello.sh
+```
+
+Add:
+
+```bash
+echo "Hello from LS6"
+```
+
+Make it executable:
+
+```bash
+chmod +x hello.sh
+```
+
+Run it:
+
+```bash
+./hello.sh
+```
+
+## Mental Model: What Just Happened?
+
+You:
+
+- created a script
+- changed its permissions
+- ran a small command safely on a login node
+
+That is appropriate because the task is tiny and brief.
+
+## Common Mistakes
+
+- running large jobs directly on the login node
+- forgetting `chmod +x`
+- losing temporary files in scratch storage
+- forgetting to check current location with `pwd`
+
+## Lab 1 — Getting Started on LS6
+
+### Part 1: Login
+
+1. Connect via SSH
+2. Confirm identity:
+
+```bash
+whoami
+```
+
+### Part 2: Filesystem
+
+Create a working directory:
+
+```bash
+mkdir hpc_course
+cd hpc_course
+pwd
+```
+
+### Part 3: File Creation
+
+Create a script:
+
+```bash
+nano hello.sh
+```
+
+Add:
+
+```bash
+echo "Hello HPC"
+```
+
+### Part 4: Run It
+
+```bash
+chmod +x hello.sh
+./hello.sh
+```
+
+## Stretch Goal
+
+Create a second script that prints:
+
+- your username
+- current directory
+- current date
+
+Hint:
+
+```bash
+whoami
+pwd
+date
+```
+
+## Looking Ahead
+
+In the next chapter, we will deepen Linux skills by focusing on:
+
+- permissions
+- environment variables
+- modules
+- debugging habits
+
+## Key Takeaways
+
+- HPC systems use clusters
+- Login nodes are for setup and lightweight work
+- Compute nodes are for actual computation
+- Linux command-line literacy is essential
+- Storage choices matter

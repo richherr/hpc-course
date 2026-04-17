@@ -1,3 +1,270 @@
-# Chapter 07-capstone
+# Capstone Project: End-to-End HPC Workflow
 
-Content placeholder.
+## Overview
+
+The capstone project is the final component of this course.
+
+In this project, you will demonstrate your ability to:
+
+- work effectively in a Linux-based HPC environment
+- manage software environments using modules and/or containers
+- compile and run programs
+- submit and monitor SLURM jobs
+- use parallel computing where appropriate
+- document and reproduce your workflow
+
+## Project Philosophy
+
+This project is not just about “getting something to run.”
+
+It is about:
+
+- **reproducibility**
+- **clarity**
+- **resource awareness**
+- **debugging ability**
+
+> 🧠 **Key Insight**
+>
+> A successful HPC user is not just someone who runs code, but someone who can **reproduce and explain** their workflow.
+
+## General Requirements
+
+All projects must include:
+
+- a working directory structure
+- source code or scripts
+- at least one SLURM job script
+- output files from completed jobs
+- documentation describing the workflow
+
+## Project Options
+
+You may choose one of the following project types.
+
+## Option 1: Compile and Run
+
+### Description
+
+Compile a C or C++ program and run it on the HPC system.
+
+### Requirements
+
+- write or obtain a C/C++ program
+- compile using `gcc` or `g++`
+- create a SLURM job script
+- run the program through SLURM
+- capture and analyze output
+
+### Suggested Extensions
+
+- use multiple source files
+- create a Makefile
+- compare optimized vs non-optimized builds
+
+## Option 2: Parallel Computing
+
+### Description
+
+Run a parallel program using MPI or OpenMP.
+
+### Requirements
+
+- compile an MPI or OpenMP program
+- run with multiple cores
+- use SLURM to request resources
+- demonstrate scaling behavior
+
+### Suggested Extensions
+
+- compare serial vs parallel performance
+- run with different core counts
+- interpret speedup results
+
+## Option 3: Containerized Workflow
+
+### Description
+
+Run an application inside a container on the HPC system.
+
+### Requirements
+
+- pull or use a container image
+- execute commands using Apptainer
+- run a containerized job via SLURM
+- demonstrate reproducibility
+
+### Suggested Extensions
+
+- bind directories correctly
+- compare container vs native environment
+- document dependencies
+
+## Option 4: Hybrid Workflow (Advanced)
+
+### Description
+
+Combine multiple techniques:
+
+- compiled code
+- parallel execution
+- containerization
+
+### Requirements
+
+- compile a program
+- run it in parallel with MPI or OpenMP
+- optionally execute within a container
+- submit through SLURM
+
+## Deliverables
+
+Your submission must include:
+
+### 1. Code and Scripts
+
+- source files (`.c`, `.cpp`, `.py`, etc.)
+- SLURM job scripts (`.slurm`)
+- optional Makefile
+
+### 2. Output Files
+
+- SLURM output files (`slurm-*.out`)
+- any generated results
+
+### 3. Documentation
+
+A short report that explains:
+
+- what you built
+- how you compiled it
+- how you ran it
+- what resources you requested
+- what output you observed
+- what problems you encountered
+- how you debugged them
+
+> 💡 **Tip**
+>
+> Include command snippets in your report to make your workflow reproducible.
+
+## Suggested Directory Structure
+
+```text
+project/
+├── src/
+├── scripts/
+├── jobs/
+├── output/
+└── README.md
+```
+
+## Reproducibility Requirements
+
+Your project should be runnable by another user.
+
+This means:
+
+- all steps are documented
+- required modules are listed
+- scripts are complete
+- paths are clear
+
+> ⚠️ **Common Failure**
+>
+> “It works on my account” is not sufficient.
+
+## Resource Awareness
+
+You should demonstrate understanding of:
+
+- number of cores requested
+- wall time
+- memory, if relevant
+
+## Debugging Reflection
+
+You must include at least one example of:
+
+- a failure you encountered
+- how you diagnosed it
+- how you fixed it
+
+## Grading Rubric
+
+### Correctness (30%)
+
+- program runs successfully
+- output is produced
+- SLURM job completes
+
+### Workflow Clarity (25%)
+
+- steps are documented
+- commands are clear
+- structure is organized
+
+### Reproducibility (20%)
+
+- another user could repeat your process
+- environment is clearly defined
+
+### Resource Usage (15%)
+
+- appropriate use of cores and time
+- understanding of SLURM directives
+
+### Reflection (10%)
+
+- discussion of challenges
+- debugging explanation
+
+## Example Workflow Summary
+
+A strong project might include:
+
+1. Write a C program
+2. Compile with `gcc -O2`
+3. Create a SLURM script
+4. Run the job
+5. Observe output
+6. Modify for parallel execution
+7. Compare performance
+8. Document the workflow
+
+## Common Mistakes
+
+- missing SLURM script
+- no documentation
+- unclear directory structure
+- hardcoded paths
+- no debugging explanation
+- incorrect resource requests
+
+## Stretch Goals
+
+For advanced students:
+
+- run multi-node MPI jobs
+- build software with dependencies
+- integrate containers with parallel jobs
+- measure and plot performance
+
+## Final Reflection
+
+At this point, you have learned to:
+
+- navigate an HPC system
+- manage Linux environments
+- submit and monitor jobs
+- compile and run software
+- use parallel computing
+- work with containers
+
+## Key Takeaways
+
+- HPC workflows involve multiple layers
+- reproducibility is critical
+- SLURM is central to execution
+- environment management matters
+- debugging is part of the process

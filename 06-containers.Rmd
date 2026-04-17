@@ -1,3 +1,283 @@
-# Chapter 06-containers
+# Containers and Reproducible HPC
 
-Content placeholder.
+## Overview
+
+In this chapter, we introduce **containers** as a tool for reproducibility and portability in HPC.
+
+You will learn:
+
+- what containers are and why they matter
+- the difference between Docker and HPC containers
+- how Apptainer works
+- how to run containers on HPC systems
+- how to integrate containers with SLURM
+
+## Mental Model: What is a Container?
+
+A container packages:
+
+- your program
+- all required libraries
+- system dependencies
+- environment configuration
+
+## Visual: Container Concept
+
+```text
+Your Program
++ Libraries
++ Dependencies
++ Environment
+-----------------
+Container Image
+```
+
+## Why Containers Matter in HPC
+
+Without containers:
+
+- dependency conflicts occur
+- software versions differ between systems
+- workflows are hard to reproduce
+
+With containers:
+
+- environments are consistent
+- workflows are portable
+- results are reproducible
+
+> 🧠 **Key Insight**
+>
+> Containers solve the “it works on my machine” problem.
+
+## Docker vs Apptainer
+
+### Docker
+
+- widely used in industry
+- typically requires privileges not appropriate on shared HPC systems
+- better suited to development and deployment workflows outside the cluster
+
+### Apptainer
+
+- designed for HPC
+- runs without root access in normal use
+- integrates with SLURM
+- commonly available on clusters
+
+## Mental Model
+
+```text
+Docker → development environment
+Apptainer → HPC execution environment
+```
+
+## Checking for Apptainer
+
+```bash
+which apptainer
+```
+
+or:
+
+```bash
+module load apptainer
+```
+
+## Pulling a Container
+
+```bash
+apptainer pull ubuntu.sif docker://ubuntu
+```
+
+## Running a Container
+
+```bash
+apptainer exec ubuntu.sif echo "Hello from container"
+```
+
+## Interactive Shell
+
+```bash
+apptainer shell ubuntu.sif
+```
+
+## Mental Model: What Just Happened?
+
+- you downloaded a container image
+- you executed a command inside it
+- the container used the host kernel
+
+## Running Python in a Container
+
+```bash
+apptainer exec ubuntu.sif python3 --version
+```
+
+## Binding Directories
+
+```bash
+apptainer exec --bind $PWD ubuntu.sif ls
+```
+
+> 💡 **Tip**
+>
+> Always bind your working directory when running containerized jobs.
+
+## SLURM + Containers
+
+Create:
+
+```bash
+nano container.slurm
+```
+
+Add:
+
+```bash
+#!/bin/bash
+#SBATCH -J container_test
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+
+module load apptainer
+
+apptainer exec ubuntu.sif echo "Running inside container"
+```
+
+Submit:
+
+```bash
+sbatch container.slurm
+```
+
+Inspect output:
+
+```bash
+cat slurm-*.out
+```
+
+## Running Applications in Containers
+
+Example:
+
+```bash
+apptainer exec ubuntu.sif python script.py
+```
+
+## Comparing Workflows
+
+### Without container
+
+- load modules
+- install dependencies
+- manage versions
+
+### With container
+
+- run container
+- everything is included in the image or explicitly bound
+
+## Reproducibility
+
+Containers allow you to:
+
+- rerun experiments later
+- share environments with others
+- ensure consistency across systems
+
+## Common Mistakes
+
+- forgetting to load the Apptainer module
+- not binding directories
+- assuming the container has every needed tool installed
+- using Docker commands directly on the cluster
+- storing large images in `$HOME`
+
+## Storage Considerations
+
+Store containers in:
+
+- `$WORK`
+- `$SCRATCH`
+
+Avoid:
+
+- `$HOME` for large image files
+
+## Debugging Containers
+
+### Check image exists
+
+```bash
+ls *.sif
+```
+
+### Test interactively
+
+```bash
+apptainer shell ubuntu.sif
+```
+
+### Check a command
+
+```bash
+apptainer exec ubuntu.sif which python3
+```
+
+## Lab 6 — Containers on HPC
+
+### Part 1: Pull Image
+
+```bash
+apptainer pull ubuntu.sif docker://ubuntu
+```
+
+### Part 2: Run Command
+
+```bash
+apptainer exec ubuntu.sif echo "Hello container"
+```
+
+### Part 3: Interactive Mode
+
+```bash
+apptainer shell ubuntu.sif
+```
+
+### Part 4: SLURM Job
+
+Create `container.slurm` and run the container through SLURM.
+
+### Part 5: Bind Directory
+
+```bash
+apptainer exec --bind $PWD ubuntu.sif ls
+```
+
+## Stretch Goal
+
+- run a Python script inside a container
+- compare container vs native environment
+- document differences
+
+## Transition to Capstone
+
+You now understand:
+
+- system access
+- Linux fundamentals
+- job scheduling
+- compiling software
+- parallel computing
+- container workflows
+
+## Key Takeaways
+
+- Containers package complete environments
+- Apptainer is designed for HPC systems
+- Containers improve reproducibility
+- SLURM can run containerized jobs
+- Containers simplify complex workflows

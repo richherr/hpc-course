@@ -1,3 +1,423 @@
-# Chapter 02-linux
+# Linux Fundamentals for HPC
 
-Content placeholder.
+## Overview
+
+In this chapter, we develop the Linux skills needed to work effectively on an HPC system.
+
+You will learn:
+
+- how files and permissions work
+- how to inspect and manage your environment
+- how software is exposed through modules
+- how to think like a debugger on a shared system
+
+## Mental Model: You Are in a Shared Environment
+
+Unlike a personal laptop, an HPC system is:
+
+- multi-user
+- resource-managed
+- environment-driven
+- structured for reproducibility
+
+Every action you take should be:
+
+- deliberate
+- traceable
+- repeatable
+
+## The Linux Filesystem
+
+Let’s visualize where you are:
+
+```text
+/
+├── home/
+│   └── your_username/
+├── work/
+│   └── project_space/
+├── scratch/
+│   └── temporary_files/
+```
+
+### Key Idea
+
+- `/home` → safe, small
+- `/work` → project data
+- `/scratch` → fast, temporary
+
+## Inspecting the System
+
+### Where am I?
+
+```bash
+pwd
+```
+
+### What’s here?
+
+```bash
+ls -l
+```
+
+### What does `-l` show?
+
+```text
+-rw-r--r-- 1 user group size date filename
+```
+
+## File Permissions
+
+### Mental Model
+
+Every file has:
+
+- **Owner**
+- **Group**
+- **Others**
+
+Each has:
+
+- read (`r`)
+- write (`w`)
+- execute (`x`)
+
+## Visual Breakdown
+
+```text
+-rwxr-xr--
+│││││││││
+│││││││└── others
+│││││└──── group
+││└──────── owner
+```
+
+## Changing Permissions
+
+### Make a file executable
+
+```bash
+chmod +x script.sh
+```
+
+### Remove write permission
+
+```bash
+chmod -w file.txt
+```
+
+### Numeric mode
+
+```bash
+chmod 755 script.sh
+```
+
+Meaning:
+
+- user: rwx
+- group: r-x
+- others: r-x
+
+> ⚠️ **Common HPC Failure**
+>
+> Many jobs fail because a script is missing execute permission.
+
+## Why Permissions Matter in HPC
+
+Common failure modes include:
+
+- a script that will not run
+- a file you cannot edit
+- a shared file with the wrong access settings
+
+## Environment Variables
+
+### What are they?
+
+Variables that define your working environment.
+
+### View them
+
+```bash
+env
+```
+
+### Common examples
+
+```bash
+echo $HOME
+echo $PATH
+```
+
+## Mental Model: PATH
+
+`PATH` tells the system where to look for executables.
+
+```bash
+echo $PATH
+```
+
+If a program is not in `PATH`, Linux may not find it.
+
+### Add to PATH temporarily
+
+```bash
+export PATH=$HOME/bin:$PATH
+```
+
+> 💡 **Debugging Tip**
+>
+> If you see `command not found`, check:
+>
+> ```bash
+> echo $PATH
+> which <command>
+> ```
+
+## Modules System
+
+HPC systems do not expose all software globally.
+
+Instead, they use **modules**.
+
+### Mental Model
+
+Modules are loadable software environments.
+
+## Basic Module Commands
+
+### List available modules
+
+```bash
+module avail
+```
+
+### Load a module
+
+```bash
+module load gcc
+```
+
+### Check loaded modules
+
+```bash
+module list
+```
+
+### Unload a module
+
+```bash
+module unload gcc
+```
+
+> 🧠 **Key Insight**
+>
+> On HPC systems, software access is often environment-based, not system-wide in the way many users expect on a laptop.
+
+## Example: Using a Compiler
+
+```bash
+module load gcc
+which gcc
+gcc --version
+```
+
+## Finding Files
+
+```bash
+find . -name "file.txt"
+```
+
+## Viewing File Contents
+
+```bash
+cat file.txt
+less file.txt
+head file.txt
+tail file.txt
+```
+
+## Combining Commands with Pipes
+
+```bash
+cat file.txt | grep "error"
+```
+
+### Pipe Mental Model
+
+Think:
+
+> one command produces output, the next command filters or transforms it
+
+## Disk Usage
+
+### Check filesystem space
+
+```bash
+df -h
+```
+
+### Check directory sizes
+
+```bash
+du -sh *
+```
+
+## Processes
+
+### See your processes
+
+```bash
+ps -u $USER
+```
+
+### Kill a process
+
+```bash
+kill <pid>
+```
+
+## Optional R Integration
+
+You can inspect environment settings inside R.
+
+```r
+Sys.getenv("PATH")
+```
+
+You can also run shell commands from R.
+
+```r
+system("echo $HOME")
+```
+
+## Common Mistakes
+
+- forgetting `chmod +x`
+- PATH confusion
+- not loading needed modules
+- filling up `$HOME`
+- losing temporary work in `$SCRATCH`
+
+## Debugging Mindset in Linux
+
+When something goes wrong, ask:
+
+### 1. Where am I?
+
+```bash
+pwd
+```
+
+### 2. What files are here?
+
+```bash
+ls -l
+```
+
+### 3. Do I have permission?
+
+```bash
+ls -l script.sh
+```
+
+### 4. Is the program available?
+
+```bash
+which gcc
+```
+
+### 5. Is my environment correct?
+
+```bash
+module list
+```
+
+## Lab 2 — Linux and Environment Mastery
+
+### Part 1: Permissions
+
+1. Create a file:
+
+```bash
+touch test.sh
+```
+
+2. Check permissions:
+
+```bash
+ls -l
+```
+
+3. Make executable:
+
+```bash
+chmod +x test.sh
+```
+
+### Part 2: Environment Variables
+
+```bash
+echo $HOME
+echo $PATH
+export COURSE=HPC
+echo $COURSE
+```
+
+### Part 3: Modules
+
+```bash
+module avail
+module load gcc
+which gcc
+gcc --version
+```
+
+### Part 4: Disk Usage
+
+```bash
+df -h
+du -sh ~
+```
+
+### Part 5: File Search
+
+```bash
+touch example.txt
+find . -name "example.txt"
+```
+
+## Stretch Goal
+
+- Create a custom `bin/` directory
+- Add it to `PATH`
+- Put a script inside it
+- Run it without using the full path
+
+## Transition to HPC Workflows
+
+So far, you have been:
+
+- navigating the system
+- editing files
+- running small commands
+
+But on an HPC system, real work is usually not done directly from the command line on the login node.
+
+Instead, you will:
+
+1. write a job script
+2. request resources
+3. submit the work to the scheduler
+
+## Looking Ahead
+
+In the next chapter, we introduce **SLURM**, the scheduler that controls computation on the system.
+
+## Key Takeaways
+
+- Permissions control execution and modification
+- PATH controls command discovery
+- Modules manage software environments
+- Disk and process awareness matter
+- Reproducible HPC work depends on environment awareness

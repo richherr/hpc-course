@@ -1,3 +1,361 @@
-# Chapter 05-parallel
+# Parallel Computing with MPI and OpenMP
 
-Content placeholder.
+## Overview
+
+In this chapter, we move from single-core programs to **parallel computing**.
+
+You will learn:
+
+- the difference between serial and parallel execution
+- the difference between processes and threads
+- how MPI and OpenMP work
+- how to run parallel jobs with SLURM
+- how to think about performance and scaling
+
+## Mental Model: Why Parallel Computing?
+
+A single core can only do one thing at a time.
+
+Parallel computing allows you to:
+
+- split a problem into pieces
+- solve those pieces simultaneously
+- combine the results
+
+## Visual: Serial vs Parallel
+
+```text
+Serial:
+Task1 → Task2 → Task3 → Task4
+
+Parallel:
+Task1
+Task2   → run at the same time
+Task3
+Task4
+```
+
+## Two Main Models
+
+### MPI (Message Passing Interface)
+
+- multiple **processes**
+- can run across **multiple nodes**
+- processes communicate via messages
+
+### OpenMP
+
+- multiple **threads**
+- usually within **one node**
+- shared memory model
+
+## Mental Model: Processes vs Threads
+
+```text
+MPI:
+Process 1 → separate memory
+Process 2 → separate memory
+
+OpenMP:
+Thread 1 → shared memory
+Thread 2 → shared memory
+```
+
+> 🧠 **Key Insight**
+>
+> MPI is for **distributed computing** across nodes.
+> OpenMP is for **shared memory** within a node.
+
+## Loading MPI
+
+```bash
+module load openmpi
+```
+
+## MPI Hello World (C)
+
+Create a file:
+
+```bash
+nano hello_mpi.c
+```
+
+Add:
+
+```c
+#include <mpi.h>
+#include <stdio.h>
+
+int main(int argc, char** argv) {
+    MPI_Init(&argc, &argv);
+
+    int rank, size;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    printf("Hello from process %d of %d\n", rank, size);
+
+    MPI_Finalize();
+    return 0;
+}
+```
+
+## Compile MPI Program
+
+```bash
+mpicc hello_mpi.c -o hello_mpi
+```
+
+## Run Locally for Testing
+
+```bash
+mpirun -np 4 ./hello_mpi
+```
+
+> ⚠️ **Important**
+>
+> On HPC systems, production runs should go through SLURM.
+
+## MPI Job Script
+
+Create:
+
+```bash
+nano mpi.slurm
+```
+
+Add:
+
+```bash
+#!/bin/bash
+#SBATCH -J mpi_test
+#SBATCH -N 1
+#SBATCH -n 4
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+
+module load openmpi
+
+mpirun ./hello_mpi
+```
+
+Submit:
+
+```bash
+sbatch mpi.slurm
+```
+
+## Expected Output
+
+```text
+Hello from process 0 of 4
+Hello from process 1 of 4
+Hello from process 2 of 4
+Hello from process 3 of 4
+```
+
+## OpenMP Example
+
+Create:
+
+```bash
+nano hello_omp.c
+```
+
+Add:
+
+```c
+#include <stdio.h>
+#include <omp.h>
+
+int main() {
+    #pragma omp parallel
+    {
+        int id = omp_get_thread_num();
+        printf("Hello from thread %d\n", id);
+    }
+    return 0;
+}
+```
+
+## Compile OpenMP Program
+
+```bash
+gcc -fopenmp hello_omp.c -o hello_omp
+```
+
+## Run OpenMP
+
+```bash
+export OMP_NUM_THREADS=4
+./hello_omp
+```
+
+## OpenMP SLURM Script
+
+Create:
+
+```bash
+nano omp.slurm
+```
+
+Add:
+
+```bash
+#!/bin/bash
+#SBATCH -J omp_test
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -c 4
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+
+export OMP_NUM_THREADS=4
+
+./hello_omp
+```
+
+Submit:
+
+```bash
+sbatch omp.slurm
+```
+
+## Hybrid Concept
+
+You can combine MPI and OpenMP:
+
+- MPI across nodes
+- OpenMP within nodes
+
+## Mental Model
+
+```text
+Node 1:
+  Process 1 → Threads
+  Process 2 → Threads
+
+Node 2:
+  Process 3 → Threads
+  Process 4 → Threads
+```
+
+## Performance Thinking
+
+We care about how runtime changes as cores increase.
+
+### Strong Scaling
+
+Same problem size, more cores.
+
+### Weak Scaling
+
+Problem size increases with cores.
+
+### Simple Timing Example
+
+```bash
+time ./hello
+```
+
+> 💡 **Insight**
+>
+> More cores do not always mean faster results.
+> Communication overhead matters.
+
+## Common Mistakes
+
+- using MPI without loading the module
+- mismatch between `-n` and program expectations
+- forgetting `OMP_NUM_THREADS`
+- running MPI directly on the login node
+- misunderstanding cores vs tasks
+
+## Debugging Checklist
+
+### Check job:
+
+```bash
+squeue -u $USER
+```
+
+### Check output:
+
+```bash
+cat slurm-*.out
+```
+
+### Check modules:
+
+```bash
+module list
+```
+
+### Check resource request:
+
+- nodes (`-N`)
+- tasks (`-n`)
+- cores (`-c`)
+
+## Lab 5 — Parallel Computing
+
+### Part 1: MPI
+
+1. Create `hello_mpi.c`
+2. Compile:
+
+```bash
+mpicc hello_mpi.c -o hello_mpi
+```
+
+3. Create SLURM script
+4. Run with 4 tasks
+
+### Part 2: OpenMP
+
+1. Create `hello_omp.c`
+2. Compile:
+
+```bash
+gcc -fopenmp hello_omp.c -o hello_omp
+```
+
+3. Run with:
+
+```bash
+export OMP_NUM_THREADS=4
+```
+
+### Part 3: Compare
+
+- run serial version
+- run MPI version
+- run OpenMP version
+
+### Part 4: Scaling Experiment
+
+Run MPI with different task counts and compare behavior and runtime.
+
+## Stretch Goal
+
+- modify program to do actual computation
+- measure runtime differences
+- plot speedup
+
+## Transition
+
+You now understand:
+
+- how to compile code
+- how to run jobs
+- how to use multiple cores
+
+Next, we modernize workflows with containers and reproducibility.
+
+## Key Takeaways
+
+- Parallel computing splits work across cores
+- MPI uses processes across nodes
+- OpenMP uses threads within a node
+- SLURM controls resource allocation
+- Performance depends on scaling and overhead

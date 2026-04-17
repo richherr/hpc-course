@@ -1,3 +1,370 @@
-# Chapter 04-compiling
+# Compiling C and C++ on HPC Systems
 
-Content placeholder.
+## Overview
+
+In this chapter, we move from running existing programs to **building software from source**.
+
+You will learn:
+
+- what compilation is and why it matters
+- how to use `gcc` and `g++`
+- how to build programs on HPC systems
+- how modules affect compilers and libraries
+- how to prepare compiled programs for SLURM execution
+
+## Mental Model: From Source Code to Executable
+
+A compiled workflow looks like this:
+
+```text
+source code (.c / .cpp)
+        ↓
+compiler (gcc / g++)
+        ↓
+executable (binary file)
+        ↓
+run on compute node
+```
+
+## Why Compilation Matters in HPC
+
+On HPC systems:
+
+- software is often not pre-installed
+- you may need specific compiler versions
+- performance depends on how code is compiled
+
+> 🧠 **Key Insight**
+>
+> Compilation is not just “building code” — it is configuring how your program interacts with the hardware.
+
+## Compilers: gcc vs g++
+
+- `gcc` → C programs
+- `g++` → C++ programs
+
+## Loading a Compiler (Modules)
+
+Before compiling, you must load a compiler.
+
+```bash
+module load gcc
+```
+
+Check it:
+
+```bash
+which gcc
+gcc --version
+```
+
+> ⚠️ **Common Error**
+>
+> Forgetting to load a compiler module will often result in:
+>
+> ```bash
+> command not found
+> ```
+
+## Your First C Program
+
+Create a file:
+
+```bash
+nano hello.c
+```
+
+Add:
+
+```c
+#include <stdio.h>
+
+int main() {
+    printf("Hello from C on HPC\n");
+    return 0;
+}
+```
+
+## Compile the Program
+
+```bash
+gcc hello.c -o hello
+```
+
+## Run the Program
+
+```bash
+./hello
+```
+
+## Mental Model: What Just Happened?
+
+- `hello.c` → source file
+- `gcc` → compiler
+- `-o hello` → output executable
+
+## File Inspection
+
+Check what was created:
+
+```bash
+ls -l
+```
+
+You should see:
+
+- `hello.c`
+- `hello` (executable)
+
+## C++ Example
+
+Create a file:
+
+```bash
+nano hello.cpp
+```
+
+Add:
+
+```cpp
+#include <iostream>
+
+int main() {
+    std::cout << "Hello from C++ on HPC" << std::endl;
+    return 0;
+}
+```
+
+Compile:
+
+```bash
+g++ hello.cpp -o hello_cpp
+```
+
+Run:
+
+```bash
+./hello_cpp
+```
+
+## Compilation Flags
+
+Basic flags:
+
+```bash
+gcc hello.c -o hello -O2
+```
+
+- `-O2` → optimization level
+
+## Common Optimization Levels
+
+- `-O0` → no optimization
+- `-O2` → standard optimization
+- `-O3` → aggressive optimization
+
+> 💡 **Tip**
+>
+> Use `-O2` for most HPC workflows unless you know you need something else.
+
+## Multiple Source Files
+
+Example structure:
+
+```text
+main.c
+helper.c
+helper.h
+```
+
+Compile:
+
+```bash
+gcc main.c helper.c -o program
+```
+
+## Header Files
+
+Headers (`.h`) define interfaces.
+
+Example:
+
+```c
+int add(int a, int b);
+```
+
+## Introduction to Makefiles
+
+For larger projects, use `make`.
+
+Create a file:
+
+```bash
+nano Makefile
+```
+
+Add:
+
+```make
+all:
+\tgcc hello.c -o hello
+```
+
+Run:
+
+```bash
+make
+```
+
+## Mental Model: Makefiles
+
+Think:
+
+> “Makefiles automate compilation steps”
+
+## Modules and Compilation
+
+Different modules provide:
+
+- different compilers
+- different library versions
+- different performance characteristics
+
+Example:
+
+```bash
+module load gcc
+module load openmpi
+```
+
+## Where to Compile
+
+Compile on:
+
+- ✅ login nodes (small builds)
+- ❌ compute nodes (unless needed for large builds)
+
+## Running Compiled Code with SLURM
+
+Create a job script:
+
+```bash
+nano run.slurm
+```
+
+Add:
+
+```bash
+#!/bin/bash
+#SBATCH -J compile_test
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+
+./hello
+```
+
+Submit:
+
+```bash
+sbatch run.slurm
+```
+
+## Common Mistakes
+
+- forgetting `module load gcc`
+- missing `-o` flag
+- running in wrong directory
+- not including all source files
+
+## Debugging Compilation Errors
+
+If compilation fails, check compiler messages carefully. Common issues include:
+
+- syntax errors
+- missing headers
+- undefined references
+- incorrect include paths
+
+## Lab 4 — Compiling on HPC
+
+### Part 1: Basic Compilation
+
+1. Create `hello.c`
+2. Compile:
+
+```bash
+gcc hello.c -o hello
+```
+
+3. Run:
+
+```bash
+./hello
+```
+
+### Part 2: C++ Program
+
+1. Create `hello.cpp`
+2. Compile:
+
+```bash
+g++ hello.cpp -o hello_cpp
+```
+
+3. Run:
+
+```bash
+./hello_cpp
+```
+
+### Part 3: Optimization
+
+Compile with optimization:
+
+```bash
+gcc hello.c -o hello_opt -O2
+```
+
+### Part 4: Run with SLURM
+
+1. Create `run.slurm`
+2. Submit:
+
+```bash
+sbatch run.slurm
+```
+
+3. Inspect output
+
+## Stretch Goal
+
+- Create a program with multiple source files
+- Write a Makefile
+- Compile using `make`
+- Run through SLURM
+
+## Transition to Parallel Computing
+
+So far, you have:
+
+- accessed the system
+- used Linux effectively
+- managed your environment
+- submitted jobs
+- compiled programs
+
+Next, we will scale up:
+
+- running programs across multiple cores
+- using MPI and OpenMP
+- understanding parallel performance
+
+## Key Takeaways
+
+- Compilation transforms source code into executables
+- `gcc` and `g++` are core tools
+- Modules control compiler environments
+- Optimization affects performance
+- Compiled programs are typically run through SLURM

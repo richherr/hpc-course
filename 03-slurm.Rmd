@@ -1,3 +1,489 @@
-# Chapter 03-slurm
+# SLURM: Job Scheduling on HPC Systems
 
-Content placeholder.
+## Overview
+
+On an HPC system, you do not usually run serious computational work directly on the command line.
+
+Instead, you submit jobs to a scheduler.
+
+On Lonestar6, that scheduler is **SLURM**.
+
+This chapter introduces:
+
+- what a scheduler does
+- how to write a SLURM script
+- how to submit and monitor jobs
+- how to debug common problems
+
+## Mental Model: Renting Compute Power
+
+Think of SLURM as a resource manager.
+
+You request:
+
+- nodes
+- tasks
+- time
+- sometimes memory or other constraints
+
+Then the system decides when and where your job runs.
+
+## The Basic Workflow
+
+```text
+User → Job Script → SLURM → Compute Node → Output File
+```
+
+## Why a Scheduler Exists
+
+Without a scheduler:
+
+- users would compete directly for resources
+- jobs would collide
+- the cluster would become disorganized
+
+With a scheduler:
+
+- resources are allocated fairly
+- jobs are queued
+- usage is tracked
+
+## What Is a Job?
+
+A job is a request that describes:
+
+- what program to run
+- how many resources it needs
+- how long it may run
+- what environment it needs
+
+## Your First Job Script
+
+Create a file:
+
+```bash
+nano job.slurm
+```
+
+Add this content:
+
+```bash
+#!/bin/bash
+#SBATCH -J hello_job
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 00:01:00
+#SBATCH -p normal
+
+echo "Hello from compute node"
+hostname
+date
+```
+
+## Breaking Down the Script
+
+### Shebang
+
+```bash
+#!/bin/bash
+```
+
+Tells the system to use Bash.
+
+### Job name
+
+```bash
+#SBATCH -J hello_job
+```
+
+This gives your job a readable name.
+
+### Number of nodes
+
+```bash
+#SBATCH -N 1
+```
+
+Request one node.
+
+### Number of tasks
+
+```bash
+#SBATCH -n 1
+```
+
+Request one task.
+
+### Wall time
+
+```bash
+#SBATCH -t 00:01:00
+```
+
+Maximum runtime of one minute.
+
+### Partition
+
+```bash
+#SBATCH -p normal
+```
+
+Request the `normal` queue or partition.
+
+## Submitting a Job
+
+```bash
+sbatch job.slurm
+```
+
+You should see a message similar to:
+
+```text
+Submitted batch job 123456
+```
+
+## Monitoring Jobs
+
+### Show your queued and running jobs
+
+```bash
+squeue -u $USER
+```
+
+This shows:
+
+- job ID
+- partition
+- job name
+- state
+- elapsed time
+- nodes used
+
+## Common Job States
+
+- `PD` → pending
+- `R` → running
+- `CG` → completing
+- `CD` → completed
+
+## Output Files
+
+When the job finishes, you will usually see:
+
+```text
+slurm-123456.out
+```
+
+View it with:
+
+```bash
+cat slurm-123456.out
+```
+
+Or more generally:
+
+```bash
+cat slurm-*.out
+```
+
+## Mental Model: What Just Happened?
+
+You:
+
+- wrote a batch script
+- submitted it with `sbatch`
+- SLURM placed it in the queue
+- the scheduler assigned resources
+- the script ran on a compute node
+- output was written to a file
+
+## Important Distinction: Login Node vs Compute Node
+
+When you type `hostname` on the login node, you will see a login-node name.
+
+When the same command runs inside a SLURM job, it shows the compute node that actually executed your work.
+
+## Adding a Delay to Observe the Queue
+
+Edit your script:
+
+```bash
+#!/bin/bash
+#SBATCH -J hello_job
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 00:02:00
+#SBATCH -p normal
+
+echo "Starting job"
+hostname
+sleep 30
+echo "Finishing job"
+```
+
+Submit it:
+
+```bash
+sbatch job.slurm
+```
+
+Then monitor:
+
+```bash
+squeue -u $USER
+```
+
+## Common Mistakes
+
+### 1. Job never starts
+
+Possible reasons:
+
+- requested too many resources
+- requested the wrong partition
+- requested too much wall time
+
+### 2. Job fails immediately
+
+Possible reasons:
+
+- script syntax error
+- bad command
+- missing module
+- missing input file
+
+### 3. No output appears
+
+Possible reasons:
+
+- job is still queued
+- wrong working directory
+- output redirected elsewhere
+
+> ⚠️ **Very Common Beginner Error**
+>
+> Students often assume `sbatch` runs the job immediately.
+>
+> It does not.
+>
+> It submits the job to the scheduler.
+
+## Inspecting Completed Jobs
+
+A useful accounting command is:
+
+```bash
+sacct
+```
+
+A more targeted version is:
+
+```bash
+sacct -j <jobid>
+```
+
+## Cancelling a Job
+
+If you need to stop a job:
+
+```bash
+scancel <jobid>
+```
+
+## Minimal Serial Job Example
+
+```bash
+#!/bin/bash
+#SBATCH -J serial_test
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+
+echo "Running serial test"
+python myscript.py
+```
+
+## Example with Module Loading
+
+```bash
+#!/bin/bash
+#SBATCH -J gcc_test
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+
+module load gcc
+
+echo "Compiler path:"
+which gcc
+gcc --version
+```
+
+## Example with Multiple Tasks
+
+```bash
+#!/bin/bash
+#SBATCH -J multitask_test
+#SBATCH -N 1
+#SBATCH -n 4
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+
+echo "Testing multiple tasks"
+hostname
+```
+
+## Mental Model: Resources
+
+A good beginner mental model is:
+
+> A SLURM script is a contract:
+>
+> “Here is what I want to run, and here are the resources I need.”
+
+## Lab 3 — First SLURM Jobs
+
+### Part 1: Your first job
+
+1. Create `job.slurm`
+2. Add the minimal script
+3. Submit with:
+
+```bash
+sbatch job.slurm
+```
+
+4. Monitor with:
+
+```bash
+squeue -u $USER
+```
+
+5. View output file
+
+### Part 2: Observe a running job
+
+Modify the script to include:
+
+```bash
+sleep 30
+```
+
+Resubmit and monitor the job while it runs.
+
+### Part 3: Change resource request
+
+Change:
+
+```bash
+#SBATCH -n 1
+```
+
+to:
+
+```bash
+#SBATCH -n 4
+```
+
+Resubmit and compare behavior.
+
+### Part 4: Load a module in the job
+
+Modify the script to include:
+
+```bash
+module load gcc
+which gcc
+gcc --version
+```
+
+Submit and inspect output.
+
+## Debugging Checklist
+
+When a job fails, ask:
+
+### 1. Did it submit?
+
+```bash
+squeue -u $USER
+```
+
+### 2. Did it complete or fail?
+
+```bash
+sacct
+```
+
+### 3. What does the output file say?
+
+```bash
+cat slurm-*.out
+```
+
+### 4. Did I load the right modules?
+
+Check the script itself and your environment assumptions.
+
+### 5. Am I in the correct directory?
+
+```bash
+pwd
+ls
+```
+
+## Failure-Based Exercise
+
+Try intentionally breaking a script in one of these ways:
+
+- misspell a command
+- load a module that is unavailable
+- request an unrealistic resource combination
+- refer to a missing file
+
+Then use:
+
+- `sacct`
+- output files
+- script inspection
+
+to diagnose what happened.
+
+## Best Practices
+
+- keep scripts small and readable
+- request realistic wall time
+- name jobs clearly
+- inspect output every time
+- use version-controlled job scripts when possible
+
+## Conceptual Bridge
+
+Up to this point, students have learned:
+
+- how to access the system
+- how to work in Linux
+- how to manage their environment
+- how to submit jobs
+
+The next step is to understand how software is actually built and prepared for these environments.
+
+## Looking Ahead
+
+In the next chapter, we will move into compiling software:
+
+- using `gcc` and `g++`
+- understanding build steps
+- working with modules and toolchains
+- preparing programs for HPC execution
+
+## Key Takeaways
+
+- Serious computation is submitted through SLURM
+- A job script describes both commands and resources
+- `sbatch` submits work
+- `squeue` monitors queued and running jobs
+- `sacct` helps inspect job history
+- Output files are central to debugging
