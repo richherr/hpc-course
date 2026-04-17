@@ -77,10 +77,8 @@ module load apptainer
 apptainer exec image.sif command
 ```
 
-```md
 ## Final Notes
 
 This appendix provides a quick reference for common HPC workflows.
-
 For full explanations and examples, refer back to the main chapters.
 
