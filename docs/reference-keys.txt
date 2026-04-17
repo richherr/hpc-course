@@ -299,6 +299,3 @@ compilation
 mpi
 openmp-1
 containers
-rendering-the-book
-publishing-to-github-pages
-final-reminder

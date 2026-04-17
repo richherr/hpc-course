@@ -77,20 +77,3 @@ module load apptainer
 apptainer exec image.sif command
 ```
 
-## Rendering the Book
-
-```r
-bookdown::render_book("index.Rmd")
-```
-
-## Publishing to GitHub Pages
-
-```bash
-git add .
-git commit -m "Update site"
-git push
-```
-
-## Final Reminder
-
-Use this appendix as a working reference while building, testing, and teaching from the course.
