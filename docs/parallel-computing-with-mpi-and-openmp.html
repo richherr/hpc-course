@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Parallel Computing with MPI and OpenMP | hpc-course.knit</title>
+  <meta name="description" content="" />
+  <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Parallel Computing with MPI and OpenMP | hpc-course.knit" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Parallel Computing with MPI and OpenMP | hpc-course.knit" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="compiling-c-and-c-on-hpc-systems.html"/>
+<link rel="next" href="containers-and-reproducible-hpc.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">HPC Course on Lonestar6</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> High-Performance Computing on Lonestar6</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#overview"><i class="fa fa-check"></i><b>1.1</b> Overview</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#learning-objectives"><i class="fa fa-check"></i><b>1.2</b> Learning Objectives</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#course-design"><i class="fa fa-check"></i><b>1.3</b> Course Design</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#suggested-use"><i class="fa fa-check"></i><b>1.4</b> Suggested Use</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html"><i class="fa fa-check"></i><b>2</b> Introduction to High-Performance Computing (HPC)</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#overview-1"><i class="fa fa-check"></i><b>2.1</b> Overview</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#what-is-hpc"><i class="fa fa-check"></i><b>2.2</b> What is HPC?</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#mental-model-the-cluster"><i class="fa fa-check"></i><b>2.3</b> Mental Model: The Cluster</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#key-components"><i class="fa fa-check"></i><b>2.3.1</b> Key Components</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#mental-model-login-nodes-vs-compute-nodes"><i class="fa fa-check"></i><b>2.4</b> Mental Model: Login Nodes vs Compute Nodes</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#login-nodes"><i class="fa fa-check"></i><b>2.4.1</b> Login Nodes</a></li>
+<li class="chapter" data-level="2.4.2" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#compute-nodes"><i class="fa fa-check"></i><b>2.4.2</b> Compute Nodes</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#lonestar6-in-practice"><i class="fa fa-check"></i><b>2.5</b> Lonestar6 in Practice</a></li>
+<li class="chapter" data-level="2.6" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#connecting-to-the-system"><i class="fa fa-check"></i><b>2.6</b> Connecting to the System</a></li>
+<li class="chapter" data-level="2.7" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#first-prompt"><i class="fa fa-check"></i><b>2.7</b> First Prompt</a></li>
+<li class="chapter" data-level="2.8" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#storage-areas"><i class="fa fa-check"></i><b>2.8</b> Storage Areas</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#check-where-you-are"><i class="fa fa-check"></i><b>2.8.1</b> Check where you are</a></li>
+<li class="chapter" data-level="2.8.2" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#list-files"><i class="fa fa-check"></i><b>2.8.2</b> List files</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#basic-linux-commands"><i class="fa fa-check"></i><b>2.9</b> Basic Linux Commands</a>
+<ul>
+<li class="chapter" data-level="2.9.1" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#move-around"><i class="fa fa-check"></i><b>2.9.1</b> Move around</a></li>
+<li class="chapter" data-level="2.9.2" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#create-a-directory"><i class="fa fa-check"></i><b>2.9.2</b> Create a directory</a></li>
+<li class="chapter" data-level="2.9.3" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#copy-a-file"><i class="fa fa-check"></i><b>2.9.3</b> Copy a file</a></li>
+<li class="chapter" data-level="2.9.4" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#move-or-rename-a-file"><i class="fa fa-check"></i><b>2.9.4</b> Move or rename a file</a></li>
+<li class="chapter" data-level="2.9.5" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#remove-a-file"><i class="fa fa-check"></i><b>2.9.5</b> Remove a file</a></li>
+</ul></li>
+<li class="chapter" data-level="2.10" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#editing-files"><i class="fa fa-check"></i><b>2.10</b> Editing Files</a></li>
+<li class="chapter" data-level="2.11" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#transfer-files"><i class="fa fa-check"></i><b>2.11</b> Transfer Files</a></li>
+<li class="chapter" data-level="2.12" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#first-small-script"><i class="fa fa-check"></i><b>2.12</b> First Small Script</a></li>
+<li class="chapter" data-level="2.13" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#mental-model-what-just-happened"><i class="fa fa-check"></i><b>2.13</b> Mental Model: What Just Happened?</a></li>
+<li class="chapter" data-level="2.14" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#common-mistakes"><i class="fa fa-check"></i><b>2.14</b> Common Mistakes</a></li>
+<li class="chapter" data-level="2.15" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#lab-1-getting-started-on-ls6"><i class="fa fa-check"></i><b>2.15</b> Lab 1 — Getting Started on LS6</a>
+<ul>
+<li class="chapter" data-level="2.15.1" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#part-1-login"><i class="fa fa-check"></i><b>2.15.1</b> Part 1: Login</a></li>
+<li class="chapter" data-level="2.15.2" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#part-2-filesystem"><i class="fa fa-check"></i><b>2.15.2</b> Part 2: Filesystem</a></li>
+<li class="chapter" data-level="2.15.3" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#part-3-file-creation"><i class="fa fa-check"></i><b>2.15.3</b> Part 3: File Creation</a></li>
+<li class="chapter" data-level="2.15.4" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#part-4-run-it"><i class="fa fa-check"></i><b>2.15.4</b> Part 4: Run It</a></li>
+</ul></li>
+<li class="chapter" data-level="2.16" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#stretch-goal"><i class="fa fa-check"></i><b>2.16</b> Stretch Goal</a></li>
+<li class="chapter" data-level="2.17" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#looking-ahead"><i class="fa fa-check"></i><b>2.17</b> Looking Ahead</a></li>
+<li class="chapter" data-level="2.18" data-path="introduction-to-high-performance-computing-hpc.html"><a href="introduction-to-high-performance-computing-hpc.html#key-takeaways"><i class="fa fa-check"></i><b>2.18</b> Key Takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html"><i class="fa fa-check"></i><b>3</b> Linux Fundamentals for HPC</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#overview-2"><i class="fa fa-check"></i><b>3.1</b> Overview</a></li>
+<li class="chapter" data-level="3.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#mental-model-you-are-in-a-shared-environment"><i class="fa fa-check"></i><b>3.2</b> Mental Model: You Are in a Shared Environment</a></li>
+<li class="chapter" data-level="3.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#the-linux-filesystem"><i class="fa fa-check"></i><b>3.3</b> The Linux Filesystem</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#key-idea"><i class="fa fa-check"></i><b>3.3.1</b> Key Idea</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#inspecting-the-system"><i class="fa fa-check"></i><b>3.4</b> Inspecting the System</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#where-am-i"><i class="fa fa-check"></i><b>3.4.1</b> Where am I?</a></li>
+<li class="chapter" data-level="3.4.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#whats-here"><i class="fa fa-check"></i><b>3.4.2</b> What’s here?</a></li>
+<li class="chapter" data-level="3.4.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#what-does--l-show"><i class="fa fa-check"></i><b>3.4.3</b> What does <code>-l</code> show?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#file-permissions"><i class="fa fa-check"></i><b>3.5</b> File Permissions</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#mental-model"><i class="fa fa-check"></i><b>3.5.1</b> Mental Model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#visual-breakdown"><i class="fa fa-check"></i><b>3.6</b> Visual Breakdown</a></li>
+<li class="chapter" data-level="3.7" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#changing-permissions"><i class="fa fa-check"></i><b>3.7</b> Changing Permissions</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#make-a-file-executable"><i class="fa fa-check"></i><b>3.7.1</b> Make a file executable</a></li>
+<li class="chapter" data-level="3.7.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#remove-write-permission"><i class="fa fa-check"></i><b>3.7.2</b> Remove write permission</a></li>
+<li class="chapter" data-level="3.7.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#numeric-mode"><i class="fa fa-check"></i><b>3.7.3</b> Numeric mode</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#why-permissions-matter-in-hpc"><i class="fa fa-check"></i><b>3.8</b> Why Permissions Matter in HPC</a></li>
+<li class="chapter" data-level="3.9" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#environment-variables"><i class="fa fa-check"></i><b>3.9</b> Environment Variables</a>
+<ul>
+<li class="chapter" data-level="3.9.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#what-are-they"><i class="fa fa-check"></i><b>3.9.1</b> What are they?</a></li>
+<li class="chapter" data-level="3.9.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#view-them"><i class="fa fa-check"></i><b>3.9.2</b> View them</a></li>
+<li class="chapter" data-level="3.9.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#common-examples"><i class="fa fa-check"></i><b>3.9.3</b> Common examples</a></li>
+</ul></li>
+<li class="chapter" data-level="3.10" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#mental-model-path"><i class="fa fa-check"></i><b>3.10</b> Mental Model: PATH</a>
+<ul>
+<li class="chapter" data-level="3.10.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#add-to-path-temporarily"><i class="fa fa-check"></i><b>3.10.1</b> Add to PATH temporarily</a></li>
+</ul></li>
+<li class="chapter" data-level="3.11" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#modules-system"><i class="fa fa-check"></i><b>3.11</b> Modules System</a>
+<ul>
+<li class="chapter" data-level="3.11.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#mental-model-1"><i class="fa fa-check"></i><b>3.11.1</b> Mental Model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.12" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#basic-module-commands"><i class="fa fa-check"></i><b>3.12</b> Basic Module Commands</a>
+<ul>
+<li class="chapter" data-level="3.12.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#list-available-modules"><i class="fa fa-check"></i><b>3.12.1</b> List available modules</a></li>
+<li class="chapter" data-level="3.12.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#load-a-module"><i class="fa fa-check"></i><b>3.12.2</b> Load a module</a></li>
+<li class="chapter" data-level="3.12.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#check-loaded-modules"><i class="fa fa-check"></i><b>3.12.3</b> Check loaded modules</a></li>
+<li class="chapter" data-level="3.12.4" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#unload-a-module"><i class="fa fa-check"></i><b>3.12.4</b> Unload a module</a></li>
+</ul></li>
+<li class="chapter" data-level="3.13" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#example-using-a-compiler"><i class="fa fa-check"></i><b>3.13</b> Example: Using a Compiler</a></li>
+<li class="chapter" data-level="3.14" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#finding-files"><i class="fa fa-check"></i><b>3.14</b> Finding Files</a></li>
+<li class="chapter" data-level="3.15" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#viewing-file-contents"><i class="fa fa-check"></i><b>3.15</b> Viewing File Contents</a></li>
+<li class="chapter" data-level="3.16" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#combining-commands-with-pipes"><i class="fa fa-check"></i><b>3.16</b> Combining Commands with Pipes</a>
+<ul>
+<li class="chapter" data-level="3.16.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#pipe-mental-model"><i class="fa fa-check"></i><b>3.16.1</b> Pipe Mental Model</a></li>
+</ul></li>
+<li class="chapter" data-level="3.17" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#disk-usage"><i class="fa fa-check"></i><b>3.17</b> Disk Usage</a>
+<ul>
+<li class="chapter" data-level="3.17.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#check-filesystem-space"><i class="fa fa-check"></i><b>3.17.1</b> Check filesystem space</a></li>
+<li class="chapter" data-level="3.17.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#check-directory-sizes"><i class="fa fa-check"></i><b>3.17.2</b> Check directory sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="3.18" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#processes"><i class="fa fa-check"></i><b>3.18</b> Processes</a>
+<ul>
+<li class="chapter" data-level="3.18.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#see-your-processes"><i class="fa fa-check"></i><b>3.18.1</b> See your processes</a></li>
+<li class="chapter" data-level="3.18.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#kill-a-process"><i class="fa fa-check"></i><b>3.18.2</b> Kill a process</a></li>
+</ul></li>
+<li class="chapter" data-level="3.19" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#optional-r-integration"><i class="fa fa-check"></i><b>3.19</b> Optional R Integration</a></li>
+<li class="chapter" data-level="3.20" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#common-mistakes-1"><i class="fa fa-check"></i><b>3.20</b> Common Mistakes</a></li>
+<li class="chapter" data-level="3.21" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#debugging-mindset-in-linux"><i class="fa fa-check"></i><b>3.21</b> Debugging Mindset in Linux</a>
+<ul>
+<li class="chapter" data-level="3.21.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#where-am-i-1"><i class="fa fa-check"></i><b>3.21.1</b> 1. Where am I?</a></li>
+<li class="chapter" data-level="3.21.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#what-files-are-here"><i class="fa fa-check"></i><b>3.21.2</b> 2. What files are here?</a></li>
+<li class="chapter" data-level="3.21.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#do-i-have-permission"><i class="fa fa-check"></i><b>3.21.3</b> 3. Do I have permission?</a></li>
+<li class="chapter" data-level="3.21.4" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#is-the-program-available"><i class="fa fa-check"></i><b>3.21.4</b> 4. Is the program available?</a></li>
+<li class="chapter" data-level="3.21.5" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#is-my-environment-correct"><i class="fa fa-check"></i><b>3.21.5</b> 5. Is my environment correct?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.22" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#lab-2-linux-and-environment-mastery"><i class="fa fa-check"></i><b>3.22</b> Lab 2 — Linux and Environment Mastery</a>
+<ul>
+<li class="chapter" data-level="3.22.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#part-1-permissions"><i class="fa fa-check"></i><b>3.22.1</b> Part 1: Permissions</a></li>
+<li class="chapter" data-level="3.22.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#part-2-environment-variables"><i class="fa fa-check"></i><b>3.22.2</b> Part 2: Environment Variables</a></li>
+<li class="chapter" data-level="3.22.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#part-3-modules"><i class="fa fa-check"></i><b>3.22.3</b> Part 3: Modules</a></li>
+<li class="chapter" data-level="3.22.4" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#part-4-disk-usage"><i class="fa fa-check"></i><b>3.22.4</b> Part 4: Disk Usage</a></li>
+<li class="chapter" data-level="3.22.5" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#part-5-file-search"><i class="fa fa-check"></i><b>3.22.5</b> Part 5: File Search</a></li>
+</ul></li>
+<li class="chapter" data-level="3.23" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#stretch-goal-1"><i class="fa fa-check"></i><b>3.23</b> Stretch Goal</a></li>
+<li class="chapter" data-level="3.24" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#transition-to-hpc-workflows"><i class="fa fa-check"></i><b>3.24</b> Transition to HPC Workflows</a></li>
+<li class="chapter" data-level="3.25" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#looking-ahead-1"><i class="fa fa-check"></i><b>3.25</b> Looking Ahead</a></li>
+<li class="chapter" data-level="3.26" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#key-takeaways-1"><i class="fa fa-check"></i><b>3.26</b> Key Takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html"><i class="fa fa-check"></i><b>4</b> SLURM: Job Scheduling on HPC Systems</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#overview-3"><i class="fa fa-check"></i><b>4.1</b> Overview</a></li>
+<li class="chapter" data-level="4.2" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#mental-model-renting-compute-power"><i class="fa fa-check"></i><b>4.2</b> Mental Model: Renting Compute Power</a></li>
+<li class="chapter" data-level="4.3" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#the-basic-workflow"><i class="fa fa-check"></i><b>4.3</b> The Basic Workflow</a></li>
+<li class="chapter" data-level="4.4" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#why-a-scheduler-exists"><i class="fa fa-check"></i><b>4.4</b> Why a Scheduler Exists</a></li>
+<li class="chapter" data-level="4.5" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#what-is-a-job"><i class="fa fa-check"></i><b>4.5</b> What Is a Job?</a></li>
+<li class="chapter" data-level="4.6" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#your-first-job-script"><i class="fa fa-check"></i><b>4.6</b> Your First Job Script</a></li>
+<li class="chapter" data-level="4.7" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#breaking-down-the-script"><i class="fa fa-check"></i><b>4.7</b> Breaking Down the Script</a>
+<ul>
+<li class="chapter" data-level="4.7.1" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#shebang"><i class="fa fa-check"></i><b>4.7.1</b> Shebang</a></li>
+<li class="chapter" data-level="4.7.2" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#job-name"><i class="fa fa-check"></i><b>4.7.2</b> Job name</a></li>
+<li class="chapter" data-level="4.7.3" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#number-of-nodes"><i class="fa fa-check"></i><b>4.7.3</b> Number of nodes</a></li>
+<li class="chapter" data-level="4.7.4" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#number-of-tasks"><i class="fa fa-check"></i><b>4.7.4</b> Number of tasks</a></li>
+<li class="chapter" data-level="4.7.5" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#wall-time"><i class="fa fa-check"></i><b>4.7.5</b> Wall time</a></li>
+<li class="chapter" data-level="4.7.6" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#partition"><i class="fa fa-check"></i><b>4.7.6</b> Partition</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#submitting-a-job"><i class="fa fa-check"></i><b>4.8</b> Submitting a Job</a></li>
+<li class="chapter" data-level="4.9" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#monitoring-jobs"><i class="fa fa-check"></i><b>4.9</b> Monitoring Jobs</a>
+<ul>
+<li class="chapter" data-level="4.9.1" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#show-your-queued-and-running-jobs"><i class="fa fa-check"></i><b>4.9.1</b> Show your queued and running jobs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.10" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#common-job-states"><i class="fa fa-check"></i><b>4.10</b> Common Job States</a></li>
+<li class="chapter" data-level="4.11" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#output-files"><i class="fa fa-check"></i><b>4.11</b> Output Files</a></li>
+<li class="chapter" data-level="4.12" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#mental-model-what-just-happened-1"><i class="fa fa-check"></i><b>4.12</b> Mental Model: What Just Happened?</a></li>
+<li class="chapter" data-level="4.13" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#important-distinction-login-node-vs-compute-node"><i class="fa fa-check"></i><b>4.13</b> Important Distinction: Login Node vs Compute Node</a></li>
+<li class="chapter" data-level="4.14" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#adding-a-delay-to-observe-the-queue"><i class="fa fa-check"></i><b>4.14</b> Adding a Delay to Observe the Queue</a></li>
+<li class="chapter" data-level="4.15" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#common-mistakes-2"><i class="fa fa-check"></i><b>4.15</b> Common Mistakes</a>
+<ul>
+<li class="chapter" data-level="4.15.1" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#job-never-starts"><i class="fa fa-check"></i><b>4.15.1</b> 1. Job never starts</a></li>
+<li class="chapter" data-level="4.15.2" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#job-fails-immediately"><i class="fa fa-check"></i><b>4.15.2</b> 2. Job fails immediately</a></li>
+<li class="chapter" data-level="4.15.3" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#no-output-appears"><i class="fa fa-check"></i><b>4.15.3</b> 3. No output appears</a></li>
+</ul></li>
+<li class="chapter" data-level="4.16" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#inspecting-completed-jobs"><i class="fa fa-check"></i><b>4.16</b> Inspecting Completed Jobs</a></li>
+<li class="chapter" data-level="4.17" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#cancelling-a-job"><i class="fa fa-check"></i><b>4.17</b> Cancelling a Job</a></li>
+<li class="chapter" data-level="4.18" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#minimal-serial-job-example"><i class="fa fa-check"></i><b>4.18</b> Minimal Serial Job Example</a></li>
+<li class="chapter" data-level="4.19" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#example-with-module-loading"><i class="fa fa-check"></i><b>4.19</b> Example with Module Loading</a></li>
+<li class="chapter" data-level="4.20" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#example-with-multiple-tasks"><i class="fa fa-check"></i><b>4.20</b> Example with Multiple Tasks</a></li>
+<li class="chapter" data-level="4.21" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#mental-model-resources"><i class="fa fa-check"></i><b>4.21</b> Mental Model: Resources</a></li>
+<li class="chapter" data-level="4.22" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#lab-3-first-slurm-jobs"><i class="fa fa-check"></i><b>4.22</b> Lab 3 — First SLURM Jobs</a>
+<ul>
+<li class="chapter" data-level="4.22.1" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#part-1-your-first-job"><i class="fa fa-check"></i><b>4.22.1</b> Part 1: Your first job</a></li>
+<li class="chapter" data-level="4.22.2" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#part-2-observe-a-running-job"><i class="fa fa-check"></i><b>4.22.2</b> Part 2: Observe a running job</a></li>
+<li class="chapter" data-level="4.22.3" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#part-3-change-resource-request"><i class="fa fa-check"></i><b>4.22.3</b> Part 3: Change resource request</a></li>
+<li class="chapter" data-level="4.22.4" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#part-4-load-a-module-in-the-job"><i class="fa fa-check"></i><b>4.22.4</b> Part 4: Load a module in the job</a></li>
+</ul></li>
+<li class="chapter" data-level="4.23" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#debugging-checklist"><i class="fa fa-check"></i><b>4.23</b> Debugging Checklist</a>
+<ul>
+<li class="chapter" data-level="4.23.1" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#did-it-submit"><i class="fa fa-check"></i><b>4.23.1</b> 1. Did it submit?</a></li>
+<li class="chapter" data-level="4.23.2" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#did-it-complete-or-fail"><i class="fa fa-check"></i><b>4.23.2</b> 2. Did it complete or fail?</a></li>
+<li class="chapter" data-level="4.23.3" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#what-does-the-output-file-say"><i class="fa fa-check"></i><b>4.23.3</b> 3. What does the output file say?</a></li>
+<li class="chapter" data-level="4.23.4" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#did-i-load-the-right-modules"><i class="fa fa-check"></i><b>4.23.4</b> 4. Did I load the right modules?</a></li>
+<li class="chapter" data-level="4.23.5" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#am-i-in-the-correct-directory"><i class="fa fa-check"></i><b>4.23.5</b> 5. Am I in the correct directory?</a></li>
+</ul></li>
+<li class="chapter" data-level="4.24" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#failure-based-exercise"><i class="fa fa-check"></i><b>4.24</b> Failure-Based Exercise</a></li>
+<li class="chapter" data-level="4.25" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#best-practices"><i class="fa fa-check"></i><b>4.25</b> Best Practices</a></li>
+<li class="chapter" data-level="4.26" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#conceptual-bridge"><i class="fa fa-check"></i><b>4.26</b> Conceptual Bridge</a></li>
+<li class="chapter" data-level="4.27" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#looking-ahead-2"><i class="fa fa-check"></i><b>4.27</b> Looking Ahead</a></li>
+<li class="chapter" data-level="4.28" data-path="slurm-job-scheduling-on-hpc-systems.html"><a href="slurm-job-scheduling-on-hpc-systems.html#key-takeaways-2"><i class="fa fa-check"></i><b>4.28</b> Key Takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html"><i class="fa fa-check"></i><b>5</b> Compiling C and C++ on HPC Systems</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#overview-4"><i class="fa fa-check"></i><b>5.1</b> Overview</a></li>
+<li class="chapter" data-level="5.2" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#mental-model-from-source-code-to-executable"><i class="fa fa-check"></i><b>5.2</b> Mental Model: From Source Code to Executable</a></li>
+<li class="chapter" data-level="5.3" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#why-compilation-matters-in-hpc"><i class="fa fa-check"></i><b>5.3</b> Why Compilation Matters in HPC</a></li>
+<li class="chapter" data-level="5.4" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#compilers-gcc-vs-g"><i class="fa fa-check"></i><b>5.4</b> Compilers: gcc vs g++</a></li>
+<li class="chapter" data-level="5.5" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#loading-a-compiler-modules"><i class="fa fa-check"></i><b>5.5</b> Loading a Compiler (Modules)</a></li>
+<li class="chapter" data-level="5.6" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#your-first-c-program"><i class="fa fa-check"></i><b>5.6</b> Your First C Program</a></li>
+<li class="chapter" data-level="5.7" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#compile-the-program"><i class="fa fa-check"></i><b>5.7</b> Compile the Program</a></li>
+<li class="chapter" data-level="5.8" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#run-the-program"><i class="fa fa-check"></i><b>5.8</b> Run the Program</a></li>
+<li class="chapter" data-level="5.9" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#mental-model-what-just-happened-2"><i class="fa fa-check"></i><b>5.9</b> Mental Model: What Just Happened?</a></li>
+<li class="chapter" data-level="5.10" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#file-inspection"><i class="fa fa-check"></i><b>5.10</b> File Inspection</a></li>
+<li class="chapter" data-level="5.11" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#c-example"><i class="fa fa-check"></i><b>5.11</b> C++ Example</a></li>
+<li class="chapter" data-level="5.12" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#compilation-flags"><i class="fa fa-check"></i><b>5.12</b> Compilation Flags</a></li>
+<li class="chapter" data-level="5.13" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#common-optimization-levels"><i class="fa fa-check"></i><b>5.13</b> Common Optimization Levels</a></li>
+<li class="chapter" data-level="5.14" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#multiple-source-files"><i class="fa fa-check"></i><b>5.14</b> Multiple Source Files</a></li>
+<li class="chapter" data-level="5.15" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#header-files"><i class="fa fa-check"></i><b>5.15</b> Header Files</a></li>
+<li class="chapter" data-level="5.16" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#introduction-to-makefiles"><i class="fa fa-check"></i><b>5.16</b> Introduction to Makefiles</a></li>
+<li class="chapter" data-level="5.17" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#mental-model-makefiles"><i class="fa fa-check"></i><b>5.17</b> Mental Model: Makefiles</a></li>
+<li class="chapter" data-level="5.18" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#modules-and-compilation"><i class="fa fa-check"></i><b>5.18</b> Modules and Compilation</a></li>
+<li class="chapter" data-level="5.19" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#where-to-compile"><i class="fa fa-check"></i><b>5.19</b> Where to Compile</a></li>
+<li class="chapter" data-level="5.20" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#running-compiled-code-with-slurm"><i class="fa fa-check"></i><b>5.20</b> Running Compiled Code with SLURM</a></li>
+<li class="chapter" data-level="5.21" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#common-mistakes-3"><i class="fa fa-check"></i><b>5.21</b> Common Mistakes</a></li>
+<li class="chapter" data-level="5.22" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#debugging-compilation-errors"><i class="fa fa-check"></i><b>5.22</b> Debugging Compilation Errors</a></li>
+<li class="chapter" data-level="5.23" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#lab-4-compiling-on-hpc"><i class="fa fa-check"></i><b>5.23</b> Lab 4 — Compiling on HPC</a>
+<ul>
+<li class="chapter" data-level="5.23.1" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#part-1-basic-compilation"><i class="fa fa-check"></i><b>5.23.1</b> Part 1: Basic Compilation</a></li>
+<li class="chapter" data-level="5.23.2" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#part-2-c-program"><i class="fa fa-check"></i><b>5.23.2</b> Part 2: C++ Program</a></li>
+<li class="chapter" data-level="5.23.3" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#part-3-optimization"><i class="fa fa-check"></i><b>5.23.3</b> Part 3: Optimization</a></li>
+<li class="chapter" data-level="5.23.4" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#part-4-run-with-slurm"><i class="fa fa-check"></i><b>5.23.4</b> Part 4: Run with SLURM</a></li>
+</ul></li>
+<li class="chapter" data-level="5.24" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#stretch-goal-2"><i class="fa fa-check"></i><b>5.24</b> Stretch Goal</a></li>
+<li class="chapter" data-level="5.25" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#transition-to-parallel-computing"><i class="fa fa-check"></i><b>5.25</b> Transition to Parallel Computing</a></li>
+<li class="chapter" data-level="5.26" data-path="compiling-c-and-c-on-hpc-systems.html"><a href="compiling-c-and-c-on-hpc-systems.html#key-takeaways-3"><i class="fa fa-check"></i><b>5.26</b> Key Takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html"><i class="fa fa-check"></i><b>6</b> Parallel Computing with MPI and OpenMP</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#overview-5"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
+<li class="chapter" data-level="6.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mental-model-why-parallel-computing"><i class="fa fa-check"></i><b>6.2</b> Mental Model: Why Parallel Computing?</a></li>
+<li class="chapter" data-level="6.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#visual-serial-vs-parallel"><i class="fa fa-check"></i><b>6.3</b> Visual: Serial vs Parallel</a></li>
+<li class="chapter" data-level="6.4" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#two-main-models"><i class="fa fa-check"></i><b>6.4</b> Two Main Models</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mpi-message-passing-interface"><i class="fa fa-check"></i><b>6.4.1</b> MPI (Message Passing Interface)</a></li>
+<li class="chapter" data-level="6.4.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#openmp"><i class="fa fa-check"></i><b>6.4.2</b> OpenMP</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mental-model-processes-vs-threads"><i class="fa fa-check"></i><b>6.5</b> Mental Model: Processes vs Threads</a></li>
+<li class="chapter" data-level="6.6" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#loading-mpi"><i class="fa fa-check"></i><b>6.6</b> Loading MPI</a></li>
+<li class="chapter" data-level="6.7" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mpi-hello-world-c"><i class="fa fa-check"></i><b>6.7</b> MPI Hello World (C)</a></li>
+<li class="chapter" data-level="6.8" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#compile-mpi-program"><i class="fa fa-check"></i><b>6.8</b> Compile MPI Program</a></li>
+<li class="chapter" data-level="6.9" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#run-locally-for-testing"><i class="fa fa-check"></i><b>6.9</b> Run Locally for Testing</a></li>
+<li class="chapter" data-level="6.10" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mpi-job-script"><i class="fa fa-check"></i><b>6.10</b> MPI Job Script</a></li>
+<li class="chapter" data-level="6.11" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#expected-output"><i class="fa fa-check"></i><b>6.11</b> Expected Output</a></li>
+<li class="chapter" data-level="6.12" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#openmp-example"><i class="fa fa-check"></i><b>6.12</b> OpenMP Example</a></li>
+<li class="chapter" data-level="6.13" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#compile-openmp-program"><i class="fa fa-check"></i><b>6.13</b> Compile OpenMP Program</a></li>
+<li class="chapter" data-level="6.14" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#run-openmp"><i class="fa fa-check"></i><b>6.14</b> Run OpenMP</a></li>
+<li class="chapter" data-level="6.15" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#openmp-slurm-script"><i class="fa fa-check"></i><b>6.15</b> OpenMP SLURM Script</a></li>
+<li class="chapter" data-level="6.16" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#hybrid-concept"><i class="fa fa-check"></i><b>6.16</b> Hybrid Concept</a></li>
+<li class="chapter" data-level="6.17" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mental-model-2"><i class="fa fa-check"></i><b>6.17</b> Mental Model</a></li>
+<li class="chapter" data-level="6.18" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#performance-thinking"><i class="fa fa-check"></i><b>6.18</b> Performance Thinking</a>
+<ul>
+<li class="chapter" data-level="6.18.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#strong-scaling"><i class="fa fa-check"></i><b>6.18.1</b> Strong Scaling</a></li>
+<li class="chapter" data-level="6.18.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#weak-scaling"><i class="fa fa-check"></i><b>6.18.2</b> Weak Scaling</a></li>
+<li class="chapter" data-level="6.18.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#simple-timing-example"><i class="fa fa-check"></i><b>6.18.3</b> Simple Timing Example</a></li>
+</ul></li>
+<li class="chapter" data-level="6.19" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#common-mistakes-4"><i class="fa fa-check"></i><b>6.19</b> Common Mistakes</a></li>
+<li class="chapter" data-level="6.20" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#debugging-checklist-1"><i class="fa fa-check"></i><b>6.20</b> Debugging Checklist</a>
+<ul>
+<li class="chapter" data-level="6.20.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-job"><i class="fa fa-check"></i><b>6.20.1</b> Check job:</a></li>
+<li class="chapter" data-level="6.20.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-output"><i class="fa fa-check"></i><b>6.20.2</b> Check output:</a></li>
+<li class="chapter" data-level="6.20.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-modules"><i class="fa fa-check"></i><b>6.20.3</b> Check modules:</a></li>
+<li class="chapter" data-level="6.20.4" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-resource-request"><i class="fa fa-check"></i><b>6.20.4</b> Check resource request:</a></li>
+</ul></li>
+<li class="chapter" data-level="6.21" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#lab-5-parallel-computing"><i class="fa fa-check"></i><b>6.21</b> Lab 5 — Parallel Computing</a>
+<ul>
+<li class="chapter" data-level="6.21.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-1-mpi"><i class="fa fa-check"></i><b>6.21.1</b> Part 1: MPI</a></li>
+<li class="chapter" data-level="6.21.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-2-openmp"><i class="fa fa-check"></i><b>6.21.2</b> Part 2: OpenMP</a></li>
+<li class="chapter" data-level="6.21.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-3-compare"><i class="fa fa-check"></i><b>6.21.3</b> Part 3: Compare</a></li>
+<li class="chapter" data-level="6.21.4" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-4-scaling-experiment"><i class="fa fa-check"></i><b>6.21.4</b> Part 4: Scaling Experiment</a></li>
+</ul></li>
+<li class="chapter" data-level="6.22" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#stretch-goal-3"><i class="fa fa-check"></i><b>6.22</b> Stretch Goal</a></li>
+<li class="chapter" data-level="6.23" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#transition"><i class="fa fa-check"></i><b>6.23</b> Transition</a></li>
+<li class="chapter" data-level="6.24" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#key-takeaways-4"><i class="fa fa-check"></i><b>6.24</b> Key Takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html"><i class="fa fa-check"></i><b>7</b> Containers and Reproducible HPC</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#overview-6"><i class="fa fa-check"></i><b>7.1</b> Overview</a></li>
+<li class="chapter" data-level="7.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#mental-model-what-is-a-container"><i class="fa fa-check"></i><b>7.2</b> Mental Model: What is a Container?</a></li>
+<li class="chapter" data-level="7.3" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#visual-container-concept"><i class="fa fa-check"></i><b>7.3</b> Visual: Container Concept</a></li>
+<li class="chapter" data-level="7.4" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#why-containers-matter-in-hpc"><i class="fa fa-check"></i><b>7.4</b> Why Containers Matter in HPC</a></li>
+<li class="chapter" data-level="7.5" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#docker-vs-apptainer"><i class="fa fa-check"></i><b>7.5</b> Docker vs Apptainer</a>
+<ul>
+<li class="chapter" data-level="7.5.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#docker"><i class="fa fa-check"></i><b>7.5.1</b> Docker</a></li>
+<li class="chapter" data-level="7.5.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#apptainer"><i class="fa fa-check"></i><b>7.5.2</b> Apptainer</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#mental-model-3"><i class="fa fa-check"></i><b>7.6</b> Mental Model</a></li>
+<li class="chapter" data-level="7.7" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#checking-for-apptainer"><i class="fa fa-check"></i><b>7.7</b> Checking for Apptainer</a></li>
+<li class="chapter" data-level="7.8" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#pulling-a-container"><i class="fa fa-check"></i><b>7.8</b> Pulling a Container</a></li>
+<li class="chapter" data-level="7.9" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#running-a-container"><i class="fa fa-check"></i><b>7.9</b> Running a Container</a></li>
+<li class="chapter" data-level="7.10" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#interactive-shell"><i class="fa fa-check"></i><b>7.10</b> Interactive Shell</a></li>
+<li class="chapter" data-level="7.11" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#mental-model-what-just-happened-3"><i class="fa fa-check"></i><b>7.11</b> Mental Model: What Just Happened?</a></li>
+<li class="chapter" data-level="7.12" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#running-python-in-a-container"><i class="fa fa-check"></i><b>7.12</b> Running Python in a Container</a></li>
+<li class="chapter" data-level="7.13" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#binding-directories"><i class="fa fa-check"></i><b>7.13</b> Binding Directories</a></li>
+<li class="chapter" data-level="7.14" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#slurm-containers"><i class="fa fa-check"></i><b>7.14</b> SLURM + Containers</a></li>
+<li class="chapter" data-level="7.15" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#running-applications-in-containers"><i class="fa fa-check"></i><b>7.15</b> Running Applications in Containers</a></li>
+<li class="chapter" data-level="7.16" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#comparing-workflows"><i class="fa fa-check"></i><b>7.16</b> Comparing Workflows</a>
+<ul>
+<li class="chapter" data-level="7.16.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#without-container"><i class="fa fa-check"></i><b>7.16.1</b> Without container</a></li>
+<li class="chapter" data-level="7.16.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#with-container"><i class="fa fa-check"></i><b>7.16.2</b> With container</a></li>
+</ul></li>
+<li class="chapter" data-level="7.17" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#reproducibility"><i class="fa fa-check"></i><b>7.17</b> Reproducibility</a></li>
+<li class="chapter" data-level="7.18" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#common-mistakes-5"><i class="fa fa-check"></i><b>7.18</b> Common Mistakes</a></li>
+<li class="chapter" data-level="7.19" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#storage-considerations"><i class="fa fa-check"></i><b>7.19</b> Storage Considerations</a></li>
+<li class="chapter" data-level="7.20" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#debugging-containers"><i class="fa fa-check"></i><b>7.20</b> Debugging Containers</a>
+<ul>
+<li class="chapter" data-level="7.20.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#check-image-exists"><i class="fa fa-check"></i><b>7.20.1</b> Check image exists</a></li>
+<li class="chapter" data-level="7.20.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#test-interactively"><i class="fa fa-check"></i><b>7.20.2</b> Test interactively</a></li>
+<li class="chapter" data-level="7.20.3" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#check-a-command"><i class="fa fa-check"></i><b>7.20.3</b> Check a command</a></li>
+</ul></li>
+<li class="chapter" data-level="7.21" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#lab-6-containers-on-hpc"><i class="fa fa-check"></i><b>7.21</b> Lab 6 — Containers on HPC</a>
+<ul>
+<li class="chapter" data-level="7.21.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-1-pull-image"><i class="fa fa-check"></i><b>7.21.1</b> Part 1: Pull Image</a></li>
+<li class="chapter" data-level="7.21.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-2-run-command"><i class="fa fa-check"></i><b>7.21.2</b> Part 2: Run Command</a></li>
+<li class="chapter" data-level="7.21.3" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-3-interactive-mode"><i class="fa fa-check"></i><b>7.21.3</b> Part 3: Interactive Mode</a></li>
+<li class="chapter" data-level="7.21.4" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-4-slurm-job"><i class="fa fa-check"></i><b>7.21.4</b> Part 4: SLURM Job</a></li>
+<li class="chapter" data-level="7.21.5" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-5-bind-directory"><i class="fa fa-check"></i><b>7.21.5</b> Part 5: Bind Directory</a></li>
+</ul></li>
+<li class="chapter" data-level="7.22" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#stretch-goal-4"><i class="fa fa-check"></i><b>7.22</b> Stretch Goal</a></li>
+<li class="chapter" data-level="7.23" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#transition-to-capstone"><i class="fa fa-check"></i><b>7.23</b> Transition to Capstone</a></li>
+<li class="chapter" data-level="7.24" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#key-takeaways-5"><i class="fa fa-check"></i><b>7.24</b> Key Takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html"><i class="fa fa-check"></i><b>8</b> Capstone Project: End-to-End HPC Workflow</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#overview-7"><i class="fa fa-check"></i><b>8.1</b> Overview</a></li>
+<li class="chapter" data-level="8.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#project-philosophy"><i class="fa fa-check"></i><b>8.2</b> Project Philosophy</a></li>
+<li class="chapter" data-level="8.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#general-requirements"><i class="fa fa-check"></i><b>8.3</b> General Requirements</a></li>
+<li class="chapter" data-level="8.4" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#project-options"><i class="fa fa-check"></i><b>8.4</b> Project Options</a></li>
+<li class="chapter" data-level="8.5" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-1-compile-and-run"><i class="fa fa-check"></i><b>8.5</b> Option 1: Compile and Run</a>
+<ul>
+<li class="chapter" data-level="8.5.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description"><i class="fa fa-check"></i><b>8.5.1</b> Description</a></li>
+<li class="chapter" data-level="8.5.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements"><i class="fa fa-check"></i><b>8.5.2</b> Requirements</a></li>
+<li class="chapter" data-level="8.5.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-extensions"><i class="fa fa-check"></i><b>8.5.3</b> Suggested Extensions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-2-parallel-computing"><i class="fa fa-check"></i><b>8.6</b> Option 2: Parallel Computing</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description-1"><i class="fa fa-check"></i><b>8.6.1</b> Description</a></li>
+<li class="chapter" data-level="8.6.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements-1"><i class="fa fa-check"></i><b>8.6.2</b> Requirements</a></li>
+<li class="chapter" data-level="8.6.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-extensions-1"><i class="fa fa-check"></i><b>8.6.3</b> Suggested Extensions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-3-containerized-workflow"><i class="fa fa-check"></i><b>8.7</b> Option 3: Containerized Workflow</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description-2"><i class="fa fa-check"></i><b>8.7.1</b> Description</a></li>
+<li class="chapter" data-level="8.7.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements-2"><i class="fa fa-check"></i><b>8.7.2</b> Requirements</a></li>
+<li class="chapter" data-level="8.7.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-extensions-2"><i class="fa fa-check"></i><b>8.7.3</b> Suggested Extensions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-4-hybrid-workflow-advanced"><i class="fa fa-check"></i><b>8.8</b> Option 4: Hybrid Workflow (Advanced)</a>
+<ul>
+<li class="chapter" data-level="8.8.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description-3"><i class="fa fa-check"></i><b>8.8.1</b> Description</a></li>
+<li class="chapter" data-level="8.8.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements-3"><i class="fa fa-check"></i><b>8.8.2</b> Requirements</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#deliverables"><i class="fa fa-check"></i><b>8.9</b> Deliverables</a>
+<ul>
+<li class="chapter" data-level="8.9.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#code-and-scripts"><i class="fa fa-check"></i><b>8.9.1</b> 1. Code and Scripts</a></li>
+<li class="chapter" data-level="8.9.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#output-files-1"><i class="fa fa-check"></i><b>8.9.2</b> 2. Output Files</a></li>
+<li class="chapter" data-level="8.9.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#documentation"><i class="fa fa-check"></i><b>8.9.3</b> 3. Documentation</a></li>
+</ul></li>
+<li class="chapter" data-level="8.10" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-directory-structure"><i class="fa fa-check"></i><b>8.10</b> Suggested Directory Structure</a></li>
+<li class="chapter" data-level="8.11" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#reproducibility-requirements"><i class="fa fa-check"></i><b>8.11</b> Reproducibility Requirements</a></li>
+<li class="chapter" data-level="8.12" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#resource-awareness"><i class="fa fa-check"></i><b>8.12</b> Resource Awareness</a></li>
+<li class="chapter" data-level="8.13" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#debugging-reflection"><i class="fa fa-check"></i><b>8.13</b> Debugging Reflection</a></li>
+<li class="chapter" data-level="8.14" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#grading-rubric"><i class="fa fa-check"></i><b>8.14</b> Grading Rubric</a>
+<ul>
+<li class="chapter" data-level="8.14.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#correctness-30"><i class="fa fa-check"></i><b>8.14.1</b> Correctness (30%)</a></li>
+<li class="chapter" data-level="8.14.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#workflow-clarity-25"><i class="fa fa-check"></i><b>8.14.2</b> Workflow Clarity (25%)</a></li>
+<li class="chapter" data-level="8.14.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#reproducibility-20"><i class="fa fa-check"></i><b>8.14.3</b> Reproducibility (20%)</a></li>
+<li class="chapter" data-level="8.14.4" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#resource-usage-15"><i class="fa fa-check"></i><b>8.14.4</b> Resource Usage (15%)</a></li>
+<li class="chapter" data-level="8.14.5" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#reflection-10"><i class="fa fa-check"></i><b>8.14.5</b> Reflection (10%)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.15" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#example-workflow-summary"><i class="fa fa-check"></i><b>8.15</b> Example Workflow Summary</a></li>
+<li class="chapter" data-level="8.16" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#common-mistakes-6"><i class="fa fa-check"></i><b>8.16</b> Common Mistakes</a></li>
+<li class="chapter" data-level="8.17" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#stretch-goals"><i class="fa fa-check"></i><b>8.17</b> Stretch Goals</a></li>
+<li class="chapter" data-level="8.18" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#final-reflection"><i class="fa fa-check"></i><b>8.18</b> Final Reflection</a></li>
+<li class="chapter" data-level="8.19" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#key-takeaways-6"><i class="fa fa-check"></i><b>8.19</b> Key Takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html"><i class="fa fa-check"></i><b>9</b> Appendix: HPC Quick Reference</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#overview-8"><i class="fa fa-check"></i><b>9.1</b> Overview</a></li>
+<li class="chapter" data-level="9.2" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#ssh"><i class="fa fa-check"></i><b>9.2</b> SSH</a></li>
+<li class="chapter" data-level="9.3" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#basic-linux"><i class="fa fa-check"></i><b>9.3</b> Basic Linux</a></li>
+<li class="chapter" data-level="9.4" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#permissions"><i class="fa fa-check"></i><b>9.4</b> Permissions</a></li>
+<li class="chapter" data-level="9.5" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#environment-and-modules"><i class="fa fa-check"></i><b>9.5</b> Environment and Modules</a></li>
+<li class="chapter" data-level="9.6" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#slurm"><i class="fa fa-check"></i><b>9.6</b> SLURM</a></li>
+<li class="chapter" data-level="9.7" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#compilation"><i class="fa fa-check"></i><b>9.7</b> Compilation</a></li>
+<li class="chapter" data-level="9.8" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#mpi"><i class="fa fa-check"></i><b>9.8</b> MPI</a></li>
+<li class="chapter" data-level="9.9" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#openmp-1"><i class="fa fa-check"></i><b>9.9</b> OpenMP</a></li>
+<li class="chapter" data-level="9.10" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#containers"><i class="fa fa-check"></i><b>9.10</b> Containers</a></li>
+<li class="chapter" data-level="9.11" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#rendering-the-book"><i class="fa fa-check"></i><b>9.11</b> Rendering the Book</a></li>
+<li class="chapter" data-level="9.12" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#publishing-to-github-pages"><i class="fa fa-check"></i><b>9.12</b> Publishing to GitHub Pages</a></li>
+<li class="chapter" data-level="9.13" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#final-reminder"><i class="fa fa-check"></i><b>9.13</b> Final Reminder</a></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="parallel-computing-with-mpi-and-openmp" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Parallel Computing with MPI and OpenMP<a href="parallel-computing-with-mpi-and-openmp.html#parallel-computing-with-mpi-and-openmp" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-5" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Overview<a href="parallel-computing-with-mpi-and-openmp.html#overview-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this chapter, we move from single-core programs to <strong>parallel computing</strong>.</p>
+<p>You will learn:</p>
+<ul>
+<li>the difference between serial and parallel execution</li>
+<li>the difference between processes and threads</li>
+<li>how MPI and OpenMP work</li>
+<li>how to run parallel jobs with SLURM</li>
+<li>how to think about performance and scaling</li>
+</ul>
+</div>
+<div id="mental-model-why-parallel-computing" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Mental Model: Why Parallel Computing?<a href="parallel-computing-with-mpi-and-openmp.html#mental-model-why-parallel-computing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A single core can only do one thing at a time.</p>
+<p>Parallel computing allows you to:</p>
+<ul>
+<li>split a problem into pieces</li>
+<li>solve those pieces simultaneously</li>
+<li>combine the results</li>
+</ul>
+</div>
+<div id="visual-serial-vs-parallel" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Visual: Serial vs Parallel<a href="parallel-computing-with-mpi-and-openmp.html#visual-serial-vs-parallel" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre class="text"><code>Serial:
+Task1 → Task2 → Task3 → Task4
+
+Parallel:
+Task1
+Task2   → run at the same time
+Task3
+Task4</code></pre>
+</div>
+<div id="two-main-models" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Two Main Models<a href="parallel-computing-with-mpi-and-openmp.html#two-main-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="mpi-message-passing-interface" class="section level3 hasAnchor" number="6.4.1">
+<h3><span class="header-section-number">6.4.1</span> MPI (Message Passing Interface)<a href="parallel-computing-with-mpi-and-openmp.html#mpi-message-passing-interface" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>multiple <strong>processes</strong></li>
+<li>can run across <strong>multiple nodes</strong></li>
+<li>processes communicate via messages</li>
+</ul>
+</div>
+<div id="openmp" class="section level3 hasAnchor" number="6.4.2">
+<h3><span class="header-section-number">6.4.2</span> OpenMP<a href="parallel-computing-with-mpi-and-openmp.html#openmp" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>multiple <strong>threads</strong></li>
+<li>usually within <strong>one node</strong></li>
+<li>shared memory model</li>
+</ul>
+</div>
+</div>
+<div id="mental-model-processes-vs-threads" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Mental Model: Processes vs Threads<a href="parallel-computing-with-mpi-and-openmp.html#mental-model-processes-vs-threads" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre class="text"><code>MPI:
+Process 1 → separate memory
+Process 2 → separate memory
+
+OpenMP:
+Thread 1 → shared memory
+Thread 2 → shared memory</code></pre>
+<blockquote>
+<p>🧠 <strong>Key Insight</strong></p>
+<p>MPI is for <strong>distributed computing</strong> across nodes.
+OpenMP is for <strong>shared memory</strong> within a node.</p>
+</blockquote>
+</div>
+<div id="loading-mpi" class="section level2 hasAnchor" number="6.6">
+<h2><span class="header-section-number">6.6</span> Loading MPI<a href="parallel-computing-with-mpi-and-openmp.html#loading-mpi" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb128"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb128-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb128-1" tabindex="-1"></a><span class="ex">module</span> load openmpi</span></code></pre></div>
+</div>
+<div id="mpi-hello-world-c" class="section level2 hasAnchor" number="6.7">
+<h2><span class="header-section-number">6.7</span> MPI Hello World (C)<a href="parallel-computing-with-mpi-and-openmp.html#mpi-hello-world-c" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create a file:</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb129-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb129-1" tabindex="-1"></a><span class="fu">nano</span> hello_mpi.c</span></code></pre></div>
+<p>Add:</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb130-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;mpi.h&gt;</span></span>
+<span id="cb130-2"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb130-3"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-3" tabindex="-1"></a></span>
+<span id="cb130-4"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-4" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb130-5"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-5" tabindex="-1"></a>    MPI_Init<span class="op">(&amp;</span>argc<span class="op">,</span> <span class="op">&amp;</span>argv<span class="op">);</span></span>
+<span id="cb130-6"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-6" tabindex="-1"></a></span>
+<span id="cb130-7"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-7" tabindex="-1"></a>    <span class="dt">int</span> rank<span class="op">,</span> size<span class="op">;</span></span>
+<span id="cb130-8"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-8" tabindex="-1"></a>    MPI_Comm_rank<span class="op">(</span>MPI_COMM_WORLD<span class="op">,</span> <span class="op">&amp;</span>rank<span class="op">);</span></span>
+<span id="cb130-9"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-9" tabindex="-1"></a>    MPI_Comm_size<span class="op">(</span>MPI_COMM_WORLD<span class="op">,</span> <span class="op">&amp;</span>size<span class="op">);</span></span>
+<span id="cb130-10"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-10" tabindex="-1"></a></span>
+<span id="cb130-11"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-11" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello from process </span><span class="sc">%d</span><span class="st"> of </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> rank<span class="op">,</span> size<span class="op">);</span></span>
+<span id="cb130-12"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-12" tabindex="-1"></a></span>
+<span id="cb130-13"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-13" tabindex="-1"></a>    MPI_Finalize<span class="op">();</span></span>
+<span id="cb130-14"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-14" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb130-15"><a href="parallel-computing-with-mpi-and-openmp.html#cb130-15" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<div id="compile-mpi-program" class="section level2 hasAnchor" number="6.8">
+<h2><span class="header-section-number">6.8</span> Compile MPI Program<a href="parallel-computing-with-mpi-and-openmp.html#compile-mpi-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb131"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb131-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb131-1" tabindex="-1"></a><span class="ex">mpicc</span> hello_mpi.c <span class="at">-o</span> hello_mpi</span></code></pre></div>
+</div>
+<div id="run-locally-for-testing" class="section level2 hasAnchor" number="6.9">
+<h2><span class="header-section-number">6.9</span> Run Locally for Testing<a href="parallel-computing-with-mpi-and-openmp.html#run-locally-for-testing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb132"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb132-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb132-1" tabindex="-1"></a><span class="ex">mpirun</span> <span class="at">-np</span> 4 ./hello_mpi</span></code></pre></div>
+<blockquote>
+<p>⚠️ <strong>Important</strong></p>
+<p>On HPC systems, production runs should go through SLURM.</p>
+</blockquote>
+</div>
+<div id="mpi-job-script" class="section level2 hasAnchor" number="6.10">
+<h2><span class="header-section-number">6.10</span> MPI Job Script<a href="parallel-computing-with-mpi-and-openmp.html#mpi-job-script" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create:</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb133-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb133-1" tabindex="-1"></a><span class="fu">nano</span> mpi.slurm</span></code></pre></div>
+<p>Add:</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb134-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb134-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb134-2"><a href="parallel-computing-with-mpi-and-openmp.html#cb134-2" tabindex="-1"></a><span class="co">#SBATCH -J mpi_test</span></span>
+<span id="cb134-3"><a href="parallel-computing-with-mpi-and-openmp.html#cb134-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb134-4"><a href="parallel-computing-with-mpi-and-openmp.html#cb134-4" tabindex="-1"></a><span class="co">#SBATCH -n 4</span></span>
+<span id="cb134-5"><a href="parallel-computing-with-mpi-and-openmp.html#cb134-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb134-6"><a href="parallel-computing-with-mpi-and-openmp.html#cb134-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb134-7"><a href="parallel-computing-with-mpi-and-openmp.html#cb134-7" tabindex="-1"></a></span>
+<span id="cb134-8"><a href="parallel-computing-with-mpi-and-openmp.html#cb134-8" tabindex="-1"></a><span class="ex">module</span> load openmpi</span>
+<span id="cb134-9"><a href="parallel-computing-with-mpi-and-openmp.html#cb134-9" tabindex="-1"></a></span>
+<span id="cb134-10"><a href="parallel-computing-with-mpi-and-openmp.html#cb134-10" tabindex="-1"></a><span class="ex">mpirun</span> ./hello_mpi</span></code></pre></div>
+<p>Submit:</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb135-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb135-1" tabindex="-1"></a><span class="ex">sbatch</span> mpi.slurm</span></code></pre></div>
+</div>
+<div id="expected-output" class="section level2 hasAnchor" number="6.11">
+<h2><span class="header-section-number">6.11</span> Expected Output<a href="parallel-computing-with-mpi-and-openmp.html#expected-output" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre class="text"><code>Hello from process 0 of 4
+Hello from process 1 of 4
+Hello from process 2 of 4
+Hello from process 3 of 4</code></pre>
+</div>
+<div id="openmp-example" class="section level2 hasAnchor" number="6.12">
+<h2><span class="header-section-number">6.12</span> OpenMP Example<a href="parallel-computing-with-mpi-and-openmp.html#openmp-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create:</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb137-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb137-1" tabindex="-1"></a><span class="fu">nano</span> hello_omp.c</span></code></pre></div>
+<p>Add:</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb138-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb138-2"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;omp.h&gt;</span></span>
+<span id="cb138-3"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-3" tabindex="-1"></a></span>
+<span id="cb138-4"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-4" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb138-5"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-5" tabindex="-1"></a>    <span class="pp">#pragma omp parallel</span></span>
+<span id="cb138-6"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-6" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb138-7"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-7" tabindex="-1"></a>        <span class="dt">int</span> id <span class="op">=</span> omp_get_thread_num<span class="op">();</span></span>
+<span id="cb138-8"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-8" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;Hello from thread </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> id<span class="op">);</span></span>
+<span id="cb138-9"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-9" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb138-10"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-10" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb138-11"><a href="parallel-computing-with-mpi-and-openmp.html#cb138-11" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<div id="compile-openmp-program" class="section level2 hasAnchor" number="6.13">
+<h2><span class="header-section-number">6.13</span> Compile OpenMP Program<a href="parallel-computing-with-mpi-and-openmp.html#compile-openmp-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb139"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb139-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb139-1" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-fopenmp</span> hello_omp.c <span class="at">-o</span> hello_omp</span></code></pre></div>
+</div>
+<div id="run-openmp" class="section level2 hasAnchor" number="6.14">
+<h2><span class="header-section-number">6.14</span> Run OpenMP<a href="parallel-computing-with-mpi-and-openmp.html#run-openmp" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb140"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb140-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb140-1" tabindex="-1"></a><span class="bu">export</span> <span class="va">OMP_NUM_THREADS</span><span class="op">=</span>4</span>
+<span id="cb140-2"><a href="parallel-computing-with-mpi-and-openmp.html#cb140-2" tabindex="-1"></a><span class="ex">./hello_omp</span></span></code></pre></div>
+</div>
+<div id="openmp-slurm-script" class="section level2 hasAnchor" number="6.15">
+<h2><span class="header-section-number">6.15</span> OpenMP SLURM Script<a href="parallel-computing-with-mpi-and-openmp.html#openmp-slurm-script" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create:</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb141-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb141-1" tabindex="-1"></a><span class="fu">nano</span> omp.slurm</span></code></pre></div>
+<p>Add:</p>
+<div class="sourceCode" id="cb142"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb142-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb142-2"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-2" tabindex="-1"></a><span class="co">#SBATCH -J omp_test</span></span>
+<span id="cb142-3"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb142-4"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb142-5"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-5" tabindex="-1"></a><span class="co">#SBATCH -c 4</span></span>
+<span id="cb142-6"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-6" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb142-7"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-7" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb142-8"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-8" tabindex="-1"></a></span>
+<span id="cb142-9"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-9" tabindex="-1"></a><span class="bu">export</span> <span class="va">OMP_NUM_THREADS</span><span class="op">=</span>4</span>
+<span id="cb142-10"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-10" tabindex="-1"></a></span>
+<span id="cb142-11"><a href="parallel-computing-with-mpi-and-openmp.html#cb142-11" tabindex="-1"></a><span class="ex">./hello_omp</span></span></code></pre></div>
+<p>Submit:</p>
+<div class="sourceCode" id="cb143"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb143-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb143-1" tabindex="-1"></a><span class="ex">sbatch</span> omp.slurm</span></code></pre></div>
+</div>
+<div id="hybrid-concept" class="section level2 hasAnchor" number="6.16">
+<h2><span class="header-section-number">6.16</span> Hybrid Concept<a href="parallel-computing-with-mpi-and-openmp.html#hybrid-concept" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You can combine MPI and OpenMP:</p>
+<ul>
+<li>MPI across nodes</li>
+<li>OpenMP within nodes</li>
+</ul>
+</div>
+<div id="mental-model-2" class="section level2 hasAnchor" number="6.17">
+<h2><span class="header-section-number">6.17</span> Mental Model<a href="parallel-computing-with-mpi-and-openmp.html#mental-model-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre class="text"><code>Node 1:
+  Process 1 → Threads
+  Process 2 → Threads
+
+Node 2:
+  Process 3 → Threads
+  Process 4 → Threads</code></pre>
+</div>
+<div id="performance-thinking" class="section level2 hasAnchor" number="6.18">
+<h2><span class="header-section-number">6.18</span> Performance Thinking<a href="parallel-computing-with-mpi-and-openmp.html#performance-thinking" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We care about how runtime changes as cores increase.</p>
+<div id="strong-scaling" class="section level3 hasAnchor" number="6.18.1">
+<h3><span class="header-section-number">6.18.1</span> Strong Scaling<a href="parallel-computing-with-mpi-and-openmp.html#strong-scaling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Same problem size, more cores.</p>
+</div>
+<div id="weak-scaling" class="section level3 hasAnchor" number="6.18.2">
+<h3><span class="header-section-number">6.18.2</span> Weak Scaling<a href="parallel-computing-with-mpi-and-openmp.html#weak-scaling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Problem size increases with cores.</p>
+</div>
+<div id="simple-timing-example" class="section level3 hasAnchor" number="6.18.3">
+<h3><span class="header-section-number">6.18.3</span> Simple Timing Example<a href="parallel-computing-with-mpi-and-openmp.html#simple-timing-example" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb145"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb145-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb145-1" tabindex="-1"></a><span class="bu">time</span> ./hello</span></code></pre></div>
+<blockquote>
+<p>💡 <strong>Insight</strong></p>
+<p>More cores do not always mean faster results.
+Communication overhead matters.</p>
+</blockquote>
+</div>
+</div>
+<div id="common-mistakes-4" class="section level2 hasAnchor" number="6.19">
+<h2><span class="header-section-number">6.19</span> Common Mistakes<a href="parallel-computing-with-mpi-and-openmp.html#common-mistakes-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>using MPI without loading the module</li>
+<li>mismatch between <code>-n</code> and program expectations</li>
+<li>forgetting <code>OMP_NUM_THREADS</code></li>
+<li>running MPI directly on the login node</li>
+<li>misunderstanding cores vs tasks</li>
+</ul>
+</div>
+<div id="debugging-checklist-1" class="section level2 hasAnchor" number="6.20">
+<h2><span class="header-section-number">6.20</span> Debugging Checklist<a href="parallel-computing-with-mpi-and-openmp.html#debugging-checklist-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="check-job" class="section level3 hasAnchor" number="6.20.1">
+<h3><span class="header-section-number">6.20.1</span> Check job:<a href="parallel-computing-with-mpi-and-openmp.html#check-job" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb146"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb146-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb146-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+</div>
+<div id="check-output" class="section level3 hasAnchor" number="6.20.2">
+<h3><span class="header-section-number">6.20.2</span> Check output:<a href="parallel-computing-with-mpi-and-openmp.html#check-output" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb147"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb147-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb147-1" tabindex="-1"></a><span class="fu">cat</span> slurm-<span class="pp">*</span>.out</span></code></pre></div>
+</div>
+<div id="check-modules" class="section level3 hasAnchor" number="6.20.3">
+<h3><span class="header-section-number">6.20.3</span> Check modules:<a href="parallel-computing-with-mpi-and-openmp.html#check-modules" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb148"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb148-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb148-1" tabindex="-1"></a><span class="ex">module</span> list</span></code></pre></div>
+</div>
+<div id="check-resource-request" class="section level3 hasAnchor" number="6.20.4">
+<h3><span class="header-section-number">6.20.4</span> Check resource request:<a href="parallel-computing-with-mpi-and-openmp.html#check-resource-request" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>nodes (<code>-N</code>)</li>
+<li>tasks (<code>-n</code>)</li>
+<li>cores (<code>-c</code>)</li>
+</ul>
+</div>
+</div>
+<div id="lab-5-parallel-computing" class="section level2 hasAnchor" number="6.21">
+<h2><span class="header-section-number">6.21</span> Lab 5 — Parallel Computing<a href="parallel-computing-with-mpi-and-openmp.html#lab-5-parallel-computing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="part-1-mpi" class="section level3 hasAnchor" number="6.21.1">
+<h3><span class="header-section-number">6.21.1</span> Part 1: MPI<a href="parallel-computing-with-mpi-and-openmp.html#part-1-mpi" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li>Create <code>hello_mpi.c</code></li>
+<li>Compile:</li>
+</ol>
+<div class="sourceCode" id="cb149"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb149-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb149-1" tabindex="-1"></a><span class="ex">mpicc</span> hello_mpi.c <span class="at">-o</span> hello_mpi</span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Create SLURM script</li>
+<li>Run with 4 tasks</li>
+</ol>
+</div>
+<div id="part-2-openmp" class="section level3 hasAnchor" number="6.21.2">
+<h3><span class="header-section-number">6.21.2</span> Part 2: OpenMP<a href="parallel-computing-with-mpi-and-openmp.html#part-2-openmp" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li>Create <code>hello_omp.c</code></li>
+<li>Compile:</li>
+</ol>
+<div class="sourceCode" id="cb150"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb150-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb150-1" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-fopenmp</span> hello_omp.c <span class="at">-o</span> hello_omp</span></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li>Run with:</li>
+</ol>
+<div class="sourceCode" id="cb151"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb151-1"><a href="parallel-computing-with-mpi-and-openmp.html#cb151-1" tabindex="-1"></a><span class="bu">export</span> <span class="va">OMP_NUM_THREADS</span><span class="op">=</span>4</span></code></pre></div>
+</div>
+<div id="part-3-compare" class="section level3 hasAnchor" number="6.21.3">
+<h3><span class="header-section-number">6.21.3</span> Part 3: Compare<a href="parallel-computing-with-mpi-and-openmp.html#part-3-compare" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>run serial version</li>
+<li>run MPI version</li>
+<li>run OpenMP version</li>
+</ul>
+</div>
+<div id="part-4-scaling-experiment" class="section level3 hasAnchor" number="6.21.4">
+<h3><span class="header-section-number">6.21.4</span> Part 4: Scaling Experiment<a href="parallel-computing-with-mpi-and-openmp.html#part-4-scaling-experiment" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Run MPI with different task counts and compare behavior and runtime.</p>
+</div>
+</div>
+<div id="stretch-goal-3" class="section level2 hasAnchor" number="6.22">
+<h2><span class="header-section-number">6.22</span> Stretch Goal<a href="parallel-computing-with-mpi-and-openmp.html#stretch-goal-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>modify program to do actual computation</li>
+<li>measure runtime differences</li>
+<li>plot speedup</li>
+</ul>
+</div>
+<div id="transition" class="section level2 hasAnchor" number="6.23">
+<h2><span class="header-section-number">6.23</span> Transition<a href="parallel-computing-with-mpi-and-openmp.html#transition" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You now understand:</p>
+<ul>
+<li>how to compile code</li>
+<li>how to run jobs</li>
+<li>how to use multiple cores</li>
+</ul>
+<p>Next, we modernize workflows with containers and reproducibility.</p>
+</div>
+<div id="key-takeaways-4" class="section level2 hasAnchor" number="6.24">
+<h2><span class="header-section-number">6.24</span> Key Takeaways<a href="parallel-computing-with-mpi-and-openmp.html#key-takeaways-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>Parallel computing splits work across cores</li>
+<li>MPI uses processes across nodes</li>
+<li>OpenMP uses threads within a node</li>
+<li>SLURM controls resource allocation</li>
+<li>Performance depends on scaling and overhead</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="compiling-c-and-c-on-hpc-systems.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="containers-and-reproducible-hpc.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+  "sharing": null,
+  "fontsettings": {
+    "theme": "white",
+    "family": "sans",
+    "size": 2
+  },
+  "edit": {
+    "link": null,
+    "text": null
+  },
+  "history": {
+    "link": null,
+    "text": null
+  },
+  "view": {
+    "link": null,
+    "text": null
+  },
+  "download": null,
+  "search": {
+    "engine": "fuse",
+    "options": null
+  },
+  "toc": {
+    "collapse": "subsection"
+  }
+});
+});
+</script>
+
+</body>
+
+</html>
