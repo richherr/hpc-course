@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 High-Performance Computing on Lonestar6 | hpc-course.knit</title>
+  <title>Chapter 3 Linux Fundamentals and Environment Awareness | hpc-course.knit</title>
   <meta name="description" content="" />
   <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 High-Performance Computing on Lonestar6 | hpc-course.knit" />
+  <meta property="og:title" content="Chapter 3 Linux Fundamentals and Environment Awareness | hpc-course.knit" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 High-Performance Computing on Lonestar6 | hpc-course.knit" />
+  <meta name="twitter:title" content="Chapter 3 Linux Fundamentals and Environment Awareness | hpc-course.knit" />
   
   
   
@@ -28,8 +28,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="introduction-to-high-performance-computing-on-ls6.html"/>
+<link rel="prev" href="introduction-to-high-performance-computing-on-ls6.html"/>
+<link rel="next" href="slurm-job-scheduling-on-ls6.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -503,133 +503,284 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<!--bookdown:title:end-->
-<!--bookdown:title:start-->
-<div id="high-performance-computing-on-lonestar6" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> High-Performance Computing on Lonestar6<a href="index.html#high-performance-computing-on-lonestar6" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="welcome" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is a practical introduction to high-performance computing using the <strong>Lonestar6 (LS6)</strong> system at the Texas Advanced Computing Center (TACC). It is written for students, researchers, and new cluster users who need an operational path from first login to confident job submission.</p>
-<p>Rather than treating HPC as an abstract subject, this book treats it as a workflow:</p>
-<ol style="list-style-type: decimal">
-<li>understand the cluster</li>
-<li>work safely in Linux</li>
-<li>manage your environment</li>
-<li>submit jobs through SLURM</li>
-<li>compile programs</li>
-<li>scale to parallel work</li>
-<li>use containers for reproducibility</li>
-<li>complete an end-to-end capstone project</li>
-</ol>
-</div>
-<div id="what-this-book-is" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> What this book is<a href="index.html#what-this-book-is" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is designed to function as:</p>
+<div id="linux-fundamentals-and-environment-awareness" class="section level1 hasAnchor" number="3">
+<h1><span class="header-section-number">Chapter 3</span> Linux Fundamentals and Environment Awareness<a href="linux-fundamentals-and-environment-awareness.html#linux-fundamentals-and-environment-awareness" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-1" class="section level2 hasAnchor" number="3.1">
+<h2><span class="header-section-number">3.1</span> Overview<a href="linux-fundamentals-and-environment-awareness.html#overview-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This chapter builds the Linux foundation needed for real HPC work. Many job failures that appear to be “cluster problems” are actually basic environment problems:</p>
 <ul>
-<li>a textbook for a short course or workshop series</li>
-<li>a lab manual for hands-on LS6 exercises</li>
-<li>a reference guide for new HPC users</li>
-<li>a bridge from beginner Linux to production cluster workflows</li>
+<li>wrong directory</li>
+<li>missing file</li>
+<li>missing execute permission</li>
+<li>wrong module environment</li>
+<li>command not found</li>
+</ul>
+<p>By the end of this chapter, you should be able to:</p>
+<ul>
+<li>interpret the output of <code>ls -l</code></li>
+<li>change file permissions for common cases</li>
+<li>inspect and reason about environment variables</li>
+<li>understand what <code>PATH</code> does</li>
+<li>load, list, and unload modules</li>
+<li>use a practical debugging checklist before submitting work</li>
 </ul>
 </div>
-<div id="who-this-book-is-for" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Who this book is for<a href="index.html#who-this-book-is-for" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This material is appropriate for:</p>
+<div id="mental-model-an-hpc-system-is-a-shared-environment" class="section level2 hasAnchor" number="3.2">
+<h2><span class="header-section-number">3.2</span> Mental model: an HPC system is a shared environment<a href="linux-fundamentals-and-environment-awareness.html#mental-model-an-hpc-system-is-a-shared-environment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>On a personal laptop, users often assume that their preferred software, file layout, and editor are just “there.” On an HPC system, the environment is more explicit.</p>
+<p>You are working in a space that is:</p>
 <ul>
-<li>upper-level undergraduates</li>
-<li>graduate students beginning computational research</li>
-<li>faculty and staff new to HPC</li>
-<li>workshop participants who need a practical guide after class</li>
-<li>self-paced learners who want an LS6-centered path into HPC</li>
+<li>multi-user</li>
+<li>resource-managed</li>
+<li>environment-driven</li>
+<li>structured for repeatability</li>
 </ul>
-<p>No prior cluster experience is assumed. Some command-line exposure is helpful, but the early chapters are written to reduce the barrier to entry.</p>
-</div>
-<div id="learning-goals" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Learning goals<a href="index.html#learning-goals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>By the end of the book, readers should be able to:</p>
+<p>That means your workflow should be deliberate. You should know:</p>
 <ul>
-<li>explain the difference between login nodes and compute nodes</li>
-<li>connect to LS6 and work within the Linux shell</li>
-<li>manage files, directories, permissions, and environment variables</li>
-<li>use modules to load software into the current environment</li>
-<li>write, submit, monitor, and debug SLURM jobs</li>
-<li>compile and run simple C programs on the cluster</li>
-<li>distinguish serial, shared-memory, and distributed-memory workflows</li>
-<li>understand the role of containers in reproducible HPC work</li>
-<li>document a complete workflow so another researcher can repeat it</li>
+<li>where you are</li>
+<li>what files are present</li>
+<li>what software is loaded</li>
+<li>what commands are available in your environment</li>
 </ul>
 </div>
-<div id="course-philosophy" class="section level2 hasAnchor" number="1.5">
-<h2><span class="header-section-number">1.5</span> Course philosophy<a href="index.html#course-philosophy" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A common beginner mistake is to treat HPC as “a bigger computer.” It is better to think of HPC as a <strong>shared, scheduled, resource-managed environment</strong>.</p>
-<p>That idea affects everything in this book:</p>
+<div id="inspecting-the-filesystem" class="section level2 hasAnchor" number="3.3">
+<h2><span class="header-section-number">3.3</span> Inspecting the filesystem<a href="linux-fundamentals-and-environment-awareness.html#inspecting-the-filesystem" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The first two commands to trust are:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="linux-fundamentals-and-environment-awareness.html#cb11-1" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb11-2"><a href="linux-fundamentals-and-environment-awareness.html#cb11-2" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span></code></pre></div>
+<div id="pwd" class="section level3 hasAnchor" number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> <code>pwd</code><a href="linux-fundamentals-and-environment-awareness.html#pwd" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Prints the current working directory.</p>
+</div>
+<div id="ls--l" class="section level3 hasAnchor" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> <code>ls -l</code><a href="linux-fundamentals-and-environment-awareness.html#ls--l" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Lists files with useful details such as permissions, owner, group, size, and modification time.</p>
+<p>An example permission string looks like this:</p>
+<pre class="text"><code>-rwxr-xr--</code></pre>
+<p>A good beginner interpretation is:</p>
 <ul>
-<li>you do not do serious computation on login nodes</li>
-<li>your environment matters because software is often module-based</li>
-<li>your working directory matters because jobs run in specific locations</li>
-<li>your resource request matters because the scheduler allocates shared infrastructure</li>
-<li>your documentation matters because reproducibility is part of responsible computing</li>
+<li>the file exists</li>
+<li>it has an owner, group, and permission settings</li>
+<li>some users may execute it, some may not</li>
 </ul>
 </div>
-<div id="how-chapters-are-organized" class="section level2 hasAnchor" number="1.6">
-<h2><span class="header-section-number">1.6</span> How chapters are organized<a href="index.html#how-chapters-are-organized" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Most chapters follow a common pattern:</p>
-<ul>
-<li>overview</li>
-<li>mental model</li>
-<li>command examples</li>
-<li>walkthrough</li>
-<li>common mistakes</li>
-<li>debugging checklist</li>
-<li>hands-on lab</li>
-<li>stretch goal</li>
-</ul>
-<p>That structure is intentional. Many new users can reproduce commands but still feel uncertain about what the system is doing. The “mental model” sections are there to explain the logic behind the commands.</p>
 </div>
-<div id="recommended-use-in-a-course" class="section level2 hasAnchor" number="1.7">
-<h2><span class="header-section-number">1.7</span> Recommended use in a course<a href="index.html#recommended-use-in-a-course" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A natural workshop sequence is:</p>
+<div id="file-permissions-in-practice" class="section level2 hasAnchor" number="3.4">
+<h2><span class="header-section-number">3.4</span> File permissions in practice<a href="linux-fundamentals-and-environment-awareness.html#file-permissions-in-practice" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Permissions matter constantly in Linux-based HPC workflows.</p>
+<p>You do not need a full theory of Unix security to start working productively. You do need the operational basics.</p>
+<div id="common-actions" class="section level3 hasAnchor" number="3.4.1">
+<h3><span class="header-section-number">3.4.1</span> Common actions<a href="linux-fundamentals-and-environment-awareness.html#common-actions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Make a file executable:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="linux-fundamentals-and-environment-awareness.html#cb13-1" tabindex="-1"></a><span class="fu">chmod</span> +x script.sh</span></code></pre></div>
+<p>Remove write permission:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="linux-fundamentals-and-environment-awareness.html#cb14-1" tabindex="-1"></a><span class="fu">chmod</span> <span class="at">-w</span> file.txt</span></code></pre></div>
+<p>Use numeric mode:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="linux-fundamentals-and-environment-awareness.html#cb15-1" tabindex="-1"></a><span class="fu">chmod</span> 755 script.sh</span></code></pre></div>
+<p>A helpful mental model for <code>755</code> is:</p>
 <ul>
-<li><strong>Workshop 1</strong>: first login, minimal Linux, first SLURM job</li>
-<li><strong>Workshop 2</strong>: job monitoring and debugging</li>
-<li><strong>Workshop 3</strong>: modules, compilers, first C program</li>
-<li><strong>Workshop 4</strong>: MPI and OpenMP foundations</li>
-<li><strong>Workshop 5</strong>: containers and reproducibility</li>
-<li><strong>Workshop 6</strong>: capstone project work session</li>
-</ul>
-<p>This book can also be taught over several weeks as an onboarding course for a research computing program.</p>
-</div>
-<div id="what-you-need-before-starting" class="section level2 hasAnchor" number="1.8">
-<h2><span class="header-section-number">1.8</span> What you need before starting<a href="index.html#what-you-need-before-starting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Before working through the book, you should have:</p>
-<ul>
-<li>an LS6 account or equivalent training account</li>
-<li>SSH access from your laptop or desktop</li>
-<li>a terminal application</li>
-<li>a text editor you are comfortable using, or willingness to use <code>nano</code></li>
-<li>a place to keep notes on commands, directory paths, and job IDs</li>
+<li>owner: read, write, execute</li>
+<li>group: read, execute</li>
+<li>others: read, execute</li>
 </ul>
 </div>
-<div id="what-success-looks-like" class="section level2 hasAnchor" number="1.9">
-<h2><span class="header-section-number">1.9</span> What success looks like<a href="index.html#what-success-looks-like" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Success in this course is not memorizing every SLURM option or every Linux command. Success looks like this:</p>
+</div>
+<div id="why-permissions-matter-on-clusters" class="section level2 hasAnchor" number="3.5">
+<h2><span class="header-section-number">3.5</span> Why permissions matter on clusters<a href="linux-fundamentals-and-environment-awareness.html#why-permissions-matter-on-clusters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Common failures include:</p>
 <ul>
-<li>you know where you are in the filesystem</li>
-<li>you know whether work belongs on a login node or compute node</li>
-<li>you can inspect your environment instead of guessing</li>
-<li>you can submit a job and interpret what happened</li>
-<li>you can recover from common failures by reading evidence</li>
+<li>a script exists but will not execute</li>
+<li>a file cannot be edited because it is not writable</li>
+<li>a shared file has the wrong permissions for collaborators</li>
 </ul>
-<p>That is the mindset of an effective HPC user.</p>
+<p>When a script “should work” but does not, <code>ls -l</code> is one of the fastest checks you can make.</p>
 </div>
-<div id="a-note-on-reproducibility" class="section level2 hasAnchor" number="1.10">
-<h2><span class="header-section-number">1.10</span> A note on reproducibility<a href="index.html#a-note-on-reproducibility" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Throughout the book, you will be encouraged to save scripts, keep meaningful file names, and write down the commands you used. These are not extra tasks. They are part of the workflow itself.</p>
-<p>In research computing, a good result that cannot be reproduced later is far less valuable than a modest result that can be rerun, explained, and shared.</p>
+<div id="environment-variables" class="section level2 hasAnchor" number="3.6">
+<h2><span class="header-section-number">3.6</span> Environment variables<a href="linux-fundamentals-and-environment-awareness.html#environment-variables" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Environment variables define part of the context in which commands run.</p>
+<p>View them with:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="linux-fundamentals-and-environment-awareness.html#cb16-1" tabindex="-1"></a><span class="fu">env</span></span></code></pre></div>
+<p>Two important examples are:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="linux-fundamentals-and-environment-awareness.html#cb17-1" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$HOME</span></span>
+<span id="cb17-2"><a href="linux-fundamentals-and-environment-awareness.html#cb17-2" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$PATH</span></span></code></pre></div>
+<div id="home-1" class="section level3 hasAnchor" number="3.6.1">
+<h3><span class="header-section-number">3.6.1</span> <code>$HOME</code><a href="linux-fundamentals-and-environment-awareness.html#home-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Usually points to your home directory.</p>
 </div>
-<div id="looking-ahead" class="section level2 hasAnchor" number="1.11">
-<h2><span class="header-section-number">1.11</span> Looking ahead<a href="index.html#looking-ahead" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We begin with the most important conceptual distinction in cluster computing: <strong>login nodes versus compute nodes</strong>. From there, we build the smallest practical Linux toolkit needed to complete a real workflow on LS6.</p>
+<div id="path" class="section level3 hasAnchor" number="3.6.2">
+<h3><span class="header-section-number">3.6.2</span> <code>$PATH</code><a href="linux-fundamentals-and-environment-awareness.html#path" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Tells the shell where to search for executable programs.</p>
+<p>If a program is not on your <code>PATH</code>, typing its name may produce:</p>
+<pre class="text"><code>command not found</code></pre>
+</div>
+</div>
+<div id="a-practical-mental-model-for-path" class="section level2 hasAnchor" number="3.7">
+<h2><span class="header-section-number">3.7</span> A practical mental model for <code>PATH</code><a href="linux-fundamentals-and-environment-awareness.html#a-practical-mental-model-for-path" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Think of <code>PATH</code> as a list of directories the shell searches when you enter a command name.</p>
+<p>If <code>gcc</code> is on your <code>PATH</code>, you can type:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="linux-fundamentals-and-environment-awareness.html#cb19-1" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">--version</span></span></code></pre></div>
+<p>If not, the shell may not know where to find it.</p>
+<p>A temporary way to add your own directory is:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="linux-fundamentals-and-environment-awareness.html#cb20-1" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">$HOME</span>/bin:<span class="va">$PATH</span></span></code></pre></div>
+<p>This prepends <code>$HOME/bin</code> to the front of the search path for the current shell session.</p>
+</div>
+<div id="modules-software-is-part-of-the-environment" class="section level2 hasAnchor" number="3.8">
+<h2><span class="header-section-number">3.8</span> Modules: software is part of the environment<a href="linux-fundamentals-and-environment-awareness.html#modules-software-is-part-of-the-environment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Clusters often use a module system rather than making every software package globally visible at all times.</p>
+<p>That means software is often loaded <strong>into the environment</strong> when needed.</p>
+<p>Common commands:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="linux-fundamentals-and-environment-awareness.html#cb21-1" tabindex="-1"></a><span class="ex">module</span> avail</span>
+<span id="cb21-2"><a href="linux-fundamentals-and-environment-awareness.html#cb21-2" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
+<span id="cb21-3"><a href="linux-fundamentals-and-environment-awareness.html#cb21-3" tabindex="-1"></a><span class="ex">module</span> list</span>
+<span id="cb21-4"><a href="linux-fundamentals-and-environment-awareness.html#cb21-4" tabindex="-1"></a><span class="ex">module</span> unload gcc</span></code></pre></div>
+</div>
+<div id="why-modules-matter" class="section level2 hasAnchor" number="3.9">
+<h2><span class="header-section-number">3.9</span> Why modules matter<a href="linux-fundamentals-and-environment-awareness.html#why-modules-matter" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>On an HPC system, different projects may need:</p>
+<ul>
+<li>different compiler versions</li>
+<li>different MPI libraries</li>
+<li>different Python stacks</li>
+<li>different container runtimes</li>
+</ul>
+<p>Modules help manage this complexity.</p>
+<p>Instead of assuming “the system version” is correct, users load an appropriate environment for the job.</p>
+</div>
+<div id="example-loading-a-compiler" class="section level2 hasAnchor" number="3.10">
+<h2><span class="header-section-number">3.10</span> Example: loading a compiler<a href="linux-fundamentals-and-environment-awareness.html#example-loading-a-compiler" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="linux-fundamentals-and-environment-awareness.html#cb22-1" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
+<span id="cb22-2"><a href="linux-fundamentals-and-environment-awareness.html#cb22-2" tabindex="-1"></a><span class="fu">which</span> gcc</span>
+<span id="cb22-3"><a href="linux-fundamentals-and-environment-awareness.html#cb22-3" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">--version</span></span></code></pre></div>
+<p>This sequence is valuable because it does three things:</p>
+<ul>
+<li>loads the compiler module</li>
+<li>shows which executable will run</li>
+<li>shows the version now active in the shell</li>
+</ul>
+</div>
+<div id="practical-file-inspection-tools" class="section level2 hasAnchor" number="3.11">
+<h2><span class="header-section-number">3.11</span> Practical file inspection tools<a href="linux-fundamentals-and-environment-awareness.html#practical-file-inspection-tools" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A few file-related commands are worth using early.</p>
+<p>Find a file:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="linux-fundamentals-and-environment-awareness.html#cb23-1" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">&quot;example.txt&quot;</span></span></code></pre></div>
+<p>View a file:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="linux-fundamentals-and-environment-awareness.html#cb24-1" tabindex="-1"></a><span class="fu">cat</span> example.txt</span>
+<span id="cb24-2"><a href="linux-fundamentals-and-environment-awareness.html#cb24-2" tabindex="-1"></a><span class="fu">less</span> example.txt</span>
+<span id="cb24-3"><a href="linux-fundamentals-and-environment-awareness.html#cb24-3" tabindex="-1"></a><span class="fu">head</span> example.txt</span>
+<span id="cb24-4"><a href="linux-fundamentals-and-environment-awareness.html#cb24-4" tabindex="-1"></a><span class="fu">tail</span> example.txt</span></code></pre></div>
+<p>These tools are especially helpful when checking logs, outputs, and small configuration files.</p>
+</div>
+<div id="piping-commands-together" class="section level2 hasAnchor" number="3.12">
+<h2><span class="header-section-number">3.12</span> Piping commands together<a href="linux-fundamentals-and-environment-awareness.html#piping-commands-together" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of the most useful Linux habits is combining small commands.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="linux-fundamentals-and-environment-awareness.html#cb25-1" tabindex="-1"></a><span class="fu">cat</span> file.txt <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;error&quot;</span></span></code></pre></div>
+<p>This is a classic pipeline: one command produces output, the next filters it.</p>
+<p>You do not need to become an expert in shell pipelines immediately, but you should recognize that Linux tools are designed to be chained together.</p>
+</div>
+<div id="disk-awareness-matters" class="section level2 hasAnchor" number="3.13">
+<h2><span class="header-section-number">3.13</span> Disk awareness matters<a href="linux-fundamentals-and-environment-awareness.html#disk-awareness-matters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>HPC users need at least basic awareness of storage usage.</p>
+<p>Check filesystem space:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="linux-fundamentals-and-environment-awareness.html#cb26-1" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span></span></code></pre></div>
+<p>Check directory sizes:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="linux-fundamentals-and-environment-awareness.html#cb27-1" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> <span class="pp">*</span></span></code></pre></div>
+<p>These commands help prevent confusion when jobs fail because of full storage areas or because output is larger than expected.</p>
+</div>
+<div id="process-awareness" class="section level2 hasAnchor" number="3.14">
+<h2><span class="header-section-number">3.14</span> Process awareness<a href="linux-fundamentals-and-environment-awareness.html#process-awareness" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sometimes you need to inspect or stop your own processes.</p>
+<p>List your processes:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="linux-fundamentals-and-environment-awareness.html#cb28-1" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<p>Kill a process:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="linux-fundamentals-and-environment-awareness.html#cb29-1" tabindex="-1"></a><span class="bu">kill</span> <span class="op">&lt;</span>pid<span class="op">&gt;</span></span></code></pre></div>
+<p>This becomes more useful later when dealing with editors, accidental runs, or interactive sessions.</p>
+</div>
+<div id="optional-connection-to-r" class="section level2 hasAnchor" number="3.15">
+<h2><span class="header-section-number">3.15</span> Optional connection to R<a href="linux-fundamentals-and-environment-awareness.html#optional-connection-to-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For students who use R heavily, it is useful to remember that environment information can also be inspected from inside R.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="linux-fundamentals-and-environment-awareness.html#cb30-1" tabindex="-1"></a><span class="fu">Sys.getenv</span>(<span class="st">&quot;PATH&quot;</span>)</span></code></pre></div>
+<p>And shell commands can be invoked from R when appropriate:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="linux-fundamentals-and-environment-awareness.html#cb31-1" tabindex="-1"></a><span class="fu">system</span>(<span class="st">&quot;echo $HOME&quot;</span>)</span></code></pre></div>
+<p>That said, it is still important to understand the shell environment directly rather than relying only on IDE tools.</p>
+</div>
+<div id="a-debugging-mindset-for-linux-based-hpc-work" class="section level2 hasAnchor" number="3.16">
+<h2><span class="header-section-number">3.16</span> A debugging mindset for Linux-based HPC work<a href="linux-fundamentals-and-environment-awareness.html#a-debugging-mindset-for-linux-based-hpc-work" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When something goes wrong, start with evidence.</p>
+<p>Ask these five questions in order:</p>
+<div id="where-am-i" class="section level3 hasAnchor" number="3.16.1">
+<h3><span class="header-section-number">3.16.1</span> 1. Where am I?<a href="linux-fundamentals-and-environment-awareness.html#where-am-i" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="linux-fundamentals-and-environment-awareness.html#cb32-1" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div>
+</div>
+<div id="what-files-are-here" class="section level3 hasAnchor" number="3.16.2">
+<h3><span class="header-section-number">3.16.2</span> 2. What files are here?<a href="linux-fundamentals-and-environment-awareness.html#what-files-are-here" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="linux-fundamentals-and-environment-awareness.html#cb33-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span></code></pre></div>
+</div>
+<div id="do-i-have-the-right-permissions" class="section level3 hasAnchor" number="3.16.3">
+<h3><span class="header-section-number">3.16.3</span> 3. Do I have the right permissions?<a href="linux-fundamentals-and-environment-awareness.html#do-i-have-the-right-permissions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="linux-fundamentals-and-environment-awareness.html#cb34-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> script.sh</span></code></pre></div>
+</div>
+<div id="is-the-program-actually-available" class="section level3 hasAnchor" number="3.16.4">
+<h3><span class="header-section-number">3.16.4</span> 4. Is the program actually available?<a href="linux-fundamentals-and-environment-awareness.html#is-the-program-actually-available" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="linux-fundamentals-and-environment-awareness.html#cb35-1" tabindex="-1"></a><span class="fu">which</span> gcc</span></code></pre></div>
+</div>
+<div id="is-my-environment-what-i-think-it-is" class="section level3 hasAnchor" number="3.16.5">
+<h3><span class="header-section-number">3.16.5</span> 5. Is my environment what I think it is?<a href="linux-fundamentals-and-environment-awareness.html#is-my-environment-what-i-think-it-is" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="linux-fundamentals-and-environment-awareness.html#cb36-1" tabindex="-1"></a><span class="ex">module</span> list</span></code></pre></div>
+<p>This checklist will reappear in later chapters because it prevents premature guessing.</p>
+</div>
+</div>
+<div id="common-beginner-mistakes-in-chapter-2" class="section level2 hasAnchor" number="3.17">
+<h2><span class="header-section-number">3.17</span> Common beginner mistakes in Chapter 2<a href="linux-fundamentals-and-environment-awareness.html#common-beginner-mistakes-in-chapter-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>forgetting <code>chmod +x</code></li>
+<li>assuming <code>PATH</code> is correct without checking</li>
+<li>forgetting to load a needed module</li>
+<li>filling up <code>$HOME</code> and wondering why workflows behave strangely</li>
+<li>treating missing commands as mysterious system failures instead of environment issues</li>
+</ul>
+</div>
+<div id="chapter-lab-1" class="section level2 hasAnchor" number="3.18">
+<h2><span class="header-section-number">3.18</span> Chapter lab<a href="linux-fundamentals-and-environment-awareness.html#chapter-lab-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="part-1-permissions" class="section level3 hasAnchor" number="3.18.1">
+<h3><span class="header-section-number">3.18.1</span> Part 1: permissions<a href="linux-fundamentals-and-environment-awareness.html#part-1-permissions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="linux-fundamentals-and-environment-awareness.html#cb37-1" tabindex="-1"></a><span class="fu">touch</span> test.sh</span>
+<span id="cb37-2"><a href="linux-fundamentals-and-environment-awareness.html#cb37-2" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span>
+<span id="cb37-3"><a href="linux-fundamentals-and-environment-awareness.html#cb37-3" tabindex="-1"></a><span class="fu">chmod</span> +x test.sh</span>
+<span id="cb37-4"><a href="linux-fundamentals-and-environment-awareness.html#cb37-4" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span></code></pre></div>
+</div>
+<div id="part-2-environment-variables" class="section level3 hasAnchor" number="3.18.2">
+<h3><span class="header-section-number">3.18.2</span> Part 2: environment variables<a href="linux-fundamentals-and-environment-awareness.html#part-2-environment-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb38"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="linux-fundamentals-and-environment-awareness.html#cb38-1" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$HOME</span></span>
+<span id="cb38-2"><a href="linux-fundamentals-and-environment-awareness.html#cb38-2" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$PATH</span></span>
+<span id="cb38-3"><a href="linux-fundamentals-and-environment-awareness.html#cb38-3" tabindex="-1"></a><span class="bu">export</span> <span class="va">COURSE</span><span class="op">=</span>HPC</span>
+<span id="cb38-4"><a href="linux-fundamentals-and-environment-awareness.html#cb38-4" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$COURSE</span></span></code></pre></div>
+</div>
+<div id="part-3-modules" class="section level3 hasAnchor" number="3.18.3">
+<h3><span class="header-section-number">3.18.3</span> Part 3: modules<a href="linux-fundamentals-and-environment-awareness.html#part-3-modules" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb39"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="linux-fundamentals-and-environment-awareness.html#cb39-1" tabindex="-1"></a><span class="ex">module</span> avail</span>
+<span id="cb39-2"><a href="linux-fundamentals-and-environment-awareness.html#cb39-2" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
+<span id="cb39-3"><a href="linux-fundamentals-and-environment-awareness.html#cb39-3" tabindex="-1"></a><span class="ex">module</span> list</span>
+<span id="cb39-4"><a href="linux-fundamentals-and-environment-awareness.html#cb39-4" tabindex="-1"></a><span class="fu">which</span> gcc</span>
+<span id="cb39-5"><a href="linux-fundamentals-and-environment-awareness.html#cb39-5" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">--version</span></span></code></pre></div>
+</div>
+<div id="part-4-storage-awareness" class="section level3 hasAnchor" number="3.18.4">
+<h3><span class="header-section-number">3.18.4</span> Part 4: storage awareness<a href="linux-fundamentals-and-environment-awareness.html#part-4-storage-awareness" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb40-1"><a href="linux-fundamentals-and-environment-awareness.html#cb40-1" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span></span>
+<span id="cb40-2"><a href="linux-fundamentals-and-environment-awareness.html#cb40-2" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> ~</span></code></pre></div>
+</div>
+<div id="part-5-file-discovery" class="section level3 hasAnchor" number="3.18.5">
+<h3><span class="header-section-number">3.18.5</span> Part 5: file discovery<a href="linux-fundamentals-and-environment-awareness.html#part-5-file-discovery" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb41"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb41-1"><a href="linux-fundamentals-and-environment-awareness.html#cb41-1" tabindex="-1"></a><span class="fu">touch</span> example.txt</span>
+<span id="cb41-2"><a href="linux-fundamentals-and-environment-awareness.html#cb41-2" tabindex="-1"></a><span class="fu">find</span> . <span class="at">-name</span> <span class="st">&quot;example.txt&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="stretch-goal" class="section level2 hasAnchor" number="3.19">
+<h2><span class="header-section-number">3.19</span> Stretch goal<a href="linux-fundamentals-and-environment-awareness.html#stretch-goal" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create a custom <code>bin/</code> directory in your home space, add it to <code>PATH</code>, place a small script in that directory, and run it without typing the full path.</p>
+</div>
+<div id="looking-ahead-2" class="section level2 hasAnchor" number="3.20">
+<h2><span class="header-section-number">3.20</span> Looking ahead<a href="linux-fundamentals-and-environment-awareness.html#looking-ahead-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The next chapter turns these Linux and environment skills into a real HPC workflow. Once you can reliably manage directories, permissions, and modules, you are ready to write a SLURM script and submit work to the scheduler.</p>
 
 </div>
 </div>
@@ -638,8 +789,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="introduction-to-high-performance-computing-on-ls6.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="introduction-to-high-performance-computing-on-ls6.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="slurm-job-scheduling-on-ls6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

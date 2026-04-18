@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 High-Performance Computing on Lonestar6 | hpc-course.knit</title>
+  <title>Chapter 5 Modules, Compilers, and Your First C Program | hpc-course.knit</title>
   <meta name="description" content="" />
   <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 High-Performance Computing on Lonestar6 | hpc-course.knit" />
+  <meta property="og:title" content="Chapter 5 Modules, Compilers, and Your First C Program | hpc-course.knit" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 High-Performance Computing on Lonestar6 | hpc-course.knit" />
+  <meta name="twitter:title" content="Chapter 5 Modules, Compilers, and Your First C Program | hpc-course.knit" />
   
   
   
@@ -28,8 +28,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="introduction-to-high-performance-computing-on-ls6.html"/>
+<link rel="prev" href="slurm-job-scheduling-on-ls6.html"/>
+<link rel="next" href="parallel-computing-with-mpi-and-openmp.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -503,133 +503,250 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<!--bookdown:title:end-->
-<!--bookdown:title:start-->
-<div id="high-performance-computing-on-lonestar6" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> High-Performance Computing on Lonestar6<a href="index.html#high-performance-computing-on-lonestar6" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="welcome" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is a practical introduction to high-performance computing using the <strong>Lonestar6 (LS6)</strong> system at the Texas Advanced Computing Center (TACC). It is written for students, researchers, and new cluster users who need an operational path from first login to confident job submission.</p>
-<p>Rather than treating HPC as an abstract subject, this book treats it as a workflow:</p>
+<div id="modules-compilers-and-your-first-c-program" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Modules, Compilers, and Your First C Program<a href="modules-compilers-and-your-first-c-program.html#modules-compilers-and-your-first-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-3" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Overview<a href="modules-compilers-and-your-first-c-program.html#overview-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In this chapter, we move from running shell commands and SLURM scripts to <strong>building executable software from source code</strong>.</p>
+<p>This matters because many HPC workflows involve custom code, research software built from source, and toolchains that depend on specific compiler environments.</p>
+<p>By the end of this chapter, you should be able to:</p>
+<ul>
+<li>explain what compilation does</li>
+<li>load a compiler module</li>
+<li>verify which compiler is active</li>
+<li>compile a small C program with <code>gcc</code></li>
+<li>run the resulting executable</li>
+<li>prepare compiled code for SLURM execution</li>
+</ul>
+</div>
+<div id="mental-model-source-code-becomes-an-executable" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Mental model: source code becomes an executable<a href="modules-compilers-and-your-first-c-program.html#mental-model-source-code-becomes-an-executable" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A compiled workflow looks like this:</p>
+<pre class="text"><code>source code (.c)
+      ↓
+compiler (gcc)
+      ↓
+executable binary
+      ↓
+run on LS6</code></pre>
+<p>That simple picture explains a great deal of later HPC practice.</p>
+<ul>
+<li>source code is human-readable</li>
+<li>the compiler translates source into machine-executable form</li>
+<li>the executable is what the system can actually run</li>
+</ul>
+</div>
+<div id="why-compilation-matters-on-clusters" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Why compilation matters on clusters<a href="modules-compilers-and-your-first-c-program.html#why-compilation-matters-on-clusters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Compilation matters in HPC because:</p>
+<ul>
+<li>software is not always preinstalled</li>
+<li>the compiler version can affect behavior</li>
+<li>libraries and toolchains must often match each other</li>
+<li>performance can depend strongly on how code is built</li>
+</ul>
+<p>For beginners, the main goal is not advanced optimization. It is understanding the workflow clearly.</p>
+</div>
+<div id="two-compilers-you-will-hear-about-often" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Two compilers you will hear about often<a href="modules-compilers-and-your-first-c-program.html#two-compilers-you-will-hear-about-often" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><code>gcc</code> for C</li>
+<li><code>g++</code> for C++</li>
+</ul>
+<p>This chapter focuses on <strong>C and <code>gcc</code></strong>, because it gives the cleanest first compiled example.</p>
+</div>
+<div id="modules-first-then-compilation" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Modules first, then compilation<a href="modules-compilers-and-your-first-c-program.html#modules-first-then-compilation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Before compiling, load a compiler environment:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb69-1"><a href="modules-compilers-and-your-first-c-program.html#cb69-1" tabindex="-1"></a><span class="ex">module</span> avail</span>
+<span id="cb69-2"><a href="modules-compilers-and-your-first-c-program.html#cb69-2" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
+<span id="cb69-3"><a href="modules-compilers-and-your-first-c-program.html#cb69-3" tabindex="-1"></a><span class="ex">module</span> list</span></code></pre></div>
+<p>This reinforces a central HPC idea: software is part of the environment.</p>
+</div>
+<div id="confirm-which-compiler-you-are-using" class="section level2 hasAnchor" number="5.6">
+<h2><span class="header-section-number">5.6</span> Confirm which compiler you are using<a href="modules-compilers-and-your-first-c-program.html#confirm-which-compiler-you-are-using" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb70"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb70-1"><a href="modules-compilers-and-your-first-c-program.html#cb70-1" tabindex="-1"></a><span class="fu">which</span> gcc</span>
+<span id="cb70-2"><a href="modules-compilers-and-your-first-c-program.html#cb70-2" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">--version</span></span></code></pre></div>
+<p>This is important because it replaces guessing with evidence.</p>
+<p>You now know:</p>
+<ul>
+<li>whether <code>gcc</code> is available</li>
+<li>where the executable is coming from</li>
+<li>which version is active</li>
+</ul>
+</div>
+<div id="your-first-c-program" class="section level2 hasAnchor" number="5.7">
+<h2><span class="header-section-number">5.7</span> Your first C program<a href="modules-compilers-and-your-first-c-program.html#your-first-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create the file:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb71-1"><a href="modules-compilers-and-your-first-c-program.html#cb71-1" tabindex="-1"></a><span class="fu">nano</span> hello.c</span></code></pre></div>
+<p>Add:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb72-1"><a href="modules-compilers-and-your-first-c-program.html#cb72-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb72-2"><a href="modules-compilers-and-your-first-c-program.html#cb72-2" tabindex="-1"></a></span>
+<span id="cb72-3"><a href="modules-compilers-and-your-first-c-program.html#cb72-3" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb72-4"><a href="modules-compilers-and-your-first-c-program.html#cb72-4" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello from C on LS6</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb72-5"><a href="modules-compilers-and-your-first-c-program.html#cb72-5" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb72-6"><a href="modules-compilers-and-your-first-c-program.html#cb72-6" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>This program does very little, but it demonstrates the full compiled workflow.</p>
+</div>
+<div id="compile-the-program" class="section level2 hasAnchor" number="5.8">
+<h2><span class="header-section-number">5.8</span> Compile the program<a href="modules-compilers-and-your-first-c-program.html#compile-the-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb73"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb73-1"><a href="modules-compilers-and-your-first-c-program.html#cb73-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
+<p>Interpretation:</p>
+<ul>
+<li><code>hello.c</code> is the source file</li>
+<li><code>-o hello</code> names the output executable <code>hello</code></li>
+</ul>
+</div>
+<div id="run-the-executable" class="section level2 hasAnchor" number="5.9">
+<h2><span class="header-section-number">5.9</span> Run the executable<a href="modules-compilers-and-your-first-c-program.html#run-the-executable" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb74"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb74-1"><a href="modules-compilers-and-your-first-c-program.html#cb74-1" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
+<p>Expected output:</p>
+<pre class="text"><code>Hello from C on LS6</code></pre>
+</div>
+<div id="inspect-what-was-created" class="section level2 hasAnchor" number="5.10">
+<h2><span class="header-section-number">5.10</span> Inspect what was created<a href="modules-compilers-and-your-first-c-program.html#inspect-what-was-created" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb76"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb76-1"><a href="modules-compilers-and-your-first-c-program.html#cb76-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span></code></pre></div>
+<p>You should see at least:</p>
+<ul>
+<li><code>hello.c</code></li>
+<li><code>hello</code></li>
+</ul>
+<p>This is an important moment for beginners: the source file and the executable are not the same thing.</p>
+</div>
+<div id="what-just-happened-1" class="section level2 hasAnchor" number="5.11">
+<h2><span class="header-section-number">5.11</span> What just happened?<a href="modules-compilers-and-your-first-c-program.html#what-just-happened-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You:</p>
+<ul>
+<li>wrote source code</li>
+<li>invoked a compiler</li>
+<li>created an executable file</li>
+<li>ran that executable from the shell</li>
+</ul>
+<p>That is the core compiled workflow used across much of scientific computing.</p>
+</div>
+<div id="optimization-flags" class="section level2 hasAnchor" number="5.12">
+<h2><span class="header-section-number">5.12</span> Optimization flags<a href="modules-compilers-and-your-first-c-program.html#optimization-flags" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A common form is:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb77-1"><a href="modules-compilers-and-your-first-c-program.html#cb77-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello <span class="at">-O2</span></span></code></pre></div>
+<p>Useful levels to know:</p>
+<ul>
+<li><code>-O0</code> = no optimization</li>
+<li><code>-O2</code> = standard practical choice</li>
+<li><code>-O3</code> = more aggressive optimization</li>
+</ul>
+<p>For an introductory course, <code>-O2</code> is a good default example.</p>
+</div>
+<div id="a-brief-note-on-c" class="section level2 hasAnchor" number="5.13">
+<h2><span class="header-section-number">5.13</span> A brief note on C++<a href="modules-compilers-and-your-first-c-program.html#a-brief-note-on-c" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A similar pattern exists for C++:</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb78-1"><a href="modules-compilers-and-your-first-c-program.html#cb78-1" tabindex="-1"></a><span class="ex">g++</span> hello.cpp <span class="at">-o</span> hello_cpp</span></code></pre></div>
+<p>The overall workflow is the same. The compiler changes because the language changes.</p>
+</div>
+<div id="multiple-file-programs" class="section level2 hasAnchor" number="5.14">
+<h2><span class="header-section-number">5.14</span> Multiple-file programs<a href="modules-compilers-and-your-first-c-program.html#multiple-file-programs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Real projects often have more than one source file.</p>
+<p>For example:</p>
+<pre class="text"><code>main.c
+helper.c
+helper.h</code></pre>
+<p>A simple compile step might be:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb80-1"><a href="modules-compilers-and-your-first-c-program.html#cb80-1" tabindex="-1"></a><span class="fu">gcc</span> main.c helper.c <span class="at">-o</span> program</span></code></pre></div>
+<p>This introduces an important idea: programs can be built from multiple components.</p>
+</div>
+<div id="header-files" class="section level2 hasAnchor" number="5.15">
+<h2><span class="header-section-number">5.15</span> Header files<a href="modules-compilers-and-your-first-c-program.html#header-files" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Headers (<code>.h</code>) are used to define interfaces or declarations.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb81-1"><a href="modules-compilers-and-your-first-c-program.html#cb81-1" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span></code></pre></div>
+<p>Even if students do not yet write large C projects, it helps to see that compilation can involve several files working together.</p>
+</div>
+<div id="automating-builds-with-make" class="section level2 hasAnchor" number="5.16">
+<h2><span class="header-section-number">5.16</span> Automating builds with <code>make</code><a href="modules-compilers-and-your-first-c-program.html#automating-builds-with-make" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When builds become repetitive, use a <code>Makefile</code>.</p>
+<p>Create:</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb82-1"><a href="modules-compilers-and-your-first-c-program.html#cb82-1" tabindex="-1"></a><span class="fu">nano</span> Makefile</span></code></pre></div>
+<p>Add:</p>
+<pre class="make"><code>all:
+    gcc hello.c -o hello</code></pre>
+<p>Then run:</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb84-1"><a href="modules-compilers-and-your-first-c-program.html#cb84-1" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
+<p>The point of this early example is not to teach all of <code>make</code>, but to show how build steps can be automated and standardized.</p>
+</div>
+<div id="where-compilation-belongs-in-the-workflow" class="section level2 hasAnchor" number="5.17">
+<h2><span class="header-section-number">5.17</span> Where compilation belongs in the workflow<a href="modules-compilers-and-your-first-c-program.html#where-compilation-belongs-in-the-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Good beginner rule:</p>
+<ul>
+<li>compile on login nodes for small builds</li>
+<li>run heavier or production computations through SLURM</li>
+</ul>
+<p>This keeps the workflow aligned with the earlier distinction between setup and computation.</p>
+</div>
+<div id="run-compiled-code-through-slurm" class="section level2 hasAnchor" number="5.18">
+<h2><span class="header-section-number">5.18</span> Run compiled code through SLURM<a href="modules-compilers-and-your-first-c-program.html#run-compiled-code-through-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create <code>run.slurm</code>:</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb85-1"><a href="modules-compilers-and-your-first-c-program.html#cb85-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb85-2"><a href="modules-compilers-and-your-first-c-program.html#cb85-2" tabindex="-1"></a><span class="co">#SBATCH -J compile_test</span></span>
+<span id="cb85-3"><a href="modules-compilers-and-your-first-c-program.html#cb85-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb85-4"><a href="modules-compilers-and-your-first-c-program.html#cb85-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb85-5"><a href="modules-compilers-and-your-first-c-program.html#cb85-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb85-6"><a href="modules-compilers-and-your-first-c-program.html#cb85-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb85-7"><a href="modules-compilers-and-your-first-c-program.html#cb85-7" tabindex="-1"></a></span>
+<span id="cb85-8"><a href="modules-compilers-and-your-first-c-program.html#cb85-8" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
+<p>Submit it:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb86-1"><a href="modules-compilers-and-your-first-c-program.html#cb86-1" tabindex="-1"></a><span class="ex">sbatch</span> run.slurm</span></code></pre></div>
+<p>Now the compiled workflow connects directly back to the scheduler workflow from the previous chapter.</p>
+</div>
+<div id="common-beginner-failures" class="section level2 hasAnchor" number="5.19">
+<h2><span class="header-section-number">5.19</span> Common beginner failures<a href="modules-compilers-and-your-first-c-program.html#common-beginner-failures" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>forgot <code>module load gcc</code></li>
+<li>typo in the source code</li>
+<li>forgot <code>-o hello</code></li>
+<li>tried to run from the wrong directory</li>
+<li>assumed compilation worked without reading the compiler output</li>
+</ul>
+</div>
+<div id="debug-checklist-for-compilation-work" class="section level2 hasAnchor" number="5.20">
+<h2><span class="header-section-number">5.20</span> Debug checklist for compilation work<a href="modules-compilers-and-your-first-c-program.html#debug-checklist-for-compilation-work" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use this order:</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb87-1"><a href="modules-compilers-and-your-first-c-program.html#cb87-1" tabindex="-1"></a><span class="ex">module</span> list</span>
+<span id="cb87-2"><a href="modules-compilers-and-your-first-c-program.html#cb87-2" tabindex="-1"></a><span class="fu">which</span> gcc</span>
+<span id="cb87-3"><a href="modules-compilers-and-your-first-c-program.html#cb87-3" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span>
+<span id="cb87-4"><a href="modules-compilers-and-your-first-c-program.html#cb87-4" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span>
+<span id="cb87-5"><a href="modules-compilers-and-your-first-c-program.html#cb87-5" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
+<p>If the compile step fails, read the compiler message slowly. It is often telling you exactly where the problem is.</p>
+</div>
+<div id="chapter-lab-3" class="section level2 hasAnchor" number="5.21">
+<h2><span class="header-section-number">5.21</span> Chapter lab<a href="modules-compilers-and-your-first-c-program.html#chapter-lab-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="part-1-compile-a-c-program" class="section level3 hasAnchor" number="5.21.1">
+<h3><span class="header-section-number">5.21.1</span> Part 1: compile a C program<a href="modules-compilers-and-your-first-c-program.html#part-1-compile-a-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li>understand the cluster</li>
-<li>work safely in Linux</li>
-<li>manage your environment</li>
-<li>submit jobs through SLURM</li>
-<li>compile programs</li>
-<li>scale to parallel work</li>
-<li>use containers for reproducibility</li>
-<li>complete an end-to-end capstone project</li>
+<li>Create <code>hello.c</code>.</li>
+<li>Compile with <code>gcc hello.c -o hello</code>.</li>
+<li>Run <code>./hello</code>.</li>
 </ol>
 </div>
-<div id="what-this-book-is" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> What this book is<a href="index.html#what-this-book-is" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is designed to function as:</p>
-<ul>
-<li>a textbook for a short course or workshop series</li>
-<li>a lab manual for hands-on LS6 exercises</li>
-<li>a reference guide for new HPC users</li>
-<li>a bridge from beginner Linux to production cluster workflows</li>
-</ul>
+<div id="part-2-inspect-the-files" class="section level3 hasAnchor" number="5.21.2">
+<h3><span class="header-section-number">5.21.2</span> Part 2: inspect the files<a href="modules-compilers-and-your-first-c-program.html#part-2-inspect-the-files" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Use <code>ls -l</code> and note the difference between source and executable.</p>
 </div>
-<div id="who-this-book-is-for" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Who this book is for<a href="index.html#who-this-book-is-for" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This material is appropriate for:</p>
-<ul>
-<li>upper-level undergraduates</li>
-<li>graduate students beginning computational research</li>
-<li>faculty and staff new to HPC</li>
-<li>workshop participants who need a practical guide after class</li>
-<li>self-paced learners who want an LS6-centered path into HPC</li>
-</ul>
-<p>No prior cluster experience is assumed. Some command-line exposure is helpful, but the early chapters are written to reduce the barrier to entry.</p>
+<div id="part-3-use-optimization" class="section level3 hasAnchor" number="5.21.3">
+<h3><span class="header-section-number">5.21.3</span> Part 3: use optimization<a href="modules-compilers-and-your-first-c-program.html#part-3-use-optimization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Compile with:</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb88-1"><a href="modules-compilers-and-your-first-c-program.html#cb88-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello_opt <span class="at">-O2</span></span></code></pre></div>
 </div>
-<div id="learning-goals" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Learning goals<a href="index.html#learning-goals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>By the end of the book, readers should be able to:</p>
-<ul>
-<li>explain the difference between login nodes and compute nodes</li>
-<li>connect to LS6 and work within the Linux shell</li>
-<li>manage files, directories, permissions, and environment variables</li>
-<li>use modules to load software into the current environment</li>
-<li>write, submit, monitor, and debug SLURM jobs</li>
-<li>compile and run simple C programs on the cluster</li>
-<li>distinguish serial, shared-memory, and distributed-memory workflows</li>
-<li>understand the role of containers in reproducible HPC work</li>
-<li>document a complete workflow so another researcher can repeat it</li>
-</ul>
+<div id="part-4-run-through-slurm" class="section level3 hasAnchor" number="5.21.4">
+<h3><span class="header-section-number">5.21.4</span> Part 4: run through SLURM<a href="modules-compilers-and-your-first-c-program.html#part-4-run-through-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Create <code>run.slurm</code>, submit it, and inspect the output file.</p>
 </div>
-<div id="course-philosophy" class="section level2 hasAnchor" number="1.5">
-<h2><span class="header-section-number">1.5</span> Course philosophy<a href="index.html#course-philosophy" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A common beginner mistake is to treat HPC as “a bigger computer.” It is better to think of HPC as a <strong>shared, scheduled, resource-managed environment</strong>.</p>
-<p>That idea affects everything in this book:</p>
-<ul>
-<li>you do not do serious computation on login nodes</li>
-<li>your environment matters because software is often module-based</li>
-<li>your working directory matters because jobs run in specific locations</li>
-<li>your resource request matters because the scheduler allocates shared infrastructure</li>
-<li>your documentation matters because reproducibility is part of responsible computing</li>
-</ul>
+<div id="part-5-optional-makefile" class="section level3 hasAnchor" number="5.21.5">
+<h3><span class="header-section-number">5.21.5</span> Part 5: optional Makefile<a href="modules-compilers-and-your-first-c-program.html#part-5-optional-makefile" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Create the minimal <code>Makefile</code> and use <code>make</code>.</p>
 </div>
-<div id="how-chapters-are-organized" class="section level2 hasAnchor" number="1.6">
-<h2><span class="header-section-number">1.6</span> How chapters are organized<a href="index.html#how-chapters-are-organized" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Most chapters follow a common pattern:</p>
-<ul>
-<li>overview</li>
-<li>mental model</li>
-<li>command examples</li>
-<li>walkthrough</li>
-<li>common mistakes</li>
-<li>debugging checklist</li>
-<li>hands-on lab</li>
-<li>stretch goal</li>
-</ul>
-<p>That structure is intentional. Many new users can reproduce commands but still feel uncertain about what the system is doing. The “mental model” sections are there to explain the logic behind the commands.</p>
 </div>
-<div id="recommended-use-in-a-course" class="section level2 hasAnchor" number="1.7">
-<h2><span class="header-section-number">1.7</span> Recommended use in a course<a href="index.html#recommended-use-in-a-course" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A natural workshop sequence is:</p>
-<ul>
-<li><strong>Workshop 1</strong>: first login, minimal Linux, first SLURM job</li>
-<li><strong>Workshop 2</strong>: job monitoring and debugging</li>
-<li><strong>Workshop 3</strong>: modules, compilers, first C program</li>
-<li><strong>Workshop 4</strong>: MPI and OpenMP foundations</li>
-<li><strong>Workshop 5</strong>: containers and reproducibility</li>
-<li><strong>Workshop 6</strong>: capstone project work session</li>
-</ul>
-<p>This book can also be taught over several weeks as an onboarding course for a research computing program.</p>
-</div>
-<div id="what-you-need-before-starting" class="section level2 hasAnchor" number="1.8">
-<h2><span class="header-section-number">1.8</span> What you need before starting<a href="index.html#what-you-need-before-starting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Before working through the book, you should have:</p>
-<ul>
-<li>an LS6 account or equivalent training account</li>
-<li>SSH access from your laptop or desktop</li>
-<li>a terminal application</li>
-<li>a text editor you are comfortable using, or willingness to use <code>nano</code></li>
-<li>a place to keep notes on commands, directory paths, and job IDs</li>
-</ul>
-</div>
-<div id="what-success-looks-like" class="section level2 hasAnchor" number="1.9">
-<h2><span class="header-section-number">1.9</span> What success looks like<a href="index.html#what-success-looks-like" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Success in this course is not memorizing every SLURM option or every Linux command. Success looks like this:</p>
-<ul>
-<li>you know where you are in the filesystem</li>
-<li>you know whether work belongs on a login node or compute node</li>
-<li>you can inspect your environment instead of guessing</li>
-<li>you can submit a job and interpret what happened</li>
-<li>you can recover from common failures by reading evidence</li>
-</ul>
-<p>That is the mindset of an effective HPC user.</p>
-</div>
-<div id="a-note-on-reproducibility" class="section level2 hasAnchor" number="1.10">
-<h2><span class="header-section-number">1.10</span> A note on reproducibility<a href="index.html#a-note-on-reproducibility" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Throughout the book, you will be encouraged to save scripts, keep meaningful file names, and write down the commands you used. These are not extra tasks. They are part of the workflow itself.</p>
-<p>In research computing, a good result that cannot be reproduced later is far less valuable than a modest result that can be rerun, explained, and shared.</p>
-</div>
-<div id="looking-ahead" class="section level2 hasAnchor" number="1.11">
-<h2><span class="header-section-number">1.11</span> Looking ahead<a href="index.html#looking-ahead" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We begin with the most important conceptual distinction in cluster computing: <strong>login nodes versus compute nodes</strong>. From there, we build the smallest practical Linux toolkit needed to complete a real workflow on LS6.</p>
+<div id="looking-ahead-4" class="section level2 hasAnchor" number="5.22">
+<h2><span class="header-section-number">5.22</span> Looking ahead<a href="modules-compilers-and-your-first-c-program.html#looking-ahead-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The next major conceptual jump is from serial execution to parallel execution. Once you understand how to compile and run one program, you are ready to ask how that work can be spread across multiple cores, threads, or nodes using MPI and OpenMP.</p>
 
 </div>
 </div>
@@ -638,8 +755,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="introduction-to-high-performance-computing-on-ls6.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="slurm-job-scheduling-on-ls6.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="parallel-computing-with-mpi-and-openmp.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
