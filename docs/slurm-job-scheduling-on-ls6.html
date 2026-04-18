@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 9 Appendix: HPC Quick Reference | hpc-course.knit</title>
+  <title>Chapter 4 SLURM Job Scheduling on LS6 | hpc-course.knit</title>
   <meta name="description" content="" />
   <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 9 Appendix: HPC Quick Reference | hpc-course.knit" />
+  <meta property="og:title" content="Chapter 4 SLURM Job Scheduling on LS6 | hpc-course.knit" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 9 Appendix: HPC Quick Reference | hpc-course.knit" />
+  <meta name="twitter:title" content="Chapter 4 SLURM Job Scheduling on LS6 | hpc-course.knit" />
   
   
   
@@ -28,8 +28,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="capstone-project-end-to-end-hpc-workflow.html"/>
-
+<link rel="prev" href="linux-fundamentals-and-environment-awareness.html"/>
+<link rel="next" href="modules-compilers-and-your-first-c-program.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -503,71 +503,344 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="appendix-hpc-quick-reference" class="section level1 hasAnchor" number="9">
-<h1><span class="header-section-number">Chapter 9</span> Appendix: HPC Quick Reference<a href="appendix-hpc-quick-reference.html#appendix-hpc-quick-reference" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="overview-7" class="section level2 hasAnchor" number="9.1">
-<h2><span class="header-section-number">9.1</span> Overview<a href="appendix-hpc-quick-reference.html#overview-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This appendix provides a compact quick reference for common commands and workflow patterns used throughout the course.</p>
+<div id="slurm-job-scheduling-on-ls6" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> SLURM Job Scheduling on LS6<a href="slurm-job-scheduling-on-ls6.html#slurm-job-scheduling-on-ls6" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-2" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Overview<a href="slurm-job-scheduling-on-ls6.html#overview-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>On an HPC system, real computational work is normally submitted through a scheduler rather than run directly from the login node. On LS6, that scheduler is <strong>SLURM</strong>.</p>
+<p>This chapter introduces the practical workflow for batch jobs:</p>
+<ul>
+<li>write a job script</li>
+<li>request resources</li>
+<li>submit with <code>sbatch</code></li>
+<li>monitor with <code>squeue</code></li>
+<li>inspect finished jobs with <code>sacct</code></li>
+<li>read output files and diagnose failures</li>
+</ul>
+<p>By the end of the chapter, you should be able to submit and interpret your first real SLURM job.</p>
 </div>
-<div id="ssh" class="section level2 hasAnchor" number="9.2">
-<h2><span class="header-section-number">9.2</span> SSH<a href="appendix-hpc-quick-reference.html#ssh" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb137"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb137-1"><a href="appendix-hpc-quick-reference.html#cb137-1" tabindex="-1"></a><span class="fu">ssh</span> your_username@ls6.tacc.utexas.edu</span></code></pre></div>
+<div id="mental-model-slurm-is-a-resource-manager" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Mental model: SLURM is a resource manager<a href="slurm-job-scheduling-on-ls6.html#mental-model-slurm-is-a-resource-manager" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Think of SLURM as the system that coordinates fair access to shared compute resources.</p>
+<p>You do not simply “grab a node.” Instead, you make a request that describes:</p>
+<ul>
+<li>what you want to run</li>
+<li>how many resources you need</li>
+<li>how long you need them</li>
+<li>which queue or partition should be used</li>
+</ul>
+<p>SLURM then decides when and where your job can run.</p>
 </div>
-<div id="basic-linux" class="section level2 hasAnchor" number="9.3">
-<h2><span class="header-section-number">9.3</span> Basic Linux<a href="appendix-hpc-quick-reference.html#basic-linux" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb138"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb138-1"><a href="appendix-hpc-quick-reference.html#cb138-1" tabindex="-1"></a><span class="bu">pwd</span></span>
-<span id="cb138-2"><a href="appendix-hpc-quick-reference.html#cb138-2" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span>
-<span id="cb138-3"><a href="appendix-hpc-quick-reference.html#cb138-3" tabindex="-1"></a><span class="bu">cd</span></span>
-<span id="cb138-4"><a href="appendix-hpc-quick-reference.html#cb138-4" tabindex="-1"></a><span class="fu">mkdir</span> project</span>
-<span id="cb138-5"><a href="appendix-hpc-quick-reference.html#cb138-5" tabindex="-1"></a><span class="fu">cp</span> file1 file2</span>
-<span id="cb138-6"><a href="appendix-hpc-quick-reference.html#cb138-6" tabindex="-1"></a><span class="fu">mv</span> old new</span>
-<span id="cb138-7"><a href="appendix-hpc-quick-reference.html#cb138-7" tabindex="-1"></a><span class="fu">rm</span> file</span></code></pre></div>
+<div id="why-clusters-use-schedulers" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Why clusters use schedulers<a href="slurm-job-scheduling-on-ls6.html#why-clusters-use-schedulers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Without a scheduler:</p>
+<ul>
+<li>users would compete chaotically for resources</li>
+<li>jobs would interfere with each other</li>
+<li>there would be little accountability for resource use</li>
+</ul>
+<p>With a scheduler:</p>
+<ul>
+<li>jobs are queued</li>
+<li>resources are allocated intentionally</li>
+<li>usage is tracked</li>
+<li>the system remains usable for many people at once</li>
+</ul>
 </div>
-<div id="permissions" class="section level2 hasAnchor" number="9.4">
-<h2><span class="header-section-number">9.4</span> Permissions<a href="appendix-hpc-quick-reference.html#permissions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb139"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb139-1"><a href="appendix-hpc-quick-reference.html#cb139-1" tabindex="-1"></a><span class="fu">chmod</span> +x script.sh</span>
-<span id="cb139-2"><a href="appendix-hpc-quick-reference.html#cb139-2" tabindex="-1"></a><span class="fu">chmod</span> 755 script.sh</span></code></pre></div>
+<div id="a-basic-batch-workflow" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> A basic batch workflow<a href="slurm-job-scheduling-on-ls6.html#a-basic-batch-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre class="text"><code>You write a job script
+        ↓
+Submit with sbatch
+        ↓
+Job enters SLURM queue
+        ↓
+Scheduler allocates compute resources
+        ↓
+Job runs on compute node(s)
+        ↓
+Output and job history become available</code></pre>
+<p>This is the operational heart of beginner HPC work.</p>
 </div>
-<div id="environment-and-modules" class="section level2 hasAnchor" number="9.5">
-<h2><span class="header-section-number">9.5</span> Environment and Modules<a href="appendix-hpc-quick-reference.html#environment-and-modules" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb140"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb140-1"><a href="appendix-hpc-quick-reference.html#cb140-1" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$PATH</span></span>
-<span id="cb140-2"><a href="appendix-hpc-quick-reference.html#cb140-2" tabindex="-1"></a><span class="ex">module</span> avail</span>
-<span id="cb140-3"><a href="appendix-hpc-quick-reference.html#cb140-3" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
-<span id="cb140-4"><a href="appendix-hpc-quick-reference.html#cb140-4" tabindex="-1"></a><span class="ex">module</span> list</span>
-<span id="cb140-5"><a href="appendix-hpc-quick-reference.html#cb140-5" tabindex="-1"></a><span class="ex">module</span> unload gcc</span></code></pre></div>
+<div id="your-first-slurm-script" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Your first SLURM script<a href="slurm-job-scheduling-on-ls6.html#your-first-slurm-script" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create a file:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="slurm-job-scheduling-on-ls6.html#cb43-1" tabindex="-1"></a><span class="fu">nano</span> job.slurm</span></code></pre></div>
+<p>Add:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="slurm-job-scheduling-on-ls6.html#cb44-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb44-2"><a href="slurm-job-scheduling-on-ls6.html#cb44-2" tabindex="-1"></a><span class="co">#SBATCH -J hello_job</span></span>
+<span id="cb44-3"><a href="slurm-job-scheduling-on-ls6.html#cb44-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb44-4"><a href="slurm-job-scheduling-on-ls6.html#cb44-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb44-5"><a href="slurm-job-scheduling-on-ls6.html#cb44-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:01:00</span></span>
+<span id="cb44-6"><a href="slurm-job-scheduling-on-ls6.html#cb44-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb44-7"><a href="slurm-job-scheduling-on-ls6.html#cb44-7" tabindex="-1"></a></span>
+<span id="cb44-8"><a href="slurm-job-scheduling-on-ls6.html#cb44-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Hello from compute node&quot;</span></span>
+<span id="cb44-9"><a href="slurm-job-scheduling-on-ls6.html#cb44-9" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb44-10"><a href="slurm-job-scheduling-on-ls6.html#cb44-10" tabindex="-1"></a><span class="fu">date</span></span></code></pre></div>
 </div>
-<div id="slurm" class="section level2 hasAnchor" number="9.6">
-<h2><span class="header-section-number">9.6</span> SLURM<a href="appendix-hpc-quick-reference.html#slurm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb141"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb141-1"><a href="appendix-hpc-quick-reference.html#cb141-1" tabindex="-1"></a><span class="ex">sbatch</span> job.slurm</span>
-<span id="cb141-2"><a href="appendix-hpc-quick-reference.html#cb141-2" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span>
-<span id="cb141-3"><a href="appendix-hpc-quick-reference.html#cb141-3" tabindex="-1"></a><span class="ex">sacct</span></span>
-<span id="cb141-4"><a href="appendix-hpc-quick-reference.html#cb141-4" tabindex="-1"></a><span class="ex">scancel</span> <span class="op">&lt;</span>jobid<span class="op">&gt;</span></span></code></pre></div>
+<div id="reading-the-script-line-by-line" class="section level2 hasAnchor" number="4.6">
+<h2><span class="header-section-number">4.6</span> Reading the script line by line<a href="slurm-job-scheduling-on-ls6.html#reading-the-script-line-by-line" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="shebang" class="section level3 hasAnchor" number="4.6.1">
+<h3><span class="header-section-number">4.6.1</span> Shebang<a href="slurm-job-scheduling-on-ls6.html#shebang" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="slurm-job-scheduling-on-ls6.html#cb45-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span></code></pre></div>
+<p>Tells the system to execute the script using Bash.</p>
 </div>
-<div id="compilation" class="section level2 hasAnchor" number="9.7">
-<h2><span class="header-section-number">9.7</span> Compilation<a href="appendix-hpc-quick-reference.html#compilation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb142"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb142-1"><a href="appendix-hpc-quick-reference.html#cb142-1" tabindex="-1"></a><span class="fu">gcc</span> program.c <span class="at">-o</span> program <span class="at">-O2</span></span>
-<span id="cb142-2"><a href="appendix-hpc-quick-reference.html#cb142-2" tabindex="-1"></a><span class="ex">g++</span> program.cpp <span class="at">-o</span> program</span>
-<span id="cb142-3"><a href="appendix-hpc-quick-reference.html#cb142-3" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
+<div id="job-name" class="section level3 hasAnchor" number="4.6.2">
+<h3><span class="header-section-number">4.6.2</span> Job name<a href="slurm-job-scheduling-on-ls6.html#job-name" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb46"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="slurm-job-scheduling-on-ls6.html#cb46-1" tabindex="-1"></a><span class="co">#SBATCH -J hello_job</span></span></code></pre></div>
+<p>Gives the job a readable name.</p>
 </div>
-<div id="mpi" class="section level2 hasAnchor" number="9.8">
-<h2><span class="header-section-number">9.8</span> MPI<a href="appendix-hpc-quick-reference.html#mpi" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb143"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb143-1"><a href="appendix-hpc-quick-reference.html#cb143-1" tabindex="-1"></a><span class="ex">module</span> load openmpi</span>
-<span id="cb143-2"><a href="appendix-hpc-quick-reference.html#cb143-2" tabindex="-1"></a><span class="ex">mpicc</span> program.c <span class="at">-o</span> program</span></code></pre></div>
+<div id="nodes" class="section level3 hasAnchor" number="4.6.3">
+<h3><span class="header-section-number">4.6.3</span> Nodes<a href="slurm-job-scheduling-on-ls6.html#nodes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="slurm-job-scheduling-on-ls6.html#cb47-1" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span></code></pre></div>
+<p>Requests one node.</p>
 </div>
-<div id="openmp-1" class="section level2 hasAnchor" number="9.9">
-<h2><span class="header-section-number">9.9</span> OpenMP<a href="appendix-hpc-quick-reference.html#openmp-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb144"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb144-1"><a href="appendix-hpc-quick-reference.html#cb144-1" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-fopenmp</span> program.c <span class="at">-o</span> program</span>
-<span id="cb144-2"><a href="appendix-hpc-quick-reference.html#cb144-2" tabindex="-1"></a><span class="bu">export</span> <span class="va">OMP_NUM_THREADS</span><span class="op">=</span>4</span></code></pre></div>
+<div id="tasks" class="section level3 hasAnchor" number="4.6.4">
+<h3><span class="header-section-number">4.6.4</span> Tasks<a href="slurm-job-scheduling-on-ls6.html#tasks" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb48"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="slurm-job-scheduling-on-ls6.html#cb48-1" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span></code></pre></div>
+<p>Requests one task.</p>
 </div>
-<div id="containers" class="section level2 hasAnchor" number="9.10">
-<h2><span class="header-section-number">9.10</span> Containers<a href="appendix-hpc-quick-reference.html#containers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb145"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb145-1"><a href="appendix-hpc-quick-reference.html#cb145-1" tabindex="-1"></a><span class="ex">module</span> load apptainer</span>
-<span id="cb145-2"><a href="appendix-hpc-quick-reference.html#cb145-2" tabindex="-1"></a><span class="ex">apptainer</span> exec image.sif command</span></code></pre></div>
+<div id="wall-time" class="section level3 hasAnchor" number="4.6.5">
+<h3><span class="header-section-number">4.6.5</span> Wall time<a href="slurm-job-scheduling-on-ls6.html#wall-time" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="slurm-job-scheduling-on-ls6.html#cb49-1" tabindex="-1"></a><span class="co">#SBATCH -t 00:01:00</span></span></code></pre></div>
+<p>Sets the maximum runtime to one minute.</p>
 </div>
-<div id="final-notes" class="section level2 hasAnchor" number="9.11">
-<h2><span class="header-section-number">9.11</span> Final Notes<a href="appendix-hpc-quick-reference.html#final-notes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This appendix provides a quick reference for common HPC workflows.
-For full explanations and examples, refer back to the main chapters.</p>
+<div id="partition" class="section level3 hasAnchor" number="4.6.6">
+<h3><span class="header-section-number">4.6.6</span> Partition<a href="slurm-job-scheduling-on-ls6.html#partition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb50"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="slurm-job-scheduling-on-ls6.html#cb50-1" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span></code></pre></div>
+<p>Requests the <code>normal</code> partition.</p>
+<p>Even at this stage, the main idea is becoming visible: a SLURM script is both a command script and a resource request.</p>
+</div>
+</div>
+<div id="submit-the-job" class="section level2 hasAnchor" number="4.7">
+<h2><span class="header-section-number">4.7</span> Submit the job<a href="slurm-job-scheduling-on-ls6.html#submit-the-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb51"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a href="slurm-job-scheduling-on-ls6.html#cb51-1" tabindex="-1"></a><span class="ex">sbatch</span> job.slurm</span></code></pre></div>
+<p>Typical response:</p>
+<pre class="text"><code>Submitted batch job 123456</code></pre>
+<p>That message does <strong>not</strong> mean your job has already run. It means the job has been accepted by the scheduler.</p>
+</div>
+<div id="one-of-the-most-important-beginner-corrections" class="section level2 hasAnchor" number="4.8">
+<h2><span class="header-section-number">4.8</span> One of the most important beginner corrections<a href="slurm-job-scheduling-on-ls6.html#one-of-the-most-important-beginner-corrections" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Students often think:</p>
+<blockquote>
+<p>I used <code>sbatch</code>, so my program must already be running.</p>
+</blockquote>
+<p>That is not necessarily true.</p>
+<p><code>sbatch</code> submits the job to the queue. The scheduler then determines when the job can start.</p>
+</div>
+<div id="monitoring-queued-and-running-jobs" class="section level2 hasAnchor" number="4.9">
+<h2><span class="header-section-number">4.9</span> Monitoring queued and running jobs<a href="slurm-job-scheduling-on-ls6.html#monitoring-queued-and-running-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="slurm-job-scheduling-on-ls6.html#cb53-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<p>This lets you inspect your current jobs.</p>
+<p>Typical fields include:</p>
+<ul>
+<li>job ID</li>
+<li>partition</li>
+<li>job name</li>
+<li>state</li>
+<li>elapsed time</li>
+<li>nodes used</li>
+</ul>
+</div>
+<div id="common-slurm-job-states" class="section level2 hasAnchor" number="4.10">
+<h2><span class="header-section-number">4.10</span> Common SLURM job states<a href="slurm-job-scheduling-on-ls6.html#common-slurm-job-states" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><code>PD</code> = pending</li>
+<li><code>R</code> = running</li>
+<li><code>CG</code> = completing</li>
+<li><code>CD</code> = completed</li>
+</ul>
+<p>A pending job is not broken simply because it is pending. It may be waiting for resources.</p>
+</div>
+<div id="output-files-as-evidence" class="section level2 hasAnchor" number="4.11">
+<h2><span class="header-section-number">4.11</span> Output files as evidence<a href="slurm-job-scheduling-on-ls6.html#output-files-as-evidence" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When a batch job finishes, a file like this often appears:</p>
+<pre class="text"><code>slurm-123456.out</code></pre>
+<p>Inspect it with:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb55-1"><a href="slurm-job-scheduling-on-ls6.html#cb55-1" tabindex="-1"></a><span class="fu">cat</span> slurm-123456.out</span></code></pre></div>
+<p>or:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="slurm-job-scheduling-on-ls6.html#cb56-1" tabindex="-1"></a><span class="fu">cat</span> slurm-<span class="pp">*</span>.out</span></code></pre></div>
+<p>These output files are often the first place to look during debugging.</p>
+</div>
+<div id="what-just-happened-in-the-first-example" class="section level2 hasAnchor" number="4.12">
+<h2><span class="header-section-number">4.12</span> What just happened in the first example?<a href="slurm-job-scheduling-on-ls6.html#what-just-happened-in-the-first-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When the simple <code>hello_job</code> runs, you have successfully completed an authentic cluster workflow:</p>
+<ul>
+<li>wrote a batch script</li>
+<li>requested resources</li>
+<li>submitted the request to SLURM</li>
+<li>allowed the scheduler to place the job</li>
+<li>executed commands on a compute node</li>
+<li>collected output from the run</li>
+</ul>
+<p>That is the core pattern you will repeat again and again.</p>
+</div>
+<div id="seeing-the-distinction-between-login-and-compute-nodes" class="section level2 hasAnchor" number="4.13">
+<h2><span class="header-section-number">4.13</span> Seeing the distinction between login and compute nodes<a href="slurm-job-scheduling-on-ls6.html#seeing-the-distinction-between-login-and-compute-nodes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Run <code>hostname</code> on the login node and compare it with the hostname printed inside a SLURM job.</p>
+<p>That difference makes the cluster architecture concrete.</p>
+<p>It helps students see that login access is not the same as compute allocation.</p>
+</div>
+<div id="a-longer-running-observation-job" class="section level2 hasAnchor" number="4.14">
+<h2><span class="header-section-number">4.14</span> A longer-running observation job<a href="slurm-job-scheduling-on-ls6.html#a-longer-running-observation-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To observe a job in the queue or running state, edit the script:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb57-1"><a href="slurm-job-scheduling-on-ls6.html#cb57-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb57-2"><a href="slurm-job-scheduling-on-ls6.html#cb57-2" tabindex="-1"></a><span class="co">#SBATCH -J hello_job</span></span>
+<span id="cb57-3"><a href="slurm-job-scheduling-on-ls6.html#cb57-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb57-4"><a href="slurm-job-scheduling-on-ls6.html#cb57-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb57-5"><a href="slurm-job-scheduling-on-ls6.html#cb57-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:02:00</span></span>
+<span id="cb57-6"><a href="slurm-job-scheduling-on-ls6.html#cb57-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb57-7"><a href="slurm-job-scheduling-on-ls6.html#cb57-7" tabindex="-1"></a></span>
+<span id="cb57-8"><a href="slurm-job-scheduling-on-ls6.html#cb57-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Starting job&quot;</span></span>
+<span id="cb57-9"><a href="slurm-job-scheduling-on-ls6.html#cb57-9" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb57-10"><a href="slurm-job-scheduling-on-ls6.html#cb57-10" tabindex="-1"></a><span class="fu">sleep</span> 30</span>
+<span id="cb57-11"><a href="slurm-job-scheduling-on-ls6.html#cb57-11" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Finishing job&quot;</span></span></code></pre></div>
+<p>Submit it again:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href="slurm-job-scheduling-on-ls6.html#cb58-1" tabindex="-1"></a><span class="ex">sbatch</span> job.slurm</span></code></pre></div>
+<p>Then check:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb59-1"><a href="slurm-job-scheduling-on-ls6.html#cb59-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<p>This lets you see the difference between job submission and job completion.</p>
+</div>
+<div id="looking-backward-with-job-accounting" class="section level2 hasAnchor" number="4.15">
+<h2><span class="header-section-number">4.15</span> Looking backward with job accounting<a href="slurm-job-scheduling-on-ls6.html#looking-backward-with-job-accounting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Jobs do not stay in <code>squeue</code> forever. Once they finish, you often want history rather than live status.</p>
+<p>Use:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb60-1"><a href="slurm-job-scheduling-on-ls6.html#cb60-1" tabindex="-1"></a><span class="ex">sacct</span></span></code></pre></div>
+<p>To focus on a specific job:</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb61-1"><a href="slurm-job-scheduling-on-ls6.html#cb61-1" tabindex="-1"></a><span class="ex">sacct</span> <span class="at">-j</span> <span class="op">&lt;</span>jobid<span class="op">&gt;</span></span></code></pre></div>
+<p>This is valuable for post-run diagnosis.</p>
+</div>
+<div id="cancelling-a-job" class="section level2 hasAnchor" number="4.16">
+<h2><span class="header-section-number">4.16</span> Cancelling a job<a href="slurm-job-scheduling-on-ls6.html#cancelling-a-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>If a job was submitted incorrectly or no longer needed, use:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb62-1"><a href="slurm-job-scheduling-on-ls6.html#cb62-1" tabindex="-1"></a><span class="ex">scancel</span> <span class="op">&lt;</span>jobid<span class="op">&gt;</span></span></code></pre></div>
+<p>Common reasons to cancel a job include:</p>
+<ul>
+<li>wrong script</li>
+<li>bad resource request</li>
+<li>runaway test submission</li>
+<li>discovering an error immediately after submission</li>
+</ul>
+</div>
+<div id="common-failure-patterns" class="section level2 hasAnchor" number="4.17">
+<h2><span class="header-section-number">4.17</span> Common failure patterns<a href="slurm-job-scheduling-on-ls6.html#common-failure-patterns" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="the-job-never-starts" class="section level3 hasAnchor" number="4.17.1">
+<h3><span class="header-section-number">4.17.1</span> 1. The job never starts<a href="slurm-job-scheduling-on-ls6.html#the-job-never-starts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Possible reasons include:</p>
+<ul>
+<li>unrealistic resource request</li>
+<li>wrong partition</li>
+<li>excessive wall time</li>
+<li>waiting for shared resources</li>
+</ul>
+</div>
+<div id="the-job-fails-immediately" class="section level3 hasAnchor" number="4.17.2">
+<h3><span class="header-section-number">4.17.2</span> 2. The job fails immediately<a href="slurm-job-scheduling-on-ls6.html#the-job-fails-immediately" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Possible reasons include:</p>
+<ul>
+<li>typo in a command</li>
+<li>missing module</li>
+<li>missing input file</li>
+<li>bad script logic</li>
+</ul>
+</div>
+<div id="no-output-appears-where-you-expected" class="section level3 hasAnchor" number="4.17.3">
+<h3><span class="header-section-number">4.17.3</span> 3. No output appears where you expected<a href="slurm-job-scheduling-on-ls6.html#no-output-appears-where-you-expected" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Possible reasons include:</p>
+<ul>
+<li>the job is still pending</li>
+<li>you are looking in the wrong directory</li>
+<li>output was redirected elsewhere</li>
+</ul>
+</div>
+</div>
+<div id="debug-from-evidence-not-guessing" class="section level2 hasAnchor" number="4.18">
+<h2><span class="header-section-number">4.18</span> Debug from evidence, not guessing<a href="slurm-job-scheduling-on-ls6.html#debug-from-evidence-not-guessing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When a job seems wrong, use this sequence.</p>
+<div id="did-it-submit" class="section level3 hasAnchor" number="4.18.1">
+<h3><span class="header-section-number">4.18.1</span> 1. Did it submit?<a href="slurm-job-scheduling-on-ls6.html#did-it-submit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb63"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb63-1"><a href="slurm-job-scheduling-on-ls6.html#cb63-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+</div>
+<div id="did-it-run-or-finish" class="section level3 hasAnchor" number="4.18.2">
+<h3><span class="header-section-number">4.18.2</span> 2. Did it run or finish?<a href="slurm-job-scheduling-on-ls6.html#did-it-run-or-finish" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb64"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb64-1"><a href="slurm-job-scheduling-on-ls6.html#cb64-1" tabindex="-1"></a><span class="ex">sacct</span></span></code></pre></div>
+</div>
+<div id="what-does-the-output-file-say" class="section level3 hasAnchor" number="4.18.3">
+<h3><span class="header-section-number">4.18.3</span> 3. What does the output file say?<a href="slurm-job-scheduling-on-ls6.html#what-does-the-output-file-say" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb65"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb65-1"><a href="slurm-job-scheduling-on-ls6.html#cb65-1" tabindex="-1"></a><span class="fu">cat</span> slurm-<span class="pp">*</span>.out</span></code></pre></div>
+</div>
+<div id="was-the-environment-correct" class="section level3 hasAnchor" number="4.18.4">
+<h3><span class="header-section-number">4.18.4</span> 4. Was the environment correct?<a href="slurm-job-scheduling-on-ls6.html#was-the-environment-correct" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Check the job script for <code>module load</code> lines and inspect assumptions.</p>
+</div>
+<div id="was-the-job-launched-from-the-correct-working-directory" class="section level3 hasAnchor" number="4.18.5">
+<h3><span class="header-section-number">4.18.5</span> 5. Was the job launched from the correct working directory?<a href="slurm-job-scheduling-on-ls6.html#was-the-job-launched-from-the-correct-working-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb66"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb66-1"><a href="slurm-job-scheduling-on-ls6.html#cb66-1" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb66-2"><a href="slurm-job-scheduling-on-ls6.html#cb66-2" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
+<p>This checklist prevents you from inventing explanations too early.</p>
+</div>
+</div>
+<div id="failure-based-learning-exercise" class="section level2 hasAnchor" number="4.19">
+<h2><span class="header-section-number">4.19</span> Failure-based learning exercise<a href="slurm-job-scheduling-on-ls6.html#failure-based-learning-exercise" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Try breaking a script intentionally in one of these ways:</p>
+<ul>
+<li>misspell a command</li>
+<li>request an unrealistic combination of resources</li>
+<li>refer to a file that does not exist</li>
+<li>load a module that is unavailable</li>
+</ul>
+<p>Then diagnose the result using:</p>
+<ul>
+<li><code>squeue</code></li>
+<li><code>sacct</code></li>
+<li>the output file</li>
+<li>inspection of the script itself</li>
+</ul>
+<p>This exercise is valuable because most HPC competence grows through interpreting evidence after a failure.</p>
+</div>
+<div id="chapter-lab-2" class="section level2 hasAnchor" number="4.20">
+<h2><span class="header-section-number">4.20</span> Chapter lab<a href="slurm-job-scheduling-on-ls6.html#chapter-lab-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="part-1-first-batch-job" class="section level3 hasAnchor" number="4.20.1">
+<h3><span class="header-section-number">4.20.1</span> Part 1: first batch job<a href="slurm-job-scheduling-on-ls6.html#part-1-first-batch-job" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li>Create <code>job.slurm</code>.</li>
+<li>Add the minimal example.</li>
+<li>Submit with <code>sbatch job.slurm</code>.</li>
+<li>Monitor with <code>squeue -u $USER</code>.</li>
+<li>Inspect the output file.</li>
+</ol>
+</div>
+<div id="part-2-observe-a-running-job" class="section level3 hasAnchor" number="4.20.2">
+<h3><span class="header-section-number">4.20.2</span> Part 2: observe a running job<a href="slurm-job-scheduling-on-ls6.html#part-2-observe-a-running-job" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Add <code>sleep 30</code>, resubmit, and watch the state change.</p>
+</div>
+<div id="part-3-change-the-resource-request" class="section level3 hasAnchor" number="4.20.3">
+<h3><span class="header-section-number">4.20.3</span> Part 3: change the resource request<a href="slurm-job-scheduling-on-ls6.html#part-3-change-the-resource-request" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Change from one task to four tasks and compare behavior.</p>
+</div>
+<div id="part-4-load-a-module-inside-the-job" class="section level3 hasAnchor" number="4.20.4">
+<h3><span class="header-section-number">4.20.4</span> Part 4: load a module inside the job<a href="slurm-job-scheduling-on-ls6.html#part-4-load-a-module-inside-the-job" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Add:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb67-1"><a href="slurm-job-scheduling-on-ls6.html#cb67-1" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
+<span id="cb67-2"><a href="slurm-job-scheduling-on-ls6.html#cb67-2" tabindex="-1"></a><span class="fu">which</span> gcc</span>
+<span id="cb67-3"><a href="slurm-job-scheduling-on-ls6.html#cb67-3" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">--version</span></span></code></pre></div>
+<p>Submit and inspect the output.</p>
+</div>
+</div>
+<div id="best-practices-to-keep-now" class="section level2 hasAnchor" number="4.21">
+<h2><span class="header-section-number">4.21</span> Best practices to keep now<a href="slurm-job-scheduling-on-ls6.html#best-practices-to-keep-now" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>keep scripts small and readable</li>
+<li>name jobs clearly</li>
+<li>request realistic time and resources</li>
+<li>inspect the output after every run</li>
+<li>save working scripts rather than rebuilding them from memory</li>
+</ul>
+</div>
+<div id="looking-ahead-3" class="section level2 hasAnchor" number="4.22">
+<h2><span class="header-section-number">4.22</span> Looking ahead<a href="slurm-job-scheduling-on-ls6.html#looking-ahead-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Once students can submit and monitor jobs confidently, the next natural question is: what exactly are we running on the cluster, and how do we build it? The next chapter moves from job submission to <strong>compiling C programs and understanding toolchains</strong>.</p>
 
 </div>
 </div>
@@ -576,8 +849,8 @@ For full explanations and examples, refer back to the main chapters.</p>
           </div>
         </div>
       </div>
-<a href="capstone-project-end-to-end-hpc-workflow.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="linux-fundamentals-and-environment-awareness.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="modules-compilers-and-your-first-c-program.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

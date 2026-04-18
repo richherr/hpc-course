@@ -1,74 +1,88 @@
-# Compiling C and C++ on HPC Systems
+# Modules, Compilers, and Your First C Program
 
 ## Overview
 
-In this chapter, we move from running existing programs to **building software from source**.
+In this chapter, we move from running shell commands and SLURM scripts to **building executable software from source code**.
 
-You will learn:
+This matters because many HPC workflows involve custom code, research software built from source, and toolchains that depend on specific compiler environments.
 
-- what compilation is and why it matters
-- how to use `gcc` and `g++`
-- how to build programs on HPC systems
-- how modules affect compilers and libraries
-- how to prepare compiled programs for SLURM execution
+By the end of this chapter, you should be able to:
 
-## Mental Model: From Source Code to Executable
+- explain what compilation does
+- load a compiler module
+- verify which compiler is active
+- compile a small C program with `gcc`
+- run the resulting executable
+- prepare compiled code for SLURM execution
+
+## Mental model: source code becomes an executable
 
 A compiled workflow looks like this:
 
 ```text
-source code (.c / .cpp)
-        ↓
-compiler (gcc / g++)
-        ↓
-executable (binary file)
-        ↓
-run on compute node
+source code (.c)
+      ↓
+compiler (gcc)
+      ↓
+executable binary
+      ↓
+run on LS6
 ```
 
-## Why Compilation Matters in HPC
+That simple picture explains a great deal of later HPC practice.
 
-On HPC systems:
+- source code is human-readable
+- the compiler translates source into machine-executable form
+- the executable is what the system can actually run
 
-- software is often not pre-installed
-- you may need specific compiler versions
-- performance depends on how code is compiled
+## Why compilation matters on clusters
 
-> 🧠 **Key Insight**
->
-> Compilation is not just “building code” — it is configuring how your program interacts with the hardware.
+Compilation matters in HPC because:
 
-## Compilers: gcc vs g++
+- software is not always preinstalled
+- the compiler version can affect behavior
+- libraries and toolchains must often match each other
+- performance can depend strongly on how code is built
 
-- `gcc` → C programs
-- `g++` → C++ programs
+For beginners, the main goal is not advanced optimization. It is understanding the workflow clearly.
 
-## Loading a Compiler (Modules)
+## Two compilers you will hear about often
 
-Before compiling, you must load a compiler.
+- `gcc` for C
+- `g++` for C++
+
+This chapter focuses on **C and `gcc`**, because it gives the cleanest first compiled example.
+
+## Modules first, then compilation
+
+Before compiling, load a compiler environment:
 
 ```bash
+module avail
 module load gcc
+module list
 ```
 
-Check it:
+This reinforces a central HPC idea: software is part of the environment.
+
+## Confirm which compiler you are using
 
 ```bash
 which gcc
 gcc --version
 ```
 
-> ⚠️ **Common Error**
->
-> Forgetting to load a compiler module will often result in:
->
-> ```bash
-> command not found
-> ```
+This is important because it replaces guessing with evidence.
 
-## Your First C Program
+You now know:
 
-Create a file:
+- whether `gcc` is available
+- where the executable is coming from
+- which version is active
+
+## Your first C program
+
+Create the file:
 
 ```bash
 nano hello.c
@@ -80,96 +94,91 @@ Add:
 #include <stdio.h>
 
 int main() {
-    printf("Hello from C on HPC\n");
+    printf("Hello from C on LS6\n");
     return 0;
 }
 ```
 
-## Compile the Program
+This program does very little, but it demonstrates the full compiled workflow.
+
+## Compile the program
 
 ```bash
 gcc hello.c -o hello
 ```
 
-## Run the Program
+Interpretation:
+
+- `hello.c` is the source file
+- `-o hello` names the output executable `hello`
+
+## Run the executable
 
 ```bash
 ./hello
 ```
 
-## Mental Model: What Just Happened?
+Expected output:
 
-- `hello.c` → source file
-- `gcc` → compiler
-- `-o hello` → output executable
+```text
+Hello from C on LS6
+```
 
-## File Inspection
-
-Check what was created:
+## Inspect what was created
 
 ```bash
 ls -l
 ```
 
-You should see:
+You should see at least:
 
 - `hello.c`
-- `hello` (executable)
+- `hello`
 
-## C++ Example
+This is an important moment for beginners: the source file and the executable are not the same thing.
 
-Create a file:
+## What just happened?
 
-```bash
-nano hello.cpp
-```
+You:
 
-Add:
+- wrote source code
+- invoked a compiler
+- created an executable file
+- ran that executable from the shell
 
-```cpp
-#include <iostream>
+That is the core compiled workflow used across much of scientific computing.
 
-int main() {
-    std::cout << "Hello from C++ on HPC" << std::endl;
-    return 0;
-}
-```
+## Optimization flags
 
-Compile:
-
-```bash
-g++ hello.cpp -o hello_cpp
-```
-
-Run:
-
-```bash
-./hello_cpp
-```
-
-## Compilation Flags
-
-Basic flags:
+A common form is:
 
 ```bash
 gcc hello.c -o hello -O2
 ```
 
-- `-O2` → optimization level
+Useful levels to know:
 
-## Common Optimization Levels
+- `-O0` = no optimization
+- `-O2` = standard practical choice
+- `-O3` = more aggressive optimization
 
-- `-O0` → no optimization
-- `-O2` → standard optimization
-- `-O3` → aggressive optimization
+For an introductory course, `-O2` is a good default example.
 
-> 💡 **Tip**
->
-> Use `-O2` for most HPC workflows unless you know you need something else.
+## A brief note on C++
 
-## Multiple Source Files
+A similar pattern exists for C++:
 
-Example structure:
+```bash
+g++ hello.cpp -o hello_cpp
+```
+
+The overall workflow is the same. The compiler changes because the language changes.
+
+## Multiple-file programs
+
+Real projects often have more than one source file.
+
+For example:
 
 ```text
 main.c
@@ -177,15 +186,17 @@ helper.c
 helper.h
 ```
 
-Compile:
+A simple compile step might be:
 
 ```bash
 gcc main.c helper.c -o program
 ```
 
-## Header Files
+This introduces an important idea: programs can be built from multiple components.
 
-Headers (`.h`) define interfaces.
+## Header files
+
+Headers (`.h`) are used to define interfaces or declarations.
 
 Example:
 
@@ -193,11 +204,13 @@ Example:
 int add(int a, int b);
 ```
 
-## Introduction to Makefiles
+Even if students do not yet write large C projects, it helps to see that compilation can involve several files working together.
 
-For larger projects, use `make`.
+## Automating builds with `make`
 
-Create a file:
+When builds become repetitive, use a `Makefile`.
+
+Create:
 
 ```bash
 nano Makefile
@@ -207,52 +220,29 @@ Add:
 
 ```make
 all:
-\tgcc hello.c -o hello
+	gcc hello.c -o hello
 ```
 
-Run:
+Then run:
 
 ```bash
 make
 ```
 
-## Mental Model: Makefiles
+The point of this early example is not to teach all of `make`, but to show how build steps can be automated and standardized.
 
-Think:
+## Where compilation belongs in the workflow
 
-> “Makefiles automate compilation steps”
+Good beginner rule:
 
-## Modules and Compilation
+- compile on login nodes for small builds
+- run heavier or production computations through SLURM
 
-Different modules provide:
+This keeps the workflow aligned with the earlier distinction between setup and computation.
 
-- different compilers
-- different library versions
-- different performance characteristics
+## Run compiled code through SLURM
 
-Example:
-
-```bash
-module load gcc
-module load openmpi
-```
-
-## Where to Compile
-
-Compile on:
-
-- ✅ login nodes (small builds)
-- ❌ compute nodes (unless needed for large builds)
-
-## Running Compiled Code with SLURM
-
-Create a job script:
-
-```bash
-nano run.slurm
-```
-
-Add:
+Create `run.slurm`:
 
 ```bash
 #!/bin/bash
@@ -265,106 +255,64 @@ Add:
 ./hello
 ```
 
-Submit:
+Submit it:
 
 ```bash
 sbatch run.slurm
 ```
 
-## Common Mistakes
+Now the compiled workflow connects directly back to the scheduler workflow from the previous chapter.
 
-- forgetting `module load gcc`
-- missing `-o` flag
-- running in wrong directory
-- not including all source files
+## Common beginner failures
 
-## Debugging Compilation Errors
+- forgot `module load gcc`
+- typo in the source code
+- forgot `-o hello`
+- tried to run from the wrong directory
+- assumed compilation worked without reading the compiler output
 
-If compilation fails, check compiler messages carefully. Common issues include:
+## Debug checklist for compilation work
 
-- syntax errors
-- missing headers
-- undefined references
-- incorrect include paths
-
-## Lab 4 — Compiling on HPC
-
-### Part 1: Basic Compilation
-
-1. Create `hello.c`
-2. Compile:
+Use this order:
 
 ```bash
+module list
+which gcc
+ls -l
 gcc hello.c -o hello
-```
-
-3. Run:
-
-```bash
 ./hello
 ```
 
-### Part 2: C++ Program
+If the compile step fails, read the compiler message slowly. It is often telling you exactly where the problem is.
 
-1. Create `hello.cpp`
-2. Compile:
+## Chapter lab
 
-```bash
-g++ hello.cpp -o hello_cpp
-```
+### Part 1: compile a C program
 
-3. Run:
+1. Create `hello.c`.
+2. Compile with `gcc hello.c -o hello`.
+3. Run `./hello`.
 
-```bash
-./hello_cpp
-```
+### Part 2: inspect the files
 
-### Part 3: Optimization
+Use `ls -l` and note the difference between source and executable.
 
-Compile with optimization:
+### Part 3: use optimization
+
+Compile with:
 
 ```bash
 gcc hello.c -o hello_opt -O2
 ```
 
-### Part 4: Run with SLURM
+### Part 4: run through SLURM
 
-1. Create `run.slurm`
-2. Submit:
+Create `run.slurm`, submit it, and inspect the output file.
 
-```bash
-sbatch run.slurm
-```
+### Part 5: optional Makefile
 
-3. Inspect output
+Create the minimal `Makefile` and use `make`.
 
-## Stretch Goal
+## Looking ahead
 
-- Create a program with multiple source files
-- Write a Makefile
-- Compile using `make`
-- Run through SLURM
-
-## Transition to Parallel Computing
-
-So far, you have:
-
-- accessed the system
-- used Linux effectively
-- managed your environment
-- submitted jobs
-- compiled programs
-
-Next, we will scale up:
-
-- running programs across multiple cores
-- using MPI and OpenMP
-- understanding parallel performance
-
-## Key Takeaways
-
-- Compilation transforms source code into executables
-- `gcc` and `g++` are core tools
-- Modules control compiler environments
-- Optimization affects performance
-- Compiled programs are typically run through SLURM
+The next major conceptual jump is from serial execution to parallel execution. Once you understand how to compile and run one program, you are ready to ask how that work can be spread across multiple cores, threads, or nodes using MPI and OpenMP.

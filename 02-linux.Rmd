@@ -1,220 +1,193 @@
-# Linux Fundamentals for HPC
+# Linux Fundamentals and Environment Awareness
 
 ## Overview
 
-In this chapter, we develop the Linux skills needed to work effectively on an HPC system.
+This chapter builds the Linux foundation needed for real HPC work. Many job failures that appear to be “cluster problems” are actually basic environment problems:
 
-You will learn:
+- wrong directory
+- missing file
+- missing execute permission
+- wrong module environment
+- command not found
 
-- how files and permissions work
-- how to inspect and manage your environment
-- how software is exposed through modules
-- how to think like a debugger on a shared system
+By the end of this chapter, you should be able to:
 
-## Mental Model: You Are in a Shared Environment
+- interpret the output of `ls -l`
+- change file permissions for common cases
+- inspect and reason about environment variables
+- understand what `PATH` does
+- load, list, and unload modules
+- use a practical debugging checklist before submitting work
 
-Unlike a personal laptop, an HPC system is:
+## Mental model: an HPC system is a shared environment
+
+On a personal laptop, users often assume that their preferred software, file layout, and editor are just “there.” On an HPC system, the environment is more explicit.
+
+You are working in a space that is:
 
 - multi-user
 - resource-managed
 - environment-driven
-- structured for reproducibility
+- structured for repeatability
 
-Every action you take should be:
+That means your workflow should be deliberate. You should know:
 
-- deliberate
-- traceable
-- repeatable
+- where you are
+- what files are present
+- what software is loaded
+- what commands are available in your environment
 
-## The Linux Filesystem
+## Inspecting the filesystem
 
-Let’s visualize where you are:
-
-```text
-/
-├── home/
-│   └── your_username/
-├── work/
-│   └── project_space/
-├── scratch/
-│   └── temporary_files/
-```
-
-### Key Idea
-
-- `/home` → safe, small
-- `/work` → project data
-- `/scratch` → fast, temporary
-
-## Inspecting the System
-
-### Where am I?
+The first two commands to trust are:
 
 ```bash
 pwd
-```
-
-### What’s here?
-
-```bash
 ls -l
 ```
 
-### What does `-l` show?
+### `pwd`
 
-```text
--rw-r--r-- 1 user group size date filename
-```
+Prints the current working directory.
 
-## File Permissions
+### `ls -l`
 
-### Mental Model
+Lists files with useful details such as permissions, owner, group, size, and modification time.
 
-Every file has:
-
-- **Owner**
-- **Group**
-- **Others**
-
-Each has:
-
-- read (`r`)
-- write (`w`)
-- execute (`x`)
-
-## Visual Breakdown
+An example permission string looks like this:
 
 ```text
 -rwxr-xr--
-│││││││││
-│││││││└── others
-│││││└──── group
-││└──────── owner
 ```
 
-## Changing Permissions
+A good beginner interpretation is:
 
-### Make a file executable
+- the file exists
+- it has an owner, group, and permission settings
+- some users may execute it, some may not
+
+## File permissions in practice
+
+Permissions matter constantly in Linux-based HPC workflows.
+
+You do not need a full theory of Unix security to start working productively. You do need the operational basics.
+
+### Common actions
+
+Make a file executable:
 
 ```bash
 chmod +x script.sh
 ```
 
-### Remove write permission
+Remove write permission:
 
 ```bash
 chmod -w file.txt
 ```
 
-### Numeric mode
+Use numeric mode:
 
 ```bash
 chmod 755 script.sh
 ```
 
-Meaning:
+A helpful mental model for `755` is:
 
-- user: rwx
-- group: r-x
-- others: r-x
+- owner: read, write, execute
+- group: read, execute
+- others: read, execute
 
-> ⚠️ **Common HPC Failure**
->
-> Many jobs fail because a script is missing execute permission.
+## Why permissions matter on clusters
 
-## Why Permissions Matter in HPC
+Common failures include:
 
-Common failure modes include:
+- a script exists but will not execute
+- a file cannot be edited because it is not writable
+- a shared file has the wrong permissions for collaborators
 
-- a script that will not run
-- a file you cannot edit
-- a shared file with the wrong access settings
+When a script “should work” but does not, `ls -l` is one of the fastest checks you can make.
 
-## Environment Variables
+## Environment variables
 
-### What are they?
+Environment variables define part of the context in which commands run.
 
-Variables that define your working environment.
-
-### View them
+View them with:
 
 ```bash
 env
 ```
 
-### Common examples
+Two important examples are:
 
 ```bash
 echo $HOME
 echo $PATH
 ```
 
-## Mental Model: PATH
+### `$HOME`
 
-`PATH` tells the system where to look for executables.
+Usually points to your home directory.
 
-```bash
-echo $PATH
+### `$PATH`
+
+Tells the shell where to search for executable programs.
+
+If a program is not on your `PATH`, typing its name may produce:
+
+```text
+command not found
 ```
 
-If a program is not in `PATH`, Linux may not find it.
+## A practical mental model for `PATH`
 
-### Add to PATH temporarily
+Think of `PATH` as a list of directories the shell searches when you enter a command name.
+
+If `gcc` is on your `PATH`, you can type:
+
+```bash
+gcc --version
+```
+
+If not, the shell may not know where to find it.
+
+A temporary way to add your own directory is:
 
 ```bash
 export PATH=$HOME/bin:$PATH
 ```
 
-> 💡 **Debugging Tip**
->
-> If you see `command not found`, check:
->
-> ```bash
-> echo $PATH
-> which <command>
-> ```
+This prepends `$HOME/bin` to the front of the search path for the current shell session.
 
-## Modules System
+## Modules: software is part of the environment
 
-HPC systems do not expose all software globally.
+Clusters often use a module system rather than making every software package globally visible at all times.
 
-Instead, they use **modules**.
+That means software is often loaded **into the environment** when needed.
 
-### Mental Model
-
-Modules are loadable software environments.
-
-## Basic Module Commands
-
-### List available modules
+Common commands:
 
 ```bash
 module avail
-```
-
-### Load a module
-
-```bash
 module load gcc
-```
-
-### Check loaded modules
-
-```bash
 module list
-```
-
-### Unload a module
-
-```bash
 module unload gcc
 ```
 
-> 🧠 **Key Insight**
->
-> On HPC systems, software access is often environment-based, not system-wide in the way many users expect on a laptop.
+## Why modules matter
 
-## Example: Using a Compiler
+On an HPC system, different projects may need:
+
+- different compiler versions
+- different MPI libraries
+- different Python stacks
+- different container runtimes
+
+Modules help manage this complexity.
+
+Instead of assuming “the system version” is correct, users load an appropriate environment for the job.
+
+## Example: loading a compiler
 
 ```bash
 module load gcc
@@ -222,86 +195,102 @@ which gcc
 gcc --version
 ```
 
-## Finding Files
+This sequence is valuable because it does three things:
+
+- loads the compiler module
+- shows which executable will run
+- shows the version now active in the shell
+
+## Practical file inspection tools
+
+A few file-related commands are worth using early.
+
+Find a file:
 
 ```bash
-find . -name "file.txt"
+find . -name "example.txt"
 ```
 
-## Viewing File Contents
+View a file:
 
 ```bash
-cat file.txt
-less file.txt
-head file.txt
-tail file.txt
+cat example.txt
+less example.txt
+head example.txt
+tail example.txt
 ```
 
-## Combining Commands with Pipes
+These tools are especially helpful when checking logs, outputs, and small configuration files.
+
+## Piping commands together
+
+One of the most useful Linux habits is combining small commands.
 
 ```bash
 cat file.txt | grep "error"
 ```
 
-### Pipe Mental Model
+This is a classic pipeline: one command produces output, the next filters it.
 
-Think:
+You do not need to become an expert in shell pipelines immediately, but you should recognize that Linux tools are designed to be chained together.
 
-> one command produces output, the next command filters or transforms it
+## Disk awareness matters
 
-## Disk Usage
+HPC users need at least basic awareness of storage usage.
 
-### Check filesystem space
+Check filesystem space:
 
 ```bash
 df -h
 ```
 
-### Check directory sizes
+Check directory sizes:
 
 ```bash
 du -sh *
 ```
 
-## Processes
+These commands help prevent confusion when jobs fail because of full storage areas or because output is larger than expected.
 
-### See your processes
+## Process awareness
+
+Sometimes you need to inspect or stop your own processes.
+
+List your processes:
 
 ```bash
 ps -u $USER
 ```
 
-### Kill a process
+Kill a process:
 
 ```bash
 kill <pid>
 ```
 
-## Optional R Integration
+This becomes more useful later when dealing with editors, accidental runs, or interactive sessions.
 
-You can inspect environment settings inside R.
+## Optional connection to R
+
+For students who use R heavily, it is useful to remember that environment information can also be inspected from inside R.
 
 ```r
 Sys.getenv("PATH")
 ```
 
-You can also run shell commands from R.
+And shell commands can be invoked from R when appropriate:
 
 ```r
 system("echo $HOME")
 ```
 
-## Common Mistakes
+That said, it is still important to understand the shell environment directly rather than relying only on IDE tools.
 
-- forgetting `chmod +x`
-- PATH confusion
-- not loading needed modules
-- filling up `$HOME`
-- losing temporary work in `$SCRATCH`
+## A debugging mindset for Linux-based HPC work
 
-## Debugging Mindset in Linux
+When something goes wrong, start with evidence.
 
-When something goes wrong, ask:
+Ask these five questions in order:
 
 ### 1. Where am I?
 
@@ -315,47 +304,46 @@ pwd
 ls -l
 ```
 
-### 3. Do I have permission?
+### 3. Do I have the right permissions?
 
 ```bash
 ls -l script.sh
 ```
 
-### 4. Is the program available?
+### 4. Is the program actually available?
 
 ```bash
 which gcc
 ```
 
-### 5. Is my environment correct?
+### 5. Is my environment what I think it is?
 
 ```bash
 module list
 ```
 
-## Lab 2 — Linux and Environment Mastery
+This checklist will reappear in later chapters because it prevents premature guessing.
 
-### Part 1: Permissions
+## Common beginner mistakes in Chapter 2
 
-1. Create a file:
+- forgetting `chmod +x`
+- assuming `PATH` is correct without checking
+- forgetting to load a needed module
+- filling up `$HOME` and wondering why workflows behave strangely
+- treating missing commands as mysterious system failures instead of environment issues
+
+## Chapter lab
+
+### Part 1: permissions
 
 ```bash
 touch test.sh
-```
-
-2. Check permissions:
-
-```bash
+ls -l
+chmod +x test.sh
 ls -l
 ```
 
-3. Make executable:
-
-```bash
-chmod +x test.sh
-```
-
-### Part 2: Environment Variables
+### Part 2: environment variables
 
 ```bash
 echo $HOME
@@ -364,60 +352,34 @@ export COURSE=HPC
 echo $COURSE
 ```
 
-### Part 3: Modules
+### Part 3: modules
 
 ```bash
 module avail
 module load gcc
+module list
 which gcc
 gcc --version
 ```
 
-### Part 4: Disk Usage
+### Part 4: storage awareness
 
 ```bash
 df -h
 du -sh ~
 ```
 
-### Part 5: File Search
+### Part 5: file discovery
 
 ```bash
 touch example.txt
 find . -name "example.txt"
 ```
 
-## Stretch Goal
+## Stretch goal
 
-- Create a custom `bin/` directory
-- Add it to `PATH`
-- Put a script inside it
-- Run it without using the full path
+Create a custom `bin/` directory in your home space, add it to `PATH`, place a small script in that directory, and run it without typing the full path.
 
-## Transition to HPC Workflows
+## Looking ahead
 
-So far, you have been:
-
-- navigating the system
-- editing files
-- running small commands
-
-But on an HPC system, real work is usually not done directly from the command line on the login node.
-
-Instead, you will:
-
-1. write a job script
-2. request resources
-3. submit the work to the scheduler
-
-## Looking Ahead
-
-In the next chapter, we introduce **SLURM**, the scheduler that controls computation on the system.
-
-## Key Takeaways
-
-- Permissions control execution and modification
-- PATH controls command discovery
-- Modules manage software environments
-- Disk and process awareness matter
-- Reproducible HPC work depends on environment awareness
+The next chapter turns these Linux and environment skills into a real HPC workflow. Once you can reliably manage directories, permissions, and modules, you are ready to write a SLURM script and submit work to the scheduler.

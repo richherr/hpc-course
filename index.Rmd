@@ -1,62 +1,123 @@
----
-title: "High-Performance Computing on Lonestar6"
-author: "Rich Herrington <br> DRI, Research Computing Services"
-site: bookdown::bookdown_site
----
-
 # High-Performance Computing on Lonestar6
 
-## Overview
+## Welcome
 
-This course introduces high-performance computing (HPC) using the Lonestar6 system at the Texas Advanced Computing Center (TACC).
+This book is a practical introduction to high-performance computing using the **Lonestar6 (LS6)** system at the Texas Advanced Computing Center (TACC). It is written for students, researchers, and new cluster users who need an operational path from first login to confident job submission.
 
-The course is designed as both:
+Rather than treating HPC as an abstract subject, this book treats it as a workflow:
 
-- a textbook
-- a lab manual
-- a practical workflow guide
+1. understand the cluster
+2. work safely in Linux
+3. manage your environment
+4. submit jobs through SLURM
+5. compile programs
+6. scale to parallel work
+7. use containers for reproducibility
+8. complete an end-to-end capstone project
 
-We move from:
+## What this book is
 
-- basic system access
-- to Linux fundamentals
-- to SLURM job scheduling
-- to compiling software
-- to parallel computing
-- to containers
-- to a capstone project
-- to a practical appendix
+This book is designed to function as:
 
-## Learning Objectives
+- a textbook for a short course or workshop series
+- a lab manual for hands-on LS6 exercises
+- a reference guide for new HPC users
+- a bridge from beginner Linux to production cluster workflows
 
-By the end of the course, students should be able to:
+## Who this book is for
+
+This material is appropriate for:
+
+- upper-level undergraduates
+- graduate students beginning computational research
+- faculty and staff new to HPC
+- workshop participants who need a practical guide after class
+- self-paced learners who want an LS6-centered path into HPC
+
+No prior cluster experience is assumed. Some command-line exposure is helpful, but the early chapters are written to reduce the barrier to entry.
+
+## Learning goals
+
+By the end of the book, readers should be able to:
 
 - explain the difference between login nodes and compute nodes
-- navigate Linux confidently on a shared cluster
-- manage files, permissions, and environment variables
-- load software through modules
-- submit and monitor SLURM batch jobs
-- debug basic job failures
-- compile C and C++ software for HPC systems
-- understand the role of MPI, OpenMP, and containers in modern HPC workflows
+- connect to LS6 and work within the Linux shell
+- manage files, directories, permissions, and environment variables
+- use modules to load software into the current environment
+- write, submit, monitor, and debug SLURM jobs
+- compile and run simple C programs on the cluster
+- distinguish serial, shared-memory, and distributed-memory workflows
+- understand the role of containers in reproducible HPC work
+- document a complete workflow so another researcher can repeat it
 
-## Course Design
+## Course philosophy
 
-Each chapter includes:
+A common beginner mistake is to treat HPC as “a bigger computer.” It is better to think of HPC as a **shared, scheduled, resource-managed environment**.
+
+That idea affects everything in this book:
+
+- you do not do serious computation on login nodes
+- your environment matters because software is often module-based
+- your working directory matters because jobs run in specific locations
+- your resource request matters because the scheduler allocates shared infrastructure
+- your documentation matters because reproducibility is part of responsible computing
+
+## How chapters are organized
+
+Most chapters follow a common pattern:
 
 - overview
 - mental model
-- commands
+- command examples
 - walkthrough
 - common mistakes
-- lab
+- debugging checklist
+- hands-on lab
 - stretch goal
 
-## Suggested Use
+That structure is intentional. Many new users can reproduce commands but still feel uncertain about what the system is doing. The “mental model” sections are there to explain the logic behind the commands.
 
-This material works well for:
+## Recommended use in a course
 
-- upper-level undergraduate instruction
-- graduate onboarding
-- research-computing workshops
-- self-paced training for new cluster users
+A natural workshop sequence is:
+
+- **Workshop 1**: first login, minimal Linux, first SLURM job
+- **Workshop 2**: job monitoring and debugging
+- **Workshop 3**: modules, compilers, first C program
+- **Workshop 4**: MPI and OpenMP foundations
+- **Workshop 5**: containers and reproducibility
+- **Workshop 6**: capstone project work session
+
+This book can also be taught over several weeks as an onboarding course for a research computing program.
+
+## What you need before starting
+
+Before working through the book, you should have:
+
+- an LS6 account or equivalent training account
+- SSH access from your laptop or desktop
+- a terminal application
+- a text editor you are comfortable using, or willingness to use `nano`
+- a place to keep notes on commands, directory paths, and job IDs
+
+## What success looks like
+
+Success in this course is not memorizing every SLURM option or every Linux command. Success looks like this:
+
+- you know where you are in the filesystem
+- you know whether work belongs on a login node or compute node
+- you can inspect your environment instead of guessing
+- you can submit a job and interpret what happened
+- you can recover from common failures by reading evidence
+
+That is the mindset of an effective HPC user.
+
+## A note on reproducibility
+
+Throughout the book, you will be encouraged to save scripts, keep meaningful file names, and write down the commands you used. These are not extra tasks. They are part of the workflow itself.
+
+In research computing, a good result that cannot be reproduced later is far less valuable than a modest result that can be rerun, explained, and shared.
+
+## Looking ahead
+
+We begin with the most important conceptual distinction in cluster computing: **login nodes versus compute nodes**. From there, we build the smallest practical Linux toolkit needed to complete a real workflow on LS6.

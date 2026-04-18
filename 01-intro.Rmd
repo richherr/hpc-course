@@ -1,176 +1,191 @@
-# Introduction to High-Performance Computing (HPC)
+# Introduction to High-Performance Computing on LS6
 
 ## Overview
 
-High-performance computing (HPC) allows us to solve problems that are too large, too slow, or too complex for an ordinary desktop or laptop computer.
+High-performance computing, or **HPC**, is the practice of using powerful shared computing systems to solve problems that are too large, too slow, or too resource-intensive for an ordinary laptop or desktop computer.
 
-In this course, we will use the **Lonestar6 (LS6)** system at TACC as our working environment.
+In this book, we use **Lonestar6 (LS6)** as the working example. The goal is not just to define HPC, but to help you begin using it productively.
 
-We will move from:
+By the end of this chapter, you should be able to:
 
-- basic system access
-- to job submission
-- to compiling and running software
-- to modern workflows using containers
+- describe what a cluster is
+- explain the difference between login nodes and compute nodes
+- identify common LS6 storage locations
+- connect the basic HPC workflow to the commands you will use later
 
-## What is HPC?
+## Why people use HPC
 
-At a high level, HPC is about:
+There are three common reasons people move from a local machine to an HPC system.
 
-- **More compute power**
-- **More memory**
-- **Parallel execution**
+### 1. The job is too slow on one machine
 
-Instead of one machine, we use a **cluster**.
+A simulation that would take hours or days on a laptop may complete much faster on multiple cores or multiple nodes.
 
-## Mental Model: The Cluster
+### 2. The job needs more memory
 
-Think of an HPC system as a collection of computers working together.
+Some workflows fail locally not because the CPU is too slow, but because the dataset, model, or matrix is too large for the memory available on the machine.
 
-### Key Components
+### 3. The work can be split into parts
 
-- **Node** → a single computer in the cluster
-- **Core** → a CPU processing unit within a node
-- **Memory (RAM)** → typically shared by processes on a node
-- **Interconnect** → the high-speed network connecting nodes
+Many scientific and data-intensive problems can be broken into pieces and executed in parallel. HPC systems are designed for this style of work.
 
-## Mental Model: Login Nodes vs Compute Nodes
+## Mental model: a cluster is a collection of computers
 
-This is one of the most important distinctions in HPC.
+An HPC system is not one giant computer. It is better to think of it as a **coordinated collection of computers** working together.
 
-### Login Nodes
+Important terms:
 
-Used for:
+- **node**: one computer within the cluster
+- **core**: one CPU execution unit on a node
+- **memory (RAM)**: memory available to processes or threads running on a node
+- **interconnect**: the high-speed network that links nodes together
+
+This distinction matters because later chapters will ask you to request resources in terms of nodes, tasks, and cores.
+
+## The most important distinction: login node vs compute node
+
+Beginners often assume that once they log in to the cluster, they are already in the right place to run their real workload. That is not usually true.
+
+### Login nodes
+
+Login nodes are used for:
 
 - editing files
-- compiling code
+- navigating directories
 - loading modules
+- compiling small programs
 - moving data
 - submitting jobs
 
-Not used for:
+Login nodes are **not** the place for serious computation.
 
-- heavy computation
-- long-running analyses
-- large training runs
+### Compute nodes
 
-### Compute Nodes
+Compute nodes are used for:
 
-Used for:
-
-- actual program execution
-- scheduled workloads
-- parallel jobs
-- batch jobs
+- running scheduled jobs
 - interactive compute sessions
+- parallel programs
+- training or simulation workloads
+- large production tasks
 
-> ⚠️ **Important Rule**
->
-> Serious computation should not be run on the login nodes.
+### Rule of thumb
 
-## Lonestar6 in Practice
+Do **setup** on the login node. Do **computation** on compute nodes.
 
-On Lonestar6, users typically connect with SSH, work in a Linux shell, manage files across storage areas, and submit workloads to **SLURM**.
+That single idea prevents many of the worst beginner mistakes.
 
-## Connecting to the System
+## A simple cluster workflow
 
-Use SSH to connect to LS6.
+Here is the workflow you will repeat throughout the course:
+
+```text
+Laptop
+  |
+  | ssh
+  v
+Login node
+  |   edit files, inspect directories, load modules
+  |   write job scripts
+  |
+  | sbatch
+  v
+SLURM scheduler
+  |
+  v
+Compute node(s)
+  |
+  v
+Output files and results
+```
+
+The scheduler in this workflow is **SLURM**, which will become the center of Chapters 3 and 4.
+
+## Connecting to LS6
+
+A standard SSH connection looks like this:
 
 ```bash
 ssh your_username@ls6.tacc.utexas.edu
 ```
 
-## First Prompt
-
-You may see something like:
+After login, you may see a shell prompt like:
 
 ```bash
 [username@login1 ~]$
 ```
 
-This tells you:
+This prompt tells you several things at once:
 
-- who you are
-- which machine you are on
+- your username
+- the machine name
 - your current directory
 
-## Storage Areas
+The prompt is not decoration. It gives you context.
 
-You will often work with several storage areas:
+## Storage areas you will encounter
 
-- `$HOME` → personal home directory
-- `$WORK` → project-oriented work storage
-- `$SCRATCH` → high-performance temporary storage
+Cluster workflows usually involve more than one storage location.
 
-### Check where you are
+### `$HOME`
+
+Your home directory is a personal, relatively safe place for configuration files, small scripts, and lightweight persistent material.
+
+### `$WORK`
+
+This is often a project-oriented area where you keep larger files, datasets, software builds, and materials that need to persist longer than temporary scratch storage.
+
+### `$SCRATCH`
+
+This is usually a high-performance temporary storage area. It is useful for active computation and temporary job data, but it should not be treated as permanent archival storage.
+
+## Why directories matter so much in HPC
+
+On a laptop, users often rely on clicking around to find files. In an HPC workflow, your current directory strongly influences:
+
+- where your job looks for input
+- where output files are written
+- whether commands run on the files you intended
+
+That is why `pwd` and `ls` show up constantly in beginner workflows.
+
+## Minimal Linux toolkit for starting HPC work
+
+You do not need to master Linux before beginning. You do need a small set of reliable commands.
 
 ```bash
 pwd
+ls
+cd
+mkdir
+cp
+mv
+rm
+nano
+chmod +x
 ```
 
-### List files
+These commands are enough to support the first real workflow in the course.
+
+## First exercise: create a workspace
 
 ```bash
+mkdir hpc_course
+cd hpc_course
+pwd
 ls
 ```
 
-## Basic Linux Commands
+This does four useful things:
 
-### Move around
+- creates a directory for your course work
+- moves you into that directory
+- verifies where you are
+- confirms what is inside it
 
-```bash
-cd my_directory
-cd ..
-cd ~
-```
+A surprising number of job failures come from skipping these checks.
 
-### Create a directory
-
-```bash
-mkdir project1
-```
-
-### Copy a file
-
-```bash
-cp file1.txt file2.txt
-```
-
-### Move or rename a file
-
-```bash
-mv oldname.txt newname.txt
-```
-
-### Remove a file
-
-```bash
-rm file1.txt
-```
-
-## Editing Files
-
-Two common editors are:
-
-```bash
-nano myfile.txt
-```
-
-and
-
-```bash
-vim myfile.txt
-```
-
-## Transfer Files
-
-From your local system:
-
-```bash
-scp myfile.txt your_username@ls6.tacc.utexas.edu:~
-```
-
-## First Small Script
+## First shell script
 
 Create a file:
 
@@ -196,74 +211,49 @@ Run it:
 ./hello.sh
 ```
 
-## Mental Model: What Just Happened?
+## What just happened?
+
+Even this small example teaches several important HPC habits.
 
 You:
 
-- created a script
-- changed its permissions
-- ran a small command safely on a login node
+- created a script file
+- made the file executable
+- ran a lightweight command safely on a login node
+- confirmed that your shell environment is working
 
-That is appropriate because the task is tiny and brief.
+This is appropriate login-node work because the task is tiny and brief.
 
-## Common Mistakes
+## Common beginner mistakes in Chapter 1
 
-- running large jobs directly on the login node
-- forgetting `chmod +x`
-- losing temporary files in scratch storage
-- forgetting to check current location with `pwd`
+### Running heavy work on the login node
 
-## Lab 1 — Getting Started on LS6
+This is the most common conceptual mistake. Users often think, “I am logged in, so I can start the analysis.” In HPC, logging in gives you access to the environment, not ownership of shared computational resources.
 
-### Part 1: Login
+### Losing track of the current directory
 
-1. Connect via SSH
-2. Confirm identity:
+If you do not know where you are, you do not really know what your job will act on.
 
-```bash
-whoami
-```
+### Forgetting execute permission
 
-### Part 2: Filesystem
+A file can exist and still fail to run. `ls -l` and `chmod +x` are basic troubleshooting tools.
 
-Create a working directory:
+### Treating storage areas as interchangeable
 
-```bash
-mkdir hpc_course
-cd hpc_course
-pwd
-```
+Different storage areas serve different purposes. That matters for both performance and data safety.
 
-### Part 3: File Creation
+## Chapter lab
 
-Create a script:
+1. Log in to LS6.
+2. Create a directory named `hpc_course`.
+3. Move into it and verify with `pwd`.
+4. Create `hello.sh`.
+5. Add one `echo` command.
+6. Make the script executable.
+7. Run it.
+8. Create a second script that prints your username, current directory, and date.
 
-```bash
-nano hello.sh
-```
-
-Add:
-
-```bash
-echo "Hello HPC"
-```
-
-### Part 4: Run It
-
-```bash
-chmod +x hello.sh
-./hello.sh
-```
-
-## Stretch Goal
-
-Create a second script that prints:
-
-- your username
-- current directory
-- current date
-
-Hint:
+Suggested commands:
 
 ```bash
 whoami
@@ -271,19 +261,13 @@ pwd
 date
 ```
 
-## Looking Ahead
+## Reflection questions
 
-In the next chapter, we will deepen Linux skills by focusing on:
+- Why is a login node not the right place for serious computation?
+- What is the difference between logging in and actually running a job?
+- Why does your current directory matter before job submission?
+- Which storage location would you trust for temporary high-volume output, and which would you treat more carefully?
 
-- permissions
-- environment variables
-- modules
-- debugging habits
+## Looking ahead
 
-## Key Takeaways
-
-- HPC systems use clusters
-- Login nodes are for setup and lightweight work
-- Compute nodes are for actual computation
-- Linux command-line literacy is essential
-- Storage choices matter
+In the next chapter, we slow down and build the Linux and environment skills that make later SLURM work easier. The theme of Chapter 2 is simple: **good HPC habits begin with filesystem awareness and environment awareness**.
