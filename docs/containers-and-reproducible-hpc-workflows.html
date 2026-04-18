@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>High-Performance Computing on Lonestar6</title>
-  <meta name="description" content="High-Performance Computing on Lonestar6" />
+  <title>Chapter 7 Containers and Reproducible HPC Workflows | High-Performance Computing on Lonestar6</title>
+  <meta name="description" content="Chapter 7 Containers and Reproducible HPC Workflows | High-Performance Computing on Lonestar6" />
   <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="High-Performance Computing on Lonestar6" />
+  <meta property="og:title" content="Chapter 7 Containers and Reproducible HPC Workflows | High-Performance Computing on Lonestar6" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="High-Performance Computing on Lonestar6" />
+  <meta name="twitter:title" content="Chapter 7 Containers and Reproducible HPC Workflows | High-Performance Computing on Lonestar6" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="introduction-to-high-performance-computing-on-ls6.html"/>
+<link rel="prev" href="parallel-computing-with-mpi-and-openmp-on-ls6.html"/>
+<link rel="next" href="capstone-project-building-an-end-to-end-hpc-workflow.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -607,135 +607,421 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">High-Performance Computing on Lonestar6</h1>
-<p class="author"><em>Rich Herrington <br> DRI, Research Computing Services</em></p>
+<div id="containers-and-reproducible-hpc-workflows" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Containers and Reproducible HPC Workflows<a href="containers-and-reproducible-hpc-workflows.html#containers-and-reproducible-hpc-workflows" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-5" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Overview<a href="containers-and-reproducible-hpc-workflows.html#overview-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of the most common frustrations in computational work is this sentence:</p>
+<blockquote>
+<p>It worked on my machine.</p>
+</blockquote>
+<p>Containers are one of the main ways modern computing tries to solve that problem.</p>
+<p>In HPC, containers help package software environments so that workflows become more portable and more reproducible. They are not magic, and they do not remove the need to understand the host system, but they are powerful when used correctly.</p>
+<p>This chapter introduces containers as a practical HPC tool. The focus is not on buzzwords. The focus is on how containers fit into real LS6-style workflow.</p>
+<p>By the end of the chapter, you should be able to:</p>
+<ul>
+<li>explain what a container is</li>
+<li>explain why containers matter in HPC</li>
+<li>distinguish Docker from Apptainer at a practical level</li>
+<li>pull or use a simple Apptainer image</li>
+<li>execute commands inside a container</li>
+<li>understand why directory binding matters</li>
+<li>run a containerized command through SLURM</li>
+<li>recognize common beginner container mistakes</li>
+</ul>
 </div>
-<div id="high-performance-computing-on-lonestar6" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> High-Performance Computing on Lonestar6<a href="index.html#high-performance-computing-on-lonestar6" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="welcome" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is a practical introduction to high-performance computing using the <strong>Lonestar6 (LS6)</strong> system at the Texas Advanced Computing Center (TACC). It is written for students, researchers, and new cluster users who need an operational path from first login to confident job submission.</p>
-<p>Rather than treating HPC as an abstract subject, this book treats it as a workflow:</p>
+<div id="mental-model-what-a-container-actually-is" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Mental model: what a container actually is<a href="containers-and-reproducible-hpc-workflows.html#mental-model-what-a-container-actually-is" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A container packages:</p>
+<ul>
+<li>your program</li>
+<li>required libraries</li>
+<li>supporting software dependencies</li>
+<li>environment expectations</li>
+</ul>
+<p>This means a container image can act like a portable execution environment.</p>
+<p>A simple mental picture is:</p>
+<pre class="text"><code>Your code
++ supporting software
++ libraries
++ environment assumptions
+--------------------------------
+Container image</code></pre>
+<p>The key idea is not that the container replaces the whole HPC system. It does not. Instead, it packages much of the user-space environment so that software behavior becomes more consistent across contexts.</p>
+</div>
+<div id="why-containers-matter-in-hpc" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> Why containers matter in HPC<a href="containers-and-reproducible-hpc-workflows.html#why-containers-matter-in-hpc" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Containers are useful because they can reduce or manage problems like:</p>
+<ul>
+<li>missing dependencies</li>
+<li>conflicting library versions</li>
+<li>“works on one machine but not another” behavior</li>
+<li>hard-to-reconstruct software setups</li>
+<li>brittle custom environments</li>
+</ul>
+<p>In research computing, this matters because reproducibility is often not just a convenience issue. It affects whether others can repeat your workflow months later.</p>
+</div>
+<div id="containers-do-not-eliminate-the-host-system" class="section level2 hasAnchor" number="7.4">
+<h2><span class="header-section-number">7.4</span> Containers do not eliminate the host system<a href="containers-and-reproducible-hpc-workflows.html#containers-do-not-eliminate-the-host-system" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A very important correction:</p>
+<blockquote>
+<p>A container is not a full replacement for the HPC system around it.</p>
+</blockquote>
+<p>You still depend on:</p>
+<ul>
+<li>the host kernel</li>
+<li>the scheduler</li>
+<li>the filesystem</li>
+<li>cluster policies</li>
+<li>the available hardware</li>
+<li>the way input and output are connected to the environment</li>
+</ul>
+<p>So the right mental model is:</p>
+<ul>
+<li>the host system provides infrastructure</li>
+<li>the container provides a packaged software environment</li>
+</ul>
+<p>Both matter.</p>
+</div>
+<div id="docker-versus-apptainer" class="section level2 hasAnchor" number="7.5">
+<h2><span class="header-section-number">7.5</span> Docker versus Apptainer<a href="containers-and-reproducible-hpc-workflows.html#docker-versus-apptainer" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="docker" class="section level3 hasAnchor" number="7.5.1">
+<h3><span class="header-section-number">7.5.1</span> Docker<a href="containers-and-reproducible-hpc-workflows.html#docker" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Docker is widely used in development and deployment environments. It is a major tool in software engineering and cloud workflows.</p>
+<p>However, on shared HPC systems, Docker often requires privileges or daemon-based behavior that are not a good fit for multi-user clusters.</p>
+</div>
+<div id="apptainer" class="section level3 hasAnchor" number="7.5.2">
+<h3><span class="header-section-number">7.5.2</span> Apptainer<a href="containers-and-reproducible-hpc-workflows.html#apptainer" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Apptainer is designed for HPC-style use.</p>
+<p>Practical advantages:</p>
+<ul>
+<li>better suited to shared environments</li>
+<li>commonly used without root privileges during normal execution</li>
+<li>integrates naturally into scheduler-based workflows</li>
+<li>fits better with cluster security models</li>
+</ul>
+<p>For this course, the practical message is simple:</p>
+<blockquote>
+<p>Docker is part of the broader container world, but Apptainer is the HPC-friendly execution model you are more likely to encounter directly on systems like LS6.</p>
+</blockquote>
+</div>
+</div>
+<div id="checking-for-apptainer" class="section level2 hasAnchor" number="7.6">
+<h2><span class="header-section-number">7.6</span> Checking for Apptainer<a href="containers-and-reproducible-hpc-workflows.html#checking-for-apptainer" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>First check whether it is already available:</p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb126-1"><a href="containers-and-reproducible-hpc-workflows.html#cb126-1" tabindex="-1"></a><span class="fu">which</span> apptainer</span></code></pre></div>
+<p>If needed, load it as a module:</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb127-1"><a href="containers-and-reproducible-hpc-workflows.html#cb127-1" tabindex="-1"></a><span class="ex">module</span> load apptainer</span></code></pre></div>
+<p>Then verify again:</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb128-1"><a href="containers-and-reproducible-hpc-workflows.html#cb128-1" tabindex="-1"></a><span class="fu">which</span> apptainer</span></code></pre></div>
+<p>This mirrors earlier course logic: software availability on HPC systems is often environment-dependent.</p>
+</div>
+<div id="pulling-a-simple-image" class="section level2 hasAnchor" number="7.7">
+<h2><span class="header-section-number">7.7</span> Pulling a simple image<a href="containers-and-reproducible-hpc-workflows.html#pulling-a-simple-image" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Example:</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb129-1"><a href="containers-and-reproducible-hpc-workflows.html#cb129-1" tabindex="-1"></a><span class="ex">apptainer</span> pull ubuntu.sif docker://ubuntu</span></code></pre></div>
+<p>Interpretation:</p>
+<ul>
+<li><code>docker://ubuntu</code> identifies the source image</li>
+<li><code>ubuntu.sif</code> is the output image file</li>
+<li><code>.sif</code> is a common Apptainer image format</li>
+</ul>
+<p>This command makes the image a tangible file in your working environment.</p>
+</div>
+<div id="run-a-command-inside-the-container" class="section level2 hasAnchor" number="7.8">
+<h2><span class="header-section-number">7.8</span> Run a command inside the container<a href="containers-and-reproducible-hpc-workflows.html#run-a-command-inside-the-container" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use:</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb130-1"><a href="containers-and-reproducible-hpc-workflows.html#cb130-1" tabindex="-1"></a><span class="ex">apptainer</span> exec ubuntu.sif echo <span class="st">&quot;Hello from container&quot;</span></span></code></pre></div>
+<p>This is the cleanest way to understand container execution.</p>
+<p>You are not “booting a virtual machine.” You are asking Apptainer to run a command inside the packaged environment represented by the image.</p>
+</div>
+<div id="use-an-interactive-shell" class="section level2 hasAnchor" number="7.9">
+<h2><span class="header-section-number">7.9</span> Use an interactive shell<a href="containers-and-reproducible-hpc-workflows.html#use-an-interactive-shell" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb131"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb131-1"><a href="containers-and-reproducible-hpc-workflows.html#cb131-1" tabindex="-1"></a><span class="ex">apptainer</span> shell ubuntu.sif</span></code></pre></div>
+<p>This opens an interactive shell inside the container environment.</p>
+<p>Useful exploratory checks include:</p>
+<div class="sourceCode" id="cb132"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb132-1"><a href="containers-and-reproducible-hpc-workflows.html#cb132-1" tabindex="-1"></a><span class="fu">which</span> python3</span>
+<span id="cb132-2"><a href="containers-and-reproducible-hpc-workflows.html#cb132-2" tabindex="-1"></a><span class="ex">python3</span> <span class="at">--version</span></span>
+<span id="cb132-3"><a href="containers-and-reproducible-hpc-workflows.html#cb132-3" tabindex="-1"></a><span class="fu">ls</span> /</span></code></pre></div>
+<p>This helps students see that the container has its own environment logic while still running on the host.</p>
+</div>
+<div id="binding-directories-the-most-important-beginner-concept" class="section level2 hasAnchor" number="7.10">
+<h2><span class="header-section-number">7.10</span> Binding directories: the most important beginner concept<a href="containers-and-reproducible-hpc-workflows.html#binding-directories-the-most-important-beginner-concept" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>One of the most common container confusions is visibility of files.</p>
+<p>A container image does not automatically expose every host path the way students might expect. Often, you need to bind directories explicitly.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb133-1"><a href="containers-and-reproducible-hpc-workflows.html#cb133-1" tabindex="-1"></a><span class="ex">apptainer</span> exec <span class="at">--bind</span> <span class="va">$PWD</span> ubuntu.sif ls</span></code></pre></div>
+<p>This makes the current working directory visible inside the container for the command being run.</p>
+<p>If your workflow depends on scripts, inputs, or outputs in the current directory, binding is often essential.</p>
+</div>
+<div id="why-binding-matters" class="section level2 hasAnchor" number="7.11">
+<h2><span class="header-section-number">7.11</span> Why binding matters<a href="containers-and-reproducible-hpc-workflows.html#why-binding-matters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Without an appropriate bind, a containerized command may not see:</p>
+<ul>
+<li>your script</li>
+<li>your input data</li>
+<li>your working directory</li>
+<li>your intended output location</li>
+</ul>
+<p>That often produces a confusing symptom:</p>
+<blockquote>
+<p>The container starts fine, but it cannot find my files.</p>
+</blockquote>
+<p>Usually the container is not “broken.” The host paths simply were not connected the way you assumed.</p>
+</div>
+<div id="a-concrete-example-with-a-host-script" class="section level2 hasAnchor" number="7.12">
+<h2><span class="header-section-number">7.12</span> A concrete example with a host script<a href="containers-and-reproducible-hpc-workflows.html#a-concrete-example-with-a-host-script" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suppose <code>script.py</code> exists in the current directory.</p>
+<p>You might try:</p>
+<div class="sourceCode" id="cb134"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb134-1"><a href="containers-and-reproducible-hpc-workflows.html#cb134-1" tabindex="-1"></a><span class="ex">apptainer</span> exec ubuntu.sif python3 script.py</span></code></pre></div>
+<p>If the container does not see that host directory, the script may not be found.</p>
+<p>A better pattern is:</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb135-1"><a href="containers-and-reproducible-hpc-workflows.html#cb135-1" tabindex="-1"></a><span class="ex">apptainer</span> exec <span class="at">--bind</span> <span class="va">$PWD</span> ubuntu.sif python3 script.py</span></code></pre></div>
+<p>This makes the relationship between host files and the container explicit.</p>
+</div>
+<div id="store-images-in-sensible-places" class="section level2 hasAnchor" number="7.13">
+<h2><span class="header-section-number">7.13</span> Store images in sensible places<a href="containers-and-reproducible-hpc-workflows.html#store-images-in-sensible-places" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Container images can be large. Good storage decisions matter.</p>
+<p>Practical advice:</p>
+<ul>
+<li>use <code>$WORK</code> or another project-oriented location for sizable images</li>
+<li>avoid cluttering small quota-limited areas like <code>$HOME</code> with large images</li>
+<li>think of images as data assets that should be placed deliberately</li>
+</ul>
+<p>This connects containers back to the filesystem lessons earlier in the course.</p>
+</div>
+<div id="running-python-inside-a-container" class="section level2 hasAnchor" number="7.14">
+<h2><span class="header-section-number">7.14</span> Running Python inside a container<a href="containers-and-reproducible-hpc-workflows.html#running-python-inside-a-container" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Example:</p>
+<div class="sourceCode" id="cb136"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb136-1"><a href="containers-and-reproducible-hpc-workflows.html#cb136-1" tabindex="-1"></a><span class="ex">apptainer</span> exec ubuntu.sif python3 <span class="at">--version</span></span></code></pre></div>
+<p>This is useful because it shows how containers can provide software versions that may not match the default host environment.</p>
+</div>
+<div id="containerizing-a-workflow-through-slurm" class="section level2 hasAnchor" number="7.15">
+<h2><span class="header-section-number">7.15</span> Containerizing a workflow through SLURM<a href="containers-and-reproducible-hpc-workflows.html#containerizing-a-workflow-through-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A batch script can run a containerized command just as it runs other programs.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb137-1"><a href="containers-and-reproducible-hpc-workflows.html#cb137-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb137-2"><a href="containers-and-reproducible-hpc-workflows.html#cb137-2" tabindex="-1"></a><span class="co">#SBATCH -J container_test</span></span>
+<span id="cb137-3"><a href="containers-and-reproducible-hpc-workflows.html#cb137-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb137-4"><a href="containers-and-reproducible-hpc-workflows.html#cb137-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb137-5"><a href="containers-and-reproducible-hpc-workflows.html#cb137-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb137-6"><a href="containers-and-reproducible-hpc-workflows.html#cb137-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb137-7"><a href="containers-and-reproducible-hpc-workflows.html#cb137-7" tabindex="-1"></a><span class="co">#SBATCH -o container_%j.out</span></span>
+<span id="cb137-8"><a href="containers-and-reproducible-hpc-workflows.html#cb137-8" tabindex="-1"></a><span class="co">#SBATCH -e container_%j.err</span></span>
+<span id="cb137-9"><a href="containers-and-reproducible-hpc-workflows.html#cb137-9" tabindex="-1"></a></span>
+<span id="cb137-10"><a href="containers-and-reproducible-hpc-workflows.html#cb137-10" tabindex="-1"></a><span class="ex">module</span> load apptainer</span>
+<span id="cb137-11"><a href="containers-and-reproducible-hpc-workflows.html#cb137-11" tabindex="-1"></a></span>
+<span id="cb137-12"><a href="containers-and-reproducible-hpc-workflows.html#cb137-12" tabindex="-1"></a><span class="ex">apptainer</span> exec <span class="at">--bind</span> <span class="va">$PWD</span> ubuntu.sif echo <span class="st">&quot;Running inside container&quot;</span></span></code></pre></div>
+<p>Submit with:</p>
+<div class="sourceCode" id="cb138"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb138-1"><a href="containers-and-reproducible-hpc-workflows.html#cb138-1" tabindex="-1"></a><span class="ex">sbatch</span> container.slurm</span></code></pre></div>
+<p>This is an important conceptual bridge:</p>
+<blockquote>
+<p>Containers do not replace SLURM. Containers are often executed <em>under</em> SLURM as part of a scheduled workflow.</p>
+</blockquote>
+</div>
+<div id="a-more-realistic-containerized-script-run" class="section level2 hasAnchor" number="7.16">
+<h2><span class="header-section-number">7.16</span> A more realistic containerized script run<a href="containers-and-reproducible-hpc-workflows.html#a-more-realistic-containerized-script-run" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suppose you have a Python script in the current working directory:</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb139-1"><a href="containers-and-reproducible-hpc-workflows.html#cb139-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb139-2"><a href="containers-and-reproducible-hpc-workflows.html#cb139-2" tabindex="-1"></a><span class="co">#SBATCH -J container_python</span></span>
+<span id="cb139-3"><a href="containers-and-reproducible-hpc-workflows.html#cb139-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb139-4"><a href="containers-and-reproducible-hpc-workflows.html#cb139-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb139-5"><a href="containers-and-reproducible-hpc-workflows.html#cb139-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:10:00</span></span>
+<span id="cb139-6"><a href="containers-and-reproducible-hpc-workflows.html#cb139-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb139-7"><a href="containers-and-reproducible-hpc-workflows.html#cb139-7" tabindex="-1"></a><span class="co">#SBATCH -o container_py_%j.out</span></span>
+<span id="cb139-8"><a href="containers-and-reproducible-hpc-workflows.html#cb139-8" tabindex="-1"></a><span class="co">#SBATCH -e container_py_%j.err</span></span>
+<span id="cb139-9"><a href="containers-and-reproducible-hpc-workflows.html#cb139-9" tabindex="-1"></a></span>
+<span id="cb139-10"><a href="containers-and-reproducible-hpc-workflows.html#cb139-10" tabindex="-1"></a><span class="ex">module</span> load apptainer</span>
+<span id="cb139-11"><a href="containers-and-reproducible-hpc-workflows.html#cb139-11" tabindex="-1"></a></span>
+<span id="cb139-12"><a href="containers-and-reproducible-hpc-workflows.html#cb139-12" tabindex="-1"></a><span class="ex">apptainer</span> exec <span class="at">--bind</span> <span class="va">$PWD</span> ubuntu.sif python3 script.py</span></code></pre></div>
+<p>This is a realistic pattern for teaching because it combines:</p>
+<ul>
+<li>scheduler awareness</li>
+<li>software environment packaging</li>
+<li>explicit path handling</li>
+<li>reproducible command execution</li>
+</ul>
+</div>
+<div id="when-containers-help-most" class="section level2 hasAnchor" number="7.17">
+<h2><span class="header-section-number">7.17</span> When containers help most<a href="containers-and-reproducible-hpc-workflows.html#when-containers-help-most" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Containers are especially useful when:</p>
+<ul>
+<li>software dependencies are awkward</li>
+<li>collaborators need the same environment</li>
+<li>the host system and project software differ significantly</li>
+<li>reproducibility matters over time</li>
+<li>modules alone are not enough or become cumbersome</li>
+</ul>
+</div>
+<div id="when-modules-may-be-enough" class="section level2 hasAnchor" number="7.18">
+<h2><span class="header-section-number">7.18</span> When modules may be enough<a href="containers-and-reproducible-hpc-workflows.html#when-modules-may-be-enough" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Not every workflow needs a container.</p>
+<p>Sometimes the module system already gives you:</p>
+<ul>
+<li>a suitable compiler</li>
+<li>the right Python stack</li>
+<li>the right MPI stack</li>
+<li>the needed application version</li>
+</ul>
+<p>In those cases, using modules alone may be simpler.</p>
+<p>This is an important judgment skill:</p>
+<blockquote>
+<p>Use the tool that fits the workflow. Do not use containers just because they sound modern.</p>
+</blockquote>
+</div>
+<div id="common-beginner-mistakes-2" class="section level2 hasAnchor" number="7.19">
+<h2><span class="header-section-number">7.19</span> Common beginner mistakes<a href="containers-and-reproducible-hpc-workflows.html#common-beginner-mistakes-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="mistake-1-assuming-the-container-sees-all-host-files-automatically" class="section level3 hasAnchor" number="7.19.1">
+<h3><span class="header-section-number">7.19.1</span> Mistake 1: assuming the container sees all host files automatically<a href="containers-and-reproducible-hpc-workflows.html#mistake-1-assuming-the-container-sees-all-host-files-automatically" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction:
+- bind the directories you actually need</p>
+</div>
+<div id="mistake-2-forgetting-to-load-apptainer" class="section level3 hasAnchor" number="7.19.2">
+<h3><span class="header-section-number">7.19.2</span> Mistake 2: forgetting to load Apptainer<a href="containers-and-reproducible-hpc-workflows.html#mistake-2-forgetting-to-load-apptainer" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction:
+- verify availability with <code>which apptainer</code>
+- load the module if needed</p>
+</div>
+<div id="mistake-3-storing-large-images-in-the-wrong-location" class="section level3 hasAnchor" number="7.19.3">
+<h3><span class="header-section-number">7.19.3</span> Mistake 3: storing large images in the wrong location<a href="containers-and-reproducible-hpc-workflows.html#mistake-3-storing-large-images-in-the-wrong-location" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction:
+- choose storage locations intentionally</p>
+</div>
+<div id="mistake-4-thinking-a-container-replaces-slurm" class="section level3 hasAnchor" number="7.19.4">
+<h3><span class="header-section-number">7.19.4</span> Mistake 4: thinking a container replaces SLURM<a href="containers-and-reproducible-hpc-workflows.html#mistake-4-thinking-a-container-replaces-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction:
+- scheduled execution still goes through SLURM on shared systems</p>
+</div>
+<div id="mistake-5-assuming-every-needed-tool-is-already-inside-the-image" class="section level3 hasAnchor" number="7.19.5">
+<h3><span class="header-section-number">7.19.5</span> Mistake 5: assuming every needed tool is already inside the image<a href="containers-and-reproducible-hpc-workflows.html#mistake-5-assuming-every-needed-tool-is-already-inside-the-image" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction:
+- inspect the image and verify commands rather than assuming</p>
+</div>
+</div>
+<div id="failure-case-study-1-file-not-found-inside-the-container" class="section level2 hasAnchor" number="7.20">
+<h2><span class="header-section-number">7.20</span> Failure case study 1: file not found inside the container<a href="containers-and-reproducible-hpc-workflows.html#failure-case-study-1-file-not-found-inside-the-container" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Symptom:
+- the script exists on the host
+- containerized execution says the file is missing</p>
+<p>Likely cause:
+- the working directory was not bound into the container</p>
+<p>Fix:
+- add <code>--bind $PWD</code> or another appropriate bind path</p>
+</div>
+<div id="failure-case-study-2-command-not-found-inside-the-image" class="section level2 hasAnchor" number="7.21">
+<h2><span class="header-section-number">7.21</span> Failure case study 2: command not found inside the image<a href="containers-and-reproducible-hpc-workflows.html#failure-case-study-2-command-not-found-inside-the-image" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Symptom:
+- <code>python3</code> or another expected command is missing</p>
+<p>Likely cause:
+- the image does not actually contain that software</p>
+<p>Fix:
+- inspect the image interactively
+- choose a more appropriate image
+- build or pull a container that matches the workflow</p>
+</div>
+<div id="failure-case-study-3-output-appears-in-the-wrong-place" class="section level2 hasAnchor" number="7.22">
+<h2><span class="header-section-number">7.22</span> Failure case study 3: output appears in the wrong place<a href="containers-and-reproducible-hpc-workflows.html#failure-case-study-3-output-appears-in-the-wrong-place" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Symptom:
+- the job runs, but expected output is not visible where the student expects it</p>
+<p>Likely causes:
+- output path inside the container does not map to the host path
+- bind paths were incomplete or misunderstood</p>
+<p>Fix:
+- make host/container path relationships explicit
+- write outputs to bound directories intentionally</p>
+</div>
+<div id="debugging-checklist-for-container-workflows" class="section level2 hasAnchor" number="7.23">
+<h2><span class="header-section-number">7.23</span> Debugging checklist for container workflows<a href="containers-and-reproducible-hpc-workflows.html#debugging-checklist-for-container-workflows" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When a containerized job behaves strangely, ask:</p>
+<div id="is-apptainer-available" class="section level3 hasAnchor" number="7.23.1">
+<h3><span class="header-section-number">7.23.1</span> 1. Is Apptainer available?<a href="containers-and-reproducible-hpc-workflows.html#is-apptainer-available" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb140"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb140-1"><a href="containers-and-reproducible-hpc-workflows.html#cb140-1" tabindex="-1"></a><span class="fu">which</span> apptainer</span></code></pre></div>
+</div>
+<div id="does-the-image-exist" class="section level3 hasAnchor" number="7.23.2">
+<h3><span class="header-section-number">7.23.2</span> 2. Does the image exist?<a href="containers-and-reproducible-hpc-workflows.html#does-the-image-exist" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb141"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb141-1"><a href="containers-and-reproducible-hpc-workflows.html#cb141-1" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>.sif</span></code></pre></div>
+</div>
+<div id="can-i-explore-it-interactively" class="section level3 hasAnchor" number="7.23.3">
+<h3><span class="header-section-number">7.23.3</span> 3. Can I explore it interactively?<a href="containers-and-reproducible-hpc-workflows.html#can-i-explore-it-interactively" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb142"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb142-1"><a href="containers-and-reproducible-hpc-workflows.html#cb142-1" tabindex="-1"></a><span class="ex">apptainer</span> shell ubuntu.sif</span></code></pre></div>
+</div>
+<div id="does-the-command-i-need-actually-exist-inside-the-image" class="section level3 hasAnchor" number="7.23.4">
+<h3><span class="header-section-number">7.23.4</span> 4. Does the command I need actually exist inside the image?<a href="containers-and-reproducible-hpc-workflows.html#does-the-command-i-need-actually-exist-inside-the-image" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb143"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb143-1"><a href="containers-and-reproducible-hpc-workflows.html#cb143-1" tabindex="-1"></a><span class="ex">apptainer</span> exec ubuntu.sif which python3</span></code></pre></div>
+</div>
+<div id="are-the-needed-host-directories-bound-into-the-container" class="section level3 hasAnchor" number="7.23.5">
+<h3><span class="header-section-number">7.23.5</span> 5. Are the needed host directories bound into the container?<a href="containers-and-reproducible-hpc-workflows.html#are-the-needed-host-directories-bound-into-the-container" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Check the <code>--bind</code> logic in the command or script.</p>
+</div>
+<div id="does-the-batch-script-still-make-sense-as-a-slurm-job" class="section level3 hasAnchor" number="7.23.6">
+<h3><span class="header-section-number">7.23.6</span> 6. Does the batch script still make sense as a SLURM job?<a href="containers-and-reproducible-hpc-workflows.html#does-the-batch-script-still-make-sense-as-a-slurm-job" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Remember that the scheduler and the container are separate layers.</p>
+</div>
+</div>
+<div id="best-practices-1" class="section level2 hasAnchor" number="7.24">
+<h2><span class="header-section-number">7.24</span> Best practices<a href="containers-and-reproducible-hpc-workflows.html#best-practices-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>load Apptainer explicitly when needed</li>
+<li>inspect images rather than assuming contents</li>
+<li>bind host directories intentionally</li>
+<li>store images in appropriate storage areas</li>
+<li>keep container commands inside readable SLURM scripts</li>
+<li>document the image source and runtime assumptions in the project README</li>
+</ul>
+</div>
+<div id="lab-1-pull-and-inspect-an-image" class="section level2 hasAnchor" number="7.25">
+<h2><span class="header-section-number">7.25</span> Lab 1: pull and inspect an image<a href="containers-and-reproducible-hpc-workflows.html#lab-1-pull-and-inspect-an-image" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ol style="list-style-type: decimal">
-<li>understand the cluster</li>
-<li>work safely in Linux</li>
-<li>manage your environment</li>
-<li>submit jobs through SLURM</li>
-<li>compile programs</li>
-<li>scale to parallel work</li>
-<li>use containers for reproducibility</li>
-<li>complete an end-to-end capstone project</li>
+<li>Load Apptainer if needed</li>
+<li>Pull a simple image</li>
+<li>Run <code>apptainer exec</code> with a trivial command</li>
+<li>Enter the image with <code>apptainer shell</code></li>
+<li>Inspect software inside the image</li>
 </ol>
 </div>
-<div id="what-this-book-is" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> What this book is<a href="index.html#what-this-book-is" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is designed to function as:</p>
+<div id="lab-2-bind-the-working-directory" class="section level2 hasAnchor" number="7.26">
+<h2><span class="header-section-number">7.26</span> Lab 2: bind the working directory<a href="containers-and-reproducible-hpc-workflows.html#lab-2-bind-the-working-directory" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Create a small host file</li>
+<li>Run a container command without a bind</li>
+<li>Observe what the container can or cannot see</li>
+<li>Repeat with <code>--bind $PWD</code></li>
+<li>Explain the difference</li>
+</ol>
+</div>
+<div id="lab-3-run-a-containerized-batch-job" class="section level2 hasAnchor" number="7.27">
+<h2><span class="header-section-number">7.27</span> Lab 3: run a containerized batch job<a href="containers-and-reproducible-hpc-workflows.html#lab-3-run-a-containerized-batch-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Write a simple <code>container.slurm</code></li>
+<li>Load Apptainer in the script</li>
+<li>Execute a containerized command</li>
+<li>Submit the job</li>
+<li>Inspect output and error files</li>
+</ol>
+</div>
+<div id="lab-4-compare-modules-and-containers" class="section level2 hasAnchor" number="7.28">
+<h2><span class="header-section-number">7.28</span> Lab 4: compare modules and containers<a href="containers-and-reproducible-hpc-workflows.html#lab-4-compare-modules-and-containers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Write a short reflection answering:</p>
 <ul>
-<li>a textbook for a short course or workshop series</li>
-<li>a lab manual for hands-on LS6 exercises</li>
-<li>a reference guide for new HPC users</li>
-<li>a bridge from beginner Linux to production cluster workflows</li>
+<li>when are modules sufficient?</li>
+<li>when does a container help?</li>
+<li>what new complexity does a container introduce?</li>
 </ul>
 </div>
-<div id="who-this-book-is-for" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Who this book is for<a href="index.html#who-this-book-is-for" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This material is appropriate for:</p>
+<div id="stretch-goal-4" class="section level2 hasAnchor" number="7.29">
+<h2><span class="header-section-number">7.29</span> Stretch goal<a href="containers-and-reproducible-hpc-workflows.html#stretch-goal-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Run a small script through Apptainer under SLURM, with explicit bind paths and recorded output. Then write a short note explaining how another student could reproduce the workflow from scratch.</p>
+</div>
+<div id="key-takeaways-3" class="section level2 hasAnchor" number="7.30">
+<h2><span class="header-section-number">7.30</span> Key takeaways<a href="containers-and-reproducible-hpc-workflows.html#key-takeaways-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li>upper-level undergraduates</li>
-<li>graduate students beginning computational research</li>
-<li>faculty and staff new to HPC</li>
-<li>workshop participants who need a practical guide after class</li>
-<li>self-paced learners who want an LS6-centered path into HPC</li>
+<li>containers package software environments, not the entire HPC system</li>
+<li>Apptainer is the HPC-friendly container tool in this course context</li>
+<li>directory binding is one of the most important practical concepts</li>
+<li>containers often run under SLURM, not instead of SLURM</li>
+<li>modules and containers solve different workflow problems</li>
+<li>reproducibility improves when container usage is documented clearly</li>
 </ul>
-<p>No prior cluster experience is assumed. Some command-line exposure is helpful, but the early chapters are written to reduce the barrier to entry.</p>
-</div>
-<div id="learning-goals" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Learning goals<a href="index.html#learning-goals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>By the end of the book, readers should be able to:</p>
-<ul>
-<li>explain the difference between login nodes and compute nodes</li>
-<li>connect to LS6 and work within the Linux shell</li>
-<li>manage files, directories, permissions, and environment variables</li>
-<li>use modules to load software into the current environment</li>
-<li>write, submit, monitor, and debug SLURM jobs</li>
-<li>compile and run simple C programs on the cluster</li>
-<li>distinguish serial, shared-memory, and distributed-memory workflows</li>
-<li>understand the role of containers in reproducible HPC work</li>
-<li>document a complete workflow so another researcher can repeat it</li>
-</ul>
-</div>
-<div id="course-philosophy" class="section level2 hasAnchor" number="1.5">
-<h2><span class="header-section-number">1.5</span> Course philosophy<a href="index.html#course-philosophy" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A common beginner mistake is to treat HPC as “a bigger computer.” It is better to think of HPC as a <strong>shared, scheduled, resource-managed environment</strong>.</p>
-<p>That idea affects everything in this book:</p>
-<ul>
-<li>you do not do serious computation on login nodes</li>
-<li>your environment matters because software is often module-based</li>
-<li>your working directory matters because jobs run in specific locations</li>
-<li>your resource request matters because the scheduler allocates shared infrastructure</li>
-<li>your documentation matters because reproducibility is part of responsible computing</li>
-</ul>
-</div>
-<div id="how-chapters-are-organized" class="section level2 hasAnchor" number="1.6">
-<h2><span class="header-section-number">1.6</span> How chapters are organized<a href="index.html#how-chapters-are-organized" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Most chapters follow a common pattern:</p>
-<ul>
-<li>overview</li>
-<li>mental model</li>
-<li>command examples</li>
-<li>walkthrough</li>
-<li>common mistakes</li>
-<li>debugging checklist</li>
-<li>hands-on lab</li>
-<li>stretch goal</li>
-</ul>
-<p>That structure is intentional. Many new users can reproduce commands but still feel uncertain about what the system is doing. The “mental model” sections are there to explain the logic behind the commands.</p>
-</div>
-<div id="recommended-use-in-a-course" class="section level2 hasAnchor" number="1.7">
-<h2><span class="header-section-number">1.7</span> Recommended use in a course<a href="index.html#recommended-use-in-a-course" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A natural workshop sequence is:</p>
-<ul>
-<li><strong>Workshop 1</strong>: first login, minimal Linux, first SLURM job</li>
-<li><strong>Workshop 2</strong>: job monitoring and debugging</li>
-<li><strong>Workshop 3</strong>: modules, compilers, first C program</li>
-<li><strong>Workshop 4</strong>: MPI and OpenMP foundations</li>
-<li><strong>Workshop 5</strong>: containers and reproducibility</li>
-<li><strong>Workshop 6</strong>: capstone project work session</li>
-</ul>
-<p>This book can also be taught over several weeks as an onboarding course for a research computing program.</p>
-</div>
-<div id="what-you-need-before-starting" class="section level2 hasAnchor" number="1.8">
-<h2><span class="header-section-number">1.8</span> What you need before starting<a href="index.html#what-you-need-before-starting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Before working through the book, you should have:</p>
-<ul>
-<li>an LS6 account or equivalent training account</li>
-<li>SSH access from your laptop or desktop</li>
-<li>a terminal application</li>
-<li>a text editor you are comfortable using, or willingness to use <code>nano</code></li>
-<li>a place to keep notes on commands, directory paths, and job IDs</li>
-</ul>
-</div>
-<div id="what-success-looks-like" class="section level2 hasAnchor" number="1.9">
-<h2><span class="header-section-number">1.9</span> What success looks like<a href="index.html#what-success-looks-like" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Success in this course is not memorizing every SLURM option or every Linux command. Success looks like this:</p>
-<ul>
-<li>you know where you are in the filesystem</li>
-<li>you know whether work belongs on a login node or compute node</li>
-<li>you can inspect your environment instead of guessing</li>
-<li>you can submit a job and interpret what happened</li>
-<li>you can recover from common failures by reading evidence</li>
-</ul>
-<p>That is the mindset of an effective HPC user.</p>
-</div>
-<div id="a-note-on-reproducibility" class="section level2 hasAnchor" number="1.10">
-<h2><span class="header-section-number">1.10</span> A note on reproducibility<a href="index.html#a-note-on-reproducibility" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Throughout the book, you will be encouraged to save scripts, keep meaningful file names, and write down the commands you used. These are not extra tasks. They are part of the workflow itself.</p>
-<p>In research computing, a good result that cannot be reproduced later is far less valuable than a modest result that can be rerun, explained, and shared.</p>
-</div>
-<div id="looking-ahead" class="section level2 hasAnchor" number="1.11">
-<h2><span class="header-section-number">1.11</span> Looking ahead<a href="index.html#looking-ahead" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We begin with the most important conceptual distinction in cluster computing: <strong>login nodes versus compute nodes</strong>. From there, we build the smallest practical Linux toolkit needed to complete a real workflow on LS6.</p>
 
 </div>
 </div>
@@ -744,8 +1030,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="introduction-to-high-performance-computing-on-ls6.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="capstone-project-building-an-end-to-end-hpc-workflow.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

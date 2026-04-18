@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>High-Performance Computing on Lonestar6</title>
-  <meta name="description" content="High-Performance Computing on Lonestar6" />
+  <title>Chapter 9 Appendix: Quick Reference and Troubleshooting for LS6 Workflows | High-Performance Computing on Lonestar6</title>
+  <meta name="description" content="Chapter 9 Appendix: Quick Reference and Troubleshooting for LS6 Workflows | High-Performance Computing on Lonestar6" />
   <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="High-Performance Computing on Lonestar6" />
+  <meta property="og:title" content="Chapter 9 Appendix: Quick Reference and Troubleshooting for LS6 Workflows | High-Performance Computing on Lonestar6" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="High-Performance Computing on Lonestar6" />
+  <meta name="twitter:title" content="Chapter 9 Appendix: Quick Reference and Troubleshooting for LS6 Workflows | High-Performance Computing on Lonestar6" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
+<link rel="prev" href="capstone-project-building-an-end-to-end-hpc-workflow.html"/>
 
-<link rel="next" href="introduction-to-high-performance-computing-on-ls6.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -607,135 +607,363 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">High-Performance Computing on Lonestar6</h1>
-<p class="author"><em>Rich Herrington <br> DRI, Research Computing Services</em></p>
+<div id="appendix-quick-reference-and-troubleshooting-for-ls6-workflows" class="section level1 hasAnchor" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Appendix: Quick Reference and Troubleshooting for LS6 Workflows<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#appendix-quick-reference-and-troubleshooting-for-ls6-workflows" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-7" class="section level2 hasAnchor" number="9.1">
+<h2><span class="header-section-number">9.1</span> Overview<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#overview-7" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This appendix is a compact reference for the commands, patterns, and reminders used throughout the course.</p>
+<p>It is <strong>not</strong> a replacement for the explanatory chapters. Instead, it is a quick recovery tool: when you already understand the ideas, this appendix helps you remember the exact command pattern or troubleshooting sequence.</p>
 </div>
-<div id="high-performance-computing-on-lonestar6" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> High-Performance Computing on Lonestar6<a href="index.html#high-performance-computing-on-lonestar6" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="welcome" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is a practical introduction to high-performance computing using the <strong>Lonestar6 (LS6)</strong> system at the Texas Advanced Computing Center (TACC). It is written for students, researchers, and new cluster users who need an operational path from first login to confident job submission.</p>
-<p>Rather than treating HPC as an abstract subject, this book treats it as a workflow:</p>
+<div id="core-workflow-picture" class="section level2 hasAnchor" number="9.2">
+<h2><span class="header-section-number">9.2</span> Core workflow picture<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#core-workflow-picture" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Keep this mental model in view:</p>
+<pre class="text"><code>Laptop -&gt; Login node -&gt; SLURM -&gt; Compute node(s) -&gt; Output</code></pre>
+<p>And keep this rule visible:</p>
+<blockquote>
+<p>Do setup on the login node. Do serious computation on compute nodes.</p>
+</blockquote>
+</div>
+<div id="a-safe-beginner-shell-pattern" class="section level2 hasAnchor" number="9.3">
+<h2><span class="header-section-number">9.3</span> A safe beginner shell pattern<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#a-safe-beginner-shell-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Before doing something important, run:</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb149-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb149-1" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb149-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb149-2" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
+<p>This quickly confirms:</p>
+<ul>
+<li>where you are</li>
+<li>what files are present</li>
+<li>whether you are about to act in the intended directory</li>
+</ul>
+<p>That tiny habit prevents many avoidable mistakes.</p>
+</div>
+<div id="ssh" class="section level2 hasAnchor" number="9.4">
+<h2><span class="header-section-number">9.4</span> SSH<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#ssh" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Connect to LS6:</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb150-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb150-1" tabindex="-1"></a><span class="fu">ssh</span> your_username@ls6.tacc.utexas.edu</span></code></pre></div>
+</div>
+<div id="filesystem-basics" class="section level2 hasAnchor" number="9.5">
+<h2><span class="header-section-number">9.5</span> Filesystem basics<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#filesystem-basics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Check current directory:</p>
+<div class="sourceCode" id="cb151"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb151-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb151-1" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div>
+<p>List files:</p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb152-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb152-1" tabindex="-1"></a><span class="fu">ls</span></span>
+<span id="cb152-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb152-2" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span></code></pre></div>
+<p>Change directories:</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb153-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb153-1" tabindex="-1"></a><span class="bu">cd</span></span>
+<span id="cb153-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb153-2" tabindex="-1"></a><span class="bu">cd</span> ..</span>
+<span id="cb153-3"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb153-3" tabindex="-1"></a><span class="bu">cd</span> my_directory</span></code></pre></div>
+<p>Create directories:</p>
+<div class="sourceCode" id="cb154"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb154-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb154-1" tabindex="-1"></a><span class="fu">mkdir</span> project</span>
+<span id="cb154-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb154-2" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> project/src project/jobs project/output</span></code></pre></div>
+<p>Copy, move, rename, remove:</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb155-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb155-1" tabindex="-1"></a><span class="fu">cp</span> oldfile newfile</span>
+<span id="cb155-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb155-2" tabindex="-1"></a><span class="fu">mv</span> oldname newname</span>
+<span id="cb155-3"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb155-3" tabindex="-1"></a><span class="fu">rm</span> file</span></code></pre></div>
+</div>
+<div id="editing-files" class="section level2 hasAnchor" number="9.6">
+<h2><span class="header-section-number">9.6</span> Editing files<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#editing-files" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use a simple editor:</p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb156-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb156-1" tabindex="-1"></a><span class="fu">nano</span> myfile.txt</span></code></pre></div>
+</div>
+<div id="permissions" class="section level2 hasAnchor" number="9.7">
+<h2><span class="header-section-number">9.7</span> Permissions<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#permissions" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Make a script executable:</p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb157-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb157-1" tabindex="-1"></a><span class="fu">chmod</span> +x script.sh</span></code></pre></div>
+<p>Inspect permissions:</p>
+<div class="sourceCode" id="cb158"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb158-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb158-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> script.sh</span></code></pre></div>
+<p>A common symptom of permission trouble is:</p>
+<ul>
+<li>the file exists</li>
+<li>but it will not run</li>
+</ul>
+</div>
+<div id="environment-variables-1" class="section level2 hasAnchor" number="9.8">
+<h2><span class="header-section-number">9.8</span> Environment variables<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#environment-variables-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>View the environment:</p>
+<div class="sourceCode" id="cb159"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb159-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb159-1" tabindex="-1"></a><span class="fu">env</span></span></code></pre></div>
+<p>Check common variables:</p>
+<div class="sourceCode" id="cb160"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb160-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb160-1" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$HOME</span></span>
+<span id="cb160-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb160-2" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$PATH</span></span>
+<span id="cb160-3"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb160-3" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$WORK</span></span>
+<span id="cb160-4"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb160-4" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$SCRATCH</span></span></code></pre></div>
+<p>Temporarily add a directory to <code>PATH</code>:</p>
+<div class="sourceCode" id="cb161"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb161-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb161-1" tabindex="-1"></a><span class="bu">export</span> <span class="va">PATH</span><span class="op">=</span><span class="va">$HOME</span>/bin:<span class="va">$PATH</span></span></code></pre></div>
+</div>
+<div id="modules" class="section level2 hasAnchor" number="9.9">
+<h2><span class="header-section-number">9.9</span> Modules<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#modules" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>List available modules:</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb162-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb162-1" tabindex="-1"></a><span class="ex">module</span> avail</span></code></pre></div>
+<p>Load a module:</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb163-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb163-1" tabindex="-1"></a><span class="ex">module</span> load gcc</span></code></pre></div>
+<p>Inspect loaded modules:</p>
+<div class="sourceCode" id="cb164"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb164-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb164-1" tabindex="-1"></a><span class="ex">module</span> list</span></code></pre></div>
+<p>Unload a module:</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb165-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb165-1" tabindex="-1"></a><span class="ex">module</span> unload gcc</span></code></pre></div>
+<p>Check where a command comes from:</p>
+<div class="sourceCode" id="cb166"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb166-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb166-1" tabindex="-1"></a><span class="fu">which</span> gcc</span></code></pre></div>
+</div>
+<div id="compilers-and-build-commands" class="section level2 hasAnchor" number="9.10">
+<h2><span class="header-section-number">9.10</span> Compilers and build commands<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#compilers-and-build-commands" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Basic C compile:</p>
+<div class="sourceCode" id="cb167"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb167-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb167-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
+<p>Compile with warnings and optimization:</p>
+<div class="sourceCode" id="cb168"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb168-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb168-1" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-Wall</span> <span class="at">-O2</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
+<p>Basic C++ compile:</p>
+<div class="sourceCode" id="cb169"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb169-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb169-1" tabindex="-1"></a><span class="ex">g++</span> hello.cpp <span class="at">-o</span> hello_cpp</span></code></pre></div>
+<p>Compile an OpenMP program:</p>
+<div class="sourceCode" id="cb170"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb170-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb170-1" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-fopenmp</span> hello_omp.c <span class="at">-o</span> hello_omp</span></code></pre></div>
+<p>Compile an MPI program:</p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb171-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb171-1" tabindex="-1"></a><span class="ex">mpicc</span> hello_mpi.c <span class="at">-o</span> hello_mpi</span></code></pre></div>
+<p>Build with <code>make</code>:</p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb172-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb172-1" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
+<p>Clean with <code>make clean</code> if the <code>Makefile</code> provides it.</p>
+</div>
+<div id="slurm-basics" class="section level2 hasAnchor" number="9.11">
+<h2><span class="header-section-number">9.11</span> SLURM basics<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#slurm-basics" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Submit a job:</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb173-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb173-1" tabindex="-1"></a><span class="ex">sbatch</span> job.slurm</span></code></pre></div>
+<p>Monitor current jobs:</p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb174-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb174-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<p>Inspect job history:</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb175-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb175-1" tabindex="-1"></a><span class="ex">sacct</span></span></code></pre></div>
+<p>Inspect one job:</p>
+<div class="sourceCode" id="cb176"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb176-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb176-1" tabindex="-1"></a><span class="ex">sacct</span> <span class="at">-j</span> 123456</span></code></pre></div>
+<p>Cancel a job:</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb177-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb177-1" tabindex="-1"></a><span class="ex">scancel</span> 123456</span></code></pre></div>
+</div>
+<div id="common-job-states-1" class="section level2 hasAnchor" number="9.12">
+<h2><span class="header-section-number">9.12</span> Common job states<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#common-job-states-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li><code>PD</code> = pending</li>
+<li><code>R</code> = running</li>
+<li><code>CG</code> = completing</li>
+<li><code>CD</code> = completed</li>
+</ul>
+<p>Remember:</p>
+<ul>
+<li><code>PD</code> does not automatically mean broken</li>
+<li><code>sbatch</code> does not mean “running right now”</li>
+</ul>
+</div>
+<div id="minimal-serial-batch-script-template" class="section level2 hasAnchor" number="9.13">
+<h2><span class="header-section-number">9.13</span> Minimal serial batch script template<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#minimal-serial-batch-script-template" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb178"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb178-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb178-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-2" tabindex="-1"></a><span class="co">#SBATCH -J my_job</span></span>
+<span id="cb178-3"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb178-4"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb178-5"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb178-6"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb178-7"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-7" tabindex="-1"></a><span class="co">#SBATCH -o my_job_%j.out</span></span>
+<span id="cb178-8"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-8" tabindex="-1"></a><span class="co">#SBATCH -e my_job_%j.err</span></span>
+<span id="cb178-9"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-9" tabindex="-1"></a></span>
+<span id="cb178-10"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-10" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb178-11"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-11" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb178-12"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb178-12" tabindex="-1"></a><span class="fu">date</span></span></code></pre></div>
+</div>
+<div id="minimal-mpi-batch-script-template" class="section level2 hasAnchor" number="9.14">
+<h2><span class="header-section-number">9.14</span> Minimal MPI batch script template<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#minimal-mpi-batch-script-template" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb179"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb179-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb179-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-2" tabindex="-1"></a><span class="co">#SBATCH -J mpi_job</span></span>
+<span id="cb179-3"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb179-4"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-4" tabindex="-1"></a><span class="co">#SBATCH -n 4</span></span>
+<span id="cb179-5"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb179-6"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb179-7"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-7" tabindex="-1"></a><span class="co">#SBATCH -o mpi_%j.out</span></span>
+<span id="cb179-8"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-8" tabindex="-1"></a><span class="co">#SBATCH -e mpi_%j.err</span></span>
+<span id="cb179-9"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-9" tabindex="-1"></a></span>
+<span id="cb179-10"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-10" tabindex="-1"></a><span class="ex">module</span> load openmpi</span>
+<span id="cb179-11"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb179-11" tabindex="-1"></a><span class="ex">mpirun</span> ./hello_mpi</span></code></pre></div>
+</div>
+<div id="minimal-openmp-batch-script-template" class="section level2 hasAnchor" number="9.15">
+<h2><span class="header-section-number">9.15</span> Minimal OpenMP batch script template<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#minimal-openmp-batch-script-template" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb180"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb180-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb180-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-2" tabindex="-1"></a><span class="co">#SBATCH -J omp_job</span></span>
+<span id="cb180-3"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb180-4"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb180-5"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-5" tabindex="-1"></a><span class="co">#SBATCH -c 4</span></span>
+<span id="cb180-6"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-6" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb180-7"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-7" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb180-8"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-8" tabindex="-1"></a><span class="co">#SBATCH -o omp_%j.out</span></span>
+<span id="cb180-9"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-9" tabindex="-1"></a><span class="co">#SBATCH -e omp_%j.err</span></span>
+<span id="cb180-10"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-10" tabindex="-1"></a></span>
+<span id="cb180-11"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-11" tabindex="-1"></a><span class="bu">export</span> <span class="va">OMP_NUM_THREADS</span><span class="op">=</span>4</span>
+<span id="cb180-12"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb180-12" tabindex="-1"></a><span class="ex">./hello_omp</span></span></code></pre></div>
+</div>
+<div id="output-files" class="section level2 hasAnchor" number="9.16">
+<h2><span class="header-section-number">9.16</span> Output files<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#output-files" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Inspect output:</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb181-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb181-1" tabindex="-1"></a><span class="fu">cat</span> slurm-<span class="pp">*</span>.out</span></code></pre></div>
+<p>Inspect a custom output file:</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb182-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb182-1" tabindex="-1"></a><span class="fu">cat</span> my_job_123456.out</span>
+<span id="cb182-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb182-2" tabindex="-1"></a><span class="fu">cat</span> my_job_123456.err</span></code></pre></div>
+<p>Use <code>less</code> when output is long:</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb183-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb183-1" tabindex="-1"></a><span class="fu">less</span> my_job_123456.out</span></code></pre></div>
+</div>
+<div id="container-commands" class="section level2 hasAnchor" number="9.17">
+<h2><span class="header-section-number">9.17</span> Container commands<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#container-commands" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Check Apptainer:</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb184-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb184-1" tabindex="-1"></a><span class="fu">which</span> apptainer</span></code></pre></div>
+<p>Load it if necessary:</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb185-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb185-1" tabindex="-1"></a><span class="ex">module</span> load apptainer</span></code></pre></div>
+<p>Pull an image:</p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb186-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb186-1" tabindex="-1"></a><span class="ex">apptainer</span> pull ubuntu.sif docker://ubuntu</span></code></pre></div>
+<p>Execute a command inside the image:</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb187-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb187-1" tabindex="-1"></a><span class="ex">apptainer</span> exec ubuntu.sif echo <span class="st">&quot;hello&quot;</span></span></code></pre></div>
+<p>Start an interactive shell:</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb188-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb188-1" tabindex="-1"></a><span class="ex">apptainer</span> shell ubuntu.sif</span></code></pre></div>
+<p>Bind the working directory:</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb189-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb189-1" tabindex="-1"></a><span class="ex">apptainer</span> exec <span class="at">--bind</span> <span class="va">$PWD</span> ubuntu.sif ls</span></code></pre></div>
+</div>
+<div id="quick-mental-model-table" class="section level2 hasAnchor" number="9.18">
+<h2><span class="header-section-number">9.18</span> Quick mental model table<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#quick-mental-model-table" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Situation</th>
+<th>Good first question</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>command does not run</td>
+<td>Is the right module loaded?</td>
+</tr>
+<tr class="even">
+<td>job fails</td>
+<td>What do the output and error files say?</td>
+</tr>
+<tr class="odd">
+<td>build fails</td>
+<td>What is the first real compiler error?</td>
+</tr>
+<tr class="even">
+<td>MPI output looks wrong</td>
+<td>Does the task count match the program model?</td>
+</tr>
+<tr class="odd">
+<td>OpenMP uses one thread</td>
+<td>Did I set <code>OMP_NUM_THREADS</code>?</td>
+</tr>
+<tr class="even">
+<td>container cannot find files</td>
+<td>Did I bind the right host directory?</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="troubleshooting-checklist-shell-and-files" class="section level2 hasAnchor" number="9.19">
+<h2><span class="header-section-number">9.19</span> Troubleshooting checklist: shell and files<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-shell-and-files" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use when something feels wrong immediately at the command line.</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb190-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb190-1" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb190-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb190-2" tabindex="-1"></a><span class="fu">ls</span></span>
+<span id="cb190-3"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb190-3" tabindex="-1"></a><span class="fu">which</span> command_name</span>
+<span id="cb190-4"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb190-4" tabindex="-1"></a><span class="ex">module</span> list</span></code></pre></div>
+<p>Questions:
+- am I in the right directory?
+- is the file really present?
+- is the command actually available?
+- is the right environment loaded?</p>
+</div>
+<div id="troubleshooting-checklist-build-failure" class="section level2 hasAnchor" number="9.20">
+<h2><span class="header-section-number">9.20</span> Troubleshooting checklist: build failure<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-build-failure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When compilation fails:</p>
 <ol style="list-style-type: decimal">
-<li>understand the cluster</li>
-<li>work safely in Linux</li>
-<li>manage your environment</li>
-<li>submit jobs through SLURM</li>
-<li>compile programs</li>
-<li>scale to parallel work</li>
-<li>use containers for reproducibility</li>
-<li>complete an end-to-end capstone project</li>
+<li>read the <strong>first meaningful error</strong></li>
+<li>note the file and line number</li>
+<li>inspect nearby source lines</li>
+<li>fix one issue at a time</li>
+<li>recompile</li>
 </ol>
+<p>Helpful commands:</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb191-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb191-1" tabindex="-1"></a><span class="fu">ls</span></span>
+<span id="cb191-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb191-2" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-Wall</span> hello.c <span class="at">-o</span> hello</span>
+<span id="cb191-3"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb191-3" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
+<p>Useful questions:
+- is the file name correct?
+- did I forget a semicolon or brace?
+- did I forget a source file in the build?
+- did I load the compiler module?</p>
 </div>
-<div id="what-this-book-is" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> What this book is<a href="index.html#what-this-book-is" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is designed to function as:</p>
+<div id="troubleshooting-checklist-slurm-job-failure" class="section level2 hasAnchor" number="9.21">
+<h2><span class="header-section-number">9.21</span> Troubleshooting checklist: SLURM job failure<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-slurm-job-failure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When a job fails or produces no useful result:</p>
+<ol style="list-style-type: decimal">
+<li>check whether it is still in the queue</li>
+<li>inspect job accounting</li>
+<li>read output and error files</li>
+<li>verify current directory and input files</li>
+<li>check software environment assumptions</li>
+</ol>
+<p>Helpful commands:</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb192-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb192-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span>
+<span id="cb192-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb192-2" tabindex="-1"></a><span class="ex">sacct</span> <span class="at">-j</span> 123456</span>
+<span id="cb192-3"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb192-3" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb192-4"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb192-4" tabindex="-1"></a><span class="fu">ls</span></span>
+<span id="cb192-5"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb192-5" tabindex="-1"></a><span class="fu">cat</span> my_job_123456.out</span>
+<span id="cb192-6"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb192-6" tabindex="-1"></a><span class="fu">cat</span> my_job_123456.err</span></code></pre></div>
+<p>Useful questions:
+- did the job actually start?
+- did the program inside the job fail?
+- am I using the right path?
+- is the right module loaded in the script?</p>
+</div>
+<div id="troubleshooting-checklist-mpi-and-openmp" class="section level2 hasAnchor" number="9.22">
+<h2><span class="header-section-number">9.22</span> Troubleshooting checklist: MPI and OpenMP<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-mpi-and-openmp" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For MPI:
+- did I compile with <code>mpicc</code>?
+- did I request the intended number of tasks?
+- does the launch command match the code?</p>
+<p>For OpenMP:
+- did I compile with <code>-fopenmp</code>?
+- did I request enough cores?
+- did I set <code>OMP_NUM_THREADS</code>?</p>
+</div>
+<div id="troubleshooting-checklist-containers" class="section level2 hasAnchor" number="9.23">
+<h2><span class="header-section-number">9.23</span> Troubleshooting checklist: containers<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-containers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When container behavior is confusing:</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb193-1"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb193-1" tabindex="-1"></a><span class="fu">which</span> apptainer</span>
+<span id="cb193-2"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb193-2" tabindex="-1"></a><span class="fu">ls</span> <span class="pp">*</span>.sif</span>
+<span id="cb193-3"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb193-3" tabindex="-1"></a><span class="ex">apptainer</span> exec image.sif which python3</span>
+<span id="cb193-4"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#cb193-4" tabindex="-1"></a><span class="ex">apptainer</span> exec <span class="at">--bind</span> <span class="va">$PWD</span> image.sif ls</span></code></pre></div>
+<p>Useful questions:
+- is Apptainer available?
+- does the image exist?
+- does the image contain the tool I need?
+- did I bind the directory containing my files?</p>
+</div>
+<div id="course-workflow-checklist" class="section level2 hasAnchor" number="9.24">
+<h2><span class="header-section-number">9.24</span> Course workflow checklist<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#course-workflow-checklist" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Before running a real job, confirm:</p>
 <ul>
-<li>a textbook for a short course or workshop series</li>
-<li>a lab manual for hands-on LS6 exercises</li>
-<li>a reference guide for new HPC users</li>
-<li>a bridge from beginner Linux to production cluster workflows</li>
+<li>I am in the intended directory</li>
+<li>the needed files exist</li>
+<li>the required module(s) are loaded</li>
+<li>the build step completed successfully</li>
+<li>the SLURM request matches the workload</li>
+<li>the output path is clear</li>
+<li>I know what success should look like</li>
 </ul>
 </div>
-<div id="who-this-book-is-for" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Who this book is for<a href="index.html#who-this-book-is-for" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This material is appropriate for:</p>
+<div id="capstone-checklist" class="section level2 hasAnchor" number="9.25">
+<h2><span class="header-section-number">9.25</span> Capstone checklist<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#capstone-checklist" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Before submitting the capstone project, confirm:</p>
 <ul>
-<li>upper-level undergraduates</li>
-<li>graduate students beginning computational research</li>
-<li>faculty and staff new to HPC</li>
-<li>workshop participants who need a practical guide after class</li>
-<li>self-paced learners who want an LS6-centered path into HPC</li>
-</ul>
-<p>No prior cluster experience is assumed. Some command-line exposure is helpful, but the early chapters are written to reduce the barrier to entry.</p>
-</div>
-<div id="learning-goals" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Learning goals<a href="index.html#learning-goals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>By the end of the book, readers should be able to:</p>
-<ul>
-<li>explain the difference between login nodes and compute nodes</li>
-<li>connect to LS6 and work within the Linux shell</li>
-<li>manage files, directories, permissions, and environment variables</li>
-<li>use modules to load software into the current environment</li>
-<li>write, submit, monitor, and debug SLURM jobs</li>
-<li>compile and run simple C programs on the cluster</li>
-<li>distinguish serial, shared-memory, and distributed-memory workflows</li>
-<li>understand the role of containers in reproducible HPC work</li>
-<li>document a complete workflow so another researcher can repeat it</li>
+<li>the project directory is organized</li>
+<li>the README explains build and run steps</li>
+<li>the output files support the claims</li>
+<li>the resource request is justified</li>
+<li>at least one debugging reflection is included</li>
+<li>another student could reproduce the workflow</li>
 </ul>
 </div>
-<div id="course-philosophy" class="section level2 hasAnchor" number="1.5">
-<h2><span class="header-section-number">1.5</span> Course philosophy<a href="index.html#course-philosophy" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A common beginner mistake is to treat HPC as “a bigger computer.” It is better to think of HPC as a <strong>shared, scheduled, resource-managed environment</strong>.</p>
-<p>That idea affects everything in this book:</p>
-<ul>
-<li>you do not do serious computation on login nodes</li>
-<li>your environment matters because software is often module-based</li>
-<li>your working directory matters because jobs run in specific locations</li>
-<li>your resource request matters because the scheduler allocates shared infrastructure</li>
-<li>your documentation matters because reproducibility is part of responsible computing</li>
-</ul>
-</div>
-<div id="how-chapters-are-organized" class="section level2 hasAnchor" number="1.6">
-<h2><span class="header-section-number">1.6</span> How chapters are organized<a href="index.html#how-chapters-are-organized" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Most chapters follow a common pattern:</p>
-<ul>
-<li>overview</li>
-<li>mental model</li>
-<li>command examples</li>
-<li>walkthrough</li>
-<li>common mistakes</li>
-<li>debugging checklist</li>
-<li>hands-on lab</li>
-<li>stretch goal</li>
-</ul>
-<p>That structure is intentional. Many new users can reproduce commands but still feel uncertain about what the system is doing. The “mental model” sections are there to explain the logic behind the commands.</p>
-</div>
-<div id="recommended-use-in-a-course" class="section level2 hasAnchor" number="1.7">
-<h2><span class="header-section-number">1.7</span> Recommended use in a course<a href="index.html#recommended-use-in-a-course" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A natural workshop sequence is:</p>
-<ul>
-<li><strong>Workshop 1</strong>: first login, minimal Linux, first SLURM job</li>
-<li><strong>Workshop 2</strong>: job monitoring and debugging</li>
-<li><strong>Workshop 3</strong>: modules, compilers, first C program</li>
-<li><strong>Workshop 4</strong>: MPI and OpenMP foundations</li>
-<li><strong>Workshop 5</strong>: containers and reproducibility</li>
-<li><strong>Workshop 6</strong>: capstone project work session</li>
-</ul>
-<p>This book can also be taught over several weeks as an onboarding course for a research computing program.</p>
-</div>
-<div id="what-you-need-before-starting" class="section level2 hasAnchor" number="1.8">
-<h2><span class="header-section-number">1.8</span> What you need before starting<a href="index.html#what-you-need-before-starting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Before working through the book, you should have:</p>
-<ul>
-<li>an LS6 account or equivalent training account</li>
-<li>SSH access from your laptop or desktop</li>
-<li>a terminal application</li>
-<li>a text editor you are comfortable using, or willingness to use <code>nano</code></li>
-<li>a place to keep notes on commands, directory paths, and job IDs</li>
-</ul>
-</div>
-<div id="what-success-looks-like" class="section level2 hasAnchor" number="1.9">
-<h2><span class="header-section-number">1.9</span> What success looks like<a href="index.html#what-success-looks-like" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Success in this course is not memorizing every SLURM option or every Linux command. Success looks like this:</p>
-<ul>
-<li>you know where you are in the filesystem</li>
-<li>you know whether work belongs on a login node or compute node</li>
-<li>you can inspect your environment instead of guessing</li>
-<li>you can submit a job and interpret what happened</li>
-<li>you can recover from common failures by reading evidence</li>
-</ul>
-<p>That is the mindset of an effective HPC user.</p>
-</div>
-<div id="a-note-on-reproducibility" class="section level2 hasAnchor" number="1.10">
-<h2><span class="header-section-number">1.10</span> A note on reproducibility<a href="index.html#a-note-on-reproducibility" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Throughout the book, you will be encouraged to save scripts, keep meaningful file names, and write down the commands you used. These are not extra tasks. They are part of the workflow itself.</p>
-<p>In research computing, a good result that cannot be reproduced later is far less valuable than a modest result that can be rerun, explained, and shared.</p>
-</div>
-<div id="looking-ahead" class="section level2 hasAnchor" number="1.11">
-<h2><span class="header-section-number">1.11</span> Looking ahead<a href="index.html#looking-ahead" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We begin with the most important conceptual distinction in cluster computing: <strong>login nodes versus compute nodes</strong>. From there, we build the smallest practical Linux toolkit needed to complete a real workflow on LS6.</p>
+<div id="final-reminder" class="section level2 hasAnchor" number="9.26">
+<h2><span class="header-section-number">9.26</span> Final reminder<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#final-reminder" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use the explanatory chapters to understand the ideas.</p>
+<p>Use this appendix when you already know the idea and need the command pattern, checklist, or first troubleshooting step quickly.</p>
 
 </div>
 </div>
@@ -744,8 +972,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
+<a href="capstone-project-building-an-end-to-end-hpc-workflow.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
-<a href="introduction-to-high-performance-computing-on-ls6.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -30,7 +30,7 @@
   
   
 <link rel="prev" href="slurm-job-scheduling-on-ls6.html"/>
-<link rel="next" href="parallel-computing-with-mpi-and-openmp.html"/>
+<link rel="next" href="parallel-computing-with-mpi-and-openmp-on-ls6.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -245,247 +245,350 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html"><i class="fa fa-check"></i><b>4</b> SLURM Job Scheduling on LS6</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#overview-2"><i class="fa fa-check"></i><b>4.1</b> Overview</a></li>
-<li class="chapter" data-level="4.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mental-model-slurm-is-a-resource-manager"><i class="fa fa-check"></i><b>4.2</b> Mental model: SLURM is a resource manager</a></li>
+<li class="chapter" data-level="4.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mental-model-slurm-is-a-resource-manager-not-a-launch-button"><i class="fa fa-check"></i><b>4.2</b> Mental model: SLURM is a resource manager, not a launch button</a></li>
 <li class="chapter" data-level="4.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#why-clusters-use-schedulers"><i class="fa fa-check"></i><b>4.3</b> Why clusters use schedulers</a></li>
-<li class="chapter" data-level="4.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-basic-batch-workflow"><i class="fa fa-check"></i><b>4.4</b> A basic batch workflow</a></li>
-<li class="chapter" data-level="4.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#your-first-slurm-script"><i class="fa fa-check"></i><b>4.5</b> Your first SLURM script</a></li>
-<li class="chapter" data-level="4.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#reading-the-script-line-by-line"><i class="fa fa-check"></i><b>4.6</b> Reading the script line by line</a>
+<li class="chapter" data-level="4.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#the-basic-batch-workflow"><i class="fa fa-check"></i><b>4.4</b> The basic batch workflow</a></li>
+<li class="chapter" data-level="4.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#login-nodes-versus-compute-nodes"><i class="fa fa-check"></i><b>4.5</b> Login nodes versus compute nodes</a>
 <ul>
-<li class="chapter" data-level="4.6.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#shebang"><i class="fa fa-check"></i><b>4.6.1</b> Shebang</a></li>
-<li class="chapter" data-level="4.6.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#job-name"><i class="fa fa-check"></i><b>4.6.2</b> Job name</a></li>
-<li class="chapter" data-level="4.6.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#nodes"><i class="fa fa-check"></i><b>4.6.3</b> Nodes</a></li>
-<li class="chapter" data-level="4.6.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#tasks"><i class="fa fa-check"></i><b>4.6.4</b> Tasks</a></li>
-<li class="chapter" data-level="4.6.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#wall-time"><i class="fa fa-check"></i><b>4.6.5</b> Wall time</a></li>
-<li class="chapter" data-level="4.6.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#partition"><i class="fa fa-check"></i><b>4.6.6</b> Partition</a></li>
+<li class="chapter" data-level="4.5.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#login-nodes-are-for"><i class="fa fa-check"></i><b>4.5.1</b> Login nodes are for:</a></li>
+<li class="chapter" data-level="4.5.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#compute-nodes-are-for"><i class="fa fa-check"></i><b>4.5.2</b> Compute nodes are for:</a></li>
 </ul></li>
-<li class="chapter" data-level="4.7" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#submit-the-job"><i class="fa fa-check"></i><b>4.7</b> Submit the job</a></li>
-<li class="chapter" data-level="4.8" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#one-of-the-most-important-beginner-corrections"><i class="fa fa-check"></i><b>4.8</b> One of the most important beginner corrections</a></li>
-<li class="chapter" data-level="4.9" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#monitoring-queued-and-running-jobs"><i class="fa fa-check"></i><b>4.9</b> Monitoring queued and running jobs</a></li>
-<li class="chapter" data-level="4.10" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#common-slurm-job-states"><i class="fa fa-check"></i><b>4.10</b> Common SLURM job states</a></li>
-<li class="chapter" data-level="4.11" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#output-files-as-evidence"><i class="fa fa-check"></i><b>4.11</b> Output files as evidence</a></li>
-<li class="chapter" data-level="4.12" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#what-just-happened-in-the-first-example"><i class="fa fa-check"></i><b>4.12</b> What just happened in the first example?</a></li>
-<li class="chapter" data-level="4.13" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#seeing-the-distinction-between-login-and-compute-nodes"><i class="fa fa-check"></i><b>4.13</b> Seeing the distinction between login and compute nodes</a></li>
-<li class="chapter" data-level="4.14" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-longer-running-observation-job"><i class="fa fa-check"></i><b>4.14</b> A longer-running observation job</a></li>
-<li class="chapter" data-level="4.15" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#looking-backward-with-job-accounting"><i class="fa fa-check"></i><b>4.15</b> Looking backward with job accounting</a></li>
-<li class="chapter" data-level="4.16" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#cancelling-a-job"><i class="fa fa-check"></i><b>4.16</b> Cancelling a job</a></li>
-<li class="chapter" data-level="4.17" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#common-failure-patterns"><i class="fa fa-check"></i><b>4.17</b> Common failure patterns</a>
+<li class="chapter" data-level="4.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#your-first-slurm-script"><i class="fa fa-check"></i><b>4.6</b> Your first SLURM script</a></li>
+<li class="chapter" data-level="4.7" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#reading-the-script-line-by-line"><i class="fa fa-check"></i><b>4.7</b> Reading the script line by line</a>
 <ul>
-<li class="chapter" data-level="4.17.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#the-job-never-starts"><i class="fa fa-check"></i><b>4.17.1</b> 1. The job never starts</a></li>
-<li class="chapter" data-level="4.17.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#the-job-fails-immediately"><i class="fa fa-check"></i><b>4.17.2</b> 2. The job fails immediately</a></li>
-<li class="chapter" data-level="4.17.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#no-output-appears-where-you-expected"><i class="fa fa-check"></i><b>4.17.3</b> 3. No output appears where you expected</a></li>
+<li class="chapter" data-level="4.7.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#shebang"><i class="fa fa-check"></i><b>4.7.1</b> Shebang</a></li>
+<li class="chapter" data-level="4.7.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#job-name"><i class="fa fa-check"></i><b>4.7.2</b> Job name</a></li>
+<li class="chapter" data-level="4.7.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#nodes"><i class="fa fa-check"></i><b>4.7.3</b> Nodes</a></li>
+<li class="chapter" data-level="4.7.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#tasks"><i class="fa fa-check"></i><b>4.7.4</b> Tasks</a></li>
+<li class="chapter" data-level="4.7.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#wall-time"><i class="fa fa-check"></i><b>4.7.5</b> Wall time</a></li>
+<li class="chapter" data-level="4.7.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#partition"><i class="fa fa-check"></i><b>4.7.6</b> Partition</a></li>
 </ul></li>
-<li class="chapter" data-level="4.18" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#debug-from-evidence-not-guessing"><i class="fa fa-check"></i><b>4.18</b> Debug from evidence, not guessing</a>
+<li class="chapter" data-level="4.8" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#submit-the-job"><i class="fa fa-check"></i><b>4.8</b> Submit the job</a></li>
+<li class="chapter" data-level="4.9" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#check-the-queue"><i class="fa fa-check"></i><b>4.9</b> Check the queue</a></li>
+<li class="chapter" data-level="4.10" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#common-job-states"><i class="fa fa-check"></i><b>4.10</b> Common job states</a></li>
+<li class="chapter" data-level="4.11" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#output-files-are-evidence"><i class="fa fa-check"></i><b>4.11</b> Output files are evidence</a></li>
+<li class="chapter" data-level="4.12" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#what-happened-in-the-first-example"><i class="fa fa-check"></i><b>4.12</b> What happened in the first example?</a></li>
+<li class="chapter" data-level="4.13" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#resource-requests-what-you-are-really-asking-for"><i class="fa fa-check"></i><b>4.13</b> Resource requests: what you are really asking for</a>
 <ul>
-<li class="chapter" data-level="4.18.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#did-it-submit"><i class="fa fa-check"></i><b>4.18.1</b> 1. Did it submit?</a></li>
-<li class="chapter" data-level="4.18.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#did-it-run-or-finish"><i class="fa fa-check"></i><b>4.18.2</b> 2. Did it run or finish?</a></li>
-<li class="chapter" data-level="4.18.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#what-does-the-output-file-say"><i class="fa fa-check"></i><b>4.18.3</b> 3. What does the output file say?</a></li>
-<li class="chapter" data-level="4.18.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#was-the-environment-correct"><i class="fa fa-check"></i><b>4.18.4</b> 4. Was the environment correct?</a></li>
-<li class="chapter" data-level="4.18.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#was-the-job-launched-from-the-correct-working-directory"><i class="fa fa-check"></i><b>4.18.5</b> 5. Was the job launched from the correct working directory?</a></li>
+<li class="chapter" data-level="4.13.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#too-small-a-request-can-cause"><i class="fa fa-check"></i><b>4.13.1</b> Too small a request can cause:</a></li>
+<li class="chapter" data-level="4.13.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#too-large-a-request-can-cause"><i class="fa fa-check"></i><b>4.13.2</b> Too large a request can cause:</a></li>
 </ul></li>
-<li class="chapter" data-level="4.19" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#failure-based-learning-exercise"><i class="fa fa-check"></i><b>4.19</b> Failure-based learning exercise</a></li>
-<li class="chapter" data-level="4.20" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#chapter-lab-2"><i class="fa fa-check"></i><b>4.20</b> Chapter lab</a>
+<li class="chapter" data-level="4.14" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-better-beginner-script-make-the-environment-visible"><i class="fa fa-check"></i><b>4.14</b> A better beginner script: make the environment visible</a></li>
+<li class="chapter" data-level="4.15" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#the-sleep-demonstration"><i class="fa fa-check"></i><b>4.15</b> The “sleep” demonstration</a></li>
+<li class="chapter" data-level="4.16" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#why-queue-time-can-change"><i class="fa fa-check"></i><b>4.16</b> Why queue time can change</a></li>
+<li class="chapter" data-level="4.17" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#output-and-error-handling"><i class="fa fa-check"></i><b>4.17</b> Output and error handling</a></li>
+<li class="chapter" data-level="4.18" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-realistic-serial-job-pattern"><i class="fa fa-check"></i><b>4.18</b> A realistic serial job pattern</a></li>
+<li class="chapter" data-level="4.19" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-realistic-compile-and-run-pattern"><i class="fa fa-check"></i><b>4.19</b> A realistic compile-and-run pattern</a></li>
+<li class="chapter" data-level="4.20" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#common-beginner-mistakes"><i class="fa fa-check"></i><b>4.20</b> Common beginner mistakes</a>
 <ul>
-<li class="chapter" data-level="4.20.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#part-1-first-batch-job"><i class="fa fa-check"></i><b>4.20.1</b> Part 1: first batch job</a></li>
-<li class="chapter" data-level="4.20.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#part-2-observe-a-running-job"><i class="fa fa-check"></i><b>4.20.2</b> Part 2: observe a running job</a></li>
-<li class="chapter" data-level="4.20.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#part-3-change-the-resource-request"><i class="fa fa-check"></i><b>4.20.3</b> Part 3: change the resource request</a></li>
-<li class="chapter" data-level="4.20.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#part-4-load-a-module-inside-the-job"><i class="fa fa-check"></i><b>4.20.4</b> Part 4: load a module inside the job</a></li>
+<li class="chapter" data-level="4.20.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-1-assuming-sbatch-ran-the-code-right-away"><i class="fa fa-check"></i><b>4.20.1</b> Mistake 1: Assuming <code>sbatch</code> ran the code right away</a></li>
+<li class="chapter" data-level="4.20.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-2-running-heavy-work-directly-on-the-login-node"><i class="fa fa-check"></i><b>4.20.2</b> Mistake 2: Running heavy work directly on the login node</a></li>
+<li class="chapter" data-level="4.20.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-3-requesting-many-tasks-for-a-serial-program"><i class="fa fa-check"></i><b>4.20.3</b> Mistake 3: Requesting many tasks for a serial program</a></li>
+<li class="chapter" data-level="4.20.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-4-asking-for-far-too-much-wall-time"><i class="fa fa-check"></i><b>4.20.4</b> Mistake 4: Asking for far too much wall time</a></li>
+<li class="chapter" data-level="4.20.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-5-ignoring-output-files"><i class="fa fa-check"></i><b>4.20.5</b> Mistake 5: Ignoring output files</a></li>
+<li class="chapter" data-level="4.20.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-6-submitting-from-the-wrong-directory"><i class="fa fa-check"></i><b>4.20.6</b> Mistake 6: Submitting from the wrong directory</a></li>
 </ul></li>
-<li class="chapter" data-level="4.21" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#best-practices-to-keep-now"><i class="fa fa-check"></i><b>4.21</b> Best practices to keep now</a></li>
-<li class="chapter" data-level="4.22" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#looking-ahead-3"><i class="fa fa-check"></i><b>4.22</b> Looking ahead</a></li>
+<li class="chapter" data-level="4.21" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-debugging-checklist-for-failed-jobs"><i class="fa fa-check"></i><b>4.21</b> A debugging checklist for failed jobs</a>
+<ul>
+<li class="chapter" data-level="4.21.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#did-the-job-submit"><i class="fa fa-check"></i><b>4.21.1</b> 1. Did the job submit?</a></li>
+<li class="chapter" data-level="4.21.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#what-does-accounting-say"><i class="fa fa-check"></i><b>4.21.2</b> 2. What does accounting say?</a></li>
+<li class="chapter" data-level="4.21.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#what-do-the-output-and-error-files-say"><i class="fa fa-check"></i><b>4.21.3</b> 3. What do the output and error files say?</a></li>
+<li class="chapter" data-level="4.21.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#was-the-intended-program-or-file-actually-present"><i class="fa fa-check"></i><b>4.21.4</b> 4. Was the intended program or file actually present?</a></li>
+<li class="chapter" data-level="4.21.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#was-the-required-software-environment-loaded"><i class="fa fa-check"></i><b>4.21.5</b> 5. Was the required software environment loaded?</a></li>
+<li class="chapter" data-level="4.21.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#did-the-resource-request-match-the-program-model"><i class="fa fa-check"></i><b>4.21.6</b> 6. Did the resource request match the program model?</a></li>
+</ul></li>
+<li class="chapter" data-level="4.22" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#failure-case-study-1-misspelled-command"><i class="fa fa-check"></i><b>4.22</b> Failure case study 1: misspelled command</a></li>
+<li class="chapter" data-level="4.23" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#failure-case-study-2-missing-input-file"><i class="fa fa-check"></i><b>4.23</b> Failure case study 2: missing input file</a></li>
+<li class="chapter" data-level="4.24" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#failure-case-study-3-request-does-not-match-workload"><i class="fa fa-check"></i><b>4.24</b> Failure case study 3: request does not match workload</a></li>
+<li class="chapter" data-level="4.25" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#interactive-jobs-versus-batch-jobs"><i class="fa fa-check"></i><b>4.25</b> Interactive jobs versus batch jobs</a>
+<ul>
+<li class="chapter" data-level="4.25.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#batch-jobs"><i class="fa fa-check"></i><b>4.25.1</b> Batch jobs</a></li>
+<li class="chapter" data-level="4.25.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#interactive-jobs"><i class="fa fa-check"></i><b>4.25.2</b> Interactive jobs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.26" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#best-practices-for-slurm-scripts"><i class="fa fa-check"></i><b>4.26</b> Best practices for SLURM scripts</a></li>
+<li class="chapter" data-level="4.27" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#lab-1-your-first-real-job"><i class="fa fa-check"></i><b>4.27</b> Lab 1: your first real job</a></li>
+<li class="chapter" data-level="4.28" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#lab-2-observe-a-running-job"><i class="fa fa-check"></i><b>4.28</b> Lab 2: observe a running job</a></li>
+<li class="chapter" data-level="4.29" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#lab-3-separate-standard-output-and-standard-error"><i class="fa fa-check"></i><b>4.29</b> Lab 3: separate standard output and standard error</a></li>
+<li class="chapter" data-level="4.30" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#lab-4-diagnose-a-broken-job"><i class="fa fa-check"></i><b>4.30</b> Lab 4: diagnose a broken job</a></li>
+<li class="chapter" data-level="4.31" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#stretch-goal-1"><i class="fa fa-check"></i><b>4.31</b> Stretch goal</a></li>
+<li class="chapter" data-level="4.32" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#key-takeaways"><i class="fa fa-check"></i><b>4.32</b> Key takeaways</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html"><i class="fa fa-check"></i><b>5</b> Modules, Compilers, and Your First C Program</a>
 <ul>
 <li class="chapter" data-level="5.1" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#overview-3"><i class="fa fa-check"></i><b>5.1</b> Overview</a></li>
 <li class="chapter" data-level="5.2" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#mental-model-source-code-becomes-an-executable"><i class="fa fa-check"></i><b>5.2</b> Mental model: source code becomes an executable</a></li>
 <li class="chapter" data-level="5.3" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#why-compilation-matters-on-clusters"><i class="fa fa-check"></i><b>5.3</b> Why compilation matters on clusters</a></li>
-<li class="chapter" data-level="5.4" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#two-compilers-you-will-hear-about-often"><i class="fa fa-check"></i><b>5.4</b> Two compilers you will hear about often</a></li>
-<li class="chapter" data-level="5.5" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#modules-first-then-compilation"><i class="fa fa-check"></i><b>5.5</b> Modules first, then compilation</a></li>
-<li class="chapter" data-level="5.6" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#confirm-which-compiler-you-are-using"><i class="fa fa-check"></i><b>5.6</b> Confirm which compiler you are using</a></li>
-<li class="chapter" data-level="5.7" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#your-first-c-program"><i class="fa fa-check"></i><b>5.7</b> Your first C program</a></li>
-<li class="chapter" data-level="5.8" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#compile-the-program"><i class="fa fa-check"></i><b>5.8</b> Compile the program</a></li>
-<li class="chapter" data-level="5.9" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#run-the-executable"><i class="fa fa-check"></i><b>5.9</b> Run the executable</a></li>
-<li class="chapter" data-level="5.10" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#inspect-what-was-created"><i class="fa fa-check"></i><b>5.10</b> Inspect what was created</a></li>
-<li class="chapter" data-level="5.11" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#what-just-happened-1"><i class="fa fa-check"></i><b>5.11</b> What just happened?</a></li>
-<li class="chapter" data-level="5.12" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#optimization-flags"><i class="fa fa-check"></i><b>5.12</b> Optimization flags</a></li>
-<li class="chapter" data-level="5.13" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#a-brief-note-on-c"><i class="fa fa-check"></i><b>5.13</b> A brief note on C++</a></li>
-<li class="chapter" data-level="5.14" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#multiple-file-programs"><i class="fa fa-check"></i><b>5.14</b> Multiple-file programs</a></li>
-<li class="chapter" data-level="5.15" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#header-files"><i class="fa fa-check"></i><b>5.15</b> Header files</a></li>
-<li class="chapter" data-level="5.16" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#automating-builds-with-make"><i class="fa fa-check"></i><b>5.16</b> Automating builds with <code>make</code></a></li>
-<li class="chapter" data-level="5.17" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#where-compilation-belongs-in-the-workflow"><i class="fa fa-check"></i><b>5.17</b> Where compilation belongs in the workflow</a></li>
-<li class="chapter" data-level="5.18" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#run-compiled-code-through-slurm"><i class="fa fa-check"></i><b>5.18</b> Run compiled code through SLURM</a></li>
-<li class="chapter" data-level="5.19" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#common-beginner-failures"><i class="fa fa-check"></i><b>5.19</b> Common beginner failures</a></li>
-<li class="chapter" data-level="5.20" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#debug-checklist-for-compilation-work"><i class="fa fa-check"></i><b>5.20</b> Debug checklist for compilation work</a></li>
-<li class="chapter" data-level="5.21" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#chapter-lab-3"><i class="fa fa-check"></i><b>5.21</b> Chapter lab</a>
+<li class="chapter" data-level="5.4" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#modules-come-before-compilers"><i class="fa fa-check"></i><b>5.4</b> Modules come before compilers</a></li>
+<li class="chapter" data-level="5.5" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#verify-the-compiler-instead-of-guessing"><i class="fa fa-check"></i><b>5.5</b> Verify the compiler instead of guessing</a></li>
+<li class="chapter" data-level="5.6" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#your-first-c-program"><i class="fa fa-check"></i><b>5.6</b> Your first C program</a></li>
+<li class="chapter" data-level="5.7" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#compile-the-program"><i class="fa fa-check"></i><b>5.7</b> Compile the program</a></li>
+<li class="chapter" data-level="5.8" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#run-the-executable"><i class="fa fa-check"></i><b>5.8</b> Run the executable</a></li>
+<li class="chapter" data-level="5.9" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#inspect-the-directory"><i class="fa fa-check"></i><b>5.9</b> Inspect the directory</a></li>
+<li class="chapter" data-level="5.10" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#what-just-happened-1"><i class="fa fa-check"></i><b>5.10</b> What just happened?</a></li>
+<li class="chapter" data-level="5.11" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#compile-versus-link-a-useful-beginner-distinction"><i class="fa fa-check"></i><b>5.11</b> Compile versus link: a useful beginner distinction</a>
 <ul>
-<li class="chapter" data-level="5.21.1" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#part-1-compile-a-c-program"><i class="fa fa-check"></i><b>5.21.1</b> Part 1: compile a C program</a></li>
-<li class="chapter" data-level="5.21.2" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#part-2-inspect-the-files"><i class="fa fa-check"></i><b>5.21.2</b> Part 2: inspect the files</a></li>
-<li class="chapter" data-level="5.21.3" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#part-3-use-optimization"><i class="fa fa-check"></i><b>5.21.3</b> Part 3: use optimization</a></li>
-<li class="chapter" data-level="5.21.4" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#part-4-run-through-slurm"><i class="fa fa-check"></i><b>5.21.4</b> Part 4: run through SLURM</a></li>
-<li class="chapter" data-level="5.21.5" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#part-5-optional-makefile"><i class="fa fa-check"></i><b>5.21.5</b> Part 5: optional Makefile</a></li>
+<li class="chapter" data-level="5.11.1" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#compilation"><i class="fa fa-check"></i><b>5.11.1</b> Compilation</a></li>
+<li class="chapter" data-level="5.11.2" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#linking"><i class="fa fa-check"></i><b>5.11.2</b> Linking</a></li>
 </ul></li>
-<li class="chapter" data-level="5.22" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#looking-ahead-4"><i class="fa fa-check"></i><b>5.22</b> Looking ahead</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html"><i class="fa fa-check"></i><b>6</b> Parallel Computing with MPI and OpenMP</a>
+<li class="chapter" data-level="5.12" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#compile-time-errors"><i class="fa fa-check"></i><b>5.12</b> Compile-time errors</a></li>
+<li class="chapter" data-level="5.13" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#link-time-errors"><i class="fa fa-check"></i><b>5.13</b> Link-time errors</a></li>
+<li class="chapter" data-level="5.14" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#a-simple-multiple-file-example"><i class="fa fa-check"></i><b>5.14</b> A simple multiple-file example</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#overview-4"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
-<li class="chapter" data-level="6.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mental-model-why-parallel-computing"><i class="fa fa-check"></i><b>6.2</b> Mental Model: Why Parallel Computing?</a></li>
-<li class="chapter" data-level="6.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#visual-serial-vs-parallel"><i class="fa fa-check"></i><b>6.3</b> Visual: Serial vs Parallel</a></li>
-<li class="chapter" data-level="6.4" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#two-main-models"><i class="fa fa-check"></i><b>6.4</b> Two Main Models</a>
-<ul>
-<li class="chapter" data-level="6.4.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mpi-message-passing-interface"><i class="fa fa-check"></i><b>6.4.1</b> MPI (Message Passing Interface)</a></li>
-<li class="chapter" data-level="6.4.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#openmp"><i class="fa fa-check"></i><b>6.4.2</b> OpenMP</a></li>
+<li class="chapter" data-level="5.14.1" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#main.c"><i class="fa fa-check"></i><b>5.14.1</b> <code>main.c</code></a></li>
+<li class="chapter" data-level="5.14.2" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#helper.h"><i class="fa fa-check"></i><b>5.14.2</b> <code>helper.h</code></a></li>
+<li class="chapter" data-level="5.14.3" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#helper.c"><i class="fa fa-check"></i><b>5.14.3</b> <code>helper.c</code></a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mental-model-processes-vs-threads"><i class="fa fa-check"></i><b>6.5</b> Mental Model: Processes vs Threads</a></li>
-<li class="chapter" data-level="6.6" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#loading-mpi"><i class="fa fa-check"></i><b>6.6</b> Loading MPI</a></li>
-<li class="chapter" data-level="6.7" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mpi-hello-world-c"><i class="fa fa-check"></i><b>6.7</b> MPI Hello World (C)</a></li>
-<li class="chapter" data-level="6.8" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#compile-mpi-program"><i class="fa fa-check"></i><b>6.8</b> Compile MPI Program</a></li>
-<li class="chapter" data-level="6.9" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#run-locally-for-testing"><i class="fa fa-check"></i><b>6.9</b> Run Locally for Testing</a></li>
-<li class="chapter" data-level="6.10" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mpi-job-script"><i class="fa fa-check"></i><b>6.10</b> MPI Job Script</a></li>
-<li class="chapter" data-level="6.11" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#expected-output"><i class="fa fa-check"></i><b>6.11</b> Expected Output</a></li>
-<li class="chapter" data-level="6.12" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#openmp-example"><i class="fa fa-check"></i><b>6.12</b> OpenMP Example</a></li>
-<li class="chapter" data-level="6.13" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#compile-openmp-program"><i class="fa fa-check"></i><b>6.13</b> Compile OpenMP Program</a></li>
-<li class="chapter" data-level="6.14" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#run-openmp"><i class="fa fa-check"></i><b>6.14</b> Run OpenMP</a></li>
-<li class="chapter" data-level="6.15" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#openmp-slurm-script"><i class="fa fa-check"></i><b>6.15</b> OpenMP SLURM Script</a></li>
-<li class="chapter" data-level="6.16" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#hybrid-concept"><i class="fa fa-check"></i><b>6.16</b> Hybrid Concept</a></li>
-<li class="chapter" data-level="6.17" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mental-model"><i class="fa fa-check"></i><b>6.17</b> Mental Model</a></li>
-<li class="chapter" data-level="6.18" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#performance-thinking"><i class="fa fa-check"></i><b>6.18</b> Performance Thinking</a>
+<li class="chapter" data-level="5.15" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#header-files-as-interfaces"><i class="fa fa-check"></i><b>5.15</b> Header files as interfaces</a></li>
+<li class="chapter" data-level="5.16" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#optimization-flags"><i class="fa fa-check"></i><b>5.16</b> Optimization flags</a></li>
+<li class="chapter" data-level="5.17" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#warnings-are-not-noise"><i class="fa fa-check"></i><b>5.17</b> Warnings are not noise</a></li>
+<li class="chapter" data-level="5.18" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#a-brief-note-on-c"><i class="fa fa-check"></i><b>5.18</b> A brief note on C++</a></li>
+<li class="chapter" data-level="5.19" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#makefiles-why-build-automation-exists"><i class="fa fa-check"></i><b>5.19</b> Makefiles: why build automation exists</a></li>
+<li class="chapter" data-level="5.20" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#a-more-realistic-makefile-example"><i class="fa fa-check"></i><b>5.20</b> A more realistic Makefile example</a></li>
+<li class="chapter" data-level="5.21" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#where-to-compile"><i class="fa fa-check"></i><b>5.21</b> Where to compile</a></li>
+<li class="chapter" data-level="5.22" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#running-compiled-code-through-slurm"><i class="fa fa-check"></i><b>5.22</b> Running compiled code through SLURM</a></li>
+<li class="chapter" data-level="5.23" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#a-practical-build-and-run-pattern"><i class="fa fa-check"></i><b>5.23</b> A practical build-and-run pattern</a></li>
+<li class="chapter" data-level="5.24" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#common-compiler-and-build-errors"><i class="fa fa-check"></i><b>5.24</b> Common compiler and build errors</a>
 <ul>
-<li class="chapter" data-level="6.18.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#strong-scaling"><i class="fa fa-check"></i><b>6.18.1</b> Strong Scaling</a></li>
-<li class="chapter" data-level="6.18.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#weak-scaling"><i class="fa fa-check"></i><b>6.18.2</b> Weak Scaling</a></li>
-<li class="chapter" data-level="6.18.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#simple-timing-example"><i class="fa fa-check"></i><b>6.18.3</b> Simple Timing Example</a></li>
+<li class="chapter" data-level="5.24.1" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#error-type-1-syntax-problem"><i class="fa fa-check"></i><b>5.24.1</b> Error type 1: syntax problem</a></li>
+<li class="chapter" data-level="5.24.2" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#error-type-2-missing-header"><i class="fa fa-check"></i><b>5.24.2</b> Error type 2: missing header</a></li>
+<li class="chapter" data-level="5.24.3" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#error-type-3-undefined-reference"><i class="fa fa-check"></i><b>5.24.3</b> Error type 3: undefined reference</a></li>
+<li class="chapter" data-level="5.24.4" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#error-type-4-command-not-found"><i class="fa fa-check"></i><b>5.24.4</b> Error type 4: command not found</a></li>
 </ul></li>
-<li class="chapter" data-level="6.19" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#common-mistakes"><i class="fa fa-check"></i><b>6.19</b> Common Mistakes</a></li>
-<li class="chapter" data-level="6.20" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#debugging-checklist"><i class="fa fa-check"></i><b>6.20</b> Debugging Checklist</a>
+<li class="chapter" data-level="5.25" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#failure-case-study-1-typo-in-source-code"><i class="fa fa-check"></i><b>5.25</b> Failure case study 1: typo in source code</a></li>
+<li class="chapter" data-level="5.26" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#failure-case-study-2-typo-in-the-compile-command"><i class="fa fa-check"></i><b>5.26</b> Failure case study 2: typo in the compile command</a></li>
+<li class="chapter" data-level="5.27" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#failure-case-study-3-object-exists-executable-is-stale"><i class="fa fa-check"></i><b>5.27</b> Failure case study 3: object exists, executable is stale</a></li>
+<li class="chapter" data-level="5.28" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#reading-compiler-messages-calmly"><i class="fa fa-check"></i><b>5.28</b> Reading compiler messages calmly</a></li>
+<li class="chapter" data-level="5.29" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#good-habits-for-build-workflows"><i class="fa fa-check"></i><b>5.29</b> Good habits for build workflows</a></li>
+<li class="chapter" data-level="5.30" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#lab-1-build-and-run-a-first-c-program"><i class="fa fa-check"></i><b>5.30</b> Lab 1: build and run a first C program</a></li>
+<li class="chapter" data-level="5.31" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#lab-2-use-warnings"><i class="fa fa-check"></i><b>5.31</b> Lab 2: use warnings</a></li>
+<li class="chapter" data-level="5.32" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#lab-3-build-a-multi-file-program"><i class="fa fa-check"></i><b>5.32</b> Lab 3: build a multi-file program</a></li>
+<li class="chapter" data-level="5.33" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#lab-4-automate-with-make"><i class="fa fa-check"></i><b>5.33</b> Lab 4: automate with <code>make</code></a></li>
+<li class="chapter" data-level="5.34" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#stretch-goal-2"><i class="fa fa-check"></i><b>5.34</b> Stretch goal</a></li>
+<li class="chapter" data-level="5.35" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#key-takeaways-1"><i class="fa fa-check"></i><b>5.35</b> Key takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html"><i class="fa fa-check"></i><b>6</b> Parallel Computing with MPI and OpenMP on LS6</a>
 <ul>
-<li class="chapter" data-level="6.20.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-job"><i class="fa fa-check"></i><b>6.20.1</b> Check job:</a></li>
-<li class="chapter" data-level="6.20.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-output"><i class="fa fa-check"></i><b>6.20.2</b> Check output:</a></li>
-<li class="chapter" data-level="6.20.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-modules"><i class="fa fa-check"></i><b>6.20.3</b> Check modules:</a></li>
-<li class="chapter" data-level="6.20.4" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-resource-request"><i class="fa fa-check"></i><b>6.20.4</b> Check resource request:</a></li>
-</ul></li>
-<li class="chapter" data-level="6.21" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#lab-5-parallel-computing"><i class="fa fa-check"></i><b>6.21</b> Lab 5 — Parallel Computing</a>
+<li class="chapter" data-level="6.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#overview-4"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
+<li class="chapter" data-level="6.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#why-parallel-computing-matters"><i class="fa fa-check"></i><b>6.2</b> Why parallel computing matters</a></li>
+<li class="chapter" data-level="6.3" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mental-model-serial-versus-parallel"><i class="fa fa-check"></i><b>6.3</b> Mental model: serial versus parallel</a></li>
+<li class="chapter" data-level="6.4" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#processes-threads-tasks-and-cores"><i class="fa fa-check"></i><b>6.4</b> Processes, threads, tasks, and cores</a>
 <ul>
-<li class="chapter" data-level="6.21.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-1-mpi"><i class="fa fa-check"></i><b>6.21.1</b> Part 1: MPI</a></li>
-<li class="chapter" data-level="6.21.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-2-openmp"><i class="fa fa-check"></i><b>6.21.2</b> Part 2: OpenMP</a></li>
-<li class="chapter" data-level="6.21.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-3-compare"><i class="fa fa-check"></i><b>6.21.3</b> Part 3: Compare</a></li>
-<li class="chapter" data-level="6.21.4" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-4-scaling-experiment"><i class="fa fa-check"></i><b>6.21.4</b> Part 4: Scaling Experiment</a></li>
+<li class="chapter" data-level="6.4.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#core"><i class="fa fa-check"></i><b>6.4.1</b> Core</a></li>
+<li class="chapter" data-level="6.4.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#process"><i class="fa fa-check"></i><b>6.4.2</b> Process</a></li>
+<li class="chapter" data-level="6.4.3" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#thread"><i class="fa fa-check"></i><b>6.4.3</b> Thread</a></li>
+<li class="chapter" data-level="6.4.4" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#task-in-slurm"><i class="fa fa-check"></i><b>6.4.4</b> Task (in SLURM)</a></li>
 </ul></li>
-<li class="chapter" data-level="6.22" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#stretch-goal-1"><i class="fa fa-check"></i><b>6.22</b> Stretch Goal</a></li>
-<li class="chapter" data-level="6.23" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#transition"><i class="fa fa-check"></i><b>6.23</b> Transition</a></li>
-<li class="chapter" data-level="6.24" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#key-takeaways"><i class="fa fa-check"></i><b>6.24</b> Key Takeaways</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html"><i class="fa fa-check"></i><b>7</b> Containers and Reproducible HPC</a>
+<li class="chapter" data-level="6.5" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#two-main-models"><i class="fa fa-check"></i><b>6.5</b> Two main models</a></li>
+<li class="chapter" data-level="6.6" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-distributed-memory-parallelism"><i class="fa fa-check"></i><b>6.6</b> MPI: distributed-memory parallelism</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#overview-5"><i class="fa fa-check"></i><b>7.1</b> Overview</a></li>
-<li class="chapter" data-level="7.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#mental-model-what-is-a-container"><i class="fa fa-check"></i><b>7.2</b> Mental Model: What is a Container?</a></li>
-<li class="chapter" data-level="7.3" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#visual-container-concept"><i class="fa fa-check"></i><b>7.3</b> Visual: Container Concept</a></li>
-<li class="chapter" data-level="7.4" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#why-containers-matter-in-hpc"><i class="fa fa-check"></i><b>7.4</b> Why Containers Matter in HPC</a></li>
-<li class="chapter" data-level="7.5" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#docker-vs-apptainer"><i class="fa fa-check"></i><b>7.5</b> Docker vs Apptainer</a>
-<ul>
-<li class="chapter" data-level="7.5.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#docker"><i class="fa fa-check"></i><b>7.5.1</b> Docker</a></li>
-<li class="chapter" data-level="7.5.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#apptainer"><i class="fa fa-check"></i><b>7.5.2</b> Apptainer</a></li>
+<li class="chapter" data-level="6.6.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#why-mpi-matters"><i class="fa fa-check"></i><b>6.6.1</b> Why MPI matters</a></li>
+<li class="chapter" data-level="6.6.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#key-idea"><i class="fa fa-check"></i><b>6.6.2</b> Key idea</a></li>
 </ul></li>
-<li class="chapter" data-level="7.6" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#mental-model-1"><i class="fa fa-check"></i><b>7.6</b> Mental Model</a></li>
-<li class="chapter" data-level="7.7" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#checking-for-apptainer"><i class="fa fa-check"></i><b>7.7</b> Checking for Apptainer</a></li>
-<li class="chapter" data-level="7.8" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#pulling-a-container"><i class="fa fa-check"></i><b>7.8</b> Pulling a Container</a></li>
-<li class="chapter" data-level="7.9" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#running-a-container"><i class="fa fa-check"></i><b>7.9</b> Running a Container</a></li>
-<li class="chapter" data-level="7.10" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#interactive-shell"><i class="fa fa-check"></i><b>7.10</b> Interactive Shell</a></li>
-<li class="chapter" data-level="7.11" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#mental-model-what-just-happened"><i class="fa fa-check"></i><b>7.11</b> Mental Model: What Just Happened?</a></li>
-<li class="chapter" data-level="7.12" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#running-python-in-a-container"><i class="fa fa-check"></i><b>7.12</b> Running Python in a Container</a></li>
-<li class="chapter" data-level="7.13" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#binding-directories"><i class="fa fa-check"></i><b>7.13</b> Binding Directories</a></li>
-<li class="chapter" data-level="7.14" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#slurm-containers"><i class="fa fa-check"></i><b>7.14</b> SLURM + Containers</a></li>
-<li class="chapter" data-level="7.15" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#running-applications-in-containers"><i class="fa fa-check"></i><b>7.15</b> Running Applications in Containers</a></li>
-<li class="chapter" data-level="7.16" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#comparing-workflows"><i class="fa fa-check"></i><b>7.16</b> Comparing Workflows</a>
+<li class="chapter" data-level="6.7" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-shared-memory-parallelism"><i class="fa fa-check"></i><b>6.7</b> OpenMP: shared-memory parallelism</a></li>
+<li class="chapter" data-level="6.8" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-decision-rule-for-beginners"><i class="fa fa-check"></i><b>6.8</b> A decision rule for beginners</a></li>
+<li class="chapter" data-level="6.9" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#parallelism-is-not-the-same-as-asking-for-more-resources"><i class="fa fa-check"></i><b>6.9</b> Parallelism is not the same as “asking for more resources”</a></li>
+<li class="chapter" data-level="6.10" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-hello-world"><i class="fa fa-check"></i><b>6.10</b> MPI hello world</a></li>
+<li class="chapter" data-level="6.11" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-quick-local-style-test"><i class="fa fa-check"></i><b>6.11</b> A quick local-style test</a></li>
+<li class="chapter" data-level="6.12" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-through-slurm"><i class="fa fa-check"></i><b>6.12</b> MPI through SLURM</a></li>
+<li class="chapter" data-level="6.13" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#what-should-the-output-look-like"><i class="fa fa-check"></i><b>6.13</b> What should the output look like?</a></li>
+<li class="chapter" data-level="6.14" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-hello-world"><i class="fa fa-check"></i><b>6.14</b> OpenMP hello world</a></li>
+<li class="chapter" data-level="6.15" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#run-the-openmp-program"><i class="fa fa-check"></i><b>6.15</b> Run the OpenMP program</a></li>
+<li class="chapter" data-level="6.16" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-through-slurm"><i class="fa fa-check"></i><b>6.16</b> OpenMP through SLURM</a></li>
+<li class="chapter" data-level="6.17" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#tasks-versus-cores-why-this-confuses-people"><i class="fa fa-check"></i><b>6.17</b> Tasks versus cores: why this confuses people</a>
 <ul>
-<li class="chapter" data-level="7.16.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#without-container"><i class="fa fa-check"></i><b>7.16.1</b> Without container</a></li>
-<li class="chapter" data-level="7.16.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#with-container"><i class="fa fa-check"></i><b>7.16.2</b> With container</a></li>
+<li class="chapter" data-level="6.17.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-like-pattern"><i class="fa fa-check"></i><b>6.17.1</b> MPI-like pattern</a></li>
+<li class="chapter" data-level="6.17.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-like-pattern"><i class="fa fa-check"></i><b>6.17.2</b> OpenMP-like pattern</a></li>
 </ul></li>
-<li class="chapter" data-level="7.17" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#reproducibility"><i class="fa fa-check"></i><b>7.17</b> Reproducibility</a></li>
-<li class="chapter" data-level="7.18" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#common-mistakes-1"><i class="fa fa-check"></i><b>7.18</b> Common Mistakes</a></li>
-<li class="chapter" data-level="7.19" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#storage-considerations"><i class="fa fa-check"></i><b>7.19</b> Storage Considerations</a></li>
-<li class="chapter" data-level="7.20" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#debugging-containers"><i class="fa fa-check"></i><b>7.20</b> Debugging Containers</a>
+<li class="chapter" data-level="6.18" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-side-by-side-comparison"><i class="fa fa-check"></i><b>6.18</b> A side-by-side comparison</a>
 <ul>
-<li class="chapter" data-level="7.20.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#check-image-exists"><i class="fa fa-check"></i><b>7.20.1</b> Check image exists</a></li>
-<li class="chapter" data-level="7.20.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#test-interactively"><i class="fa fa-check"></i><b>7.20.2</b> Test interactively</a></li>
-<li class="chapter" data-level="7.20.3" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#check-a-command"><i class="fa fa-check"></i><b>7.20.3</b> Check a command</a></li>
+<li class="chapter" data-level="6.18.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-script-pattern"><i class="fa fa-check"></i><b>6.18.1</b> MPI script pattern</a></li>
+<li class="chapter" data-level="6.18.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-script-pattern"><i class="fa fa-check"></i><b>6.18.2</b> OpenMP script pattern</a></li>
 </ul></li>
-<li class="chapter" data-level="7.21" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#lab-6-containers-on-hpc"><i class="fa fa-check"></i><b>7.21</b> Lab 6 — Containers on HPC</a>
+<li class="chapter" data-level="6.19" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#hybrid-thinking"><i class="fa fa-check"></i><b>6.19</b> Hybrid thinking</a></li>
+<li class="chapter" data-level="6.20" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#strong-scaling-and-weak-scaling"><i class="fa fa-check"></i><b>6.20</b> Strong scaling and weak scaling</a>
 <ul>
-<li class="chapter" data-level="7.21.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-1-pull-image"><i class="fa fa-check"></i><b>7.21.1</b> Part 1: Pull Image</a></li>
-<li class="chapter" data-level="7.21.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-2-run-command"><i class="fa fa-check"></i><b>7.21.2</b> Part 2: Run Command</a></li>
-<li class="chapter" data-level="7.21.3" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-3-interactive-mode"><i class="fa fa-check"></i><b>7.21.3</b> Part 3: Interactive Mode</a></li>
-<li class="chapter" data-level="7.21.4" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-4-slurm-job"><i class="fa fa-check"></i><b>7.21.4</b> Part 4: SLURM Job</a></li>
-<li class="chapter" data-level="7.21.5" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-5-bind-directory"><i class="fa fa-check"></i><b>7.21.5</b> Part 5: Bind Directory</a></li>
+<li class="chapter" data-level="6.20.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#strong-scaling"><i class="fa fa-check"></i><b>6.20.1</b> Strong scaling</a></li>
+<li class="chapter" data-level="6.20.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#weak-scaling"><i class="fa fa-check"></i><b>6.20.2</b> Weak scaling</a></li>
 </ul></li>
-<li class="chapter" data-level="7.22" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#stretch-goal-2"><i class="fa fa-check"></i><b>7.22</b> Stretch Goal</a></li>
-<li class="chapter" data-level="7.23" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#transition-to-capstone"><i class="fa fa-check"></i><b>7.23</b> Transition to Capstone</a></li>
-<li class="chapter" data-level="7.24" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#key-takeaways-1"><i class="fa fa-check"></i><b>7.24</b> Key Takeaways</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html"><i class="fa fa-check"></i><b>8</b> Capstone Project: End-to-End HPC Workflow</a>
+<li class="chapter" data-level="6.21" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#why-speedup-is-not-automatic"><i class="fa fa-check"></i><b>6.21</b> Why speedup is not automatic</a></li>
+<li class="chapter" data-level="6.22" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-simple-timing-habit"><i class="fa fa-check"></i><b>6.22</b> A simple timing habit</a></li>
+<li class="chapter" data-level="6.23" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#common-beginner-mistakes-1"><i class="fa fa-check"></i><b>6.23</b> Common beginner mistakes</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#overview-6"><i class="fa fa-check"></i><b>8.1</b> Overview</a></li>
-<li class="chapter" data-level="8.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#project-philosophy"><i class="fa fa-check"></i><b>8.2</b> Project Philosophy</a></li>
-<li class="chapter" data-level="8.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#general-requirements"><i class="fa fa-check"></i><b>8.3</b> General Requirements</a></li>
-<li class="chapter" data-level="8.4" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#project-options"><i class="fa fa-check"></i><b>8.4</b> Project Options</a></li>
-<li class="chapter" data-level="8.5" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-1-compile-and-run"><i class="fa fa-check"></i><b>8.5</b> Option 1: Compile and Run</a>
-<ul>
-<li class="chapter" data-level="8.5.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description"><i class="fa fa-check"></i><b>8.5.1</b> Description</a></li>
-<li class="chapter" data-level="8.5.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements"><i class="fa fa-check"></i><b>8.5.2</b> Requirements</a></li>
-<li class="chapter" data-level="8.5.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-extensions"><i class="fa fa-check"></i><b>8.5.3</b> Suggested Extensions</a></li>
+<li class="chapter" data-level="6.23.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-1-requesting-four-tasks-for-a-serial-program"><i class="fa fa-check"></i><b>6.23.1</b> Mistake 1: requesting four tasks for a serial program</a></li>
+<li class="chapter" data-level="6.23.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-2-confusing-tasks-with-threads"><i class="fa fa-check"></i><b>6.23.2</b> Mistake 2: confusing tasks with threads</a></li>
+<li class="chapter" data-level="6.23.3" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-3-using-openmp-code-without-setting-omp_num_threads"><i class="fa fa-check"></i><b>6.23.3</b> Mistake 3: using OpenMP code without setting <code>OMP_NUM_THREADS</code></a></li>
+<li class="chapter" data-level="6.23.4" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-4-running-mpi-directly-on-the-login-node-as-a-habit"><i class="fa fa-check"></i><b>6.23.4</b> Mistake 4: running MPI directly on the login node as a habit</a></li>
+<li class="chapter" data-level="6.23.5" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-5-assuming-output-order-reveals-execution-order-cleanly"><i class="fa fa-check"></i><b>6.23.5</b> Mistake 5: assuming output order reveals execution order cleanly</a></li>
 </ul></li>
-<li class="chapter" data-level="8.6" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-2-parallel-computing"><i class="fa fa-check"></i><b>8.6</b> Option 2: Parallel Computing</a>
+<li class="chapter" data-level="6.24" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#failure-case-study-1-resource-request-does-not-match-the-mpi-code"><i class="fa fa-check"></i><b>6.24</b> Failure case study 1: resource request does not match the MPI code</a></li>
+<li class="chapter" data-level="6.25" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#failure-case-study-2-openmp-script-requests-four-cores-but-uses-one-thread"><i class="fa fa-check"></i><b>6.25</b> Failure case study 2: OpenMP script requests four cores but uses one thread</a></li>
+<li class="chapter" data-level="6.26" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#failure-case-study-3-parallel-job-is-slower-than-the-serial-version"><i class="fa fa-check"></i><b>6.26</b> Failure case study 3: parallel job is slower than the serial version</a></li>
+<li class="chapter" data-level="6.27" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#debugging-checklist-for-parallel-jobs"><i class="fa fa-check"></i><b>6.27</b> Debugging checklist for parallel jobs</a>
 <ul>
-<li class="chapter" data-level="8.6.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description-1"><i class="fa fa-check"></i><b>8.6.1</b> Description</a></li>
-<li class="chapter" data-level="8.6.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements-1"><i class="fa fa-check"></i><b>8.6.2</b> Requirements</a></li>
-<li class="chapter" data-level="8.6.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-extensions-1"><i class="fa fa-check"></i><b>8.6.3</b> Suggested Extensions</a></li>
+<li class="chapter" data-level="6.27.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#what-model-am-i-using"><i class="fa fa-check"></i><b>6.27.1</b> 1. What model am I using?</a></li>
+<li class="chapter" data-level="6.27.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#does-the-compile-step-match-the-model"><i class="fa fa-check"></i><b>6.27.2</b> 2. Does the compile step match the model?</a></li>
+<li class="chapter" data-level="6.27.3" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#does-the-slurm-request-match-the-model"><i class="fa fa-check"></i><b>6.27.3</b> 3. Does the SLURM request match the model?</a></li>
+<li class="chapter" data-level="6.27.4" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#are-the-relevant-environment-variables-set"><i class="fa fa-check"></i><b>6.27.4</b> 4. Are the relevant environment variables set?</a></li>
+<li class="chapter" data-level="6.27.5" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#what-does-the-output-file-actually-show"><i class="fa fa-check"></i><b>6.27.5</b> 5. What does the output file actually show?</a></li>
+<li class="chapter" data-level="6.27.6" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#is-the-workload-large-enough-to-reveal-meaningful-parallel-behavior"><i class="fa fa-check"></i><b>6.27.6</b> 6. Is the workload large enough to reveal meaningful parallel behavior?</a></li>
 </ul></li>
-<li class="chapter" data-level="8.7" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-3-containerized-workflow"><i class="fa fa-check"></i><b>8.7</b> Option 3: Containerized Workflow</a>
+<li class="chapter" data-level="6.28" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#best-practices"><i class="fa fa-check"></i><b>6.28</b> Best practices</a></li>
+<li class="chapter" data-level="6.29" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-1-mpi-hello-world"><i class="fa fa-check"></i><b>6.29</b> Lab 1: MPI hello world</a></li>
+<li class="chapter" data-level="6.30" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-2-openmp-hello-world"><i class="fa fa-check"></i><b>6.30</b> Lab 2: OpenMP hello world</a></li>
+<li class="chapter" data-level="6.31" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-3-compare-the-models-conceptually"><i class="fa fa-check"></i><b>6.31</b> Lab 3: compare the models conceptually</a></li>
+<li class="chapter" data-level="6.32" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-4-measure-a-tiny-scaling-experiment"><i class="fa fa-check"></i><b>6.32</b> Lab 4: measure a tiny scaling experiment</a></li>
+<li class="chapter" data-level="6.33" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#stretch-goal-3"><i class="fa fa-check"></i><b>6.33</b> Stretch goal</a></li>
+<li class="chapter" data-level="6.34" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#key-takeaways-2"><i class="fa fa-check"></i><b>6.34</b> Key takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html"><i class="fa fa-check"></i><b>7</b> Containers and Reproducible HPC Workflows</a>
 <ul>
-<li class="chapter" data-level="8.7.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description-2"><i class="fa fa-check"></i><b>8.7.1</b> Description</a></li>
-<li class="chapter" data-level="8.7.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements-2"><i class="fa fa-check"></i><b>8.7.2</b> Requirements</a></li>
-<li class="chapter" data-level="8.7.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-extensions-2"><i class="fa fa-check"></i><b>8.7.3</b> Suggested Extensions</a></li>
-</ul></li>
-<li class="chapter" data-level="8.8" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-4-hybrid-workflow-advanced"><i class="fa fa-check"></i><b>8.8</b> Option 4: Hybrid Workflow (Advanced)</a>
+<li class="chapter" data-level="7.1" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#overview-5"><i class="fa fa-check"></i><b>7.1</b> Overview</a></li>
+<li class="chapter" data-level="7.2" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mental-model-what-a-container-actually-is"><i class="fa fa-check"></i><b>7.2</b> Mental model: what a container actually is</a></li>
+<li class="chapter" data-level="7.3" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#why-containers-matter-in-hpc"><i class="fa fa-check"></i><b>7.3</b> Why containers matter in HPC</a></li>
+<li class="chapter" data-level="7.4" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#containers-do-not-eliminate-the-host-system"><i class="fa fa-check"></i><b>7.4</b> Containers do not eliminate the host system</a></li>
+<li class="chapter" data-level="7.5" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#docker-versus-apptainer"><i class="fa fa-check"></i><b>7.5</b> Docker versus Apptainer</a>
 <ul>
-<li class="chapter" data-level="8.8.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description-3"><i class="fa fa-check"></i><b>8.8.1</b> Description</a></li>
-<li class="chapter" data-level="8.8.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements-3"><i class="fa fa-check"></i><b>8.8.2</b> Requirements</a></li>
+<li class="chapter" data-level="7.5.1" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#docker"><i class="fa fa-check"></i><b>7.5.1</b> Docker</a></li>
+<li class="chapter" data-level="7.5.2" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#apptainer"><i class="fa fa-check"></i><b>7.5.2</b> Apptainer</a></li>
 </ul></li>
-<li class="chapter" data-level="8.9" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#deliverables"><i class="fa fa-check"></i><b>8.9</b> Deliverables</a>
+<li class="chapter" data-level="7.6" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#checking-for-apptainer"><i class="fa fa-check"></i><b>7.6</b> Checking for Apptainer</a></li>
+<li class="chapter" data-level="7.7" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#pulling-a-simple-image"><i class="fa fa-check"></i><b>7.7</b> Pulling a simple image</a></li>
+<li class="chapter" data-level="7.8" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#run-a-command-inside-the-container"><i class="fa fa-check"></i><b>7.8</b> Run a command inside the container</a></li>
+<li class="chapter" data-level="7.9" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#use-an-interactive-shell"><i class="fa fa-check"></i><b>7.9</b> Use an interactive shell</a></li>
+<li class="chapter" data-level="7.10" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#binding-directories-the-most-important-beginner-concept"><i class="fa fa-check"></i><b>7.10</b> Binding directories: the most important beginner concept</a></li>
+<li class="chapter" data-level="7.11" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#why-binding-matters"><i class="fa fa-check"></i><b>7.11</b> Why binding matters</a></li>
+<li class="chapter" data-level="7.12" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#a-concrete-example-with-a-host-script"><i class="fa fa-check"></i><b>7.12</b> A concrete example with a host script</a></li>
+<li class="chapter" data-level="7.13" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#store-images-in-sensible-places"><i class="fa fa-check"></i><b>7.13</b> Store images in sensible places</a></li>
+<li class="chapter" data-level="7.14" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#running-python-inside-a-container"><i class="fa fa-check"></i><b>7.14</b> Running Python inside a container</a></li>
+<li class="chapter" data-level="7.15" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#containerizing-a-workflow-through-slurm"><i class="fa fa-check"></i><b>7.15</b> Containerizing a workflow through SLURM</a></li>
+<li class="chapter" data-level="7.16" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#a-more-realistic-containerized-script-run"><i class="fa fa-check"></i><b>7.16</b> A more realistic containerized script run</a></li>
+<li class="chapter" data-level="7.17" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#when-containers-help-most"><i class="fa fa-check"></i><b>7.17</b> When containers help most</a></li>
+<li class="chapter" data-level="7.18" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#when-modules-may-be-enough"><i class="fa fa-check"></i><b>7.18</b> When modules may be enough</a></li>
+<li class="chapter" data-level="7.19" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#common-beginner-mistakes-2"><i class="fa fa-check"></i><b>7.19</b> Common beginner mistakes</a>
 <ul>
-<li class="chapter" data-level="8.9.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#code-and-scripts"><i class="fa fa-check"></i><b>8.9.1</b> 1. Code and Scripts</a></li>
-<li class="chapter" data-level="8.9.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#output-files"><i class="fa fa-check"></i><b>8.9.2</b> 2. Output Files</a></li>
-<li class="chapter" data-level="8.9.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#documentation"><i class="fa fa-check"></i><b>8.9.3</b> 3. Documentation</a></li>
+<li class="chapter" data-level="7.19.1" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mistake-1-assuming-the-container-sees-all-host-files-automatically"><i class="fa fa-check"></i><b>7.19.1</b> Mistake 1: assuming the container sees all host files automatically</a></li>
+<li class="chapter" data-level="7.19.2" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mistake-2-forgetting-to-load-apptainer"><i class="fa fa-check"></i><b>7.19.2</b> Mistake 2: forgetting to load Apptainer</a></li>
+<li class="chapter" data-level="7.19.3" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mistake-3-storing-large-images-in-the-wrong-location"><i class="fa fa-check"></i><b>7.19.3</b> Mistake 3: storing large images in the wrong location</a></li>
+<li class="chapter" data-level="7.19.4" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mistake-4-thinking-a-container-replaces-slurm"><i class="fa fa-check"></i><b>7.19.4</b> Mistake 4: thinking a container replaces SLURM</a></li>
+<li class="chapter" data-level="7.19.5" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mistake-5-assuming-every-needed-tool-is-already-inside-the-image"><i class="fa fa-check"></i><b>7.19.5</b> Mistake 5: assuming every needed tool is already inside the image</a></li>
 </ul></li>
-<li class="chapter" data-level="8.10" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-directory-structure"><i class="fa fa-check"></i><b>8.10</b> Suggested Directory Structure</a></li>
-<li class="chapter" data-level="8.11" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#reproducibility-requirements"><i class="fa fa-check"></i><b>8.11</b> Reproducibility Requirements</a></li>
-<li class="chapter" data-level="8.12" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#resource-awareness"><i class="fa fa-check"></i><b>8.12</b> Resource Awareness</a></li>
-<li class="chapter" data-level="8.13" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#debugging-reflection"><i class="fa fa-check"></i><b>8.13</b> Debugging Reflection</a></li>
-<li class="chapter" data-level="8.14" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#grading-rubric"><i class="fa fa-check"></i><b>8.14</b> Grading Rubric</a>
+<li class="chapter" data-level="7.20" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#failure-case-study-1-file-not-found-inside-the-container"><i class="fa fa-check"></i><b>7.20</b> Failure case study 1: file not found inside the container</a></li>
+<li class="chapter" data-level="7.21" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#failure-case-study-2-command-not-found-inside-the-image"><i class="fa fa-check"></i><b>7.21</b> Failure case study 2: command not found inside the image</a></li>
+<li class="chapter" data-level="7.22" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#failure-case-study-3-output-appears-in-the-wrong-place"><i class="fa fa-check"></i><b>7.22</b> Failure case study 3: output appears in the wrong place</a></li>
+<li class="chapter" data-level="7.23" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#debugging-checklist-for-container-workflows"><i class="fa fa-check"></i><b>7.23</b> Debugging checklist for container workflows</a>
 <ul>
-<li class="chapter" data-level="8.14.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#correctness-30"><i class="fa fa-check"></i><b>8.14.1</b> Correctness (30%)</a></li>
-<li class="chapter" data-level="8.14.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#workflow-clarity-25"><i class="fa fa-check"></i><b>8.14.2</b> Workflow Clarity (25%)</a></li>
-<li class="chapter" data-level="8.14.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#reproducibility-20"><i class="fa fa-check"></i><b>8.14.3</b> Reproducibility (20%)</a></li>
-<li class="chapter" data-level="8.14.4" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#resource-usage-15"><i class="fa fa-check"></i><b>8.14.4</b> Resource Usage (15%)</a></li>
-<li class="chapter" data-level="8.14.5" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#reflection-10"><i class="fa fa-check"></i><b>8.14.5</b> Reflection (10%)</a></li>
+<li class="chapter" data-level="7.23.1" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#is-apptainer-available"><i class="fa fa-check"></i><b>7.23.1</b> 1. Is Apptainer available?</a></li>
+<li class="chapter" data-level="7.23.2" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#does-the-image-exist"><i class="fa fa-check"></i><b>7.23.2</b> 2. Does the image exist?</a></li>
+<li class="chapter" data-level="7.23.3" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#can-i-explore-it-interactively"><i class="fa fa-check"></i><b>7.23.3</b> 3. Can I explore it interactively?</a></li>
+<li class="chapter" data-level="7.23.4" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#does-the-command-i-need-actually-exist-inside-the-image"><i class="fa fa-check"></i><b>7.23.4</b> 4. Does the command I need actually exist inside the image?</a></li>
+<li class="chapter" data-level="7.23.5" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#are-the-needed-host-directories-bound-into-the-container"><i class="fa fa-check"></i><b>7.23.5</b> 5. Are the needed host directories bound into the container?</a></li>
+<li class="chapter" data-level="7.23.6" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#does-the-batch-script-still-make-sense-as-a-slurm-job"><i class="fa fa-check"></i><b>7.23.6</b> 6. Does the batch script still make sense as a SLURM job?</a></li>
 </ul></li>
-<li class="chapter" data-level="8.15" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#example-workflow-summary"><i class="fa fa-check"></i><b>8.15</b> Example Workflow Summary</a></li>
-<li class="chapter" data-level="8.16" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#common-mistakes-2"><i class="fa fa-check"></i><b>8.16</b> Common Mistakes</a></li>
-<li class="chapter" data-level="8.17" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#stretch-goals"><i class="fa fa-check"></i><b>8.17</b> Stretch Goals</a></li>
-<li class="chapter" data-level="8.18" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#final-reflection"><i class="fa fa-check"></i><b>8.18</b> Final Reflection</a></li>
-<li class="chapter" data-level="8.19" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#key-takeaways-2"><i class="fa fa-check"></i><b>8.19</b> Key Takeaways</a></li>
+<li class="chapter" data-level="7.24" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#best-practices-1"><i class="fa fa-check"></i><b>7.24</b> Best practices</a></li>
+<li class="chapter" data-level="7.25" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#lab-1-pull-and-inspect-an-image"><i class="fa fa-check"></i><b>7.25</b> Lab 1: pull and inspect an image</a></li>
+<li class="chapter" data-level="7.26" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#lab-2-bind-the-working-directory"><i class="fa fa-check"></i><b>7.26</b> Lab 2: bind the working directory</a></li>
+<li class="chapter" data-level="7.27" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#lab-3-run-a-containerized-batch-job"><i class="fa fa-check"></i><b>7.27</b> Lab 3: run a containerized batch job</a></li>
+<li class="chapter" data-level="7.28" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#lab-4-compare-modules-and-containers"><i class="fa fa-check"></i><b>7.28</b> Lab 4: compare modules and containers</a></li>
+<li class="chapter" data-level="7.29" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#stretch-goal-4"><i class="fa fa-check"></i><b>7.29</b> Stretch goal</a></li>
+<li class="chapter" data-level="7.30" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#key-takeaways-3"><i class="fa fa-check"></i><b>7.30</b> Key takeaways</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html"><i class="fa fa-check"></i><b>9</b> Appendix: HPC Quick Reference</a>
+<li class="chapter" data-level="8" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html"><i class="fa fa-check"></i><b>8</b> Capstone Project: Building an End-to-End HPC Workflow</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#overview-7"><i class="fa fa-check"></i><b>9.1</b> Overview</a></li>
-<li class="chapter" data-level="9.2" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#ssh"><i class="fa fa-check"></i><b>9.2</b> SSH</a></li>
-<li class="chapter" data-level="9.3" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#basic-linux"><i class="fa fa-check"></i><b>9.3</b> Basic Linux</a></li>
-<li class="chapter" data-level="9.4" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#permissions"><i class="fa fa-check"></i><b>9.4</b> Permissions</a></li>
-<li class="chapter" data-level="9.5" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#environment-and-modules"><i class="fa fa-check"></i><b>9.5</b> Environment and Modules</a></li>
-<li class="chapter" data-level="9.6" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#slurm"><i class="fa fa-check"></i><b>9.6</b> SLURM</a></li>
-<li class="chapter" data-level="9.7" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#compilation"><i class="fa fa-check"></i><b>9.7</b> Compilation</a></li>
-<li class="chapter" data-level="9.8" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#mpi"><i class="fa fa-check"></i><b>9.8</b> MPI</a></li>
-<li class="chapter" data-level="9.9" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#openmp-1"><i class="fa fa-check"></i><b>9.9</b> OpenMP</a></li>
-<li class="chapter" data-level="9.10" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#containers"><i class="fa fa-check"></i><b>9.10</b> Containers</a></li>
-<li class="chapter" data-level="9.11" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#final-notes"><i class="fa fa-check"></i><b>9.11</b> Final Notes</a></li>
+<li class="chapter" data-level="8.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#overview-6"><i class="fa fa-check"></i><b>8.1</b> Overview</a></li>
+<li class="chapter" data-level="8.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#the-philosophy-of-the-capstone"><i class="fa fa-check"></i><b>8.2</b> The philosophy of the capstone</a></li>
+<li class="chapter" data-level="8.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-counts-as-a-successful-capstone"><i class="fa fa-check"></i><b>8.3</b> What counts as a successful capstone</a></li>
+<li class="chapter" data-level="8.4" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-the-capstone-should-demonstrate"><i class="fa fa-check"></i><b>8.4</b> What the capstone should demonstrate</a></li>
+<li class="chapter" data-level="8.5" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#four-capstone-styles"><i class="fa fa-check"></i><b>8.5</b> Four capstone styles</a></li>
+<li class="chapter" data-level="8.6" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-1-compile-and-run-a-c-or-c-program"><i class="fa fa-check"></i><b>8.6</b> Option 1: compile and run a C or C++ program</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#minimum-ingredients"><i class="fa fa-check"></i><b>8.6.1</b> Minimum ingredients</a></li>
+<li class="chapter" data-level="8.6.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#strong-additions"><i class="fa fa-check"></i><b>8.6.2</b> Strong additions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-2-parallel-program"><i class="fa fa-check"></i><b>8.7</b> Option 2: parallel program</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#minimum-ingredients-1"><i class="fa fa-check"></i><b>8.7.1</b> Minimum ingredients</a></li>
+<li class="chapter" data-level="8.7.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#strong-additions-1"><i class="fa fa-check"></i><b>8.7.2</b> Strong additions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-3-containerized-workflow"><i class="fa fa-check"></i><b>8.8</b> Option 3: containerized workflow</a>
+<ul>
+<li class="chapter" data-level="8.8.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#minimum-ingredients-2"><i class="fa fa-check"></i><b>8.8.1</b> Minimum ingredients</a></li>
+<li class="chapter" data-level="8.8.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#strong-additions-2"><i class="fa fa-check"></i><b>8.8.2</b> Strong additions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-4-hybrid-workflow"><i class="fa fa-check"></i><b>8.9</b> Option 4: hybrid workflow</a></li>
+<li class="chapter" data-level="8.10" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#project-scale-how-big-is-big-enough"><i class="fa fa-check"></i><b>8.10</b> Project scale: how big is “big enough”?</a></li>
+<li class="chapter" data-level="8.11" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#a-recommended-directory-structure"><i class="fa fa-check"></i><b>8.11</b> A recommended directory structure</a></li>
+<li class="chapter" data-level="8.12" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-belongs-in-the-readme"><i class="fa fa-check"></i><b>8.12</b> What belongs in the README</a></li>
+<li class="chapter" data-level="8.13" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#reproducibility-the-real-standard"><i class="fa fa-check"></i><b>8.13</b> Reproducibility: the real standard</a></li>
+<li class="chapter" data-level="8.14" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#resource-awareness-is-part-of-the-grade"><i class="fa fa-check"></i><b>8.14</b> Resource awareness is part of the grade</a></li>
+<li class="chapter" data-level="8.15" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#debugging-reflection-is-required"><i class="fa fa-check"></i><b>8.15</b> Debugging reflection is required</a></li>
+<li class="chapter" data-level="8.16" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#example-capstone-template-1-compiled-serial-program"><i class="fa fa-check"></i><b>8.16</b> Example capstone template 1: compiled serial program</a>
+<ul>
+<li class="chapter" data-level="8.16.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#files"><i class="fa fa-check"></i><b>8.16.1</b> Files</a></li>
+<li class="chapter" data-level="8.16.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow"><i class="fa fa-check"></i><b>8.16.2</b> Workflow</a></li>
+<li class="chapter" data-level="8.16.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-this-demonstrates"><i class="fa fa-check"></i><b>8.16.3</b> What this demonstrates</a></li>
+</ul></li>
+<li class="chapter" data-level="8.17" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#example-capstone-template-2-openmp-program"><i class="fa fa-check"></i><b>8.17</b> Example capstone template 2: OpenMP program</a>
+<ul>
+<li class="chapter" data-level="8.17.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#files-1"><i class="fa fa-check"></i><b>8.17.1</b> Files</a></li>
+<li class="chapter" data-level="8.17.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow-1"><i class="fa fa-check"></i><b>8.17.2</b> Workflow</a></li>
+<li class="chapter" data-level="8.17.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-this-demonstrates-1"><i class="fa fa-check"></i><b>8.17.3</b> What this demonstrates</a></li>
+</ul></li>
+<li class="chapter" data-level="8.18" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#example-capstone-template-3-containerized-python-script"><i class="fa fa-check"></i><b>8.18</b> Example capstone template 3: containerized Python script</a>
+<ul>
+<li class="chapter" data-level="8.18.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#files-2"><i class="fa fa-check"></i><b>8.18.1</b> Files</a></li>
+<li class="chapter" data-level="8.18.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow-2"><i class="fa fa-check"></i><b>8.18.2</b> Workflow</a></li>
+<li class="chapter" data-level="8.18.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-this-demonstrates-2"><i class="fa fa-check"></i><b>8.18.3</b> What this demonstrates</a></li>
+</ul></li>
+<li class="chapter" data-level="8.19" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#a-grading-rubric-you-can-actually-use"><i class="fa fa-check"></i><b>8.19</b> A grading rubric you can actually use</a>
+<ul>
+<li class="chapter" data-level="8.19.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow-correctness-30"><i class="fa fa-check"></i><b>8.19.1</b> Workflow correctness (30%)</a></li>
+<li class="chapter" data-level="8.19.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#documentation-quality-25"><i class="fa fa-check"></i><b>8.19.2</b> Documentation quality (25%)</a></li>
+<li class="chapter" data-level="8.19.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#reproducibility-20"><i class="fa fa-check"></i><b>8.19.3</b> Reproducibility (20%)</a></li>
+<li class="chapter" data-level="8.19.4" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#resource-awareness-15"><i class="fa fa-check"></i><b>8.19.4</b> Resource awareness (15%)</a></li>
+<li class="chapter" data-level="8.19.5" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#debugging-reflection-10"><i class="fa fa-check"></i><b>8.19.5</b> Debugging reflection (10%)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.20" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#common-capstone-mistakes"><i class="fa fa-check"></i><b>8.20</b> Common capstone mistakes</a>
+<ul>
+<li class="chapter" data-level="8.20.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-1-no-readme"><i class="fa fa-check"></i><b>8.20.1</b> Mistake 1: no README</a></li>
+<li class="chapter" data-level="8.20.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-2-output-exists-but-no-explanation"><i class="fa fa-check"></i><b>8.20.2</b> Mistake 2: output exists, but no explanation</a></li>
+<li class="chapter" data-level="8.20.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-3-wrong-resource-request"><i class="fa fa-check"></i><b>8.20.3</b> Mistake 3: wrong resource request</a></li>
+<li class="chapter" data-level="8.20.4" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-4-hidden-assumptions"><i class="fa fa-check"></i><b>8.20.4</b> Mistake 4: hidden assumptions</a></li>
+<li class="chapter" data-level="8.20.5" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-5-debugging-omitted"><i class="fa fa-check"></i><b>8.20.5</b> Mistake 5: debugging omitted</a></li>
+</ul></li>
+<li class="chapter" data-level="8.21" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#how-to-write-the-debugging-reflection"><i class="fa fa-check"></i><b>8.21</b> How to write the debugging reflection</a></li>
+<li class="chapter" data-level="8.22" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#final-submission-checklist"><i class="fa fa-check"></i><b>8.22</b> Final submission checklist</a></li>
+<li class="chapter" data-level="8.23" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#lab-draft-your-capstone-plan"><i class="fa fa-check"></i><b>8.23</b> Lab: draft your capstone plan</a></li>
+<li class="chapter" data-level="8.24" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#stretch-goal-5"><i class="fa fa-check"></i><b>8.24</b> Stretch goal</a></li>
+<li class="chapter" data-level="8.25" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#key-takeaways-4"><i class="fa fa-check"></i><b>8.25</b> Key takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><i class="fa fa-check"></i><b>9</b> Appendix: Quick Reference and Troubleshooting for LS6 Workflows</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#overview-7"><i class="fa fa-check"></i><b>9.1</b> Overview</a></li>
+<li class="chapter" data-level="9.2" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#core-workflow-picture"><i class="fa fa-check"></i><b>9.2</b> Core workflow picture</a></li>
+<li class="chapter" data-level="9.3" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#a-safe-beginner-shell-pattern"><i class="fa fa-check"></i><b>9.3</b> A safe beginner shell pattern</a></li>
+<li class="chapter" data-level="9.4" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#ssh"><i class="fa fa-check"></i><b>9.4</b> SSH</a></li>
+<li class="chapter" data-level="9.5" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#filesystem-basics"><i class="fa fa-check"></i><b>9.5</b> Filesystem basics</a></li>
+<li class="chapter" data-level="9.6" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#editing-files"><i class="fa fa-check"></i><b>9.6</b> Editing files</a></li>
+<li class="chapter" data-level="9.7" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#permissions"><i class="fa fa-check"></i><b>9.7</b> Permissions</a></li>
+<li class="chapter" data-level="9.8" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#environment-variables-1"><i class="fa fa-check"></i><b>9.8</b> Environment variables</a></li>
+<li class="chapter" data-level="9.9" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#modules"><i class="fa fa-check"></i><b>9.9</b> Modules</a></li>
+<li class="chapter" data-level="9.10" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#compilers-and-build-commands"><i class="fa fa-check"></i><b>9.10</b> Compilers and build commands</a></li>
+<li class="chapter" data-level="9.11" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#slurm-basics"><i class="fa fa-check"></i><b>9.11</b> SLURM basics</a></li>
+<li class="chapter" data-level="9.12" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#common-job-states-1"><i class="fa fa-check"></i><b>9.12</b> Common job states</a></li>
+<li class="chapter" data-level="9.13" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#minimal-serial-batch-script-template"><i class="fa fa-check"></i><b>9.13</b> Minimal serial batch script template</a></li>
+<li class="chapter" data-level="9.14" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#minimal-mpi-batch-script-template"><i class="fa fa-check"></i><b>9.14</b> Minimal MPI batch script template</a></li>
+<li class="chapter" data-level="9.15" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#minimal-openmp-batch-script-template"><i class="fa fa-check"></i><b>9.15</b> Minimal OpenMP batch script template</a></li>
+<li class="chapter" data-level="9.16" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#output-files"><i class="fa fa-check"></i><b>9.16</b> Output files</a></li>
+<li class="chapter" data-level="9.17" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#container-commands"><i class="fa fa-check"></i><b>9.17</b> Container commands</a></li>
+<li class="chapter" data-level="9.18" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#quick-mental-model-table"><i class="fa fa-check"></i><b>9.18</b> Quick mental model table</a></li>
+<li class="chapter" data-level="9.19" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-shell-and-files"><i class="fa fa-check"></i><b>9.19</b> Troubleshooting checklist: shell and files</a></li>
+<li class="chapter" data-level="9.20" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-build-failure"><i class="fa fa-check"></i><b>9.20</b> Troubleshooting checklist: build failure</a></li>
+<li class="chapter" data-level="9.21" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-slurm-job-failure"><i class="fa fa-check"></i><b>9.21</b> Troubleshooting checklist: SLURM job failure</a></li>
+<li class="chapter" data-level="9.22" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-mpi-and-openmp"><i class="fa fa-check"></i><b>9.22</b> Troubleshooting checklist: MPI and OpenMP</a></li>
+<li class="chapter" data-level="9.23" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-containers"><i class="fa fa-check"></i><b>9.23</b> Troubleshooting checklist: containers</a></li>
+<li class="chapter" data-level="9.24" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#course-workflow-checklist"><i class="fa fa-check"></i><b>9.24</b> Course workflow checklist</a></li>
+<li class="chapter" data-level="9.25" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#capstone-checklist"><i class="fa fa-check"></i><b>9.25</b> Capstone checklist</a></li>
+<li class="chapter" data-level="9.26" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#final-reminder"><i class="fa fa-check"></i><b>9.26</b> Final reminder</a></li>
 </ul></li>
 </ul>
 
@@ -508,16 +611,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 5</span> Modules, Compilers, and Your First C Program<a href="modules-compilers-and-your-first-c-program.html#modules-compilers-and-your-first-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="overview-3" class="section level2 hasAnchor" number="5.1">
 <h2><span class="header-section-number">5.1</span> Overview<a href="modules-compilers-and-your-first-c-program.html#overview-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In this chapter, we move from running shell commands and SLURM scripts to <strong>building executable software from source code</strong>.</p>
-<p>This matters because many HPC workflows involve custom code, research software built from source, and toolchains that depend on specific compiler environments.</p>
+<p>In this chapter, we move from running shell commands and submitting SLURM scripts to <strong>building executable software from source code</strong>.</p>
+<p>This matters because much HPC work depends on software that is:</p>
+<ul>
+<li>written by researchers</li>
+<li>customized for a lab or project</li>
+<li>compiled against particular libraries</li>
+<li>sensitive to the compiler and environment used to build it</li>
+</ul>
+<p>That means compilation is not an optional side topic. It is part of the practical workflow of scientific computing.</p>
 <p>By the end of this chapter, you should be able to:</p>
 <ul>
 <li>explain what compilation does</li>
+<li>distinguish source files from executables</li>
 <li>load a compiler module</li>
 <li>verify which compiler is active</li>
 <li>compile a small C program with <code>gcc</code></li>
-<li>run the resulting executable</li>
-<li>prepare compiled code for SLURM execution</li>
+<li>explain the difference between compiling and linking at a basic level</li>
+<li>interpret common build errors</li>
+<li>prepare compiled code for execution through SLURM</li>
 </ul>
 </div>
 <div id="mental-model-source-code-becomes-an-executable" class="section level2 hasAnchor" number="5.2">
@@ -525,229 +637,476 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>A compiled workflow looks like this:</p>
 <pre class="text"><code>source code (.c)
       ↓
-compiler (gcc)
+compiler
+      ↓
+object code and linking
       ↓
 executable binary
       ↓
 run on LS6</code></pre>
-<p>That simple picture explains a great deal of later HPC practice.</p>
+<p>At a beginner level, this picture is enough to build the right intuition:</p>
 <ul>
-<li>source code is human-readable</li>
-<li>the compiler translates source into machine-executable form</li>
-<li>the executable is what the system can actually run</li>
+<li>the source file is written for humans</li>
+<li>the executable is written for the machine</li>
+<li>the compiler translates</li>
+<li>the build process may involve more than one file</li>
 </ul>
+<p>One of the most useful early realizations is that <strong>editing source code does not automatically change the executable</strong>. If you edit the source, you must rebuild the program.</p>
 </div>
 <div id="why-compilation-matters-on-clusters" class="section level2 hasAnchor" number="5.3">
 <h2><span class="header-section-number">5.3</span> Why compilation matters on clusters<a href="modules-compilers-and-your-first-c-program.html#why-compilation-matters-on-clusters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Compilation matters in HPC because:</p>
 <ul>
 <li>software is not always preinstalled</li>
-<li>the compiler version can affect behavior</li>
-<li>libraries and toolchains must often match each other</li>
-<li>performance can depend strongly on how code is built</li>
+<li>research code may need to be built from source</li>
+<li>compiler and library versions must often match</li>
+<li>toolchains affect performance and reproducibility</li>
+<li>different module environments can produce different behavior</li>
 </ul>
-<p>For beginners, the main goal is not advanced optimization. It is understanding the workflow clearly.</p>
+<p>On a laptop, beginners often get used to one built-in environment. On a cluster, you should think more deliberately:</p>
+<blockquote>
+<p>What compiler am I using? What libraries is it tied to? What environment is active right now?</p>
+</blockquote>
+<p>Those are normal questions in HPC.</p>
 </div>
-<div id="two-compilers-you-will-hear-about-often" class="section level2 hasAnchor" number="5.4">
-<h2><span class="header-section-number">5.4</span> Two compilers you will hear about often<a href="modules-compilers-and-your-first-c-program.html#two-compilers-you-will-hear-about-often" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ul>
-<li><code>gcc</code> for C</li>
-<li><code>g++</code> for C++</li>
-</ul>
-<p>This chapter focuses on <strong>C and <code>gcc</code></strong>, because it gives the cleanest first compiled example.</p>
+<div id="modules-come-before-compilers" class="section level2 hasAnchor" number="5.4">
+<h2><span class="header-section-number">5.4</span> Modules come before compilers<a href="modules-compilers-and-your-first-c-program.html#modules-come-before-compilers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Before compiling, inspect the available software environment:</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb76-1"><a href="modules-compilers-and-your-first-c-program.html#cb76-1" tabindex="-1"></a><span class="ex">module</span> avail</span></code></pre></div>
+<p>Then load a compiler environment:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb77-1"><a href="modules-compilers-and-your-first-c-program.html#cb77-1" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
+<span id="cb77-2"><a href="modules-compilers-and-your-first-c-program.html#cb77-2" tabindex="-1"></a><span class="ex">module</span> list</span></code></pre></div>
+<p>This reinforces a key course theme:</p>
+<blockquote>
+<p>On an HPC system, software is usually exposed through the environment rather than assumed to be globally fixed forever.</p>
+</blockquote>
 </div>
-<div id="modules-first-then-compilation" class="section level2 hasAnchor" number="5.5">
-<h2><span class="header-section-number">5.5</span> Modules first, then compilation<a href="modules-compilers-and-your-first-c-program.html#modules-first-then-compilation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Before compiling, load a compiler environment:</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb69-1"><a href="modules-compilers-and-your-first-c-program.html#cb69-1" tabindex="-1"></a><span class="ex">module</span> avail</span>
-<span id="cb69-2"><a href="modules-compilers-and-your-first-c-program.html#cb69-2" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
-<span id="cb69-3"><a href="modules-compilers-and-your-first-c-program.html#cb69-3" tabindex="-1"></a><span class="ex">module</span> list</span></code></pre></div>
-<p>This reinforces a central HPC idea: software is part of the environment.</p>
-</div>
-<div id="confirm-which-compiler-you-are-using" class="section level2 hasAnchor" number="5.6">
-<h2><span class="header-section-number">5.6</span> Confirm which compiler you are using<a href="modules-compilers-and-your-first-c-program.html#confirm-which-compiler-you-are-using" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb70"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb70-1"><a href="modules-compilers-and-your-first-c-program.html#cb70-1" tabindex="-1"></a><span class="fu">which</span> gcc</span>
-<span id="cb70-2"><a href="modules-compilers-and-your-first-c-program.html#cb70-2" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">--version</span></span></code></pre></div>
-<p>This is important because it replaces guessing with evidence.</p>
-<p>You now know:</p>
+<div id="verify-the-compiler-instead-of-guessing" class="section level2 hasAnchor" number="5.5">
+<h2><span class="header-section-number">5.5</span> Verify the compiler instead of guessing<a href="modules-compilers-and-your-first-c-program.html#verify-the-compiler-instead-of-guessing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use:</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb78-1"><a href="modules-compilers-and-your-first-c-program.html#cb78-1" tabindex="-1"></a><span class="fu">which</span> gcc</span>
+<span id="cb78-2"><a href="modules-compilers-and-your-first-c-program.html#cb78-2" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">--version</span></span></code></pre></div>
+<p>This gives you evidence for:</p>
 <ul>
 <li>whether <code>gcc</code> is available</li>
-<li>where the executable is coming from</li>
+<li>where the executable is located</li>
 <li>which version is active</li>
 </ul>
+<p>That matters because troubleshooting gets much easier when you know exactly which tool you are using.</p>
 </div>
-<div id="your-first-c-program" class="section level2 hasAnchor" number="5.7">
-<h2><span class="header-section-number">5.7</span> Your first C program<a href="modules-compilers-and-your-first-c-program.html#your-first-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Create the file:</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb71-1"><a href="modules-compilers-and-your-first-c-program.html#cb71-1" tabindex="-1"></a><span class="fu">nano</span> hello.c</span></code></pre></div>
+<div id="your-first-c-program" class="section level2 hasAnchor" number="5.6">
+<h2><span class="header-section-number">5.6</span> Your first C program<a href="modules-compilers-and-your-first-c-program.html#your-first-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create a file named <code>hello.c</code>:</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb79-1"><a href="modules-compilers-and-your-first-c-program.html#cb79-1" tabindex="-1"></a><span class="fu">nano</span> hello.c</span></code></pre></div>
 <p>Add:</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb72-1"><a href="modules-compilers-and-your-first-c-program.html#cb72-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb72-2"><a href="modules-compilers-and-your-first-c-program.html#cb72-2" tabindex="-1"></a></span>
-<span id="cb72-3"><a href="modules-compilers-and-your-first-c-program.html#cb72-3" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb72-4"><a href="modules-compilers-and-your-first-c-program.html#cb72-4" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello from C on LS6</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb72-5"><a href="modules-compilers-and-your-first-c-program.html#cb72-5" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb72-6"><a href="modules-compilers-and-your-first-c-program.html#cb72-6" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>This program does very little, but it demonstrates the full compiled workflow.</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb80-1"><a href="modules-compilers-and-your-first-c-program.html#cb80-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb80-2"><a href="modules-compilers-and-your-first-c-program.html#cb80-2" tabindex="-1"></a></span>
+<span id="cb80-3"><a href="modules-compilers-and-your-first-c-program.html#cb80-3" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb80-4"><a href="modules-compilers-and-your-first-c-program.html#cb80-4" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello from C on LS6</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb80-5"><a href="modules-compilers-and-your-first-c-program.html#cb80-5" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb80-6"><a href="modules-compilers-and-your-first-c-program.html#cb80-6" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>This program is intentionally tiny. The point is not complexity. The point is making the compile-and-run pipeline visible.</p>
 </div>
-<div id="compile-the-program" class="section level2 hasAnchor" number="5.8">
-<h2><span class="header-section-number">5.8</span> Compile the program<a href="modules-compilers-and-your-first-c-program.html#compile-the-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb73"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb73-1"><a href="modules-compilers-and-your-first-c-program.html#cb73-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
+<div id="compile-the-program" class="section level2 hasAnchor" number="5.7">
+<h2><span class="header-section-number">5.7</span> Compile the program<a href="modules-compilers-and-your-first-c-program.html#compile-the-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb81"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb81-1"><a href="modules-compilers-and-your-first-c-program.html#cb81-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
 <p>Interpretation:</p>
 <ul>
 <li><code>hello.c</code> is the source file</li>
 <li><code>-o hello</code> names the output executable <code>hello</code></li>
 </ul>
 </div>
-<div id="run-the-executable" class="section level2 hasAnchor" number="5.9">
-<h2><span class="header-section-number">5.9</span> Run the executable<a href="modules-compilers-and-your-first-c-program.html#run-the-executable" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb74"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb74-1"><a href="modules-compilers-and-your-first-c-program.html#cb74-1" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
+<div id="run-the-executable" class="section level2 hasAnchor" number="5.8">
+<h2><span class="header-section-number">5.8</span> Run the executable<a href="modules-compilers-and-your-first-c-program.html#run-the-executable" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb82"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb82-1"><a href="modules-compilers-and-your-first-c-program.html#cb82-1" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
 <p>Expected output:</p>
 <pre class="text"><code>Hello from C on LS6</code></pre>
 </div>
-<div id="inspect-what-was-created" class="section level2 hasAnchor" number="5.10">
-<h2><span class="header-section-number">5.10</span> Inspect what was created<a href="modules-compilers-and-your-first-c-program.html#inspect-what-was-created" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb76"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb76-1"><a href="modules-compilers-and-your-first-c-program.html#cb76-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span></code></pre></div>
+<div id="inspect-the-directory" class="section level2 hasAnchor" number="5.9">
+<h2><span class="header-section-number">5.9</span> Inspect the directory<a href="modules-compilers-and-your-first-c-program.html#inspect-the-directory" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use:</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb84-1"><a href="modules-compilers-and-your-first-c-program.html#cb84-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span></code></pre></div>
 <p>You should see at least:</p>
 <ul>
 <li><code>hello.c</code></li>
 <li><code>hello</code></li>
 </ul>
-<p>This is an important moment for beginners: the source file and the executable are not the same thing.</p>
+<p>This is an important conceptual moment. The source file and executable are different artifacts with different purposes.</p>
 </div>
-<div id="what-just-happened-1" class="section level2 hasAnchor" number="5.11">
-<h2><span class="header-section-number">5.11</span> What just happened?<a href="modules-compilers-and-your-first-c-program.html#what-just-happened-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="what-just-happened-1" class="section level2 hasAnchor" number="5.10">
+<h2><span class="header-section-number">5.10</span> What just happened?<a href="modules-compilers-and-your-first-c-program.html#what-just-happened-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>You:</p>
 <ul>
-<li>wrote source code</li>
+<li>wrote human-readable source code</li>
 <li>invoked a compiler</li>
-<li>created an executable file</li>
-<li>ran that executable from the shell</li>
+<li>produced machine-executable output</li>
+<li>ran the resulting program</li>
 </ul>
-<p>That is the core compiled workflow used across much of scientific computing.</p>
+<p>This is the basic compiled workflow that underlies far more complex HPC software.</p>
 </div>
-<div id="optimization-flags" class="section level2 hasAnchor" number="5.12">
-<h2><span class="header-section-number">5.12</span> Optimization flags<a href="modules-compilers-and-your-first-c-program.html#optimization-flags" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A common form is:</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb77-1"><a href="modules-compilers-and-your-first-c-program.html#cb77-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello <span class="at">-O2</span></span></code></pre></div>
-<p>Useful levels to know:</p>
+<div id="compile-versus-link-a-useful-beginner-distinction" class="section level2 hasAnchor" number="5.11">
+<h2><span class="header-section-number">5.11</span> Compile versus link: a useful beginner distinction<a href="modules-compilers-and-your-first-c-program.html#compile-versus-link-a-useful-beginner-distinction" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Students often use the word “compile” to describe the entire build process. In casual conversation that is common, but it helps to know that there are two ideas present:</p>
+<div id="compilation" class="section level3 hasAnchor" number="5.11.1">
+<h3><span class="header-section-number">5.11.1</span> Compilation<a href="modules-compilers-and-your-first-c-program.html#compilation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Turning source code into lower-level object code.</p>
+</div>
+<div id="linking" class="section level3 hasAnchor" number="5.11.2">
+<h3><span class="header-section-number">5.11.2</span> Linking<a href="modules-compilers-and-your-first-c-program.html#linking" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Combining object code and libraries into a final executable.</p>
+<p>At first, these steps are often hidden behind a single command like:</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb85-1"><a href="modules-compilers-and-your-first-c-program.html#cb85-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
+<p>But conceptually, the compiler is doing more than one job on your behalf.</p>
+<p>Why does this matter? Because some errors are <strong>compile-time errors</strong> and others are <strong>link-time errors</strong>.</p>
+</div>
+</div>
+<div id="compile-time-errors" class="section level2 hasAnchor" number="5.12">
+<h2><span class="header-section-number">5.12</span> Compile-time errors<a href="modules-compilers-and-your-first-c-program.html#compile-time-errors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>These happen when the compiler cannot interpret the source correctly.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb86-1"><a href="modules-compilers-and-your-first-c-program.html#cb86-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb86-2"><a href="modules-compilers-and-your-first-c-program.html#cb86-2" tabindex="-1"></a></span>
+<span id="cb86-3"><a href="modules-compilers-and-your-first-c-program.html#cb86-3" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb86-4"><a href="modules-compilers-and-your-first-c-program.html#cb86-4" tabindex="-1"></a>    prinft<span class="op">(</span><span class="st">&quot;Hello</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
+<span id="cb86-5"><a href="modules-compilers-and-your-first-c-program.html#cb86-5" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb86-6"><a href="modules-compilers-and-your-first-c-program.html#cb86-6" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Notice the typo: <code>prinft</code> instead of <code>printf</code>.</p>
+<p>If you compile:</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb87-1"><a href="modules-compilers-and-your-first-c-program.html#cb87-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
+<p>the compiler will report a problem.</p>
+<p>A compile-time error often points to:</p>
+<ul>
+<li>a typo</li>
+<li>invalid syntax</li>
+<li>missing punctuation</li>
+<li>misuse of the language</li>
+</ul>
+</div>
+<div id="link-time-errors" class="section level2 hasAnchor" number="5.13">
+<h2><span class="header-section-number">5.13</span> Link-time errors<a href="modules-compilers-and-your-first-c-program.html#link-time-errors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Link-time errors happen when source files may compile individually, but the final program cannot be assembled correctly.</p>
+<p>A common beginner example involves a missing function definition.</p>
+<p>Suppose <code>main.c</code> calls a function <code>add</code>, but the file containing <code>add</code> is not included in the build command. Then the compiler may accept <code>main.c</code>, but the linker will complain that the referenced symbol cannot be resolved.</p>
+<p>This distinction helps students read build messages more intelligently:</p>
+<ul>
+<li>syntax problems often mean compilation trouble</li>
+<li>undefined reference problems often mean linking trouble</li>
+</ul>
+</div>
+<div id="a-simple-multiple-file-example" class="section level2 hasAnchor" number="5.14">
+<h2><span class="header-section-number">5.14</span> A simple multiple-file example<a href="modules-compilers-and-your-first-c-program.html#a-simple-multiple-file-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Imagine the following files:</p>
+<div id="main.c" class="section level3 hasAnchor" number="5.14.1">
+<h3><span class="header-section-number">5.14.1</span> <code>main.c</code><a href="modules-compilers-and-your-first-c-program.html#main.c" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb88"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb88-1"><a href="modules-compilers-and-your-first-c-program.html#cb88-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb88-2"><a href="modules-compilers-and-your-first-c-program.html#cb88-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;helper.h&quot;</span></span>
+<span id="cb88-3"><a href="modules-compilers-and-your-first-c-program.html#cb88-3" tabindex="-1"></a></span>
+<span id="cb88-4"><a href="modules-compilers-and-your-first-c-program.html#cb88-4" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb88-5"><a href="modules-compilers-and-your-first-c-program.html#cb88-5" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">));</span></span>
+<span id="cb88-6"><a href="modules-compilers-and-your-first-c-program.html#cb88-6" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb88-7"><a href="modules-compilers-and-your-first-c-program.html#cb88-7" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+</div>
+<div id="helper.h" class="section level3 hasAnchor" number="5.14.2">
+<h3><span class="header-section-number">5.14.2</span> <code>helper.h</code><a href="modules-compilers-and-your-first-c-program.html#helper.h" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb89"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb89-1"><a href="modules-compilers-and-your-first-c-program.html#cb89-1" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span></code></pre></div>
+</div>
+<div id="helper.c" class="section level3 hasAnchor" number="5.14.3">
+<h3><span class="header-section-number">5.14.3</span> <code>helper.c</code><a href="modules-compilers-and-your-first-c-program.html#helper.c" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb90"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb90-1"><a href="modules-compilers-and-your-first-c-program.html#cb90-1" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb90-2"><a href="modules-compilers-and-your-first-c-program.html#cb90-2" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
+<span id="cb90-3"><a href="modules-compilers-and-your-first-c-program.html#cb90-3" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Build with:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb91-1"><a href="modules-compilers-and-your-first-c-program.html#cb91-1" tabindex="-1"></a><span class="fu">gcc</span> main.c helper.c <span class="at">-o</span> program</span></code></pre></div>
+<p>Now the interface and implementation are both included.</p>
+<p>If you forget <code>helper.c</code>, you may get a link-time error. That is a valuable teaching moment.</p>
+</div>
+</div>
+<div id="header-files-as-interfaces" class="section level2 hasAnchor" number="5.15">
+<h2><span class="header-section-number">5.15</span> Header files as interfaces<a href="modules-compilers-and-your-first-c-program.html#header-files-as-interfaces" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Headers (<code>.h</code>) are commonly used to declare what functions are available. They do not usually hold the full implementation.</p>
+<p>At a beginner level, the main takeaway is:</p>
+<blockquote>
+<p>Headers tell the compiler what to expect. Source files provide the actual code.</p>
+</blockquote>
+<p>This makes larger projects more organized and easier to compile piece by piece.</p>
+</div>
+<div id="optimization-flags" class="section level2 hasAnchor" number="5.16">
+<h2><span class="header-section-number">5.16</span> Optimization flags<a href="modules-compilers-and-your-first-c-program.html#optimization-flags" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A common practical compile command is:</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb92-1"><a href="modules-compilers-and-your-first-c-program.html#cb92-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello <span class="at">-O2</span></span></code></pre></div>
+<p>Useful optimization levels to know:</p>
 <ul>
 <li><code>-O0</code> = no optimization</li>
-<li><code>-O2</code> = standard practical choice</li>
+<li><code>-O2</code> = common practical default</li>
 <li><code>-O3</code> = more aggressive optimization</li>
 </ul>
-<p>For an introductory course, <code>-O2</code> is a good default example.</p>
+<p>For an introductory course, <code>-O2</code> is a reasonable example because it introduces the idea that the build process can affect performance.</p>
+<p>The important conceptual point is not to memorize every flag. It is to realize that <strong>how</strong> a program is compiled can matter.</p>
 </div>
-<div id="a-brief-note-on-c" class="section level2 hasAnchor" number="5.13">
-<h2><span class="header-section-number">5.13</span> A brief note on C++<a href="modules-compilers-and-your-first-c-program.html#a-brief-note-on-c" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="warnings-are-not-noise" class="section level2 hasAnchor" number="5.17">
+<h2><span class="header-section-number">5.17</span> Warnings are not noise<a href="modules-compilers-and-your-first-c-program.html#warnings-are-not-noise" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb93-1"><a href="modules-compilers-and-your-first-c-program.html#cb93-1" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-Wall</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
+<p><code>-Wall</code> asks the compiler to show a wider class of warnings.</p>
+<p>Warnings do not always stop the build, but they are often useful clues. Strong beginners learn to read them early instead of ignoring them.</p>
+<p>A good principle is:</p>
+<blockquote>
+<p>If the compiler is trying to tell you something, pay attention before the project becomes larger.</p>
+</blockquote>
+</div>
+<div id="a-brief-note-on-c" class="section level2 hasAnchor" number="5.18">
+<h2><span class="header-section-number">5.18</span> A brief note on C++<a href="modules-compilers-and-your-first-c-program.html#a-brief-note-on-c" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A similar pattern exists for C++:</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb78-1"><a href="modules-compilers-and-your-first-c-program.html#cb78-1" tabindex="-1"></a><span class="ex">g++</span> hello.cpp <span class="at">-o</span> hello_cpp</span></code></pre></div>
-<p>The overall workflow is the same. The compiler changes because the language changes.</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb94-1"><a href="modules-compilers-and-your-first-c-program.html#cb94-1" tabindex="-1"></a><span class="ex">g++</span> hello.cpp <span class="at">-o</span> hello_cpp</span></code></pre></div>
+<p>The overall workflow remains familiar:</p>
+<ul>
+<li>write source</li>
+<li>invoke compiler</li>
+<li>produce executable</li>
+<li>run executable</li>
+</ul>
+<p>This chapter uses C because it gives the cleanest first exposure to the build process.</p>
 </div>
-<div id="multiple-file-programs" class="section level2 hasAnchor" number="5.14">
-<h2><span class="header-section-number">5.14</span> Multiple-file programs<a href="modules-compilers-and-your-first-c-program.html#multiple-file-programs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Real projects often have more than one source file.</p>
-<p>For example:</p>
-<pre class="text"><code>main.c
-helper.c
-helper.h</code></pre>
-<p>A simple compile step might be:</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb80-1"><a href="modules-compilers-and-your-first-c-program.html#cb80-1" tabindex="-1"></a><span class="fu">gcc</span> main.c helper.c <span class="at">-o</span> program</span></code></pre></div>
-<p>This introduces an important idea: programs can be built from multiple components.</p>
-</div>
-<div id="header-files" class="section level2 hasAnchor" number="5.15">
-<h2><span class="header-section-number">5.15</span> Header files<a href="modules-compilers-and-your-first-c-program.html#header-files" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Headers (<code>.h</code>) are used to define interfaces or declarations.</p>
-<p>Example:</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb81-1"><a href="modules-compilers-and-your-first-c-program.html#cb81-1" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span></code></pre></div>
-<p>Even if students do not yet write large C projects, it helps to see that compilation can involve several files working together.</p>
-</div>
-<div id="automating-builds-with-make" class="section level2 hasAnchor" number="5.16">
-<h2><span class="header-section-number">5.16</span> Automating builds with <code>make</code><a href="modules-compilers-and-your-first-c-program.html#automating-builds-with-make" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When builds become repetitive, use a <code>Makefile</code>.</p>
+<div id="makefiles-why-build-automation-exists" class="section level2 hasAnchor" number="5.19">
+<h2><span class="header-section-number">5.19</span> Makefiles: why build automation exists<a href="modules-compilers-and-your-first-c-program.html#makefiles-why-build-automation-exists" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>As projects grow, repeated build commands become tiresome and error-prone. A <code>Makefile</code> automates the process.</p>
 <p>Create:</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb82-1"><a href="modules-compilers-and-your-first-c-program.html#cb82-1" tabindex="-1"></a><span class="fu">nano</span> Makefile</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb95-1"><a href="modules-compilers-and-your-first-c-program.html#cb95-1" tabindex="-1"></a><span class="fu">nano</span> Makefile</span></code></pre></div>
 <p>Add:</p>
 <pre class="make"><code>all:
-    gcc hello.c -o hello</code></pre>
+    gcc -Wall -O2 hello.c -o hello</code></pre>
 <p>Then run:</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb84-1"><a href="modules-compilers-and-your-first-c-program.html#cb84-1" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
-<p>The point of this early example is not to teach all of <code>make</code>, but to show how build steps can be automated and standardized.</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb97-1"><a href="modules-compilers-and-your-first-c-program.html#cb97-1" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
+<p>This is not just a convenience trick. It teaches a valuable lesson:</p>
+<blockquote>
+<p>Build steps are part of the workflow and should be made repeatable.</p>
+</blockquote>
 </div>
-<div id="where-compilation-belongs-in-the-workflow" class="section level2 hasAnchor" number="5.17">
-<h2><span class="header-section-number">5.17</span> Where compilation belongs in the workflow<a href="modules-compilers-and-your-first-c-program.html#where-compilation-belongs-in-the-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Good beginner rule:</p>
+<div id="a-more-realistic-makefile-example" class="section level2 hasAnchor" number="5.20">
+<h2><span class="header-section-number">5.20</span> A more realistic Makefile example<a href="modules-compilers-and-your-first-c-program.html#a-more-realistic-makefile-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre class="make"><code>CC=gcc
+CFLAGS=-Wall -O2
+
+all: program
+
+program: main.o helper.o
+    $(CC) $(CFLAGS) main.o helper.o -o program
+
+main.o: main.c helper.h
+    $(CC) $(CFLAGS) -c main.c
+
+helper.o: helper.c helper.h
+    $(CC) $(CFLAGS) -c helper.c
+
+clean:
+    rm -f *.o program</code></pre>
+<p>Even if students are not yet comfortable writing Makefiles from scratch, reading one helps them understand how real projects are assembled.</p>
+</div>
+<div id="where-to-compile" class="section level2 hasAnchor" number="5.21">
+<h2><span class="header-section-number">5.21</span> Where to compile<a href="modules-compilers-and-your-first-c-program.html#where-to-compile" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For small builds, compile on the login node.</p>
+<p>That is appropriate because compilation is often part of setup work. However, very large builds or special workflows may require different strategies depending on system policy and project needs.</p>
+<p>For this course, the safe beginner pattern is:</p>
 <ul>
-<li>compile on login nodes for small builds</li>
-<li>run heavier or production computations through SLURM</li>
-</ul>
-<p>This keeps the workflow aligned with the earlier distinction between setup and computation.</p>
-</div>
-<div id="run-compiled-code-through-slurm" class="section level2 hasAnchor" number="5.18">
-<h2><span class="header-section-number">5.18</span> Run compiled code through SLURM<a href="modules-compilers-and-your-first-c-program.html#run-compiled-code-through-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Create <code>run.slurm</code>:</p>
-<div class="sourceCode" id="cb85"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb85-1"><a href="modules-compilers-and-your-first-c-program.html#cb85-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb85-2"><a href="modules-compilers-and-your-first-c-program.html#cb85-2" tabindex="-1"></a><span class="co">#SBATCH -J compile_test</span></span>
-<span id="cb85-3"><a href="modules-compilers-and-your-first-c-program.html#cb85-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
-<span id="cb85-4"><a href="modules-compilers-and-your-first-c-program.html#cb85-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
-<span id="cb85-5"><a href="modules-compilers-and-your-first-c-program.html#cb85-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
-<span id="cb85-6"><a href="modules-compilers-and-your-first-c-program.html#cb85-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
-<span id="cb85-7"><a href="modules-compilers-and-your-first-c-program.html#cb85-7" tabindex="-1"></a></span>
-<span id="cb85-8"><a href="modules-compilers-and-your-first-c-program.html#cb85-8" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
-<p>Submit it:</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb86-1"><a href="modules-compilers-and-your-first-c-program.html#cb86-1" tabindex="-1"></a><span class="ex">sbatch</span> run.slurm</span></code></pre></div>
-<p>Now the compiled workflow connects directly back to the scheduler workflow from the previous chapter.</p>
-</div>
-<div id="common-beginner-failures" class="section level2 hasAnchor" number="5.19">
-<h2><span class="header-section-number">5.19</span> Common beginner failures<a href="modules-compilers-and-your-first-c-program.html#common-beginner-failures" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ul>
-<li>forgot <code>module load gcc</code></li>
-<li>typo in the source code</li>
-<li>forgot <code>-o hello</code></li>
-<li>tried to run from the wrong directory</li>
-<li>assumed compilation worked without reading the compiler output</li>
+<li>edit on the login node</li>
+<li>compile on the login node</li>
+<li>run real jobs on compute nodes via SLURM</li>
 </ul>
 </div>
-<div id="debug-checklist-for-compilation-work" class="section level2 hasAnchor" number="5.20">
-<h2><span class="header-section-number">5.20</span> Debug checklist for compilation work<a href="modules-compilers-and-your-first-c-program.html#debug-checklist-for-compilation-work" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Use this order:</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb87-1"><a href="modules-compilers-and-your-first-c-program.html#cb87-1" tabindex="-1"></a><span class="ex">module</span> list</span>
-<span id="cb87-2"><a href="modules-compilers-and-your-first-c-program.html#cb87-2" tabindex="-1"></a><span class="fu">which</span> gcc</span>
-<span id="cb87-3"><a href="modules-compilers-and-your-first-c-program.html#cb87-3" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span>
-<span id="cb87-4"><a href="modules-compilers-and-your-first-c-program.html#cb87-4" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span>
-<span id="cb87-5"><a href="modules-compilers-and-your-first-c-program.html#cb87-5" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
-<p>If the compile step fails, read the compiler message slowly. It is often telling you exactly where the problem is.</p>
+<div id="running-compiled-code-through-slurm" class="section level2 hasAnchor" number="5.22">
+<h2><span class="header-section-number">5.22</span> Running compiled code through SLURM<a href="modules-compilers-and-your-first-c-program.html#running-compiled-code-through-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Once the executable exists, a batch script can run it.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb99-1"><a href="modules-compilers-and-your-first-c-program.html#cb99-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb99-2"><a href="modules-compilers-and-your-first-c-program.html#cb99-2" tabindex="-1"></a><span class="co">#SBATCH -J c_hello</span></span>
+<span id="cb99-3"><a href="modules-compilers-and-your-first-c-program.html#cb99-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb99-4"><a href="modules-compilers-and-your-first-c-program.html#cb99-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb99-5"><a href="modules-compilers-and-your-first-c-program.html#cb99-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb99-6"><a href="modules-compilers-and-your-first-c-program.html#cb99-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb99-7"><a href="modules-compilers-and-your-first-c-program.html#cb99-7" tabindex="-1"></a><span class="co">#SBATCH -o c_hello_%j.out</span></span>
+<span id="cb99-8"><a href="modules-compilers-and-your-first-c-program.html#cb99-8" tabindex="-1"></a><span class="co">#SBATCH -e c_hello_%j.err</span></span>
+<span id="cb99-9"><a href="modules-compilers-and-your-first-c-program.html#cb99-9" tabindex="-1"></a></span>
+<span id="cb99-10"><a href="modules-compilers-and-your-first-c-program.html#cb99-10" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
+<p>Submit with:</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb100-1"><a href="modules-compilers-and-your-first-c-program.html#cb100-1" tabindex="-1"></a><span class="ex">sbatch</span> run_hello.slurm</span></code></pre></div>
+<p>This connects Chapter 4 directly to Chapter 3: building and scheduling are different phases of the workflow.</p>
 </div>
-<div id="chapter-lab-3" class="section level2 hasAnchor" number="5.21">
-<h2><span class="header-section-number">5.21</span> Chapter lab<a href="modules-compilers-and-your-first-c-program.html#chapter-lab-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="part-1-compile-a-c-program" class="section level3 hasAnchor" number="5.21.1">
-<h3><span class="header-section-number">5.21.1</span> Part 1: compile a C program<a href="modules-compilers-and-your-first-c-program.html#part-1-compile-a-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="a-practical-build-and-run-pattern" class="section level2 hasAnchor" number="5.23">
+<h2><span class="header-section-number">5.23</span> A practical build-and-run pattern<a href="modules-compilers-and-your-first-c-program.html#a-practical-build-and-run-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A typical beginner workflow might look like this:</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb101-1"><a href="modules-compilers-and-your-first-c-program.html#cb101-1" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
+<span id="cb101-2"><a href="modules-compilers-and-your-first-c-program.html#cb101-2" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-Wall</span> <span class="at">-O2</span> hello.c <span class="at">-o</span> hello</span>
+<span id="cb101-3"><a href="modules-compilers-and-your-first-c-program.html#cb101-3" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> hello</span>
+<span id="cb101-4"><a href="modules-compilers-and-your-first-c-program.html#cb101-4" tabindex="-1"></a><span class="ex">./hello</span></span>
+<span id="cb101-5"><a href="modules-compilers-and-your-first-c-program.html#cb101-5" tabindex="-1"></a><span class="ex">sbatch</span> run_hello.slurm</span></code></pre></div>
+<p>This order is instructional gold because it separates concerns clearly:</p>
 <ol style="list-style-type: decimal">
-<li>Create <code>hello.c</code>.</li>
-<li>Compile with <code>gcc hello.c -o hello</code>.</li>
-<li>Run <code>./hello</code>.</li>
+<li>load environment</li>
+<li>build executable</li>
+<li>test executable lightly</li>
+<li>run real work through the scheduler</li>
 </ol>
 </div>
-<div id="part-2-inspect-the-files" class="section level3 hasAnchor" number="5.21.2">
-<h3><span class="header-section-number">5.21.2</span> Part 2: inspect the files<a href="modules-compilers-and-your-first-c-program.html#part-2-inspect-the-files" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Use <code>ls -l</code> and note the difference between source and executable.</p>
+<div id="common-compiler-and-build-errors" class="section level2 hasAnchor" number="5.24">
+<h2><span class="header-section-number">5.24</span> Common compiler and build errors<a href="modules-compilers-and-your-first-c-program.html#common-compiler-and-build-errors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="error-type-1-syntax-problem" class="section level3 hasAnchor" number="5.24.1">
+<h3><span class="header-section-number">5.24.1</span> Error type 1: syntax problem<a href="modules-compilers-and-your-first-c-program.html#error-type-1-syntax-problem" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Symptoms:
+- missing semicolon
+- typo in a function name
+- unbalanced braces or parentheses</p>
+<p>Response:
+- read the line number
+- inspect nearby lines
+- fix syntax before trying other theories</p>
 </div>
-<div id="part-3-use-optimization" class="section level3 hasAnchor" number="5.21.3">
-<h3><span class="header-section-number">5.21.3</span> Part 3: use optimization<a href="modules-compilers-and-your-first-c-program.html#part-3-use-optimization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Compile with:</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb88-1"><a href="modules-compilers-and-your-first-c-program.html#cb88-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello_opt <span class="at">-O2</span></span></code></pre></div>
+<div id="error-type-2-missing-header" class="section level3 hasAnchor" number="5.24.2">
+<h3><span class="header-section-number">5.24.2</span> Error type 2: missing header<a href="modules-compilers-and-your-first-c-program.html#error-type-2-missing-header" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Symptoms:
+- compiler says it cannot find a header file</p>
+<p>Response:
+- check the include line
+- confirm the file exists
+- confirm search paths if using nonstandard locations</p>
 </div>
-<div id="part-4-run-through-slurm" class="section level3 hasAnchor" number="5.21.4">
-<h3><span class="header-section-number">5.21.4</span> Part 4: run through SLURM<a href="modules-compilers-and-your-first-c-program.html#part-4-run-through-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Create <code>run.slurm</code>, submit it, and inspect the output file.</p>
+<div id="error-type-3-undefined-reference" class="section level3 hasAnchor" number="5.24.3">
+<h3><span class="header-section-number">5.24.3</span> Error type 3: undefined reference<a href="modules-compilers-and-your-first-c-program.html#error-type-3-undefined-reference" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Symptoms:
+- the compiler gets farther, then the linker complains</p>
+<p>Response:
+- check whether all needed <code>.c</code> files were included
+- check whether required libraries were linked</p>
 </div>
-<div id="part-5-optional-makefile" class="section level3 hasAnchor" number="5.21.5">
-<h3><span class="header-section-number">5.21.5</span> Part 5: optional Makefile<a href="modules-compilers-and-your-first-c-program.html#part-5-optional-makefile" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Create the minimal <code>Makefile</code> and use <code>make</code>.</p>
+<div id="error-type-4-command-not-found" class="section level3 hasAnchor" number="5.24.4">
+<h3><span class="header-section-number">5.24.4</span> Error type 4: command not found<a href="modules-compilers-and-your-first-c-program.html#error-type-4-command-not-found" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Symptoms:
+- shell cannot find <code>gcc</code></p>
+<p>Response:
+- check <code>module load gcc</code>
+- run <code>which gcc</code></p>
 </div>
 </div>
-<div id="looking-ahead-4" class="section level2 hasAnchor" number="5.22">
-<h2><span class="header-section-number">5.22</span> Looking ahead<a href="modules-compilers-and-your-first-c-program.html#looking-ahead-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>The next major conceptual jump is from serial execution to parallel execution. Once you understand how to compile and run one program, you are ready to ask how that work can be spread across multiple cores, threads, or nodes using MPI and OpenMP.</p>
+<div id="failure-case-study-1-typo-in-source-code" class="section level2 hasAnchor" number="5.25">
+<h2><span class="header-section-number">5.25</span> Failure case study 1: typo in source code<a href="modules-compilers-and-your-first-c-program.html#failure-case-study-1-typo-in-source-code" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suppose you accidentally write:</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb102-1"><a href="modules-compilers-and-your-first-c-program.html#cb102-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb102-2"><a href="modules-compilers-and-your-first-c-program.html#cb102-2" tabindex="-1"></a></span>
+<span id="cb102-3"><a href="modules-compilers-and-your-first-c-program.html#cb102-3" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb102-4"><a href="modules-compilers-and-your-first-c-program.html#cb102-4" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">)</span></span>
+<span id="cb102-5"><a href="modules-compilers-and-your-first-c-program.html#cb102-5" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb102-6"><a href="modules-compilers-and-your-first-c-program.html#cb102-6" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>The missing semicolon after <code>printf</code> will prevent compilation.</p>
+<p>Lesson:
+- the executable cannot update until the source is valid</p>
+</div>
+<div id="failure-case-study-2-typo-in-the-compile-command" class="section level2 hasAnchor" number="5.26">
+<h2><span class="header-section-number">5.26</span> Failure case study 2: typo in the compile command<a href="modules-compilers-and-your-first-c-program.html#failure-case-study-2-typo-in-the-compile-command" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suppose you run:</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb103-1"><a href="modules-compilers-and-your-first-c-program.html#cb103-1" tabindex="-1"></a><span class="fu">gcc</span> hell.c <span class="at">-o</span> hello</span></code></pre></div>
+<p>but the file is actually named <code>hello.c</code>.</p>
+<p>Lesson:
+- sometimes the mistake is not in the source, but in the shell command itself</p>
+<p>Use:</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb104-1"><a href="modules-compilers-and-your-first-c-program.html#cb104-1" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
+<p>to confirm filenames rather than relying on memory.</p>
+</div>
+<div id="failure-case-study-3-object-exists-executable-is-stale" class="section level2 hasAnchor" number="5.27">
+<h2><span class="header-section-number">5.27</span> Failure case study 3: object exists, executable is stale<a href="modules-compilers-and-your-first-c-program.html#failure-case-study-3-object-exists-executable-is-stale" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suppose you edit <code>hello.c</code>, forget to rebuild, and run <code>./hello</code>.</p>
+<p>You may see old behavior and think the edits failed.</p>
+<p>What really happened is simpler:</p>
+<ul>
+<li>source changed</li>
+<li>executable did not</li>
+</ul>
+<p>Lesson:
+- rebuilding is part of the development loop</p>
+</div>
+<div id="reading-compiler-messages-calmly" class="section level2 hasAnchor" number="5.28">
+<h2><span class="header-section-number">5.28</span> Reading compiler messages calmly<a href="modules-compilers-and-your-first-c-program.html#reading-compiler-messages-calmly" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Compiler output can look intimidating because it is dense. A good beginner habit is to read it in layers:</p>
+<ol style="list-style-type: decimal">
+<li>identify the first real error</li>
+<li>find the file and line number</li>
+<li>inspect the local code near that line</li>
+<li>fix one issue at a time</li>
+<li>recompile</li>
+</ol>
+<p>Do not scroll immediately to the bottom and panic. Often the first meaningful error is the most useful one.</p>
+</div>
+<div id="good-habits-for-build-workflows" class="section level2 hasAnchor" number="5.29">
+<h2><span class="header-section-number">5.29</span> Good habits for build workflows<a href="modules-compilers-and-your-first-c-program.html#good-habits-for-build-workflows" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>load the compiler module explicitly</li>
+<li>check <code>which gcc</code> and <code>gcc --version</code></li>
+<li>keep source files organized</li>
+<li>rebuild after edits</li>
+<li>use <code>-Wall</code></li>
+<li>automate repetitive builds with <code>make</code></li>
+<li>keep run scripts separate from source files</li>
+<li>treat build commands as part of reproducible workflow documentation</li>
+</ul>
+</div>
+<div id="lab-1-build-and-run-a-first-c-program" class="section level2 hasAnchor" number="5.30">
+<h2><span class="header-section-number">5.30</span> Lab 1: build and run a first C program<a href="modules-compilers-and-your-first-c-program.html#lab-1-build-and-run-a-first-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Create <code>hello.c</code></li>
+<li>Load <code>gcc</code></li>
+<li>Compile with <code>gcc hello.c -o hello</code></li>
+<li>Run <code>./hello</code></li>
+<li>Confirm the executable exists with <code>ls -l</code></li>
+</ol>
+</div>
+<div id="lab-2-use-warnings" class="section level2 hasAnchor" number="5.31">
+<h2><span class="header-section-number">5.31</span> Lab 2: use warnings<a href="modules-compilers-and-your-first-c-program.html#lab-2-use-warnings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Recompile using <code>gcc -Wall hello.c -o hello</code></li>
+<li>Introduce a small issue</li>
+<li>Observe how warnings or errors change</li>
+<li>Fix the issue and recompile</li>
+</ol>
+</div>
+<div id="lab-3-build-a-multi-file-program" class="section level2 hasAnchor" number="5.32">
+<h2><span class="header-section-number">5.32</span> Lab 3: build a multi-file program<a href="modules-compilers-and-your-first-c-program.html#lab-3-build-a-multi-file-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Create <code>main.c</code>, <code>helper.c</code>, and <code>helper.h</code></li>
+<li>Compile them together</li>
+<li>Run the result</li>
+<li>Remove one source file from the compile command intentionally</li>
+<li>Observe and interpret the resulting error</li>
+</ol>
+</div>
+<div id="lab-4-automate-with-make" class="section level2 hasAnchor" number="5.33">
+<h2><span class="header-section-number">5.33</span> Lab 4: automate with <code>make</code><a href="modules-compilers-and-your-first-c-program.html#lab-4-automate-with-make" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Create a simple <code>Makefile</code></li>
+<li>Build with <code>make</code></li>
+<li>Edit the source</li>
+<li>Build again</li>
+<li>Explain why a Makefile is useful in repeatable workflows</li>
+</ol>
+</div>
+<div id="stretch-goal-2" class="section level2 hasAnchor" number="5.34">
+<h2><span class="header-section-number">5.34</span> Stretch goal<a href="modules-compilers-and-your-first-c-program.html#stretch-goal-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create a small program that reads input, performs a calculation, and writes output. Then:</p>
+<ul>
+<li>compile it with warnings enabled</li>
+<li>create a SLURM script to run it</li>
+<li>store source in <code>src/</code></li>
+<li>store the job script in <code>jobs/</code></li>
+<li>document the build and run commands in a <code>README.md</code></li>
+</ul>
+</div>
+<div id="key-takeaways-1" class="section level2 hasAnchor" number="5.35">
+<h2><span class="header-section-number">5.35</span> Key takeaways<a href="modules-compilers-and-your-first-c-program.html#key-takeaways-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>source code and executables are different artifacts</li>
+<li>compiler modules are part of the HPC environment</li>
+<li>compile-time and link-time errors are different kinds of failures</li>
+<li>warnings are useful, not just noise</li>
+<li>Makefiles turn repeated build steps into reproducible workflow</li>
+<li>small programs can be built on the login node, but real execution belongs under SLURM</li>
+</ul>
 
 </div>
 </div>
@@ -757,7 +1116,7 @@ helper.h</code></pre>
         </div>
       </div>
 <a href="slurm-job-scheduling-on-ls6.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="parallel-computing-with-mpi-and-openmp.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>High-Performance Computing on Lonestar6</title>
-  <meta name="description" content="High-Performance Computing on Lonestar6" />
+  <title>Chapter 6 Parallel Computing with MPI and OpenMP on LS6 | High-Performance Computing on Lonestar6</title>
+  <meta name="description" content="Chapter 6 Parallel Computing with MPI and OpenMP on LS6 | High-Performance Computing on Lonestar6" />
   <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="High-Performance Computing on Lonestar6" />
+  <meta property="og:title" content="Chapter 6 Parallel Computing with MPI and OpenMP on LS6 | High-Performance Computing on Lonestar6" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="High-Performance Computing on Lonestar6" />
+  <meta name="twitter:title" content="Chapter 6 Parallel Computing with MPI and OpenMP on LS6 | High-Performance Computing on Lonestar6" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="introduction-to-high-performance-computing-on-ls6.html"/>
+<link rel="prev" href="modules-compilers-and-your-first-c-program.html"/>
+<link rel="next" href="containers-and-reproducible-hpc-workflows.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -607,135 +607,558 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">High-Performance Computing on Lonestar6</h1>
-<p class="author"><em>Rich Herrington <br> DRI, Research Computing Services</em></p>
-</div>
-<div id="high-performance-computing-on-lonestar6" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> High-Performance Computing on Lonestar6<a href="index.html#high-performance-computing-on-lonestar6" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="welcome" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is a practical introduction to high-performance computing using the <strong>Lonestar6 (LS6)</strong> system at the Texas Advanced Computing Center (TACC). It is written for students, researchers, and new cluster users who need an operational path from first login to confident job submission.</p>
-<p>Rather than treating HPC as an abstract subject, this book treats it as a workflow:</p>
-<ol style="list-style-type: decimal">
-<li>understand the cluster</li>
-<li>work safely in Linux</li>
-<li>manage your environment</li>
+<div id="parallel-computing-with-mpi-and-openmp-on-ls6" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Parallel Computing with MPI and OpenMP on LS6<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#parallel-computing-with-mpi-and-openmp-on-ls6" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-4" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Overview<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#overview-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Up to this point, the course has focused on a basic but essential HPC workflow:</p>
+<ul>
+<li>connect to the system</li>
+<li>work safely on the login node</li>
+<li>manage files and environment modules</li>
 <li>submit jobs through SLURM</li>
-<li>compile programs</li>
-<li>scale to parallel work</li>
-<li>use containers for reproducibility</li>
-<li>complete an end-to-end capstone project</li>
+<li>compile programs from source</li>
+</ul>
+<p>The next conceptual step is <strong>parallel computing</strong>.</p>
+<p>Parallel computing is one of the main reasons HPC systems exist. A cluster is valuable not only because it is larger than a laptop, but because it allows work to be spread across multiple cores, multiple processes, and sometimes multiple nodes.</p>
+<p>This chapter introduces the two most common beginner models:</p>
+<ul>
+<li><strong>MPI</strong> for distributed-memory parallelism</li>
+<li><strong>OpenMP</strong> for shared-memory parallelism</li>
+</ul>
+<p>By the end of the chapter, you should be able to:</p>
+<ul>
+<li>explain the difference between serial and parallel execution</li>
+<li>explain the difference between processes and threads</li>
+<li>distinguish tasks, cores, and threads in a practical way</li>
+<li>describe when MPI and OpenMP are appropriate</li>
+<li>compile a small MPI program</li>
+<li>compile a small OpenMP program</li>
+<li>connect SLURM resource requests to the program model being used</li>
+</ul>
+</div>
+<div id="why-parallel-computing-matters" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Why parallel computing matters<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#why-parallel-computing-matters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A single CPU core can execute only one stream of instructions at a time. For small tasks, that may be enough. For larger tasks, it becomes a bottleneck.</p>
+<p>Parallel computing helps when:</p>
+<ul>
+<li>the work can be broken into pieces</li>
+<li>those pieces can be done at the same time</li>
+<li>the time to solution matters</li>
+<li>the dataset or simulation is large</li>
+<li>many repeated calculations must be carried out efficiently</li>
+</ul>
+<p>In practice, HPC workloads often take one of these forms:</p>
+<ul>
+<li>many independent jobs</li>
+<li>one program using multiple processes</li>
+<li>one program using multiple threads</li>
+<li>hybrid workflows combining both processes and threads</li>
+</ul>
+<p>One of the most important learning goals here is to stop treating “parallel” as one vague idea. There are different models, and the resource request should reflect the model.</p>
+</div>
+<div id="mental-model-serial-versus-parallel" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> Mental model: serial versus parallel<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mental-model-serial-versus-parallel" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A serial program performs one step after another:</p>
+<pre class="text"><code>Task 1 -&gt; Task 2 -&gt; Task 3 -&gt; Task 4</code></pre>
+<p>A parallel program attempts to perform multiple pieces of work concurrently:</p>
+<pre class="text"><code>Task 1
+Task 2    -&gt; running at the same time
+Task 3
+Task 4</code></pre>
+<p>This does <strong>not</strong> automatically guarantee a speedup. Parallelism introduces overhead, coordination, and sometimes communication cost.</p>
+<p>That is why the real question is not just:</p>
+<blockquote>
+<p>Can I use more cores?</p>
+</blockquote>
+<p>It is:</p>
+<blockquote>
+<p>Does this workload benefit from more cores, and which model fits it best?</p>
+</blockquote>
+</div>
+<div id="processes-threads-tasks-and-cores" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Processes, threads, tasks, and cores<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#processes-threads-tasks-and-cores" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>These terms often get blurred together. It is better to separate them.</p>
+<div id="core" class="section level3 hasAnchor" number="6.4.1">
+<h3><span class="header-section-number">6.4.1</span> Core<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#core" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A hardware execution unit on a CPU.</p>
+</div>
+<div id="process" class="section level3 hasAnchor" number="6.4.2">
+<h3><span class="header-section-number">6.4.2</span> Process<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>An independent running program instance with its own memory space.</p>
+</div>
+<div id="thread" class="section level3 hasAnchor" number="6.4.3">
+<h3><span class="header-section-number">6.4.3</span> Thread<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#thread" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A lighter-weight execution path within a process, usually sharing memory with other threads in that same process.</p>
+</div>
+<div id="task-in-slurm" class="section level3 hasAnchor" number="6.4.4">
+<h3><span class="header-section-number">6.4.4</span> Task (in SLURM)<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#task-in-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A scheduler concept often used to represent one process slot or one program instance in parallel execution.</p>
+<p>For beginners, the practical takeaway is:</p>
+<ul>
+<li>MPI usually maps naturally to <strong>multiple processes/tasks</strong></li>
+<li>OpenMP usually maps naturally to <strong>multiple threads on one process</strong></li>
+<li>cores are the hardware resources underneath both models</li>
+</ul>
+</div>
+</div>
+<div id="two-main-models" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Two main models<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#two-main-models" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="mpi-distributed-memory-parallelism" class="section level2 hasAnchor" number="6.6">
+<h2><span class="header-section-number">6.6</span> MPI: distributed-memory parallelism<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-distributed-memory-parallelism" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>MPI stands for <strong>Message Passing Interface</strong>.</p>
+<p>Mental model:</p>
+<ul>
+<li>you run multiple processes</li>
+<li>each process has its own memory space</li>
+<li>processes communicate by sending messages</li>
+</ul>
+<p>This model is especially useful when work is distributed across multiple processes and possibly multiple nodes.</p>
+<div id="why-mpi-matters" class="section level3 hasAnchor" number="6.6.1">
+<h3><span class="header-section-number">6.6.1</span> Why MPI matters<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#why-mpi-matters" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>MPI is a standard approach when:</p>
+<ul>
+<li>the program is written for distributed memory</li>
+<li>processes must cooperate across one or more nodes</li>
+<li>the workload scales beyond the memory or cores of a single process</li>
+</ul>
+</div>
+<div id="key-idea" class="section level3 hasAnchor" number="6.6.2">
+<h3><span class="header-section-number">6.6.2</span> Key idea<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#key-idea" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>MPI processes do not automatically share memory the way threads do. Communication must be explicit.</p>
+</div>
+</div>
+<div id="openmp-shared-memory-parallelism" class="section level2 hasAnchor" number="6.7">
+<h2><span class="header-section-number">6.7</span> OpenMP: shared-memory parallelism<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-shared-memory-parallelism" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>OpenMP is a threading model.</p>
+<p>Mental model:</p>
+<ul>
+<li>one program starts</li>
+<li>that program creates multiple threads</li>
+<li>the threads share memory inside the same node</li>
+</ul>
+<p>This model is especially useful when:</p>
+<ul>
+<li>the program is running on one node</li>
+<li>shared-memory parallelism is sufficient</li>
+<li>the work can be split across loops or sections without needing message passing</li>
+</ul>
+</div>
+<div id="a-decision-rule-for-beginners" class="section level2 hasAnchor" number="6.8">
+<h2><span class="header-section-number">6.8</span> A decision rule for beginners<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-decision-rule-for-beginners" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A useful first approximation is:</p>
+<ul>
+<li>use <strong>MPI</strong> when the workload is designed as multiple communicating processes</li>
+<li>use <strong>OpenMP</strong> when the workload is designed as multiple threads sharing memory on a node</li>
+</ul>
+<p>That is not the whole world of parallel computing, but it is a strong start.</p>
+</div>
+<div id="parallelism-is-not-the-same-as-asking-for-more-resources" class="section level2 hasAnchor" number="6.9">
+<h2><span class="header-section-number">6.9</span> Parallelism is not the same as “asking for more resources”<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#parallelism-is-not-the-same-as-asking-for-more-resources" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A repeated beginner mistake is to request more tasks or cores without changing the program.</p>
+<p>If a plain serial program is run like this:</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb107-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb107-1" tabindex="-1"></a><span class="ex">python</span> analysis.py</span></code></pre></div>
+<p>then asking for four tasks does not magically make it parallel.</p>
+<p>Similarly, an OpenMP program may request four cores, but if <code>OMP_NUM_THREADS</code> is never set, the program may not use them as intended.</p>
+<p>The scheduler grants resources. It does not rewrite your code.</p>
+</div>
+<div id="mpi-hello-world" class="section level2 hasAnchor" number="6.10">
+<h2><span class="header-section-number">6.10</span> MPI hello world<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-hello-world" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Load an MPI environment:</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb108-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb108-1" tabindex="-1"></a><span class="ex">module</span> load openmpi</span></code></pre></div>
+<p>Create <code>hello_mpi.c</code>:</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb109-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;mpi.h&gt;</span></span>
+<span id="cb109-2"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb109-3"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-3" tabindex="-1"></a></span>
+<span id="cb109-4"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-4" tabindex="-1"></a><span class="dt">int</span> main<span class="op">(</span><span class="dt">int</span> argc<span class="op">,</span> <span class="dt">char</span><span class="op">**</span> argv<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb109-5"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-5" tabindex="-1"></a>    MPI_Init<span class="op">(&amp;</span>argc<span class="op">,</span> <span class="op">&amp;</span>argv<span class="op">);</span></span>
+<span id="cb109-6"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-6" tabindex="-1"></a></span>
+<span id="cb109-7"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-7" tabindex="-1"></a>    <span class="dt">int</span> rank<span class="op">,</span> size<span class="op">;</span></span>
+<span id="cb109-8"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-8" tabindex="-1"></a>    MPI_Comm_rank<span class="op">(</span>MPI_COMM_WORLD<span class="op">,</span> <span class="op">&amp;</span>rank<span class="op">);</span></span>
+<span id="cb109-9"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-9" tabindex="-1"></a>    MPI_Comm_size<span class="op">(</span>MPI_COMM_WORLD<span class="op">,</span> <span class="op">&amp;</span>size<span class="op">);</span></span>
+<span id="cb109-10"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-10" tabindex="-1"></a></span>
+<span id="cb109-11"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-11" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello from process </span><span class="sc">%d</span><span class="st"> of </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> rank<span class="op">,</span> size<span class="op">);</span></span>
+<span id="cb109-12"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-12" tabindex="-1"></a></span>
+<span id="cb109-13"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-13" tabindex="-1"></a>    MPI_Finalize<span class="op">();</span></span>
+<span id="cb109-14"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-14" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb109-15"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb109-15" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Compile with:</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb110-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb110-1" tabindex="-1"></a><span class="ex">mpicc</span> hello_mpi.c <span class="at">-o</span> hello_mpi</span></code></pre></div>
+<p><code>mpicc</code> is a compiler wrapper that helps build MPI programs with the appropriate MPI libraries.</p>
+</div>
+<div id="a-quick-local-style-test" class="section level2 hasAnchor" number="6.11">
+<h2><span class="header-section-number">6.11</span> A quick local-style test<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-quick-local-style-test" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A short test might use:</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb111-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb111-1" tabindex="-1"></a><span class="ex">mpirun</span> <span class="at">-np</span> 4 ./hello_mpi</span></code></pre></div>
+<p>However, on a shared HPC system, real runs should usually go through SLURM so that resource allocation remains explicit and appropriate.</p>
+</div>
+<div id="mpi-through-slurm" class="section level2 hasAnchor" number="6.12">
+<h2><span class="header-section-number">6.12</span> MPI through SLURM<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-through-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Example script:</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb112-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb112-2"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-2" tabindex="-1"></a><span class="co">#SBATCH -J mpi_hello</span></span>
+<span id="cb112-3"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb112-4"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-4" tabindex="-1"></a><span class="co">#SBATCH -n 4</span></span>
+<span id="cb112-5"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb112-6"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb112-7"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-7" tabindex="-1"></a><span class="co">#SBATCH -o mpi_%j.out</span></span>
+<span id="cb112-8"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-8" tabindex="-1"></a><span class="co">#SBATCH -e mpi_%j.err</span></span>
+<span id="cb112-9"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-9" tabindex="-1"></a></span>
+<span id="cb112-10"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-10" tabindex="-1"></a><span class="ex">module</span> load openmpi</span>
+<span id="cb112-11"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-11" tabindex="-1"></a></span>
+<span id="cb112-12"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb112-12" tabindex="-1"></a><span class="ex">mpirun</span> ./hello_mpi</span></code></pre></div>
+<p>Interpretation:</p>
+<ul>
+<li><code>-N 1</code> requests one node</li>
+<li><code>-n 4</code> requests four tasks</li>
+<li>the MPI program runs as four cooperating processes</li>
+</ul>
+<p>This is a good place to reinforce the mental model:</p>
+<blockquote>
+<p>In an MPI job, tasks usually correspond to processes.</p>
+</blockquote>
+</div>
+<div id="what-should-the-output-look-like" class="section level2 hasAnchor" number="6.13">
+<h2><span class="header-section-number">6.13</span> What should the output look like?<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#what-should-the-output-look-like" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>You might see something like:</p>
+<pre class="text"><code>Hello from process 0 of 4
+Hello from process 1 of 4
+Hello from process 2 of 4
+Hello from process 3 of 4</code></pre>
+<p>The order may vary because parallel processes do not necessarily print in rank order.</p>
+<p>That in itself is an important lesson: parallel execution can produce nondeterministic ordering in output.</p>
+</div>
+<div id="openmp-hello-world" class="section level2 hasAnchor" number="6.14">
+<h2><span class="header-section-number">6.14</span> OpenMP hello world<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-hello-world" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create <code>hello_omp.c</code>:</p>
+<div class="sourceCode" id="cb114"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb114-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
+<span id="cb114-2"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;omp.h&gt;</span></span>
+<span id="cb114-3"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-3" tabindex="-1"></a></span>
+<span id="cb114-4"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-4" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
+<span id="cb114-5"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-5" tabindex="-1"></a>    <span class="pp">#pragma omp parallel</span></span>
+<span id="cb114-6"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-6" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb114-7"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-7" tabindex="-1"></a>        <span class="dt">int</span> id <span class="op">=</span> omp_get_thread_num<span class="op">();</span></span>
+<span id="cb114-8"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-8" tabindex="-1"></a>        <span class="dt">int</span> nthreads <span class="op">=</span> omp_get_num_threads<span class="op">();</span></span>
+<span id="cb114-9"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-9" tabindex="-1"></a>        printf<span class="op">(</span><span class="st">&quot;Hello from thread </span><span class="sc">%d</span><span class="st"> of </span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> id<span class="op">,</span> nthreads<span class="op">);</span></span>
+<span id="cb114-10"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-10" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb114-11"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-11" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb114-12"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb114-12" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<p>Compile with:</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb115-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb115-1" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-fopenmp</span> hello_omp.c <span class="at">-o</span> hello_omp</span></code></pre></div>
+<p>The <code>-fopenmp</code> flag enables OpenMP support.</p>
+</div>
+<div id="run-the-openmp-program" class="section level2 hasAnchor" number="6.15">
+<h2><span class="header-section-number">6.15</span> Run the OpenMP program<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#run-the-openmp-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Set the number of threads:</p>
+<div class="sourceCode" id="cb116"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb116-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb116-1" tabindex="-1"></a><span class="bu">export</span> <span class="va">OMP_NUM_THREADS</span><span class="op">=</span>4</span>
+<span id="cb116-2"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb116-2" tabindex="-1"></a><span class="ex">./hello_omp</span></span></code></pre></div>
+<p>Expected pattern:</p>
+<pre class="text"><code>Hello from thread 0 of 4
+Hello from thread 1 of 4
+Hello from thread 2 of 4
+Hello from thread 3 of 4</code></pre>
+<p>Again, output order may vary.</p>
+</div>
+<div id="openmp-through-slurm" class="section level2 hasAnchor" number="6.16">
+<h2><span class="header-section-number">6.16</span> OpenMP through SLURM<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-through-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Example script:</p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb118-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb118-2"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-2" tabindex="-1"></a><span class="co">#SBATCH -J omp_hello</span></span>
+<span id="cb118-3"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb118-4"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb118-5"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-5" tabindex="-1"></a><span class="co">#SBATCH -c 4</span></span>
+<span id="cb118-6"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-6" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb118-7"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-7" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb118-8"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-8" tabindex="-1"></a><span class="co">#SBATCH -o omp_%j.out</span></span>
+<span id="cb118-9"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-9" tabindex="-1"></a><span class="co">#SBATCH -e omp_%j.err</span></span>
+<span id="cb118-10"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-10" tabindex="-1"></a></span>
+<span id="cb118-11"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-11" tabindex="-1"></a><span class="bu">export</span> <span class="va">OMP_NUM_THREADS</span><span class="op">=</span>4</span>
+<span id="cb118-12"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-12" tabindex="-1"></a></span>
+<span id="cb118-13"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb118-13" tabindex="-1"></a><span class="ex">./hello_omp</span></span></code></pre></div>
+<p>Interpretation:</p>
+<ul>
+<li><code>-n 1</code> requests one task/process</li>
+<li><code>-c 4</code> requests four CPU cores for that task</li>
+<li><code>OMP_NUM_THREADS=4</code> tells the program to use four threads</li>
+</ul>
+<p>This is the key beginner OpenMP pattern:</p>
+<blockquote>
+<p>one process, multiple threads, one shared-memory node context</p>
+</blockquote>
+</div>
+<div id="tasks-versus-cores-why-this-confuses-people" class="section level2 hasAnchor" number="6.17">
+<h2><span class="header-section-number">6.17</span> Tasks versus cores: why this confuses people<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#tasks-versus-cores-why-this-confuses-people" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This is where many students get mixed up.</p>
+<div id="mpi-like-pattern" class="section level3 hasAnchor" number="6.17.1">
+<h3><span class="header-section-number">6.17.1</span> MPI-like pattern<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-like-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>several tasks</li>
+<li>usually one process per task</li>
+<li>communication among processes</li>
+<li>potentially across multiple nodes</li>
+</ul>
+</div>
+<div id="openmp-like-pattern" class="section level3 hasAnchor" number="6.17.2">
+<h3><span class="header-section-number">6.17.2</span> OpenMP-like pattern<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-like-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>one task</li>
+<li>several cores for that task</li>
+<li>one process creates multiple threads</li>
+<li>usually within one node</li>
+</ul>
+<p>If you remember only one practical distinction, make it this:</p>
+<blockquote>
+<p>MPI usually scales by adding processes. OpenMP usually scales by adding threads.</p>
+</blockquote>
+</div>
+</div>
+<div id="a-side-by-side-comparison" class="section level2 hasAnchor" number="6.18">
+<h2><span class="header-section-number">6.18</span> A side-by-side comparison<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-side-by-side-comparison" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="mpi-script-pattern" class="section level3 hasAnchor" number="6.18.1">
+<h3><span class="header-section-number">6.18.1</span> MPI script pattern<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-script-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb119"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb119-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb119-1" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb119-2"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb119-2" tabindex="-1"></a><span class="co">#SBATCH -n 4</span></span>
+<span id="cb119-3"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb119-3" tabindex="-1"></a><span class="ex">module</span> load openmpi</span>
+<span id="cb119-4"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb119-4" tabindex="-1"></a><span class="ex">mpirun</span> ./hello_mpi</span></code></pre></div>
+</div>
+<div id="openmp-script-pattern" class="section level3 hasAnchor" number="6.18.2">
+<h3><span class="header-section-number">6.18.2</span> OpenMP script pattern<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-script-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div class="sourceCode" id="cb120"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb120-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb120-1" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb120-2"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb120-2" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb120-3"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb120-3" tabindex="-1"></a><span class="co">#SBATCH -c 4</span></span>
+<span id="cb120-4"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb120-4" tabindex="-1"></a><span class="bu">export</span> <span class="va">OMP_NUM_THREADS</span><span class="op">=</span>4</span>
+<span id="cb120-5"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb120-5" tabindex="-1"></a><span class="ex">./hello_omp</span></span></code></pre></div>
+<p>The resource requests are different because the program models are different.</p>
+</div>
+</div>
+<div id="hybrid-thinking" class="section level2 hasAnchor" number="6.19">
+<h2><span class="header-section-number">6.19</span> Hybrid thinking<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#hybrid-thinking" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Some applications use both MPI and OpenMP.</p>
+<p>Mental model:</p>
+<pre class="text"><code>Multiple MPI processes
+        ↓
+Each process creates multiple threads</code></pre>
+<p>That can be useful, but it also makes the resource request more complex. For an introductory course, it is enough to understand the concept without requiring deep hybrid optimization.</p>
+</div>
+<div id="strong-scaling-and-weak-scaling" class="section level2 hasAnchor" number="6.20">
+<h2><span class="header-section-number">6.20</span> Strong scaling and weak scaling<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#strong-scaling-and-weak-scaling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Performance discussions often use two ideas.</p>
+<div id="strong-scaling" class="section level3 hasAnchor" number="6.20.1">
+<h3><span class="header-section-number">6.20.1</span> Strong scaling<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#strong-scaling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Same problem size, more resources.</p>
+<p>Question:
+- does runtime decrease when cores increase?</p>
+</div>
+<div id="weak-scaling" class="section level3 hasAnchor" number="6.20.2">
+<h3><span class="header-section-number">6.20.2</span> Weak scaling<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#weak-scaling" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Problem size grows as resources grow.</p>
+<p>Question:
+- can the workload size increase while runtime stays roughly manageable?</p>
+<p>These ideas matter because “faster with more cores” is not the whole story. Parallel performance depends on how the workload and resources interact.</p>
+</div>
+</div>
+<div id="why-speedup-is-not-automatic" class="section level2 hasAnchor" number="6.21">
+<h2><span class="header-section-number">6.21</span> Why speedup is not automatic<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#why-speedup-is-not-automatic" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Beginners often imagine that doubling cores should cut time in half. Real life is more complicated.</p>
+<p>Reasons speedup may fall short:</p>
+<ul>
+<li>communication overhead</li>
+<li>synchronization cost</li>
+<li>load imbalance</li>
+<li>memory bottlenecks</li>
+<li>serial parts of the code</li>
+<li>poor match between program and requested resources</li>
+</ul>
+<p>This is why performance thinking matters as much as syntax.</p>
+</div>
+<div id="a-simple-timing-habit" class="section level2 hasAnchor" number="6.22">
+<h2><span class="header-section-number">6.22</span> A simple timing habit<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-simple-timing-habit" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Use:</p>
+<div class="sourceCode" id="cb122"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb122-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb122-1" tabindex="-1"></a><span class="bu">time</span> ./hello</span></code></pre></div>
+<p>or time the relevant production code in a more meaningful example.</p>
+<p>The key lesson is that parallel claims should be supported by evidence, not assumption.</p>
+</div>
+<div id="common-beginner-mistakes-1" class="section level2 hasAnchor" number="6.23">
+<h2><span class="header-section-number">6.23</span> Common beginner mistakes<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#common-beginner-mistakes-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="mistake-1-requesting-four-tasks-for-a-serial-program" class="section level3 hasAnchor" number="6.23.1">
+<h3><span class="header-section-number">6.23.1</span> Mistake 1: requesting four tasks for a serial program<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-1-requesting-four-tasks-for-a-serial-program" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction:
+- the code remains serial unless it is written or launched in a parallel way</p>
+</div>
+<div id="mistake-2-confusing-tasks-with-threads" class="section level3 hasAnchor" number="6.23.2">
+<h3><span class="header-section-number">6.23.2</span> Mistake 2: confusing tasks with threads<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-2-confusing-tasks-with-threads" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction:
+- tasks usually correspond to processes
+- threads are created within a process</p>
+</div>
+<div id="mistake-3-using-openmp-code-without-setting-omp_num_threads" class="section level3 hasAnchor" number="6.23.3">
+<h3><span class="header-section-number">6.23.3</span> Mistake 3: using OpenMP code without setting <code>OMP_NUM_THREADS</code><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-3-using-openmp-code-without-setting-omp_num_threads" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction:
+- thread count must usually be specified deliberately</p>
+</div>
+<div id="mistake-4-running-mpi-directly-on-the-login-node-as-a-habit" class="section level3 hasAnchor" number="6.23.4">
+<h3><span class="header-section-number">6.23.4</span> Mistake 4: running MPI directly on the login node as a habit<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-4-running-mpi-directly-on-the-login-node-as-a-habit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction:
+- small tests may be possible, but real runs belong under SLURM</p>
+</div>
+<div id="mistake-5-assuming-output-order-reveals-execution-order-cleanly" class="section level3 hasAnchor" number="6.23.5">
+<h3><span class="header-section-number">6.23.5</span> Mistake 5: assuming output order reveals execution order cleanly<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-5-assuming-output-order-reveals-execution-order-cleanly" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction:
+- parallel output can interleave unpredictably</p>
+</div>
+</div>
+<div id="failure-case-study-1-resource-request-does-not-match-the-mpi-code" class="section level2 hasAnchor" number="6.24">
+<h2><span class="header-section-number">6.24</span> Failure case study 1: resource request does not match the MPI code<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#failure-case-study-1-resource-request-does-not-match-the-mpi-code" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suppose an MPI program is launched with only one task, but the student expects four processes to appear.</p>
+<p>Possible causes:
+- <code>-n</code> was set incorrectly
+- the launch command did not match the intended run
+- the program was built or run under the wrong assumptions</p>
+<p>Lesson:
+- in MPI workflows, process count is a real design parameter, not a decorative number</p>
+</div>
+<div id="failure-case-study-2-openmp-script-requests-four-cores-but-uses-one-thread" class="section level2 hasAnchor" number="6.25">
+<h2><span class="header-section-number">6.25</span> Failure case study 2: OpenMP script requests four cores but uses one thread<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#failure-case-study-2-openmp-script-requests-four-cores-but-uses-one-thread" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suppose the job script includes:</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb123-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb123-1" tabindex="-1"></a><span class="co">#SBATCH -c 4</span></span></code></pre></div>
+<p>but never sets:</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb124-1"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#cb124-1" tabindex="-1"></a><span class="bu">export</span> <span class="va">OMP_NUM_THREADS</span><span class="op">=</span>4</span></code></pre></div>
+<p>The job may use only one thread.</p>
+<p>Lesson:
+- the scheduler grants cores
+- the program still needs to be told how many threads to create</p>
+</div>
+<div id="failure-case-study-3-parallel-job-is-slower-than-the-serial-version" class="section level2 hasAnchor" number="6.26">
+<h2><span class="header-section-number">6.26</span> Failure case study 3: parallel job is slower than the serial version<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#failure-case-study-3-parallel-job-is-slower-than-the-serial-version" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Students are often surprised by this.</p>
+<p>Possible reasons:
+- the problem is too small
+- communication overhead dominates
+- startup overhead dominates
+- the implementation is inefficient
+- the resource request does not fit the code</p>
+<p>Lesson:
+- parallelism is a strategy, not a magic spell</p>
+</div>
+<div id="debugging-checklist-for-parallel-jobs" class="section level2 hasAnchor" number="6.27">
+<h2><span class="header-section-number">6.27</span> Debugging checklist for parallel jobs<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#debugging-checklist-for-parallel-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When a parallel run looks wrong, ask:</p>
+<div id="what-model-am-i-using" class="section level3 hasAnchor" number="6.27.1">
+<h3><span class="header-section-number">6.27.1</span> 1. What model am I using?<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#what-model-am-i-using" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>serial</li>
+<li>MPI</li>
+<li>OpenMP</li>
+<li>hybrid</li>
+</ul>
+</div>
+<div id="does-the-compile-step-match-the-model" class="section level3 hasAnchor" number="6.27.2">
+<h3><span class="header-section-number">6.27.2</span> 2. Does the compile step match the model?<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#does-the-compile-step-match-the-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li><code>mpicc</code> for MPI</li>
+<li><code>gcc -fopenmp</code> for OpenMP</li>
+</ul>
+</div>
+<div id="does-the-slurm-request-match-the-model" class="section level3 hasAnchor" number="6.27.3">
+<h3><span class="header-section-number">6.27.3</span> 3. Does the SLURM request match the model?<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#does-the-slurm-request-match-the-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>tasks for MPI</li>
+<li>cores/threads for OpenMP</li>
+</ul>
+</div>
+<div id="are-the-relevant-environment-variables-set" class="section level3 hasAnchor" number="6.27.4">
+<h3><span class="header-section-number">6.27.4</span> 4. Are the relevant environment variables set?<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#are-the-relevant-environment-variables-set" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>especially <code>OMP_NUM_THREADS</code></li>
+</ul>
+</div>
+<div id="what-does-the-output-file-actually-show" class="section level3 hasAnchor" number="6.27.5">
+<h3><span class="header-section-number">6.27.5</span> 5. What does the output file actually show?<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#what-does-the-output-file-actually-show" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>process counts</li>
+<li>thread counts</li>
+<li>unexpected ordering</li>
+<li>crashes or missing output</li>
+</ul>
+</div>
+<div id="is-the-workload-large-enough-to-reveal-meaningful-parallel-behavior" class="section level3 hasAnchor" number="6.27.6">
+<h3><span class="header-section-number">6.27.6</span> 6. Is the workload large enough to reveal meaningful parallel behavior?<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#is-the-workload-large-enough-to-reveal-meaningful-parallel-behavior" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Small toy problems often hide or distort scaling.</p>
+</div>
+</div>
+<div id="best-practices" class="section level2 hasAnchor" number="6.28">
+<h2><span class="header-section-number">6.28</span> Best practices<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#best-practices" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>decide first whether the code is serial, MPI, or OpenMP</li>
+<li>request resources that match the model</li>
+<li>make process and thread counts visible in output</li>
+<li>begin with small tests</li>
+<li>measure rather than assume speedup</li>
+<li>keep job scripts readable and explicit</li>
+</ul>
+</div>
+<div id="lab-1-mpi-hello-world" class="section level2 hasAnchor" number="6.29">
+<h2><span class="header-section-number">6.29</span> Lab 1: MPI hello world<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-1-mpi-hello-world" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Create <code>hello_mpi.c</code></li>
+<li>Load the MPI environment</li>
+<li>Compile with <code>mpicc</code></li>
+<li>Create a SLURM script requesting four tasks</li>
+<li>Submit the job</li>
+<li>Inspect the output and explain rank and size</li>
 </ol>
 </div>
-<div id="what-this-book-is" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> What this book is<a href="index.html#what-this-book-is" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is designed to function as:</p>
+<div id="lab-2-openmp-hello-world" class="section level2 hasAnchor" number="6.30">
+<h2><span class="header-section-number">6.30</span> Lab 2: OpenMP hello world<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-2-openmp-hello-world" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Create <code>hello_omp.c</code></li>
+<li>Compile with <code>gcc -fopenmp</code></li>
+<li>Create a SLURM script with one task and four cores</li>
+<li>Set <code>OMP_NUM_THREADS=4</code></li>
+<li>Submit the job</li>
+<li>Inspect the output and explain thread count</li>
+</ol>
+</div>
+<div id="lab-3-compare-the-models-conceptually" class="section level2 hasAnchor" number="6.31">
+<h2><span class="header-section-number">6.31</span> Lab 3: compare the models conceptually<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-3-compare-the-models-conceptually" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create a small written comparison answering:</p>
 <ul>
-<li>a textbook for a short course or workshop series</li>
-<li>a lab manual for hands-on LS6 exercises</li>
-<li>a reference guide for new HPC users</li>
-<li>a bridge from beginner Linux to production cluster workflows</li>
+<li>what is a process?</li>
+<li>what is a thread?</li>
+<li>how do the SLURM requests differ for MPI and OpenMP?</li>
+<li>when would you choose each model?</li>
 </ul>
 </div>
-<div id="who-this-book-is-for" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Who this book is for<a href="index.html#who-this-book-is-for" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This material is appropriate for:</p>
+<div id="lab-4-measure-a-tiny-scaling-experiment" class="section level2 hasAnchor" number="6.32">
+<h2><span class="header-section-number">6.32</span> Lab 4: measure a tiny scaling experiment<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-4-measure-a-tiny-scaling-experiment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For a simple parallel program:</p>
 <ul>
-<li>upper-level undergraduates</li>
-<li>graduate students beginning computational research</li>
-<li>faculty and staff new to HPC</li>
-<li>workshop participants who need a practical guide after class</li>
-<li>self-paced learners who want an LS6-centered path into HPC</li>
-</ul>
-<p>No prior cluster experience is assumed. Some command-line exposure is helpful, but the early chapters are written to reduce the barrier to entry.</p>
-</div>
-<div id="learning-goals" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Learning goals<a href="index.html#learning-goals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>By the end of the book, readers should be able to:</p>
-<ul>
-<li>explain the difference between login nodes and compute nodes</li>
-<li>connect to LS6 and work within the Linux shell</li>
-<li>manage files, directories, permissions, and environment variables</li>
-<li>use modules to load software into the current environment</li>
-<li>write, submit, monitor, and debug SLURM jobs</li>
-<li>compile and run simple C programs on the cluster</li>
-<li>distinguish serial, shared-memory, and distributed-memory workflows</li>
-<li>understand the role of containers in reproducible HPC work</li>
-<li>document a complete workflow so another researcher can repeat it</li>
+<li>run with 1, 2, and 4 processes or threads</li>
+<li>record runtimes</li>
+<li>explain whether the results are convincing or limited</li>
+<li>discuss why the speedup may not be perfectly linear</li>
 </ul>
 </div>
-<div id="course-philosophy" class="section level2 hasAnchor" number="1.5">
-<h2><span class="header-section-number">1.5</span> Course philosophy<a href="index.html#course-philosophy" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A common beginner mistake is to treat HPC as “a bigger computer.” It is better to think of HPC as a <strong>shared, scheduled, resource-managed environment</strong>.</p>
-<p>That idea affects everything in this book:</p>
+<div id="stretch-goal-3" class="section level2 hasAnchor" number="6.33">
+<h2><span class="header-section-number">6.33</span> Stretch goal<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#stretch-goal-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Create a small compute kernel that performs repeated arithmetic or loop work. Implement either:</p>
 <ul>
-<li>you do not do serious computation on login nodes</li>
-<li>your environment matters because software is often module-based</li>
-<li>your working directory matters because jobs run in specific locations</li>
-<li>your resource request matters because the scheduler allocates shared infrastructure</li>
-<li>your documentation matters because reproducibility is part of responsible computing</li>
+<li>an MPI version using multiple ranks, or</li>
+<li>an OpenMP version using multiple threads</li>
 </ul>
+<p>Then write a short reflection on whether the parallel model actually helped.</p>
 </div>
-<div id="how-chapters-are-organized" class="section level2 hasAnchor" number="1.6">
-<h2><span class="header-section-number">1.6</span> How chapters are organized<a href="index.html#how-chapters-are-organized" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Most chapters follow a common pattern:</p>
+<div id="key-takeaways-2" class="section level2 hasAnchor" number="6.34">
+<h2><span class="header-section-number">6.34</span> Key takeaways<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#key-takeaways-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li>overview</li>
-<li>mental model</li>
-<li>command examples</li>
-<li>walkthrough</li>
-<li>common mistakes</li>
-<li>debugging checklist</li>
-<li>hands-on lab</li>
-<li>stretch goal</li>
+<li>parallel computing is about matching workload structure to resource use</li>
+<li>MPI uses multiple processes and explicit communication</li>
+<li>OpenMP uses multiple threads in shared memory</li>
+<li>tasks, cores, and threads are related but not interchangeable terms</li>
+<li>SLURM grants resources; it does not automatically parallelize your program</li>
+<li>speedup should be measured, not assumed</li>
 </ul>
-<p>That structure is intentional. Many new users can reproduce commands but still feel uncertain about what the system is doing. The “mental model” sections are there to explain the logic behind the commands.</p>
-</div>
-<div id="recommended-use-in-a-course" class="section level2 hasAnchor" number="1.7">
-<h2><span class="header-section-number">1.7</span> Recommended use in a course<a href="index.html#recommended-use-in-a-course" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A natural workshop sequence is:</p>
-<ul>
-<li><strong>Workshop 1</strong>: first login, minimal Linux, first SLURM job</li>
-<li><strong>Workshop 2</strong>: job monitoring and debugging</li>
-<li><strong>Workshop 3</strong>: modules, compilers, first C program</li>
-<li><strong>Workshop 4</strong>: MPI and OpenMP foundations</li>
-<li><strong>Workshop 5</strong>: containers and reproducibility</li>
-<li><strong>Workshop 6</strong>: capstone project work session</li>
-</ul>
-<p>This book can also be taught over several weeks as an onboarding course for a research computing program.</p>
-</div>
-<div id="what-you-need-before-starting" class="section level2 hasAnchor" number="1.8">
-<h2><span class="header-section-number">1.8</span> What you need before starting<a href="index.html#what-you-need-before-starting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Before working through the book, you should have:</p>
-<ul>
-<li>an LS6 account or equivalent training account</li>
-<li>SSH access from your laptop or desktop</li>
-<li>a terminal application</li>
-<li>a text editor you are comfortable using, or willingness to use <code>nano</code></li>
-<li>a place to keep notes on commands, directory paths, and job IDs</li>
-</ul>
-</div>
-<div id="what-success-looks-like" class="section level2 hasAnchor" number="1.9">
-<h2><span class="header-section-number">1.9</span> What success looks like<a href="index.html#what-success-looks-like" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Success in this course is not memorizing every SLURM option or every Linux command. Success looks like this:</p>
-<ul>
-<li>you know where you are in the filesystem</li>
-<li>you know whether work belongs on a login node or compute node</li>
-<li>you can inspect your environment instead of guessing</li>
-<li>you can submit a job and interpret what happened</li>
-<li>you can recover from common failures by reading evidence</li>
-</ul>
-<p>That is the mindset of an effective HPC user.</p>
-</div>
-<div id="a-note-on-reproducibility" class="section level2 hasAnchor" number="1.10">
-<h2><span class="header-section-number">1.10</span> A note on reproducibility<a href="index.html#a-note-on-reproducibility" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Throughout the book, you will be encouraged to save scripts, keep meaningful file names, and write down the commands you used. These are not extra tasks. They are part of the workflow itself.</p>
-<p>In research computing, a good result that cannot be reproduced later is far less valuable than a modest result that can be rerun, explained, and shared.</p>
-</div>
-<div id="looking-ahead" class="section level2 hasAnchor" number="1.11">
-<h2><span class="header-section-number">1.11</span> Looking ahead<a href="index.html#looking-ahead" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We begin with the most important conceptual distinction in cluster computing: <strong>login nodes versus compute nodes</strong>. From there, we build the smallest practical Linux toolkit needed to complete a real workflow on LS6.</p>
 
 </div>
 </div>
@@ -744,8 +1167,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="introduction-to-high-performance-computing-on-ls6.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="modules-compilers-and-your-first-c-program.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="containers-and-reproducible-hpc-workflows.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

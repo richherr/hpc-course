@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>High-Performance Computing on Lonestar6</title>
-  <meta name="description" content="High-Performance Computing on Lonestar6" />
+  <title>Chapter 8 Capstone Project: Building an End-to-End HPC Workflow | High-Performance Computing on Lonestar6</title>
+  <meta name="description" content="Chapter 8 Capstone Project: Building an End-to-End HPC Workflow | High-Performance Computing on Lonestar6" />
   <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="High-Performance Computing on Lonestar6" />
+  <meta property="og:title" content="Chapter 8 Capstone Project: Building an End-to-End HPC Workflow | High-Performance Computing on Lonestar6" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="High-Performance Computing on Lonestar6" />
+  <meta name="twitter:title" content="Chapter 8 Capstone Project: Building an End-to-End HPC Workflow | High-Performance Computing on Lonestar6" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="introduction-to-high-performance-computing-on-ls6.html"/>
+<link rel="prev" href="containers-and-reproducible-hpc-workflows.html"/>
+<link rel="next" href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -607,135 +607,497 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">High-Performance Computing on Lonestar6</h1>
-<p class="author"><em>Rich Herrington <br> DRI, Research Computing Services</em></p>
+<div id="capstone-project-building-an-end-to-end-hpc-workflow" class="section level1 hasAnchor" number="8">
+<h1><span class="header-section-number">Chapter 8</span> Capstone Project: Building an End-to-End HPC Workflow<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#capstone-project-building-an-end-to-end-hpc-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-6" class="section level2 hasAnchor" number="8.1">
+<h2><span class="header-section-number">8.1</span> Overview<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#overview-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The capstone project is where the course stops being a list of isolated skills and becomes a coherent workflow.</p>
+<p>Earlier chapters asked you to learn pieces:</p>
+<ul>
+<li>navigate LS6 through the shell</li>
+<li>work deliberately in the filesystem</li>
+<li>manage environment modules</li>
+<li>write and submit SLURM jobs</li>
+<li>inspect output and debug failures</li>
+<li>compile software</li>
+<li>run parallel programs</li>
+<li>use containers for reproducible execution</li>
+</ul>
+<p>The capstone asks you to assemble those pieces into one documented project that another person could understand and repeat.</p>
+<p>This chapter explains:</p>
+<ul>
+<li>what a good capstone project looks like</li>
+<li>how large or small it should be</li>
+<li>how to structure the project directory</li>
+<li>what deliverables should be included</li>
+<li>how to demonstrate reproducibility and resource awareness</li>
+<li>how to write a useful debugging reflection</li>
+</ul>
 </div>
-<div id="high-performance-computing-on-lonestar6" class="section level1 hasAnchor" number="1">
-<h1><span class="header-section-number">Chapter 1</span> High-Performance Computing on Lonestar6<a href="index.html#high-performance-computing-on-lonestar6" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="welcome" class="section level2 hasAnchor" number="1.1">
-<h2><span class="header-section-number">1.1</span> Welcome<a href="index.html#welcome" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is a practical introduction to high-performance computing using the <strong>Lonestar6 (LS6)</strong> system at the Texas Advanced Computing Center (TACC). It is written for students, researchers, and new cluster users who need an operational path from first login to confident job submission.</p>
-<p>Rather than treating HPC as an abstract subject, this book treats it as a workflow:</p>
+<div id="the-philosophy-of-the-capstone" class="section level2 hasAnchor" number="8.2">
+<h2><span class="header-section-number">8.2</span> The philosophy of the capstone<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#the-philosophy-of-the-capstone" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A beginner sometimes thinks the goal of HPC is simply to “make code run.”</p>
+<p>That is not enough.</p>
+<p>A strong HPC workflow should also be:</p>
+<ul>
+<li>understandable</li>
+<li>repeatable</li>
+<li>resource-aware</li>
+<li>debuggable</li>
+<li>explainable to another researcher or student</li>
+</ul>
+<p>This is why the capstone is not only about output. It is about workflow maturity.</p>
+<p>You are showing that you can move from:</p>
+<blockquote>
+<p>“I got something to work somehow”</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p>“I understand the environment, the build process, the scheduler request, the output, and the choices I made.”</p>
+</blockquote>
+</div>
+<div id="what-counts-as-a-successful-capstone" class="section level2 hasAnchor" number="8.3">
+<h2><span class="header-section-number">8.3</span> What counts as a successful capstone<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-counts-as-a-successful-capstone" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A successful capstone does <strong>not</strong> need to be huge.</p>
+<p>A modest project can be excellent if it is:</p>
+<ul>
+<li>organized clearly</li>
+<li>run correctly through SLURM</li>
+<li>documented honestly</li>
+<li>accompanied by output and evidence</li>
+<li>explicit about what was learned</li>
+</ul>
+<p>A small project with strong workflow discipline is often much better than a giant project held together by copy-paste and guesswork.</p>
+</div>
+<div id="what-the-capstone-should-demonstrate" class="section level2 hasAnchor" number="8.4">
+<h2><span class="header-section-number">8.4</span> What the capstone should demonstrate<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-the-capstone-should-demonstrate" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>At minimum, a capstone should show that you can:</p>
+<ul>
+<li>organize a project directory on LS6</li>
+<li>prepare code or scripts intentionally</li>
+<li>load the needed environment</li>
+<li>submit at least one real job</li>
+<li>capture output and inspect it</li>
+<li>explain the resources requested</li>
+<li>diagnose or reflect on at least one issue encountered</li>
+<li>write enough documentation that another person could follow the workflow</li>
+</ul>
+<p>That last point matters. In research computing, documentation is part of the work.</p>
+</div>
+<div id="four-capstone-styles" class="section level2 hasAnchor" number="8.5">
+<h2><span class="header-section-number">8.5</span> Four capstone styles<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#four-capstone-styles" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The course supports several project styles. Choose one that fits the skills you want to emphasize.</p>
+</div>
+<div id="option-1-compile-and-run-a-c-or-c-program" class="section level2 hasAnchor" number="8.6">
+<h2><span class="header-section-number">8.6</span> Option 1: compile and run a C or C++ program<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-1-compile-and-run-a-c-or-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This is a good fit if you want to emphasize:</p>
+<ul>
+<li>compiler modules</li>
+<li>source files and executables</li>
+<li>Makefiles or build commands</li>
+<li>job submission of compiled code</li>
+</ul>
+<div id="minimum-ingredients" class="section level3 hasAnchor" number="8.6.1">
+<h3><span class="header-section-number">8.6.1</span> Minimum ingredients<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#minimum-ingredients" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>source code</li>
+<li>compile command or Makefile</li>
+<li>SLURM job script</li>
+<li>output file</li>
+<li>README describing the workflow</li>
+</ul>
+</div>
+<div id="strong-additions" class="section level3 hasAnchor" number="8.6.2">
+<h3><span class="header-section-number">8.6.2</span> Strong additions<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#strong-additions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>warnings enabled in the build</li>
+<li>small input/output example</li>
+<li>note about why the resource request is appropriate</li>
+</ul>
+</div>
+</div>
+<div id="option-2-parallel-program" class="section level2 hasAnchor" number="8.7">
+<h2><span class="header-section-number">8.7</span> Option 2: parallel program<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-2-parallel-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This is a good fit if you want to emphasize:</p>
+<ul>
+<li>MPI or OpenMP</li>
+<li>tasks versus threads</li>
+<li>matching resource requests to program structure</li>
+<li>basic scaling or comparison runs</li>
+</ul>
+<div id="minimum-ingredients-1" class="section level3 hasAnchor" number="8.7.1">
+<h3><span class="header-section-number">8.7.1</span> Minimum ingredients<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#minimum-ingredients-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>parallel source code</li>
+<li>compile step</li>
+<li>SLURM job script</li>
+<li>output from at least one successful run</li>
+<li>reflection on the parallel model used</li>
+</ul>
+</div>
+<div id="strong-additions-1" class="section level3 hasAnchor" number="8.7.2">
+<h3><span class="header-section-number">8.7.2</span> Strong additions<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#strong-additions-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>compare 1 versus 2 versus 4 tasks or threads</li>
+<li>explain whether the result was convincing</li>
+<li>discuss overhead or scaling limitations</li>
+</ul>
+</div>
+</div>
+<div id="option-3-containerized-workflow" class="section level2 hasAnchor" number="8.8">
+<h2><span class="header-section-number">8.8</span> Option 3: containerized workflow<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-3-containerized-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This is a good fit if you want to emphasize:</p>
+<ul>
+<li>reproducibility</li>
+<li>environment portability</li>
+<li>Apptainer execution</li>
+<li>explicit bind-path thinking</li>
+</ul>
+<div id="minimum-ingredients-2" class="section level3 hasAnchor" number="8.8.1">
+<h3><span class="header-section-number">8.8.1</span> Minimum ingredients<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#minimum-ingredients-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>container image or source description</li>
+<li>script or workflow executed inside the container</li>
+<li>SLURM job script</li>
+<li>explanation of bind paths</li>
+<li>output from a successful run</li>
+</ul>
+</div>
+<div id="strong-additions-2" class="section level3 hasAnchor" number="8.8.2">
+<h3><span class="header-section-number">8.8.2</span> Strong additions<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#strong-additions-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>comparison to a module-only workflow</li>
+<li>note about why the container was useful</li>
+<li>clear documentation of image source and assumptions</li>
+</ul>
+</div>
+</div>
+<div id="option-4-hybrid-workflow" class="section level2 hasAnchor" number="8.9">
+<h2><span class="header-section-number">8.9</span> Option 4: hybrid workflow<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-4-hybrid-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This option combines course ideas.</p>
+<p>Examples:
+- compiled MPI program run through SLURM
+- compiled program executed in a container
+- serial and parallel versions of the same program
+- workflow with build, execution, and post-run inspection documented end to end</p>
+<p>This option is excellent for stronger students, but it should not become complicated just for show.</p>
+</div>
+<div id="project-scale-how-big-is-big-enough" class="section level2 hasAnchor" number="8.10">
+<h2><span class="header-section-number">8.10</span> Project scale: how big is “big enough”?<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#project-scale-how-big-is-big-enough" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A common student fear is that the project must be impressive in scope.</p>
+<p>That is not the right goal.</p>
+<p>A capstone is big enough when it:</p>
+<ul>
+<li>demonstrates real HPC workflow</li>
+<li>includes documented evidence</li>
+<li>shows conscious resource use</li>
+<li>contains enough moving parts to reveal understanding</li>
+</ul>
+<p>A one-file serial program with a careful SLURM script and excellent documentation can be a better capstone than an overambitious project that no one can reproduce.</p>
+</div>
+<div id="a-recommended-directory-structure" class="section level2 hasAnchor" number="8.11">
+<h2><span class="header-section-number">8.11</span> A recommended directory structure<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#a-recommended-directory-structure" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A clean project structure helps the reader understand the workflow.</p>
+<p>Example:</p>
+<pre class="text"><code>project/
+├── src/
+├── scripts/
+├── jobs/
+├── output/
+├── env/
+└── README.md</code></pre>
+<p>Suggested meanings:</p>
+<ul>
+<li><code>src/</code> for source code</li>
+<li><code>scripts/</code> for helper scripts</li>
+<li><code>jobs/</code> for SLURM submission files</li>
+<li><code>output/</code> for job output and result files</li>
+<li><code>env/</code> for notes about modules, build steps, or container images</li>
+<li><code>README.md</code> for project explanation</li>
+</ul>
+<p>The exact names can vary, but the project should communicate structure clearly.</p>
+</div>
+<div id="what-belongs-in-the-readme" class="section level2 hasAnchor" number="8.12">
+<h2><span class="header-section-number">8.12</span> What belongs in the README<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-belongs-in-the-readme" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The README is one of the most important deliverables.</p>
+<p>At minimum, it should answer:</p>
+<ul>
+<li>What does this project do?</li>
+<li>What files matter most?</li>
+<li>What software environment is required?</li>
+<li>How do you build it?</li>
+<li>How do you run it?</li>
+<li>What output should the user expect?</li>
+<li>What did you learn or debug along the way?</li>
+</ul>
+<p>A README turns your project from a private memory into a reproducible artifact.</p>
+</div>
+<div id="reproducibility-the-real-standard" class="section level2 hasAnchor" number="8.13">
+<h2><span class="header-section-number">8.13</span> Reproducibility: the real standard<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#reproducibility-the-real-standard" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A project is reproducible when another person could follow the documented steps and obtain the same workflow behavior.</p>
+<p>That means avoiding hidden assumptions such as:</p>
+<ul>
+<li>“just run this from the right place”</li>
+<li>“use whatever module works”</li>
+<li>“it should already be installed”</li>
+<li>“I forgot exactly how I built it”</li>
+</ul>
+<p>Reproducibility is improved when you write down:</p>
+<ul>
+<li>module loads</li>
+<li>build commands</li>
+<li>job submission commands</li>
+<li>expected outputs</li>
+<li>known limitations</li>
+</ul>
+</div>
+<div id="resource-awareness-is-part-of-the-grade" class="section level2 hasAnchor" number="8.14">
+<h2><span class="header-section-number">8.14</span> Resource awareness is part of the grade<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#resource-awareness-is-part-of-the-grade" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The capstone should show that you understand the scheduler request, not just the program.</p>
+<p>You should be able to explain:</p>
+<ul>
+<li>why you requested a certain number of nodes or tasks</li>
+<li>why the wall time is reasonable</li>
+<li>whether the workload is serial, threaded, or process-based</li>
+<li>whether the request fits the program</li>
+</ul>
+<p>A capstone that asks for four tasks and runs a plain serial job should be treated as incomplete understanding, even if the job technically runs.</p>
+</div>
+<div id="debugging-reflection-is-required" class="section level2 hasAnchor" number="8.15">
+<h2><span class="header-section-number">8.15</span> Debugging reflection is required<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#debugging-reflection-is-required" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Almost every real computational workflow includes some kind of failure, revision, or adjustment.</p>
+<p>That is normal.</p>
+<p>Your project should include at least one concise debugging reflection, such as:</p>
+<ul>
+<li>a missing module load caused command failure</li>
+<li>a compile error came from a typo</li>
+<li>the job was submitted from the wrong directory</li>
+<li>an MPI task count did not match the expected process count</li>
+<li>a container could not see the intended files until a bind path was added</li>
+</ul>
+<p>The goal is not to pretend nothing went wrong. The goal is to show that you can diagnose and respond intelligently.</p>
+</div>
+<div id="example-capstone-template-1-compiled-serial-program" class="section level2 hasAnchor" number="8.16">
+<h2><span class="header-section-number">8.16</span> Example capstone template 1: compiled serial program<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#example-capstone-template-1-compiled-serial-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="files" class="section level3 hasAnchor" number="8.16.1">
+<h3><span class="header-section-number">8.16.1</span> Files<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#files" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre class="text"><code>src/hello.c
+jobs/run_hello.slurm
+README.md
+output/slurm-123456.out</code></pre>
+</div>
+<div id="workflow" class="section level3 hasAnchor" number="8.16.2">
+<h3><span class="header-section-number">8.16.2</span> Workflow<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ol style="list-style-type: decimal">
-<li>understand the cluster</li>
-<li>work safely in Linux</li>
-<li>manage your environment</li>
-<li>submit jobs through SLURM</li>
-<li>compile programs</li>
-<li>scale to parallel work</li>
-<li>use containers for reproducibility</li>
-<li>complete an end-to-end capstone project</li>
+<li>load <code>gcc</code></li>
+<li>compile <code>hello.c</code></li>
+<li>run <code>./hello</code> as a short test</li>
+<li>submit <code>jobs/run_hello.slurm</code></li>
+<li>inspect the output file</li>
+<li>document the steps in <code>README.md</code></li>
 </ol>
 </div>
-<div id="what-this-book-is" class="section level2 hasAnchor" number="1.2">
-<h2><span class="header-section-number">1.2</span> What this book is<a href="index.html#what-this-book-is" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This book is designed to function as:</p>
+<div id="what-this-demonstrates" class="section level3 hasAnchor" number="8.16.3">
+<h3><span class="header-section-number">8.16.3</span> What this demonstrates<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-this-demonstrates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>a textbook for a short course or workshop series</li>
-<li>a lab manual for hands-on LS6 exercises</li>
-<li>a reference guide for new HPC users</li>
-<li>a bridge from beginner Linux to production cluster workflows</li>
+<li>compilation</li>
+<li>executable management</li>
+<li>SLURM submission</li>
+<li>output inspection</li>
+<li>reproducibility basics</li>
 </ul>
 </div>
-<div id="who-this-book-is-for" class="section level2 hasAnchor" number="1.3">
-<h2><span class="header-section-number">1.3</span> Who this book is for<a href="index.html#who-this-book-is-for" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>This material is appropriate for:</p>
-<ul>
-<li>upper-level undergraduates</li>
-<li>graduate students beginning computational research</li>
-<li>faculty and staff new to HPC</li>
-<li>workshop participants who need a practical guide after class</li>
-<li>self-paced learners who want an LS6-centered path into HPC</li>
-</ul>
-<p>No prior cluster experience is assumed. Some command-line exposure is helpful, but the early chapters are written to reduce the barrier to entry.</p>
 </div>
-<div id="learning-goals" class="section level2 hasAnchor" number="1.4">
-<h2><span class="header-section-number">1.4</span> Learning goals<a href="index.html#learning-goals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>By the end of the book, readers should be able to:</p>
-<ul>
-<li>explain the difference between login nodes and compute nodes</li>
-<li>connect to LS6 and work within the Linux shell</li>
-<li>manage files, directories, permissions, and environment variables</li>
-<li>use modules to load software into the current environment</li>
-<li>write, submit, monitor, and debug SLURM jobs</li>
-<li>compile and run simple C programs on the cluster</li>
-<li>distinguish serial, shared-memory, and distributed-memory workflows</li>
-<li>understand the role of containers in reproducible HPC work</li>
-<li>document a complete workflow so another researcher can repeat it</li>
-</ul>
+<div id="example-capstone-template-2-openmp-program" class="section level2 hasAnchor" number="8.17">
+<h2><span class="header-section-number">8.17</span> Example capstone template 2: OpenMP program<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#example-capstone-template-2-openmp-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="files-1" class="section level3 hasAnchor" number="8.17.1">
+<h3><span class="header-section-number">8.17.1</span> Files<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#files-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre class="text"><code>src/hello_omp.c
+jobs/run_omp.slurm
+README.md
+output/omp_123456.out</code></pre>
 </div>
-<div id="course-philosophy" class="section level2 hasAnchor" number="1.5">
-<h2><span class="header-section-number">1.5</span> Course philosophy<a href="index.html#course-philosophy" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A common beginner mistake is to treat HPC as “a bigger computer.” It is better to think of HPC as a <strong>shared, scheduled, resource-managed environment</strong>.</p>
-<p>That idea affects everything in this book:</p>
+<div id="workflow-1" class="section level3 hasAnchor" number="8.17.2">
+<h3><span class="header-section-number">8.17.2</span> Workflow<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li>compile with <code>gcc -fopenmp</code></li>
+<li>request one task and multiple cores</li>
+<li>set <code>OMP_NUM_THREADS</code></li>
+<li>run through SLURM</li>
+<li>inspect output showing thread IDs</li>
+<li>explain why <code>-n 1</code> and <code>-c 4</code> make sense</li>
+</ol>
+</div>
+<div id="what-this-demonstrates-1" class="section level3 hasAnchor" number="8.17.3">
+<h3><span class="header-section-number">8.17.3</span> What this demonstrates<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-this-demonstrates-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>you do not do serious computation on login nodes</li>
-<li>your environment matters because software is often module-based</li>
-<li>your working directory matters because jobs run in specific locations</li>
-<li>your resource request matters because the scheduler allocates shared infrastructure</li>
-<li>your documentation matters because reproducibility is part of responsible computing</li>
+<li>thread-based parallelism</li>
+<li>scheduler-resource alignment</li>
+<li>explanation of model choice</li>
 </ul>
 </div>
-<div id="how-chapters-are-organized" class="section level2 hasAnchor" number="1.6">
-<h2><span class="header-section-number">1.6</span> How chapters are organized<a href="index.html#how-chapters-are-organized" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Most chapters follow a common pattern:</p>
-<ul>
-<li>overview</li>
-<li>mental model</li>
-<li>command examples</li>
-<li>walkthrough</li>
-<li>common mistakes</li>
-<li>debugging checklist</li>
-<li>hands-on lab</li>
-<li>stretch goal</li>
-</ul>
-<p>That structure is intentional. Many new users can reproduce commands but still feel uncertain about what the system is doing. The “mental model” sections are there to explain the logic behind the commands.</p>
 </div>
-<div id="recommended-use-in-a-course" class="section level2 hasAnchor" number="1.7">
-<h2><span class="header-section-number">1.7</span> Recommended use in a course<a href="index.html#recommended-use-in-a-course" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A natural workshop sequence is:</p>
-<ul>
-<li><strong>Workshop 1</strong>: first login, minimal Linux, first SLURM job</li>
-<li><strong>Workshop 2</strong>: job monitoring and debugging</li>
-<li><strong>Workshop 3</strong>: modules, compilers, first C program</li>
-<li><strong>Workshop 4</strong>: MPI and OpenMP foundations</li>
-<li><strong>Workshop 5</strong>: containers and reproducibility</li>
-<li><strong>Workshop 6</strong>: capstone project work session</li>
-</ul>
-<p>This book can also be taught over several weeks as an onboarding course for a research computing program.</p>
+<div id="example-capstone-template-3-containerized-python-script" class="section level2 hasAnchor" number="8.18">
+<h2><span class="header-section-number">8.18</span> Example capstone template 3: containerized Python script<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#example-capstone-template-3-containerized-python-script" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="files-2" class="section level3 hasAnchor" number="8.18.1">
+<h3><span class="header-section-number">8.18.1</span> Files<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#files-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<pre class="text"><code>scripts/script.py
+jobs/run_container.slurm
+env/container_notes.txt
+README.md
+output/container_py_123456.out</code></pre>
 </div>
-<div id="what-you-need-before-starting" class="section level2 hasAnchor" number="1.8">
-<h2><span class="header-section-number">1.8</span> What you need before starting<a href="index.html#what-you-need-before-starting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Before working through the book, you should have:</p>
+<div id="workflow-2" class="section level3 hasAnchor" number="8.18.2">
+<h3><span class="header-section-number">8.18.2</span> Workflow<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ol style="list-style-type: decimal">
+<li>identify or pull an image</li>
+<li>load Apptainer</li>
+<li>bind the working directory</li>
+<li>run <code>script.py</code> through the container in a SLURM job</li>
+<li>document the image source and bind assumptions</li>
+</ol>
+</div>
+<div id="what-this-demonstrates-2" class="section level3 hasAnchor" number="8.18.3">
+<h3><span class="header-section-number">8.18.3</span> What this demonstrates<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-this-demonstrates-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>an LS6 account or equivalent training account</li>
-<li>SSH access from your laptop or desktop</li>
-<li>a terminal application</li>
-<li>a text editor you are comfortable using, or willingness to use <code>nano</code></li>
-<li>a place to keep notes on commands, directory paths, and job IDs</li>
+<li>reproducible environment thinking</li>
+<li>scheduler plus container interaction</li>
+<li>path-awareness</li>
 </ul>
 </div>
-<div id="what-success-looks-like" class="section level2 hasAnchor" number="1.9">
-<h2><span class="header-section-number">1.9</span> What success looks like<a href="index.html#what-success-looks-like" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Success in this course is not memorizing every SLURM option or every Linux command. Success looks like this:</p>
+</div>
+<div id="a-grading-rubric-you-can-actually-use" class="section level2 hasAnchor" number="8.19">
+<h2><span class="header-section-number">8.19</span> A grading rubric you can actually use<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#a-grading-rubric-you-can-actually-use" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="workflow-correctness-30" class="section level3 hasAnchor" number="8.19.1">
+<h3><span class="header-section-number">8.19.1</span> Workflow correctness (30%)<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow-correctness-30" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>you know where you are in the filesystem</li>
-<li>you know whether work belongs on a login node or compute node</li>
-<li>you can inspect your environment instead of guessing</li>
-<li>you can submit a job and interpret what happened</li>
-<li>you can recover from common failures by reading evidence</li>
+<li>does the build/run path work?</li>
+<li>does the SLURM job complete?</li>
+<li>is output present?</li>
 </ul>
-<p>That is the mindset of an effective HPC user.</p>
 </div>
-<div id="a-note-on-reproducibility" class="section level2 hasAnchor" number="1.10">
-<h2><span class="header-section-number">1.10</span> A note on reproducibility<a href="index.html#a-note-on-reproducibility" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Throughout the book, you will be encouraged to save scripts, keep meaningful file names, and write down the commands you used. These are not extra tasks. They are part of the workflow itself.</p>
-<p>In research computing, a good result that cannot be reproduced later is far less valuable than a modest result that can be rerun, explained, and shared.</p>
+<div id="documentation-quality-25" class="section level3 hasAnchor" number="8.19.2">
+<h3><span class="header-section-number">8.19.2</span> Documentation quality (25%)<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#documentation-quality-25" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>is the README clear?</li>
+<li>are commands and files explained?</li>
+<li>can a reader follow the workflow?</li>
+</ul>
 </div>
-<div id="looking-ahead" class="section level2 hasAnchor" number="1.11">
-<h2><span class="header-section-number">1.11</span> Looking ahead<a href="index.html#looking-ahead" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>We begin with the most important conceptual distinction in cluster computing: <strong>login nodes versus compute nodes</strong>. From there, we build the smallest practical Linux toolkit needed to complete a real workflow on LS6.</p>
+<div id="reproducibility-20" class="section level3 hasAnchor" number="8.19.3">
+<h3><span class="header-section-number">8.19.3</span> Reproducibility (20%)<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#reproducibility-20" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>are environment assumptions explicit?</li>
+<li>are steps repeatable?</li>
+<li>are hidden dependencies minimized?</li>
+</ul>
+</div>
+<div id="resource-awareness-15" class="section level3 hasAnchor" number="8.19.4">
+<h3><span class="header-section-number">8.19.4</span> Resource awareness (15%)<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#resource-awareness-15" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>do the scheduler requests make sense?</li>
+<li>does the student understand tasks, threads, and wall time?</li>
+</ul>
+</div>
+<div id="debugging-reflection-10" class="section level3 hasAnchor" number="8.19.5">
+<h3><span class="header-section-number">8.19.5</span> Debugging reflection (10%)<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#debugging-reflection-10" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>is there an honest description of a problem and how it was fixed?</li>
+</ul>
+<p>This rubric rewards the habits the course actually teaches.</p>
+</div>
+</div>
+<div id="common-capstone-mistakes" class="section level2 hasAnchor" number="8.20">
+<h2><span class="header-section-number">8.20</span> Common capstone mistakes<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#common-capstone-mistakes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="mistake-1-no-readme" class="section level3 hasAnchor" number="8.20.1">
+<h3><span class="header-section-number">8.20.1</span> Mistake 1: no README<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-1-no-readme" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Without documentation, the project becomes difficult to interpret or reproduce.</p>
+</div>
+<div id="mistake-2-output-exists-but-no-explanation" class="section level3 hasAnchor" number="8.20.2">
+<h3><span class="header-section-number">8.20.2</span> Mistake 2: output exists, but no explanation<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-2-output-exists-but-no-explanation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A result file without workflow context is incomplete.</p>
+</div>
+<div id="mistake-3-wrong-resource-request" class="section level3 hasAnchor" number="8.20.3">
+<h3><span class="header-section-number">8.20.3</span> Mistake 3: wrong resource request<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-3-wrong-resource-request" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The project may run, but the request reveals misunderstanding.</p>
+</div>
+<div id="mistake-4-hidden-assumptions" class="section level3 hasAnchor" number="8.20.4">
+<h3><span class="header-section-number">8.20.4</span> Mistake 4: hidden assumptions<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-4-hidden-assumptions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If the project depends on unstated directory locations, modules, or files, reproducibility suffers.</p>
+</div>
+<div id="mistake-5-debugging-omitted" class="section level3 hasAnchor" number="8.20.5">
+<h3><span class="header-section-number">8.20.5</span> Mistake 5: debugging omitted<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-5-debugging-omitted" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Real workflows involve corrections. Omitting them often hides the most educational part of the work.</p>
+</div>
+</div>
+<div id="how-to-write-the-debugging-reflection" class="section level2 hasAnchor" number="8.21">
+<h2><span class="header-section-number">8.21</span> How to write the debugging reflection<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#how-to-write-the-debugging-reflection" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A good debugging reflection is short and specific.</p>
+<p>Useful structure:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Problem</strong><br />
+What went wrong?</p></li>
+<li><p><strong>Evidence</strong><br />
+What output, error file, or observation revealed it?</p></li>
+<li><p><strong>Diagnosis</strong><br />
+What caused the issue?</p></li>
+<li><p><strong>Fix</strong><br />
+What did you change?</p></li>
+<li><p><strong>Lesson learned</strong><br />
+What will you do differently next time?</p></li>
+</ol>
+<p>Example:</p>
+<blockquote>
+<p>The initial job failed because the script assumed the executable was in the current directory, but I had submitted the job from a different location. I noticed the error in the output file when the executable could not be found. I fixed the issue by submitting from the project root and using a clearer path. The lesson was that working directory assumptions should be made explicit.</p>
+</blockquote>
+</div>
+<div id="final-submission-checklist" class="section level2 hasAnchor" number="8.22">
+<h2><span class="header-section-number">8.22</span> Final submission checklist<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#final-submission-checklist" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Before turning in a capstone, ask:</p>
+<ul>
+<li>does the project directory make sense?</li>
+<li>are the important files clearly named?</li>
+<li>can I explain the resource request?</li>
+<li>do the output files support my claims?</li>
+<li>have I documented build and run steps?</li>
+<li>have I included at least one debugging reflection?</li>
+<li>could another student reproduce this?</li>
+</ul>
+</div>
+<div id="lab-draft-your-capstone-plan" class="section level2 hasAnchor" number="8.23">
+<h2><span class="header-section-number">8.23</span> Lab: draft your capstone plan<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#lab-draft-your-capstone-plan" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Before building the final project, write a one-page project plan answering:</p>
+<ul>
+<li>which capstone option will I choose?</li>
+<li>what files will I need?</li>
+<li>what environment will I load?</li>
+<li>how will I run the job?</li>
+<li>what output will I collect?</li>
+<li>what resource request makes sense?</li>
+<li>what might go wrong?</li>
+</ul>
+<p>This planning exercise often prevents weak project structure later.</p>
+</div>
+<div id="stretch-goal-5" class="section level2 hasAnchor" number="8.24">
+<h2><span class="header-section-number">8.24</span> Stretch goal<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#stretch-goal-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Add a second run or variation that compares:</p>
+<ul>
+<li>serial versus parallel</li>
+<li>containerized versus module-based</li>
+<li>one task versus several tasks</li>
+<li>one optimization level versus another</li>
+</ul>
+<p>Then discuss what changed and why.</p>
+</div>
+<div id="key-takeaways-4" class="section level2 hasAnchor" number="8.25">
+<h2><span class="header-section-number">8.25</span> Key takeaways<a href="capstone-project-building-an-end-to-end-hpc-workflow.html#key-takeaways-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>the capstone is a workflow demonstration, not just an output demonstration</li>
+<li>smaller, clearer, more reproducible projects are often better than overambitious ones</li>
+<li>README quality is a major part of project quality</li>
+<li>resource awareness and debugging reflection are essential</li>
+<li>a successful capstone shows that you understand the full path from environment setup to output interpretation</li>
+</ul>
 
 </div>
 </div>
@@ -744,8 +1106,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="introduction-to-high-performance-computing-on-ls6.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="containers-and-reproducible-hpc-workflows.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

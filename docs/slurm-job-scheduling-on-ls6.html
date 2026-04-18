@@ -245,247 +245,350 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html"><i class="fa fa-check"></i><b>4</b> SLURM Job Scheduling on LS6</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#overview-2"><i class="fa fa-check"></i><b>4.1</b> Overview</a></li>
-<li class="chapter" data-level="4.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mental-model-slurm-is-a-resource-manager"><i class="fa fa-check"></i><b>4.2</b> Mental model: SLURM is a resource manager</a></li>
+<li class="chapter" data-level="4.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mental-model-slurm-is-a-resource-manager-not-a-launch-button"><i class="fa fa-check"></i><b>4.2</b> Mental model: SLURM is a resource manager, not a launch button</a></li>
 <li class="chapter" data-level="4.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#why-clusters-use-schedulers"><i class="fa fa-check"></i><b>4.3</b> Why clusters use schedulers</a></li>
-<li class="chapter" data-level="4.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-basic-batch-workflow"><i class="fa fa-check"></i><b>4.4</b> A basic batch workflow</a></li>
-<li class="chapter" data-level="4.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#your-first-slurm-script"><i class="fa fa-check"></i><b>4.5</b> Your first SLURM script</a></li>
-<li class="chapter" data-level="4.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#reading-the-script-line-by-line"><i class="fa fa-check"></i><b>4.6</b> Reading the script line by line</a>
+<li class="chapter" data-level="4.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#the-basic-batch-workflow"><i class="fa fa-check"></i><b>4.4</b> The basic batch workflow</a></li>
+<li class="chapter" data-level="4.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#login-nodes-versus-compute-nodes"><i class="fa fa-check"></i><b>4.5</b> Login nodes versus compute nodes</a>
 <ul>
-<li class="chapter" data-level="4.6.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#shebang"><i class="fa fa-check"></i><b>4.6.1</b> Shebang</a></li>
-<li class="chapter" data-level="4.6.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#job-name"><i class="fa fa-check"></i><b>4.6.2</b> Job name</a></li>
-<li class="chapter" data-level="4.6.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#nodes"><i class="fa fa-check"></i><b>4.6.3</b> Nodes</a></li>
-<li class="chapter" data-level="4.6.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#tasks"><i class="fa fa-check"></i><b>4.6.4</b> Tasks</a></li>
-<li class="chapter" data-level="4.6.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#wall-time"><i class="fa fa-check"></i><b>4.6.5</b> Wall time</a></li>
-<li class="chapter" data-level="4.6.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#partition"><i class="fa fa-check"></i><b>4.6.6</b> Partition</a></li>
+<li class="chapter" data-level="4.5.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#login-nodes-are-for"><i class="fa fa-check"></i><b>4.5.1</b> Login nodes are for:</a></li>
+<li class="chapter" data-level="4.5.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#compute-nodes-are-for"><i class="fa fa-check"></i><b>4.5.2</b> Compute nodes are for:</a></li>
 </ul></li>
-<li class="chapter" data-level="4.7" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#submit-the-job"><i class="fa fa-check"></i><b>4.7</b> Submit the job</a></li>
-<li class="chapter" data-level="4.8" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#one-of-the-most-important-beginner-corrections"><i class="fa fa-check"></i><b>4.8</b> One of the most important beginner corrections</a></li>
-<li class="chapter" data-level="4.9" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#monitoring-queued-and-running-jobs"><i class="fa fa-check"></i><b>4.9</b> Monitoring queued and running jobs</a></li>
-<li class="chapter" data-level="4.10" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#common-slurm-job-states"><i class="fa fa-check"></i><b>4.10</b> Common SLURM job states</a></li>
-<li class="chapter" data-level="4.11" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#output-files-as-evidence"><i class="fa fa-check"></i><b>4.11</b> Output files as evidence</a></li>
-<li class="chapter" data-level="4.12" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#what-just-happened-in-the-first-example"><i class="fa fa-check"></i><b>4.12</b> What just happened in the first example?</a></li>
-<li class="chapter" data-level="4.13" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#seeing-the-distinction-between-login-and-compute-nodes"><i class="fa fa-check"></i><b>4.13</b> Seeing the distinction between login and compute nodes</a></li>
-<li class="chapter" data-level="4.14" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-longer-running-observation-job"><i class="fa fa-check"></i><b>4.14</b> A longer-running observation job</a></li>
-<li class="chapter" data-level="4.15" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#looking-backward-with-job-accounting"><i class="fa fa-check"></i><b>4.15</b> Looking backward with job accounting</a></li>
-<li class="chapter" data-level="4.16" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#cancelling-a-job"><i class="fa fa-check"></i><b>4.16</b> Cancelling a job</a></li>
-<li class="chapter" data-level="4.17" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#common-failure-patterns"><i class="fa fa-check"></i><b>4.17</b> Common failure patterns</a>
+<li class="chapter" data-level="4.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#your-first-slurm-script"><i class="fa fa-check"></i><b>4.6</b> Your first SLURM script</a></li>
+<li class="chapter" data-level="4.7" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#reading-the-script-line-by-line"><i class="fa fa-check"></i><b>4.7</b> Reading the script line by line</a>
 <ul>
-<li class="chapter" data-level="4.17.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#the-job-never-starts"><i class="fa fa-check"></i><b>4.17.1</b> 1. The job never starts</a></li>
-<li class="chapter" data-level="4.17.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#the-job-fails-immediately"><i class="fa fa-check"></i><b>4.17.2</b> 2. The job fails immediately</a></li>
-<li class="chapter" data-level="4.17.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#no-output-appears-where-you-expected"><i class="fa fa-check"></i><b>4.17.3</b> 3. No output appears where you expected</a></li>
+<li class="chapter" data-level="4.7.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#shebang"><i class="fa fa-check"></i><b>4.7.1</b> Shebang</a></li>
+<li class="chapter" data-level="4.7.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#job-name"><i class="fa fa-check"></i><b>4.7.2</b> Job name</a></li>
+<li class="chapter" data-level="4.7.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#nodes"><i class="fa fa-check"></i><b>4.7.3</b> Nodes</a></li>
+<li class="chapter" data-level="4.7.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#tasks"><i class="fa fa-check"></i><b>4.7.4</b> Tasks</a></li>
+<li class="chapter" data-level="4.7.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#wall-time"><i class="fa fa-check"></i><b>4.7.5</b> Wall time</a></li>
+<li class="chapter" data-level="4.7.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#partition"><i class="fa fa-check"></i><b>4.7.6</b> Partition</a></li>
 </ul></li>
-<li class="chapter" data-level="4.18" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#debug-from-evidence-not-guessing"><i class="fa fa-check"></i><b>4.18</b> Debug from evidence, not guessing</a>
+<li class="chapter" data-level="4.8" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#submit-the-job"><i class="fa fa-check"></i><b>4.8</b> Submit the job</a></li>
+<li class="chapter" data-level="4.9" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#check-the-queue"><i class="fa fa-check"></i><b>4.9</b> Check the queue</a></li>
+<li class="chapter" data-level="4.10" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#common-job-states"><i class="fa fa-check"></i><b>4.10</b> Common job states</a></li>
+<li class="chapter" data-level="4.11" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#output-files-are-evidence"><i class="fa fa-check"></i><b>4.11</b> Output files are evidence</a></li>
+<li class="chapter" data-level="4.12" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#what-happened-in-the-first-example"><i class="fa fa-check"></i><b>4.12</b> What happened in the first example?</a></li>
+<li class="chapter" data-level="4.13" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#resource-requests-what-you-are-really-asking-for"><i class="fa fa-check"></i><b>4.13</b> Resource requests: what you are really asking for</a>
 <ul>
-<li class="chapter" data-level="4.18.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#did-it-submit"><i class="fa fa-check"></i><b>4.18.1</b> 1. Did it submit?</a></li>
-<li class="chapter" data-level="4.18.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#did-it-run-or-finish"><i class="fa fa-check"></i><b>4.18.2</b> 2. Did it run or finish?</a></li>
-<li class="chapter" data-level="4.18.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#what-does-the-output-file-say"><i class="fa fa-check"></i><b>4.18.3</b> 3. What does the output file say?</a></li>
-<li class="chapter" data-level="4.18.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#was-the-environment-correct"><i class="fa fa-check"></i><b>4.18.4</b> 4. Was the environment correct?</a></li>
-<li class="chapter" data-level="4.18.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#was-the-job-launched-from-the-correct-working-directory"><i class="fa fa-check"></i><b>4.18.5</b> 5. Was the job launched from the correct working directory?</a></li>
+<li class="chapter" data-level="4.13.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#too-small-a-request-can-cause"><i class="fa fa-check"></i><b>4.13.1</b> Too small a request can cause:</a></li>
+<li class="chapter" data-level="4.13.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#too-large-a-request-can-cause"><i class="fa fa-check"></i><b>4.13.2</b> Too large a request can cause:</a></li>
 </ul></li>
-<li class="chapter" data-level="4.19" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#failure-based-learning-exercise"><i class="fa fa-check"></i><b>4.19</b> Failure-based learning exercise</a></li>
-<li class="chapter" data-level="4.20" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#chapter-lab-2"><i class="fa fa-check"></i><b>4.20</b> Chapter lab</a>
+<li class="chapter" data-level="4.14" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-better-beginner-script-make-the-environment-visible"><i class="fa fa-check"></i><b>4.14</b> A better beginner script: make the environment visible</a></li>
+<li class="chapter" data-level="4.15" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#the-sleep-demonstration"><i class="fa fa-check"></i><b>4.15</b> The “sleep” demonstration</a></li>
+<li class="chapter" data-level="4.16" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#why-queue-time-can-change"><i class="fa fa-check"></i><b>4.16</b> Why queue time can change</a></li>
+<li class="chapter" data-level="4.17" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#output-and-error-handling"><i class="fa fa-check"></i><b>4.17</b> Output and error handling</a></li>
+<li class="chapter" data-level="4.18" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-realistic-serial-job-pattern"><i class="fa fa-check"></i><b>4.18</b> A realistic serial job pattern</a></li>
+<li class="chapter" data-level="4.19" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-realistic-compile-and-run-pattern"><i class="fa fa-check"></i><b>4.19</b> A realistic compile-and-run pattern</a></li>
+<li class="chapter" data-level="4.20" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#common-beginner-mistakes"><i class="fa fa-check"></i><b>4.20</b> Common beginner mistakes</a>
 <ul>
-<li class="chapter" data-level="4.20.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#part-1-first-batch-job"><i class="fa fa-check"></i><b>4.20.1</b> Part 1: first batch job</a></li>
-<li class="chapter" data-level="4.20.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#part-2-observe-a-running-job"><i class="fa fa-check"></i><b>4.20.2</b> Part 2: observe a running job</a></li>
-<li class="chapter" data-level="4.20.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#part-3-change-the-resource-request"><i class="fa fa-check"></i><b>4.20.3</b> Part 3: change the resource request</a></li>
-<li class="chapter" data-level="4.20.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#part-4-load-a-module-inside-the-job"><i class="fa fa-check"></i><b>4.20.4</b> Part 4: load a module inside the job</a></li>
+<li class="chapter" data-level="4.20.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-1-assuming-sbatch-ran-the-code-right-away"><i class="fa fa-check"></i><b>4.20.1</b> Mistake 1: Assuming <code>sbatch</code> ran the code right away</a></li>
+<li class="chapter" data-level="4.20.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-2-running-heavy-work-directly-on-the-login-node"><i class="fa fa-check"></i><b>4.20.2</b> Mistake 2: Running heavy work directly on the login node</a></li>
+<li class="chapter" data-level="4.20.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-3-requesting-many-tasks-for-a-serial-program"><i class="fa fa-check"></i><b>4.20.3</b> Mistake 3: Requesting many tasks for a serial program</a></li>
+<li class="chapter" data-level="4.20.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-4-asking-for-far-too-much-wall-time"><i class="fa fa-check"></i><b>4.20.4</b> Mistake 4: Asking for far too much wall time</a></li>
+<li class="chapter" data-level="4.20.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-5-ignoring-output-files"><i class="fa fa-check"></i><b>4.20.5</b> Mistake 5: Ignoring output files</a></li>
+<li class="chapter" data-level="4.20.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#mistake-6-submitting-from-the-wrong-directory"><i class="fa fa-check"></i><b>4.20.6</b> Mistake 6: Submitting from the wrong directory</a></li>
 </ul></li>
-<li class="chapter" data-level="4.21" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#best-practices-to-keep-now"><i class="fa fa-check"></i><b>4.21</b> Best practices to keep now</a></li>
-<li class="chapter" data-level="4.22" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#looking-ahead-3"><i class="fa fa-check"></i><b>4.22</b> Looking ahead</a></li>
+<li class="chapter" data-level="4.21" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#a-debugging-checklist-for-failed-jobs"><i class="fa fa-check"></i><b>4.21</b> A debugging checklist for failed jobs</a>
+<ul>
+<li class="chapter" data-level="4.21.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#did-the-job-submit"><i class="fa fa-check"></i><b>4.21.1</b> 1. Did the job submit?</a></li>
+<li class="chapter" data-level="4.21.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#what-does-accounting-say"><i class="fa fa-check"></i><b>4.21.2</b> 2. What does accounting say?</a></li>
+<li class="chapter" data-level="4.21.3" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#what-do-the-output-and-error-files-say"><i class="fa fa-check"></i><b>4.21.3</b> 3. What do the output and error files say?</a></li>
+<li class="chapter" data-level="4.21.4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#was-the-intended-program-or-file-actually-present"><i class="fa fa-check"></i><b>4.21.4</b> 4. Was the intended program or file actually present?</a></li>
+<li class="chapter" data-level="4.21.5" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#was-the-required-software-environment-loaded"><i class="fa fa-check"></i><b>4.21.5</b> 5. Was the required software environment loaded?</a></li>
+<li class="chapter" data-level="4.21.6" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#did-the-resource-request-match-the-program-model"><i class="fa fa-check"></i><b>4.21.6</b> 6. Did the resource request match the program model?</a></li>
+</ul></li>
+<li class="chapter" data-level="4.22" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#failure-case-study-1-misspelled-command"><i class="fa fa-check"></i><b>4.22</b> Failure case study 1: misspelled command</a></li>
+<li class="chapter" data-level="4.23" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#failure-case-study-2-missing-input-file"><i class="fa fa-check"></i><b>4.23</b> Failure case study 2: missing input file</a></li>
+<li class="chapter" data-level="4.24" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#failure-case-study-3-request-does-not-match-workload"><i class="fa fa-check"></i><b>4.24</b> Failure case study 3: request does not match workload</a></li>
+<li class="chapter" data-level="4.25" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#interactive-jobs-versus-batch-jobs"><i class="fa fa-check"></i><b>4.25</b> Interactive jobs versus batch jobs</a>
+<ul>
+<li class="chapter" data-level="4.25.1" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#batch-jobs"><i class="fa fa-check"></i><b>4.25.1</b> Batch jobs</a></li>
+<li class="chapter" data-level="4.25.2" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#interactive-jobs"><i class="fa fa-check"></i><b>4.25.2</b> Interactive jobs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.26" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#best-practices-for-slurm-scripts"><i class="fa fa-check"></i><b>4.26</b> Best practices for SLURM scripts</a></li>
+<li class="chapter" data-level="4.27" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#lab-1-your-first-real-job"><i class="fa fa-check"></i><b>4.27</b> Lab 1: your first real job</a></li>
+<li class="chapter" data-level="4.28" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#lab-2-observe-a-running-job"><i class="fa fa-check"></i><b>4.28</b> Lab 2: observe a running job</a></li>
+<li class="chapter" data-level="4.29" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#lab-3-separate-standard-output-and-standard-error"><i class="fa fa-check"></i><b>4.29</b> Lab 3: separate standard output and standard error</a></li>
+<li class="chapter" data-level="4.30" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#lab-4-diagnose-a-broken-job"><i class="fa fa-check"></i><b>4.30</b> Lab 4: diagnose a broken job</a></li>
+<li class="chapter" data-level="4.31" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#stretch-goal-1"><i class="fa fa-check"></i><b>4.31</b> Stretch goal</a></li>
+<li class="chapter" data-level="4.32" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#key-takeaways"><i class="fa fa-check"></i><b>4.32</b> Key takeaways</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html"><i class="fa fa-check"></i><b>5</b> Modules, Compilers, and Your First C Program</a>
 <ul>
 <li class="chapter" data-level="5.1" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#overview-3"><i class="fa fa-check"></i><b>5.1</b> Overview</a></li>
 <li class="chapter" data-level="5.2" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#mental-model-source-code-becomes-an-executable"><i class="fa fa-check"></i><b>5.2</b> Mental model: source code becomes an executable</a></li>
 <li class="chapter" data-level="5.3" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#why-compilation-matters-on-clusters"><i class="fa fa-check"></i><b>5.3</b> Why compilation matters on clusters</a></li>
-<li class="chapter" data-level="5.4" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#two-compilers-you-will-hear-about-often"><i class="fa fa-check"></i><b>5.4</b> Two compilers you will hear about often</a></li>
-<li class="chapter" data-level="5.5" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#modules-first-then-compilation"><i class="fa fa-check"></i><b>5.5</b> Modules first, then compilation</a></li>
-<li class="chapter" data-level="5.6" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#confirm-which-compiler-you-are-using"><i class="fa fa-check"></i><b>5.6</b> Confirm which compiler you are using</a></li>
-<li class="chapter" data-level="5.7" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#your-first-c-program"><i class="fa fa-check"></i><b>5.7</b> Your first C program</a></li>
-<li class="chapter" data-level="5.8" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#compile-the-program"><i class="fa fa-check"></i><b>5.8</b> Compile the program</a></li>
-<li class="chapter" data-level="5.9" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#run-the-executable"><i class="fa fa-check"></i><b>5.9</b> Run the executable</a></li>
-<li class="chapter" data-level="5.10" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#inspect-what-was-created"><i class="fa fa-check"></i><b>5.10</b> Inspect what was created</a></li>
-<li class="chapter" data-level="5.11" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#what-just-happened-1"><i class="fa fa-check"></i><b>5.11</b> What just happened?</a></li>
-<li class="chapter" data-level="5.12" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#optimization-flags"><i class="fa fa-check"></i><b>5.12</b> Optimization flags</a></li>
-<li class="chapter" data-level="5.13" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#a-brief-note-on-c"><i class="fa fa-check"></i><b>5.13</b> A brief note on C++</a></li>
-<li class="chapter" data-level="5.14" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#multiple-file-programs"><i class="fa fa-check"></i><b>5.14</b> Multiple-file programs</a></li>
-<li class="chapter" data-level="5.15" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#header-files"><i class="fa fa-check"></i><b>5.15</b> Header files</a></li>
-<li class="chapter" data-level="5.16" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#automating-builds-with-make"><i class="fa fa-check"></i><b>5.16</b> Automating builds with <code>make</code></a></li>
-<li class="chapter" data-level="5.17" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#where-compilation-belongs-in-the-workflow"><i class="fa fa-check"></i><b>5.17</b> Where compilation belongs in the workflow</a></li>
-<li class="chapter" data-level="5.18" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#run-compiled-code-through-slurm"><i class="fa fa-check"></i><b>5.18</b> Run compiled code through SLURM</a></li>
-<li class="chapter" data-level="5.19" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#common-beginner-failures"><i class="fa fa-check"></i><b>5.19</b> Common beginner failures</a></li>
-<li class="chapter" data-level="5.20" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#debug-checklist-for-compilation-work"><i class="fa fa-check"></i><b>5.20</b> Debug checklist for compilation work</a></li>
-<li class="chapter" data-level="5.21" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#chapter-lab-3"><i class="fa fa-check"></i><b>5.21</b> Chapter lab</a>
+<li class="chapter" data-level="5.4" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#modules-come-before-compilers"><i class="fa fa-check"></i><b>5.4</b> Modules come before compilers</a></li>
+<li class="chapter" data-level="5.5" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#verify-the-compiler-instead-of-guessing"><i class="fa fa-check"></i><b>5.5</b> Verify the compiler instead of guessing</a></li>
+<li class="chapter" data-level="5.6" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#your-first-c-program"><i class="fa fa-check"></i><b>5.6</b> Your first C program</a></li>
+<li class="chapter" data-level="5.7" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#compile-the-program"><i class="fa fa-check"></i><b>5.7</b> Compile the program</a></li>
+<li class="chapter" data-level="5.8" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#run-the-executable"><i class="fa fa-check"></i><b>5.8</b> Run the executable</a></li>
+<li class="chapter" data-level="5.9" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#inspect-the-directory"><i class="fa fa-check"></i><b>5.9</b> Inspect the directory</a></li>
+<li class="chapter" data-level="5.10" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#what-just-happened-1"><i class="fa fa-check"></i><b>5.10</b> What just happened?</a></li>
+<li class="chapter" data-level="5.11" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#compile-versus-link-a-useful-beginner-distinction"><i class="fa fa-check"></i><b>5.11</b> Compile versus link: a useful beginner distinction</a>
 <ul>
-<li class="chapter" data-level="5.21.1" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#part-1-compile-a-c-program"><i class="fa fa-check"></i><b>5.21.1</b> Part 1: compile a C program</a></li>
-<li class="chapter" data-level="5.21.2" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#part-2-inspect-the-files"><i class="fa fa-check"></i><b>5.21.2</b> Part 2: inspect the files</a></li>
-<li class="chapter" data-level="5.21.3" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#part-3-use-optimization"><i class="fa fa-check"></i><b>5.21.3</b> Part 3: use optimization</a></li>
-<li class="chapter" data-level="5.21.4" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#part-4-run-through-slurm"><i class="fa fa-check"></i><b>5.21.4</b> Part 4: run through SLURM</a></li>
-<li class="chapter" data-level="5.21.5" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#part-5-optional-makefile"><i class="fa fa-check"></i><b>5.21.5</b> Part 5: optional Makefile</a></li>
+<li class="chapter" data-level="5.11.1" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#compilation"><i class="fa fa-check"></i><b>5.11.1</b> Compilation</a></li>
+<li class="chapter" data-level="5.11.2" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#linking"><i class="fa fa-check"></i><b>5.11.2</b> Linking</a></li>
 </ul></li>
-<li class="chapter" data-level="5.22" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#looking-ahead-4"><i class="fa fa-check"></i><b>5.22</b> Looking ahead</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html"><i class="fa fa-check"></i><b>6</b> Parallel Computing with MPI and OpenMP</a>
+<li class="chapter" data-level="5.12" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#compile-time-errors"><i class="fa fa-check"></i><b>5.12</b> Compile-time errors</a></li>
+<li class="chapter" data-level="5.13" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#link-time-errors"><i class="fa fa-check"></i><b>5.13</b> Link-time errors</a></li>
+<li class="chapter" data-level="5.14" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#a-simple-multiple-file-example"><i class="fa fa-check"></i><b>5.14</b> A simple multiple-file example</a>
 <ul>
-<li class="chapter" data-level="6.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#overview-4"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
-<li class="chapter" data-level="6.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mental-model-why-parallel-computing"><i class="fa fa-check"></i><b>6.2</b> Mental Model: Why Parallel Computing?</a></li>
-<li class="chapter" data-level="6.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#visual-serial-vs-parallel"><i class="fa fa-check"></i><b>6.3</b> Visual: Serial vs Parallel</a></li>
-<li class="chapter" data-level="6.4" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#two-main-models"><i class="fa fa-check"></i><b>6.4</b> Two Main Models</a>
-<ul>
-<li class="chapter" data-level="6.4.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mpi-message-passing-interface"><i class="fa fa-check"></i><b>6.4.1</b> MPI (Message Passing Interface)</a></li>
-<li class="chapter" data-level="6.4.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#openmp"><i class="fa fa-check"></i><b>6.4.2</b> OpenMP</a></li>
+<li class="chapter" data-level="5.14.1" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#main.c"><i class="fa fa-check"></i><b>5.14.1</b> <code>main.c</code></a></li>
+<li class="chapter" data-level="5.14.2" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#helper.h"><i class="fa fa-check"></i><b>5.14.2</b> <code>helper.h</code></a></li>
+<li class="chapter" data-level="5.14.3" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#helper.c"><i class="fa fa-check"></i><b>5.14.3</b> <code>helper.c</code></a></li>
 </ul></li>
-<li class="chapter" data-level="6.5" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mental-model-processes-vs-threads"><i class="fa fa-check"></i><b>6.5</b> Mental Model: Processes vs Threads</a></li>
-<li class="chapter" data-level="6.6" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#loading-mpi"><i class="fa fa-check"></i><b>6.6</b> Loading MPI</a></li>
-<li class="chapter" data-level="6.7" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mpi-hello-world-c"><i class="fa fa-check"></i><b>6.7</b> MPI Hello World (C)</a></li>
-<li class="chapter" data-level="6.8" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#compile-mpi-program"><i class="fa fa-check"></i><b>6.8</b> Compile MPI Program</a></li>
-<li class="chapter" data-level="6.9" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#run-locally-for-testing"><i class="fa fa-check"></i><b>6.9</b> Run Locally for Testing</a></li>
-<li class="chapter" data-level="6.10" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mpi-job-script"><i class="fa fa-check"></i><b>6.10</b> MPI Job Script</a></li>
-<li class="chapter" data-level="6.11" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#expected-output"><i class="fa fa-check"></i><b>6.11</b> Expected Output</a></li>
-<li class="chapter" data-level="6.12" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#openmp-example"><i class="fa fa-check"></i><b>6.12</b> OpenMP Example</a></li>
-<li class="chapter" data-level="6.13" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#compile-openmp-program"><i class="fa fa-check"></i><b>6.13</b> Compile OpenMP Program</a></li>
-<li class="chapter" data-level="6.14" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#run-openmp"><i class="fa fa-check"></i><b>6.14</b> Run OpenMP</a></li>
-<li class="chapter" data-level="6.15" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#openmp-slurm-script"><i class="fa fa-check"></i><b>6.15</b> OpenMP SLURM Script</a></li>
-<li class="chapter" data-level="6.16" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#hybrid-concept"><i class="fa fa-check"></i><b>6.16</b> Hybrid Concept</a></li>
-<li class="chapter" data-level="6.17" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#mental-model"><i class="fa fa-check"></i><b>6.17</b> Mental Model</a></li>
-<li class="chapter" data-level="6.18" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#performance-thinking"><i class="fa fa-check"></i><b>6.18</b> Performance Thinking</a>
+<li class="chapter" data-level="5.15" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#header-files-as-interfaces"><i class="fa fa-check"></i><b>5.15</b> Header files as interfaces</a></li>
+<li class="chapter" data-level="5.16" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#optimization-flags"><i class="fa fa-check"></i><b>5.16</b> Optimization flags</a></li>
+<li class="chapter" data-level="5.17" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#warnings-are-not-noise"><i class="fa fa-check"></i><b>5.17</b> Warnings are not noise</a></li>
+<li class="chapter" data-level="5.18" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#a-brief-note-on-c"><i class="fa fa-check"></i><b>5.18</b> A brief note on C++</a></li>
+<li class="chapter" data-level="5.19" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#makefiles-why-build-automation-exists"><i class="fa fa-check"></i><b>5.19</b> Makefiles: why build automation exists</a></li>
+<li class="chapter" data-level="5.20" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#a-more-realistic-makefile-example"><i class="fa fa-check"></i><b>5.20</b> A more realistic Makefile example</a></li>
+<li class="chapter" data-level="5.21" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#where-to-compile"><i class="fa fa-check"></i><b>5.21</b> Where to compile</a></li>
+<li class="chapter" data-level="5.22" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#running-compiled-code-through-slurm"><i class="fa fa-check"></i><b>5.22</b> Running compiled code through SLURM</a></li>
+<li class="chapter" data-level="5.23" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#a-practical-build-and-run-pattern"><i class="fa fa-check"></i><b>5.23</b> A practical build-and-run pattern</a></li>
+<li class="chapter" data-level="5.24" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#common-compiler-and-build-errors"><i class="fa fa-check"></i><b>5.24</b> Common compiler and build errors</a>
 <ul>
-<li class="chapter" data-level="6.18.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#strong-scaling"><i class="fa fa-check"></i><b>6.18.1</b> Strong Scaling</a></li>
-<li class="chapter" data-level="6.18.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#weak-scaling"><i class="fa fa-check"></i><b>6.18.2</b> Weak Scaling</a></li>
-<li class="chapter" data-level="6.18.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#simple-timing-example"><i class="fa fa-check"></i><b>6.18.3</b> Simple Timing Example</a></li>
+<li class="chapter" data-level="5.24.1" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#error-type-1-syntax-problem"><i class="fa fa-check"></i><b>5.24.1</b> Error type 1: syntax problem</a></li>
+<li class="chapter" data-level="5.24.2" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#error-type-2-missing-header"><i class="fa fa-check"></i><b>5.24.2</b> Error type 2: missing header</a></li>
+<li class="chapter" data-level="5.24.3" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#error-type-3-undefined-reference"><i class="fa fa-check"></i><b>5.24.3</b> Error type 3: undefined reference</a></li>
+<li class="chapter" data-level="5.24.4" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#error-type-4-command-not-found"><i class="fa fa-check"></i><b>5.24.4</b> Error type 4: command not found</a></li>
 </ul></li>
-<li class="chapter" data-level="6.19" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#common-mistakes"><i class="fa fa-check"></i><b>6.19</b> Common Mistakes</a></li>
-<li class="chapter" data-level="6.20" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#debugging-checklist"><i class="fa fa-check"></i><b>6.20</b> Debugging Checklist</a>
+<li class="chapter" data-level="5.25" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#failure-case-study-1-typo-in-source-code"><i class="fa fa-check"></i><b>5.25</b> Failure case study 1: typo in source code</a></li>
+<li class="chapter" data-level="5.26" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#failure-case-study-2-typo-in-the-compile-command"><i class="fa fa-check"></i><b>5.26</b> Failure case study 2: typo in the compile command</a></li>
+<li class="chapter" data-level="5.27" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#failure-case-study-3-object-exists-executable-is-stale"><i class="fa fa-check"></i><b>5.27</b> Failure case study 3: object exists, executable is stale</a></li>
+<li class="chapter" data-level="5.28" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#reading-compiler-messages-calmly"><i class="fa fa-check"></i><b>5.28</b> Reading compiler messages calmly</a></li>
+<li class="chapter" data-level="5.29" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#good-habits-for-build-workflows"><i class="fa fa-check"></i><b>5.29</b> Good habits for build workflows</a></li>
+<li class="chapter" data-level="5.30" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#lab-1-build-and-run-a-first-c-program"><i class="fa fa-check"></i><b>5.30</b> Lab 1: build and run a first C program</a></li>
+<li class="chapter" data-level="5.31" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#lab-2-use-warnings"><i class="fa fa-check"></i><b>5.31</b> Lab 2: use warnings</a></li>
+<li class="chapter" data-level="5.32" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#lab-3-build-a-multi-file-program"><i class="fa fa-check"></i><b>5.32</b> Lab 3: build a multi-file program</a></li>
+<li class="chapter" data-level="5.33" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#lab-4-automate-with-make"><i class="fa fa-check"></i><b>5.33</b> Lab 4: automate with <code>make</code></a></li>
+<li class="chapter" data-level="5.34" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#stretch-goal-2"><i class="fa fa-check"></i><b>5.34</b> Stretch goal</a></li>
+<li class="chapter" data-level="5.35" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#key-takeaways-1"><i class="fa fa-check"></i><b>5.35</b> Key takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html"><i class="fa fa-check"></i><b>6</b> Parallel Computing with MPI and OpenMP on LS6</a>
 <ul>
-<li class="chapter" data-level="6.20.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-job"><i class="fa fa-check"></i><b>6.20.1</b> Check job:</a></li>
-<li class="chapter" data-level="6.20.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-output"><i class="fa fa-check"></i><b>6.20.2</b> Check output:</a></li>
-<li class="chapter" data-level="6.20.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-modules"><i class="fa fa-check"></i><b>6.20.3</b> Check modules:</a></li>
-<li class="chapter" data-level="6.20.4" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#check-resource-request"><i class="fa fa-check"></i><b>6.20.4</b> Check resource request:</a></li>
-</ul></li>
-<li class="chapter" data-level="6.21" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#lab-5-parallel-computing"><i class="fa fa-check"></i><b>6.21</b> Lab 5 — Parallel Computing</a>
+<li class="chapter" data-level="6.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#overview-4"><i class="fa fa-check"></i><b>6.1</b> Overview</a></li>
+<li class="chapter" data-level="6.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#why-parallel-computing-matters"><i class="fa fa-check"></i><b>6.2</b> Why parallel computing matters</a></li>
+<li class="chapter" data-level="6.3" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mental-model-serial-versus-parallel"><i class="fa fa-check"></i><b>6.3</b> Mental model: serial versus parallel</a></li>
+<li class="chapter" data-level="6.4" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#processes-threads-tasks-and-cores"><i class="fa fa-check"></i><b>6.4</b> Processes, threads, tasks, and cores</a>
 <ul>
-<li class="chapter" data-level="6.21.1" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-1-mpi"><i class="fa fa-check"></i><b>6.21.1</b> Part 1: MPI</a></li>
-<li class="chapter" data-level="6.21.2" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-2-openmp"><i class="fa fa-check"></i><b>6.21.2</b> Part 2: OpenMP</a></li>
-<li class="chapter" data-level="6.21.3" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-3-compare"><i class="fa fa-check"></i><b>6.21.3</b> Part 3: Compare</a></li>
-<li class="chapter" data-level="6.21.4" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#part-4-scaling-experiment"><i class="fa fa-check"></i><b>6.21.4</b> Part 4: Scaling Experiment</a></li>
+<li class="chapter" data-level="6.4.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#core"><i class="fa fa-check"></i><b>6.4.1</b> Core</a></li>
+<li class="chapter" data-level="6.4.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#process"><i class="fa fa-check"></i><b>6.4.2</b> Process</a></li>
+<li class="chapter" data-level="6.4.3" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#thread"><i class="fa fa-check"></i><b>6.4.3</b> Thread</a></li>
+<li class="chapter" data-level="6.4.4" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#task-in-slurm"><i class="fa fa-check"></i><b>6.4.4</b> Task (in SLURM)</a></li>
 </ul></li>
-<li class="chapter" data-level="6.22" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#stretch-goal-1"><i class="fa fa-check"></i><b>6.22</b> Stretch Goal</a></li>
-<li class="chapter" data-level="6.23" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#transition"><i class="fa fa-check"></i><b>6.23</b> Transition</a></li>
-<li class="chapter" data-level="6.24" data-path="parallel-computing-with-mpi-and-openmp.html"><a href="parallel-computing-with-mpi-and-openmp.html#key-takeaways"><i class="fa fa-check"></i><b>6.24</b> Key Takeaways</a></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html"><i class="fa fa-check"></i><b>7</b> Containers and Reproducible HPC</a>
+<li class="chapter" data-level="6.5" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#two-main-models"><i class="fa fa-check"></i><b>6.5</b> Two main models</a></li>
+<li class="chapter" data-level="6.6" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-distributed-memory-parallelism"><i class="fa fa-check"></i><b>6.6</b> MPI: distributed-memory parallelism</a>
 <ul>
-<li class="chapter" data-level="7.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#overview-5"><i class="fa fa-check"></i><b>7.1</b> Overview</a></li>
-<li class="chapter" data-level="7.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#mental-model-what-is-a-container"><i class="fa fa-check"></i><b>7.2</b> Mental Model: What is a Container?</a></li>
-<li class="chapter" data-level="7.3" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#visual-container-concept"><i class="fa fa-check"></i><b>7.3</b> Visual: Container Concept</a></li>
-<li class="chapter" data-level="7.4" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#why-containers-matter-in-hpc"><i class="fa fa-check"></i><b>7.4</b> Why Containers Matter in HPC</a></li>
-<li class="chapter" data-level="7.5" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#docker-vs-apptainer"><i class="fa fa-check"></i><b>7.5</b> Docker vs Apptainer</a>
-<ul>
-<li class="chapter" data-level="7.5.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#docker"><i class="fa fa-check"></i><b>7.5.1</b> Docker</a></li>
-<li class="chapter" data-level="7.5.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#apptainer"><i class="fa fa-check"></i><b>7.5.2</b> Apptainer</a></li>
+<li class="chapter" data-level="6.6.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#why-mpi-matters"><i class="fa fa-check"></i><b>6.6.1</b> Why MPI matters</a></li>
+<li class="chapter" data-level="6.6.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#key-idea"><i class="fa fa-check"></i><b>6.6.2</b> Key idea</a></li>
 </ul></li>
-<li class="chapter" data-level="7.6" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#mental-model-1"><i class="fa fa-check"></i><b>7.6</b> Mental Model</a></li>
-<li class="chapter" data-level="7.7" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#checking-for-apptainer"><i class="fa fa-check"></i><b>7.7</b> Checking for Apptainer</a></li>
-<li class="chapter" data-level="7.8" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#pulling-a-container"><i class="fa fa-check"></i><b>7.8</b> Pulling a Container</a></li>
-<li class="chapter" data-level="7.9" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#running-a-container"><i class="fa fa-check"></i><b>7.9</b> Running a Container</a></li>
-<li class="chapter" data-level="7.10" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#interactive-shell"><i class="fa fa-check"></i><b>7.10</b> Interactive Shell</a></li>
-<li class="chapter" data-level="7.11" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#mental-model-what-just-happened"><i class="fa fa-check"></i><b>7.11</b> Mental Model: What Just Happened?</a></li>
-<li class="chapter" data-level="7.12" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#running-python-in-a-container"><i class="fa fa-check"></i><b>7.12</b> Running Python in a Container</a></li>
-<li class="chapter" data-level="7.13" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#binding-directories"><i class="fa fa-check"></i><b>7.13</b> Binding Directories</a></li>
-<li class="chapter" data-level="7.14" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#slurm-containers"><i class="fa fa-check"></i><b>7.14</b> SLURM + Containers</a></li>
-<li class="chapter" data-level="7.15" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#running-applications-in-containers"><i class="fa fa-check"></i><b>7.15</b> Running Applications in Containers</a></li>
-<li class="chapter" data-level="7.16" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#comparing-workflows"><i class="fa fa-check"></i><b>7.16</b> Comparing Workflows</a>
+<li class="chapter" data-level="6.7" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-shared-memory-parallelism"><i class="fa fa-check"></i><b>6.7</b> OpenMP: shared-memory parallelism</a></li>
+<li class="chapter" data-level="6.8" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-decision-rule-for-beginners"><i class="fa fa-check"></i><b>6.8</b> A decision rule for beginners</a></li>
+<li class="chapter" data-level="6.9" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#parallelism-is-not-the-same-as-asking-for-more-resources"><i class="fa fa-check"></i><b>6.9</b> Parallelism is not the same as “asking for more resources”</a></li>
+<li class="chapter" data-level="6.10" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-hello-world"><i class="fa fa-check"></i><b>6.10</b> MPI hello world</a></li>
+<li class="chapter" data-level="6.11" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-quick-local-style-test"><i class="fa fa-check"></i><b>6.11</b> A quick local-style test</a></li>
+<li class="chapter" data-level="6.12" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-through-slurm"><i class="fa fa-check"></i><b>6.12</b> MPI through SLURM</a></li>
+<li class="chapter" data-level="6.13" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#what-should-the-output-look-like"><i class="fa fa-check"></i><b>6.13</b> What should the output look like?</a></li>
+<li class="chapter" data-level="6.14" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-hello-world"><i class="fa fa-check"></i><b>6.14</b> OpenMP hello world</a></li>
+<li class="chapter" data-level="6.15" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#run-the-openmp-program"><i class="fa fa-check"></i><b>6.15</b> Run the OpenMP program</a></li>
+<li class="chapter" data-level="6.16" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-through-slurm"><i class="fa fa-check"></i><b>6.16</b> OpenMP through SLURM</a></li>
+<li class="chapter" data-level="6.17" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#tasks-versus-cores-why-this-confuses-people"><i class="fa fa-check"></i><b>6.17</b> Tasks versus cores: why this confuses people</a>
 <ul>
-<li class="chapter" data-level="7.16.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#without-container"><i class="fa fa-check"></i><b>7.16.1</b> Without container</a></li>
-<li class="chapter" data-level="7.16.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#with-container"><i class="fa fa-check"></i><b>7.16.2</b> With container</a></li>
+<li class="chapter" data-level="6.17.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-like-pattern"><i class="fa fa-check"></i><b>6.17.1</b> MPI-like pattern</a></li>
+<li class="chapter" data-level="6.17.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-like-pattern"><i class="fa fa-check"></i><b>6.17.2</b> OpenMP-like pattern</a></li>
 </ul></li>
-<li class="chapter" data-level="7.17" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#reproducibility"><i class="fa fa-check"></i><b>7.17</b> Reproducibility</a></li>
-<li class="chapter" data-level="7.18" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#common-mistakes-1"><i class="fa fa-check"></i><b>7.18</b> Common Mistakes</a></li>
-<li class="chapter" data-level="7.19" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#storage-considerations"><i class="fa fa-check"></i><b>7.19</b> Storage Considerations</a></li>
-<li class="chapter" data-level="7.20" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#debugging-containers"><i class="fa fa-check"></i><b>7.20</b> Debugging Containers</a>
+<li class="chapter" data-level="6.18" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-side-by-side-comparison"><i class="fa fa-check"></i><b>6.18</b> A side-by-side comparison</a>
 <ul>
-<li class="chapter" data-level="7.20.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#check-image-exists"><i class="fa fa-check"></i><b>7.20.1</b> Check image exists</a></li>
-<li class="chapter" data-level="7.20.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#test-interactively"><i class="fa fa-check"></i><b>7.20.2</b> Test interactively</a></li>
-<li class="chapter" data-level="7.20.3" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#check-a-command"><i class="fa fa-check"></i><b>7.20.3</b> Check a command</a></li>
+<li class="chapter" data-level="6.18.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mpi-script-pattern"><i class="fa fa-check"></i><b>6.18.1</b> MPI script pattern</a></li>
+<li class="chapter" data-level="6.18.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#openmp-script-pattern"><i class="fa fa-check"></i><b>6.18.2</b> OpenMP script pattern</a></li>
 </ul></li>
-<li class="chapter" data-level="7.21" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#lab-6-containers-on-hpc"><i class="fa fa-check"></i><b>7.21</b> Lab 6 — Containers on HPC</a>
+<li class="chapter" data-level="6.19" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#hybrid-thinking"><i class="fa fa-check"></i><b>6.19</b> Hybrid thinking</a></li>
+<li class="chapter" data-level="6.20" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#strong-scaling-and-weak-scaling"><i class="fa fa-check"></i><b>6.20</b> Strong scaling and weak scaling</a>
 <ul>
-<li class="chapter" data-level="7.21.1" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-1-pull-image"><i class="fa fa-check"></i><b>7.21.1</b> Part 1: Pull Image</a></li>
-<li class="chapter" data-level="7.21.2" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-2-run-command"><i class="fa fa-check"></i><b>7.21.2</b> Part 2: Run Command</a></li>
-<li class="chapter" data-level="7.21.3" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-3-interactive-mode"><i class="fa fa-check"></i><b>7.21.3</b> Part 3: Interactive Mode</a></li>
-<li class="chapter" data-level="7.21.4" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-4-slurm-job"><i class="fa fa-check"></i><b>7.21.4</b> Part 4: SLURM Job</a></li>
-<li class="chapter" data-level="7.21.5" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#part-5-bind-directory"><i class="fa fa-check"></i><b>7.21.5</b> Part 5: Bind Directory</a></li>
+<li class="chapter" data-level="6.20.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#strong-scaling"><i class="fa fa-check"></i><b>6.20.1</b> Strong scaling</a></li>
+<li class="chapter" data-level="6.20.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#weak-scaling"><i class="fa fa-check"></i><b>6.20.2</b> Weak scaling</a></li>
 </ul></li>
-<li class="chapter" data-level="7.22" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#stretch-goal-2"><i class="fa fa-check"></i><b>7.22</b> Stretch Goal</a></li>
-<li class="chapter" data-level="7.23" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#transition-to-capstone"><i class="fa fa-check"></i><b>7.23</b> Transition to Capstone</a></li>
-<li class="chapter" data-level="7.24" data-path="containers-and-reproducible-hpc.html"><a href="containers-and-reproducible-hpc.html#key-takeaways-1"><i class="fa fa-check"></i><b>7.24</b> Key Takeaways</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html"><i class="fa fa-check"></i><b>8</b> Capstone Project: End-to-End HPC Workflow</a>
+<li class="chapter" data-level="6.21" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#why-speedup-is-not-automatic"><i class="fa fa-check"></i><b>6.21</b> Why speedup is not automatic</a></li>
+<li class="chapter" data-level="6.22" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#a-simple-timing-habit"><i class="fa fa-check"></i><b>6.22</b> A simple timing habit</a></li>
+<li class="chapter" data-level="6.23" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#common-beginner-mistakes-1"><i class="fa fa-check"></i><b>6.23</b> Common beginner mistakes</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#overview-6"><i class="fa fa-check"></i><b>8.1</b> Overview</a></li>
-<li class="chapter" data-level="8.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#project-philosophy"><i class="fa fa-check"></i><b>8.2</b> Project Philosophy</a></li>
-<li class="chapter" data-level="8.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#general-requirements"><i class="fa fa-check"></i><b>8.3</b> General Requirements</a></li>
-<li class="chapter" data-level="8.4" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#project-options"><i class="fa fa-check"></i><b>8.4</b> Project Options</a></li>
-<li class="chapter" data-level="8.5" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-1-compile-and-run"><i class="fa fa-check"></i><b>8.5</b> Option 1: Compile and Run</a>
-<ul>
-<li class="chapter" data-level="8.5.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description"><i class="fa fa-check"></i><b>8.5.1</b> Description</a></li>
-<li class="chapter" data-level="8.5.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements"><i class="fa fa-check"></i><b>8.5.2</b> Requirements</a></li>
-<li class="chapter" data-level="8.5.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-extensions"><i class="fa fa-check"></i><b>8.5.3</b> Suggested Extensions</a></li>
+<li class="chapter" data-level="6.23.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-1-requesting-four-tasks-for-a-serial-program"><i class="fa fa-check"></i><b>6.23.1</b> Mistake 1: requesting four tasks for a serial program</a></li>
+<li class="chapter" data-level="6.23.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-2-confusing-tasks-with-threads"><i class="fa fa-check"></i><b>6.23.2</b> Mistake 2: confusing tasks with threads</a></li>
+<li class="chapter" data-level="6.23.3" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-3-using-openmp-code-without-setting-omp_num_threads"><i class="fa fa-check"></i><b>6.23.3</b> Mistake 3: using OpenMP code without setting <code>OMP_NUM_THREADS</code></a></li>
+<li class="chapter" data-level="6.23.4" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-4-running-mpi-directly-on-the-login-node-as-a-habit"><i class="fa fa-check"></i><b>6.23.4</b> Mistake 4: running MPI directly on the login node as a habit</a></li>
+<li class="chapter" data-level="6.23.5" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#mistake-5-assuming-output-order-reveals-execution-order-cleanly"><i class="fa fa-check"></i><b>6.23.5</b> Mistake 5: assuming output order reveals execution order cleanly</a></li>
 </ul></li>
-<li class="chapter" data-level="8.6" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-2-parallel-computing"><i class="fa fa-check"></i><b>8.6</b> Option 2: Parallel Computing</a>
+<li class="chapter" data-level="6.24" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#failure-case-study-1-resource-request-does-not-match-the-mpi-code"><i class="fa fa-check"></i><b>6.24</b> Failure case study 1: resource request does not match the MPI code</a></li>
+<li class="chapter" data-level="6.25" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#failure-case-study-2-openmp-script-requests-four-cores-but-uses-one-thread"><i class="fa fa-check"></i><b>6.25</b> Failure case study 2: OpenMP script requests four cores but uses one thread</a></li>
+<li class="chapter" data-level="6.26" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#failure-case-study-3-parallel-job-is-slower-than-the-serial-version"><i class="fa fa-check"></i><b>6.26</b> Failure case study 3: parallel job is slower than the serial version</a></li>
+<li class="chapter" data-level="6.27" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#debugging-checklist-for-parallel-jobs"><i class="fa fa-check"></i><b>6.27</b> Debugging checklist for parallel jobs</a>
 <ul>
-<li class="chapter" data-level="8.6.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description-1"><i class="fa fa-check"></i><b>8.6.1</b> Description</a></li>
-<li class="chapter" data-level="8.6.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements-1"><i class="fa fa-check"></i><b>8.6.2</b> Requirements</a></li>
-<li class="chapter" data-level="8.6.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-extensions-1"><i class="fa fa-check"></i><b>8.6.3</b> Suggested Extensions</a></li>
+<li class="chapter" data-level="6.27.1" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#what-model-am-i-using"><i class="fa fa-check"></i><b>6.27.1</b> 1. What model am I using?</a></li>
+<li class="chapter" data-level="6.27.2" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#does-the-compile-step-match-the-model"><i class="fa fa-check"></i><b>6.27.2</b> 2. Does the compile step match the model?</a></li>
+<li class="chapter" data-level="6.27.3" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#does-the-slurm-request-match-the-model"><i class="fa fa-check"></i><b>6.27.3</b> 3. Does the SLURM request match the model?</a></li>
+<li class="chapter" data-level="6.27.4" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#are-the-relevant-environment-variables-set"><i class="fa fa-check"></i><b>6.27.4</b> 4. Are the relevant environment variables set?</a></li>
+<li class="chapter" data-level="6.27.5" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#what-does-the-output-file-actually-show"><i class="fa fa-check"></i><b>6.27.5</b> 5. What does the output file actually show?</a></li>
+<li class="chapter" data-level="6.27.6" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#is-the-workload-large-enough-to-reveal-meaningful-parallel-behavior"><i class="fa fa-check"></i><b>6.27.6</b> 6. Is the workload large enough to reveal meaningful parallel behavior?</a></li>
 </ul></li>
-<li class="chapter" data-level="8.7" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-3-containerized-workflow"><i class="fa fa-check"></i><b>8.7</b> Option 3: Containerized Workflow</a>
+<li class="chapter" data-level="6.28" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#best-practices"><i class="fa fa-check"></i><b>6.28</b> Best practices</a></li>
+<li class="chapter" data-level="6.29" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-1-mpi-hello-world"><i class="fa fa-check"></i><b>6.29</b> Lab 1: MPI hello world</a></li>
+<li class="chapter" data-level="6.30" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-2-openmp-hello-world"><i class="fa fa-check"></i><b>6.30</b> Lab 2: OpenMP hello world</a></li>
+<li class="chapter" data-level="6.31" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-3-compare-the-models-conceptually"><i class="fa fa-check"></i><b>6.31</b> Lab 3: compare the models conceptually</a></li>
+<li class="chapter" data-level="6.32" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-4-measure-a-tiny-scaling-experiment"><i class="fa fa-check"></i><b>6.32</b> Lab 4: measure a tiny scaling experiment</a></li>
+<li class="chapter" data-level="6.33" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#stretch-goal-3"><i class="fa fa-check"></i><b>6.33</b> Stretch goal</a></li>
+<li class="chapter" data-level="6.34" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#key-takeaways-2"><i class="fa fa-check"></i><b>6.34</b> Key takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html"><i class="fa fa-check"></i><b>7</b> Containers and Reproducible HPC Workflows</a>
 <ul>
-<li class="chapter" data-level="8.7.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description-2"><i class="fa fa-check"></i><b>8.7.1</b> Description</a></li>
-<li class="chapter" data-level="8.7.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements-2"><i class="fa fa-check"></i><b>8.7.2</b> Requirements</a></li>
-<li class="chapter" data-level="8.7.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-extensions-2"><i class="fa fa-check"></i><b>8.7.3</b> Suggested Extensions</a></li>
-</ul></li>
-<li class="chapter" data-level="8.8" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#option-4-hybrid-workflow-advanced"><i class="fa fa-check"></i><b>8.8</b> Option 4: Hybrid Workflow (Advanced)</a>
+<li class="chapter" data-level="7.1" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#overview-5"><i class="fa fa-check"></i><b>7.1</b> Overview</a></li>
+<li class="chapter" data-level="7.2" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mental-model-what-a-container-actually-is"><i class="fa fa-check"></i><b>7.2</b> Mental model: what a container actually is</a></li>
+<li class="chapter" data-level="7.3" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#why-containers-matter-in-hpc"><i class="fa fa-check"></i><b>7.3</b> Why containers matter in HPC</a></li>
+<li class="chapter" data-level="7.4" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#containers-do-not-eliminate-the-host-system"><i class="fa fa-check"></i><b>7.4</b> Containers do not eliminate the host system</a></li>
+<li class="chapter" data-level="7.5" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#docker-versus-apptainer"><i class="fa fa-check"></i><b>7.5</b> Docker versus Apptainer</a>
 <ul>
-<li class="chapter" data-level="8.8.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#description-3"><i class="fa fa-check"></i><b>8.8.1</b> Description</a></li>
-<li class="chapter" data-level="8.8.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#requirements-3"><i class="fa fa-check"></i><b>8.8.2</b> Requirements</a></li>
+<li class="chapter" data-level="7.5.1" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#docker"><i class="fa fa-check"></i><b>7.5.1</b> Docker</a></li>
+<li class="chapter" data-level="7.5.2" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#apptainer"><i class="fa fa-check"></i><b>7.5.2</b> Apptainer</a></li>
 </ul></li>
-<li class="chapter" data-level="8.9" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#deliverables"><i class="fa fa-check"></i><b>8.9</b> Deliverables</a>
+<li class="chapter" data-level="7.6" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#checking-for-apptainer"><i class="fa fa-check"></i><b>7.6</b> Checking for Apptainer</a></li>
+<li class="chapter" data-level="7.7" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#pulling-a-simple-image"><i class="fa fa-check"></i><b>7.7</b> Pulling a simple image</a></li>
+<li class="chapter" data-level="7.8" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#run-a-command-inside-the-container"><i class="fa fa-check"></i><b>7.8</b> Run a command inside the container</a></li>
+<li class="chapter" data-level="7.9" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#use-an-interactive-shell"><i class="fa fa-check"></i><b>7.9</b> Use an interactive shell</a></li>
+<li class="chapter" data-level="7.10" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#binding-directories-the-most-important-beginner-concept"><i class="fa fa-check"></i><b>7.10</b> Binding directories: the most important beginner concept</a></li>
+<li class="chapter" data-level="7.11" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#why-binding-matters"><i class="fa fa-check"></i><b>7.11</b> Why binding matters</a></li>
+<li class="chapter" data-level="7.12" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#a-concrete-example-with-a-host-script"><i class="fa fa-check"></i><b>7.12</b> A concrete example with a host script</a></li>
+<li class="chapter" data-level="7.13" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#store-images-in-sensible-places"><i class="fa fa-check"></i><b>7.13</b> Store images in sensible places</a></li>
+<li class="chapter" data-level="7.14" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#running-python-inside-a-container"><i class="fa fa-check"></i><b>7.14</b> Running Python inside a container</a></li>
+<li class="chapter" data-level="7.15" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#containerizing-a-workflow-through-slurm"><i class="fa fa-check"></i><b>7.15</b> Containerizing a workflow through SLURM</a></li>
+<li class="chapter" data-level="7.16" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#a-more-realistic-containerized-script-run"><i class="fa fa-check"></i><b>7.16</b> A more realistic containerized script run</a></li>
+<li class="chapter" data-level="7.17" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#when-containers-help-most"><i class="fa fa-check"></i><b>7.17</b> When containers help most</a></li>
+<li class="chapter" data-level="7.18" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#when-modules-may-be-enough"><i class="fa fa-check"></i><b>7.18</b> When modules may be enough</a></li>
+<li class="chapter" data-level="7.19" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#common-beginner-mistakes-2"><i class="fa fa-check"></i><b>7.19</b> Common beginner mistakes</a>
 <ul>
-<li class="chapter" data-level="8.9.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#code-and-scripts"><i class="fa fa-check"></i><b>8.9.1</b> 1. Code and Scripts</a></li>
-<li class="chapter" data-level="8.9.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#output-files"><i class="fa fa-check"></i><b>8.9.2</b> 2. Output Files</a></li>
-<li class="chapter" data-level="8.9.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#documentation"><i class="fa fa-check"></i><b>8.9.3</b> 3. Documentation</a></li>
+<li class="chapter" data-level="7.19.1" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mistake-1-assuming-the-container-sees-all-host-files-automatically"><i class="fa fa-check"></i><b>7.19.1</b> Mistake 1: assuming the container sees all host files automatically</a></li>
+<li class="chapter" data-level="7.19.2" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mistake-2-forgetting-to-load-apptainer"><i class="fa fa-check"></i><b>7.19.2</b> Mistake 2: forgetting to load Apptainer</a></li>
+<li class="chapter" data-level="7.19.3" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mistake-3-storing-large-images-in-the-wrong-location"><i class="fa fa-check"></i><b>7.19.3</b> Mistake 3: storing large images in the wrong location</a></li>
+<li class="chapter" data-level="7.19.4" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mistake-4-thinking-a-container-replaces-slurm"><i class="fa fa-check"></i><b>7.19.4</b> Mistake 4: thinking a container replaces SLURM</a></li>
+<li class="chapter" data-level="7.19.5" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#mistake-5-assuming-every-needed-tool-is-already-inside-the-image"><i class="fa fa-check"></i><b>7.19.5</b> Mistake 5: assuming every needed tool is already inside the image</a></li>
 </ul></li>
-<li class="chapter" data-level="8.10" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#suggested-directory-structure"><i class="fa fa-check"></i><b>8.10</b> Suggested Directory Structure</a></li>
-<li class="chapter" data-level="8.11" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#reproducibility-requirements"><i class="fa fa-check"></i><b>8.11</b> Reproducibility Requirements</a></li>
-<li class="chapter" data-level="8.12" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#resource-awareness"><i class="fa fa-check"></i><b>8.12</b> Resource Awareness</a></li>
-<li class="chapter" data-level="8.13" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#debugging-reflection"><i class="fa fa-check"></i><b>8.13</b> Debugging Reflection</a></li>
-<li class="chapter" data-level="8.14" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#grading-rubric"><i class="fa fa-check"></i><b>8.14</b> Grading Rubric</a>
+<li class="chapter" data-level="7.20" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#failure-case-study-1-file-not-found-inside-the-container"><i class="fa fa-check"></i><b>7.20</b> Failure case study 1: file not found inside the container</a></li>
+<li class="chapter" data-level="7.21" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#failure-case-study-2-command-not-found-inside-the-image"><i class="fa fa-check"></i><b>7.21</b> Failure case study 2: command not found inside the image</a></li>
+<li class="chapter" data-level="7.22" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#failure-case-study-3-output-appears-in-the-wrong-place"><i class="fa fa-check"></i><b>7.22</b> Failure case study 3: output appears in the wrong place</a></li>
+<li class="chapter" data-level="7.23" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#debugging-checklist-for-container-workflows"><i class="fa fa-check"></i><b>7.23</b> Debugging checklist for container workflows</a>
 <ul>
-<li class="chapter" data-level="8.14.1" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#correctness-30"><i class="fa fa-check"></i><b>8.14.1</b> Correctness (30%)</a></li>
-<li class="chapter" data-level="8.14.2" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#workflow-clarity-25"><i class="fa fa-check"></i><b>8.14.2</b> Workflow Clarity (25%)</a></li>
-<li class="chapter" data-level="8.14.3" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#reproducibility-20"><i class="fa fa-check"></i><b>8.14.3</b> Reproducibility (20%)</a></li>
-<li class="chapter" data-level="8.14.4" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#resource-usage-15"><i class="fa fa-check"></i><b>8.14.4</b> Resource Usage (15%)</a></li>
-<li class="chapter" data-level="8.14.5" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#reflection-10"><i class="fa fa-check"></i><b>8.14.5</b> Reflection (10%)</a></li>
+<li class="chapter" data-level="7.23.1" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#is-apptainer-available"><i class="fa fa-check"></i><b>7.23.1</b> 1. Is Apptainer available?</a></li>
+<li class="chapter" data-level="7.23.2" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#does-the-image-exist"><i class="fa fa-check"></i><b>7.23.2</b> 2. Does the image exist?</a></li>
+<li class="chapter" data-level="7.23.3" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#can-i-explore-it-interactively"><i class="fa fa-check"></i><b>7.23.3</b> 3. Can I explore it interactively?</a></li>
+<li class="chapter" data-level="7.23.4" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#does-the-command-i-need-actually-exist-inside-the-image"><i class="fa fa-check"></i><b>7.23.4</b> 4. Does the command I need actually exist inside the image?</a></li>
+<li class="chapter" data-level="7.23.5" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#are-the-needed-host-directories-bound-into-the-container"><i class="fa fa-check"></i><b>7.23.5</b> 5. Are the needed host directories bound into the container?</a></li>
+<li class="chapter" data-level="7.23.6" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#does-the-batch-script-still-make-sense-as-a-slurm-job"><i class="fa fa-check"></i><b>7.23.6</b> 6. Does the batch script still make sense as a SLURM job?</a></li>
 </ul></li>
-<li class="chapter" data-level="8.15" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#example-workflow-summary"><i class="fa fa-check"></i><b>8.15</b> Example Workflow Summary</a></li>
-<li class="chapter" data-level="8.16" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#common-mistakes-2"><i class="fa fa-check"></i><b>8.16</b> Common Mistakes</a></li>
-<li class="chapter" data-level="8.17" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#stretch-goals"><i class="fa fa-check"></i><b>8.17</b> Stretch Goals</a></li>
-<li class="chapter" data-level="8.18" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#final-reflection"><i class="fa fa-check"></i><b>8.18</b> Final Reflection</a></li>
-<li class="chapter" data-level="8.19" data-path="capstone-project-end-to-end-hpc-workflow.html"><a href="capstone-project-end-to-end-hpc-workflow.html#key-takeaways-2"><i class="fa fa-check"></i><b>8.19</b> Key Takeaways</a></li>
+<li class="chapter" data-level="7.24" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#best-practices-1"><i class="fa fa-check"></i><b>7.24</b> Best practices</a></li>
+<li class="chapter" data-level="7.25" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#lab-1-pull-and-inspect-an-image"><i class="fa fa-check"></i><b>7.25</b> Lab 1: pull and inspect an image</a></li>
+<li class="chapter" data-level="7.26" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#lab-2-bind-the-working-directory"><i class="fa fa-check"></i><b>7.26</b> Lab 2: bind the working directory</a></li>
+<li class="chapter" data-level="7.27" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#lab-3-run-a-containerized-batch-job"><i class="fa fa-check"></i><b>7.27</b> Lab 3: run a containerized batch job</a></li>
+<li class="chapter" data-level="7.28" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#lab-4-compare-modules-and-containers"><i class="fa fa-check"></i><b>7.28</b> Lab 4: compare modules and containers</a></li>
+<li class="chapter" data-level="7.29" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#stretch-goal-4"><i class="fa fa-check"></i><b>7.29</b> Stretch goal</a></li>
+<li class="chapter" data-level="7.30" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#key-takeaways-3"><i class="fa fa-check"></i><b>7.30</b> Key takeaways</a></li>
 </ul></li>
-<li class="chapter" data-level="9" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html"><i class="fa fa-check"></i><b>9</b> Appendix: HPC Quick Reference</a>
+<li class="chapter" data-level="8" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html"><i class="fa fa-check"></i><b>8</b> Capstone Project: Building an End-to-End HPC Workflow</a>
 <ul>
-<li class="chapter" data-level="9.1" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#overview-7"><i class="fa fa-check"></i><b>9.1</b> Overview</a></li>
-<li class="chapter" data-level="9.2" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#ssh"><i class="fa fa-check"></i><b>9.2</b> SSH</a></li>
-<li class="chapter" data-level="9.3" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#basic-linux"><i class="fa fa-check"></i><b>9.3</b> Basic Linux</a></li>
-<li class="chapter" data-level="9.4" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#permissions"><i class="fa fa-check"></i><b>9.4</b> Permissions</a></li>
-<li class="chapter" data-level="9.5" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#environment-and-modules"><i class="fa fa-check"></i><b>9.5</b> Environment and Modules</a></li>
-<li class="chapter" data-level="9.6" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#slurm"><i class="fa fa-check"></i><b>9.6</b> SLURM</a></li>
-<li class="chapter" data-level="9.7" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#compilation"><i class="fa fa-check"></i><b>9.7</b> Compilation</a></li>
-<li class="chapter" data-level="9.8" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#mpi"><i class="fa fa-check"></i><b>9.8</b> MPI</a></li>
-<li class="chapter" data-level="9.9" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#openmp-1"><i class="fa fa-check"></i><b>9.9</b> OpenMP</a></li>
-<li class="chapter" data-level="9.10" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#containers"><i class="fa fa-check"></i><b>9.10</b> Containers</a></li>
-<li class="chapter" data-level="9.11" data-path="appendix-hpc-quick-reference.html"><a href="appendix-hpc-quick-reference.html#final-notes"><i class="fa fa-check"></i><b>9.11</b> Final Notes</a></li>
+<li class="chapter" data-level="8.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#overview-6"><i class="fa fa-check"></i><b>8.1</b> Overview</a></li>
+<li class="chapter" data-level="8.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#the-philosophy-of-the-capstone"><i class="fa fa-check"></i><b>8.2</b> The philosophy of the capstone</a></li>
+<li class="chapter" data-level="8.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-counts-as-a-successful-capstone"><i class="fa fa-check"></i><b>8.3</b> What counts as a successful capstone</a></li>
+<li class="chapter" data-level="8.4" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-the-capstone-should-demonstrate"><i class="fa fa-check"></i><b>8.4</b> What the capstone should demonstrate</a></li>
+<li class="chapter" data-level="8.5" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#four-capstone-styles"><i class="fa fa-check"></i><b>8.5</b> Four capstone styles</a></li>
+<li class="chapter" data-level="8.6" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-1-compile-and-run-a-c-or-c-program"><i class="fa fa-check"></i><b>8.6</b> Option 1: compile and run a C or C++ program</a>
+<ul>
+<li class="chapter" data-level="8.6.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#minimum-ingredients"><i class="fa fa-check"></i><b>8.6.1</b> Minimum ingredients</a></li>
+<li class="chapter" data-level="8.6.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#strong-additions"><i class="fa fa-check"></i><b>8.6.2</b> Strong additions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-2-parallel-program"><i class="fa fa-check"></i><b>8.7</b> Option 2: parallel program</a>
+<ul>
+<li class="chapter" data-level="8.7.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#minimum-ingredients-1"><i class="fa fa-check"></i><b>8.7.1</b> Minimum ingredients</a></li>
+<li class="chapter" data-level="8.7.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#strong-additions-1"><i class="fa fa-check"></i><b>8.7.2</b> Strong additions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.8" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-3-containerized-workflow"><i class="fa fa-check"></i><b>8.8</b> Option 3: containerized workflow</a>
+<ul>
+<li class="chapter" data-level="8.8.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#minimum-ingredients-2"><i class="fa fa-check"></i><b>8.8.1</b> Minimum ingredients</a></li>
+<li class="chapter" data-level="8.8.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#strong-additions-2"><i class="fa fa-check"></i><b>8.8.2</b> Strong additions</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#option-4-hybrid-workflow"><i class="fa fa-check"></i><b>8.9</b> Option 4: hybrid workflow</a></li>
+<li class="chapter" data-level="8.10" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#project-scale-how-big-is-big-enough"><i class="fa fa-check"></i><b>8.10</b> Project scale: how big is “big enough”?</a></li>
+<li class="chapter" data-level="8.11" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#a-recommended-directory-structure"><i class="fa fa-check"></i><b>8.11</b> A recommended directory structure</a></li>
+<li class="chapter" data-level="8.12" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-belongs-in-the-readme"><i class="fa fa-check"></i><b>8.12</b> What belongs in the README</a></li>
+<li class="chapter" data-level="8.13" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#reproducibility-the-real-standard"><i class="fa fa-check"></i><b>8.13</b> Reproducibility: the real standard</a></li>
+<li class="chapter" data-level="8.14" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#resource-awareness-is-part-of-the-grade"><i class="fa fa-check"></i><b>8.14</b> Resource awareness is part of the grade</a></li>
+<li class="chapter" data-level="8.15" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#debugging-reflection-is-required"><i class="fa fa-check"></i><b>8.15</b> Debugging reflection is required</a></li>
+<li class="chapter" data-level="8.16" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#example-capstone-template-1-compiled-serial-program"><i class="fa fa-check"></i><b>8.16</b> Example capstone template 1: compiled serial program</a>
+<ul>
+<li class="chapter" data-level="8.16.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#files"><i class="fa fa-check"></i><b>8.16.1</b> Files</a></li>
+<li class="chapter" data-level="8.16.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow"><i class="fa fa-check"></i><b>8.16.2</b> Workflow</a></li>
+<li class="chapter" data-level="8.16.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-this-demonstrates"><i class="fa fa-check"></i><b>8.16.3</b> What this demonstrates</a></li>
+</ul></li>
+<li class="chapter" data-level="8.17" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#example-capstone-template-2-openmp-program"><i class="fa fa-check"></i><b>8.17</b> Example capstone template 2: OpenMP program</a>
+<ul>
+<li class="chapter" data-level="8.17.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#files-1"><i class="fa fa-check"></i><b>8.17.1</b> Files</a></li>
+<li class="chapter" data-level="8.17.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow-1"><i class="fa fa-check"></i><b>8.17.2</b> Workflow</a></li>
+<li class="chapter" data-level="8.17.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-this-demonstrates-1"><i class="fa fa-check"></i><b>8.17.3</b> What this demonstrates</a></li>
+</ul></li>
+<li class="chapter" data-level="8.18" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#example-capstone-template-3-containerized-python-script"><i class="fa fa-check"></i><b>8.18</b> Example capstone template 3: containerized Python script</a>
+<ul>
+<li class="chapter" data-level="8.18.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#files-2"><i class="fa fa-check"></i><b>8.18.1</b> Files</a></li>
+<li class="chapter" data-level="8.18.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow-2"><i class="fa fa-check"></i><b>8.18.2</b> Workflow</a></li>
+<li class="chapter" data-level="8.18.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#what-this-demonstrates-2"><i class="fa fa-check"></i><b>8.18.3</b> What this demonstrates</a></li>
+</ul></li>
+<li class="chapter" data-level="8.19" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#a-grading-rubric-you-can-actually-use"><i class="fa fa-check"></i><b>8.19</b> A grading rubric you can actually use</a>
+<ul>
+<li class="chapter" data-level="8.19.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#workflow-correctness-30"><i class="fa fa-check"></i><b>8.19.1</b> Workflow correctness (30%)</a></li>
+<li class="chapter" data-level="8.19.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#documentation-quality-25"><i class="fa fa-check"></i><b>8.19.2</b> Documentation quality (25%)</a></li>
+<li class="chapter" data-level="8.19.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#reproducibility-20"><i class="fa fa-check"></i><b>8.19.3</b> Reproducibility (20%)</a></li>
+<li class="chapter" data-level="8.19.4" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#resource-awareness-15"><i class="fa fa-check"></i><b>8.19.4</b> Resource awareness (15%)</a></li>
+<li class="chapter" data-level="8.19.5" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#debugging-reflection-10"><i class="fa fa-check"></i><b>8.19.5</b> Debugging reflection (10%)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.20" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#common-capstone-mistakes"><i class="fa fa-check"></i><b>8.20</b> Common capstone mistakes</a>
+<ul>
+<li class="chapter" data-level="8.20.1" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-1-no-readme"><i class="fa fa-check"></i><b>8.20.1</b> Mistake 1: no README</a></li>
+<li class="chapter" data-level="8.20.2" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-2-output-exists-but-no-explanation"><i class="fa fa-check"></i><b>8.20.2</b> Mistake 2: output exists, but no explanation</a></li>
+<li class="chapter" data-level="8.20.3" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-3-wrong-resource-request"><i class="fa fa-check"></i><b>8.20.3</b> Mistake 3: wrong resource request</a></li>
+<li class="chapter" data-level="8.20.4" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-4-hidden-assumptions"><i class="fa fa-check"></i><b>8.20.4</b> Mistake 4: hidden assumptions</a></li>
+<li class="chapter" data-level="8.20.5" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#mistake-5-debugging-omitted"><i class="fa fa-check"></i><b>8.20.5</b> Mistake 5: debugging omitted</a></li>
+</ul></li>
+<li class="chapter" data-level="8.21" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#how-to-write-the-debugging-reflection"><i class="fa fa-check"></i><b>8.21</b> How to write the debugging reflection</a></li>
+<li class="chapter" data-level="8.22" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#final-submission-checklist"><i class="fa fa-check"></i><b>8.22</b> Final submission checklist</a></li>
+<li class="chapter" data-level="8.23" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#lab-draft-your-capstone-plan"><i class="fa fa-check"></i><b>8.23</b> Lab: draft your capstone plan</a></li>
+<li class="chapter" data-level="8.24" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#stretch-goal-5"><i class="fa fa-check"></i><b>8.24</b> Stretch goal</a></li>
+<li class="chapter" data-level="8.25" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#key-takeaways-4"><i class="fa fa-check"></i><b>8.25</b> Key takeaways</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><i class="fa fa-check"></i><b>9</b> Appendix: Quick Reference and Troubleshooting for LS6 Workflows</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#overview-7"><i class="fa fa-check"></i><b>9.1</b> Overview</a></li>
+<li class="chapter" data-level="9.2" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#core-workflow-picture"><i class="fa fa-check"></i><b>9.2</b> Core workflow picture</a></li>
+<li class="chapter" data-level="9.3" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#a-safe-beginner-shell-pattern"><i class="fa fa-check"></i><b>9.3</b> A safe beginner shell pattern</a></li>
+<li class="chapter" data-level="9.4" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#ssh"><i class="fa fa-check"></i><b>9.4</b> SSH</a></li>
+<li class="chapter" data-level="9.5" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#filesystem-basics"><i class="fa fa-check"></i><b>9.5</b> Filesystem basics</a></li>
+<li class="chapter" data-level="9.6" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#editing-files"><i class="fa fa-check"></i><b>9.6</b> Editing files</a></li>
+<li class="chapter" data-level="9.7" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#permissions"><i class="fa fa-check"></i><b>9.7</b> Permissions</a></li>
+<li class="chapter" data-level="9.8" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#environment-variables-1"><i class="fa fa-check"></i><b>9.8</b> Environment variables</a></li>
+<li class="chapter" data-level="9.9" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#modules"><i class="fa fa-check"></i><b>9.9</b> Modules</a></li>
+<li class="chapter" data-level="9.10" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#compilers-and-build-commands"><i class="fa fa-check"></i><b>9.10</b> Compilers and build commands</a></li>
+<li class="chapter" data-level="9.11" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#slurm-basics"><i class="fa fa-check"></i><b>9.11</b> SLURM basics</a></li>
+<li class="chapter" data-level="9.12" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#common-job-states-1"><i class="fa fa-check"></i><b>9.12</b> Common job states</a></li>
+<li class="chapter" data-level="9.13" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#minimal-serial-batch-script-template"><i class="fa fa-check"></i><b>9.13</b> Minimal serial batch script template</a></li>
+<li class="chapter" data-level="9.14" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#minimal-mpi-batch-script-template"><i class="fa fa-check"></i><b>9.14</b> Minimal MPI batch script template</a></li>
+<li class="chapter" data-level="9.15" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#minimal-openmp-batch-script-template"><i class="fa fa-check"></i><b>9.15</b> Minimal OpenMP batch script template</a></li>
+<li class="chapter" data-level="9.16" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#output-files"><i class="fa fa-check"></i><b>9.16</b> Output files</a></li>
+<li class="chapter" data-level="9.17" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#container-commands"><i class="fa fa-check"></i><b>9.17</b> Container commands</a></li>
+<li class="chapter" data-level="9.18" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#quick-mental-model-table"><i class="fa fa-check"></i><b>9.18</b> Quick mental model table</a></li>
+<li class="chapter" data-level="9.19" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-shell-and-files"><i class="fa fa-check"></i><b>9.19</b> Troubleshooting checklist: shell and files</a></li>
+<li class="chapter" data-level="9.20" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-build-failure"><i class="fa fa-check"></i><b>9.20</b> Troubleshooting checklist: build failure</a></li>
+<li class="chapter" data-level="9.21" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-slurm-job-failure"><i class="fa fa-check"></i><b>9.21</b> Troubleshooting checklist: SLURM job failure</a></li>
+<li class="chapter" data-level="9.22" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-mpi-and-openmp"><i class="fa fa-check"></i><b>9.22</b> Troubleshooting checklist: MPI and OpenMP</a></li>
+<li class="chapter" data-level="9.23" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#troubleshooting-checklist-containers"><i class="fa fa-check"></i><b>9.23</b> Troubleshooting checklist: containers</a></li>
+<li class="chapter" data-level="9.24" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#course-workflow-checklist"><i class="fa fa-check"></i><b>9.24</b> Course workflow checklist</a></li>
+<li class="chapter" data-level="9.25" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#capstone-checklist"><i class="fa fa-check"></i><b>9.25</b> Capstone checklist</a></li>
+<li class="chapter" data-level="9.26" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html#final-reminder"><i class="fa fa-check"></i><b>9.26</b> Final reminder</a></li>
 </ul></li>
 </ul>
 
@@ -508,63 +611,110 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 4</span> SLURM Job Scheduling on LS6<a href="slurm-job-scheduling-on-ls6.html#slurm-job-scheduling-on-ls6" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <div id="overview-2" class="section level2 hasAnchor" number="4.1">
 <h2><span class="header-section-number">4.1</span> Overview<a href="slurm-job-scheduling-on-ls6.html#overview-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>On an HPC system, real computational work is normally submitted through a scheduler rather than run directly from the login node. On LS6, that scheduler is <strong>SLURM</strong>.</p>
-<p>This chapter introduces the practical workflow for batch jobs:</p>
+<p>On a shared HPC system, real computational work is normally submitted through a scheduler rather than run directly on the login node. On LS6, that scheduler is <strong>SLURM</strong>.</p>
+<p>That sentence is easy to memorize, but the course goal is deeper than memorization. You should understand <strong>why</strong> a scheduler exists, <strong>what</strong> a job request really means, and <strong>how</strong> to reason about a job when it does not behave the way you expected.</p>
+<p>This chapter develops the practical workflow for beginner and intermediate batch jobs:</p>
 <ul>
 <li>write a job script</li>
-<li>request resources</li>
+<li>request resources deliberately</li>
 <li>submit with <code>sbatch</code></li>
 <li>monitor with <code>squeue</code></li>
 <li>inspect finished jobs with <code>sacct</code></li>
-<li>read output files and diagnose failures</li>
+<li>interpret output files</li>
+<li>diagnose common failures</li>
 </ul>
-<p>By the end of the chapter, you should be able to submit and interpret your first real SLURM job.</p>
+<p>By the end of the chapter, you should be able to submit a real job, explain the meaning of your resource request, and work through the first layer of job debugging without guessing.</p>
 </div>
-<div id="mental-model-slurm-is-a-resource-manager" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Mental model: SLURM is a resource manager<a href="slurm-job-scheduling-on-ls6.html#mental-model-slurm-is-a-resource-manager" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Think of SLURM as the system that coordinates fair access to shared compute resources.</p>
-<p>You do not simply “grab a node.” Instead, you make a request that describes:</p>
+<div id="mental-model-slurm-is-a-resource-manager-not-a-launch-button" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Mental model: SLURM is a resource manager, not a launch button<a href="slurm-job-scheduling-on-ls6.html#mental-model-slurm-is-a-resource-manager-not-a-launch-button" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A common beginner misunderstanding is to treat <code>sbatch</code> as if it were a special version of <code>bash</code>.</p>
+<p>It is not.</p>
+<p>When you run a shell script directly, the shell starts executing the script immediately in your current environment.</p>
+<p>When you submit with <code>sbatch</code>, you are doing something different:</p>
+<ol style="list-style-type: decimal">
+<li>you hand SLURM a script</li>
+<li>you describe the resources needed for that script</li>
+<li>the scheduler decides when those resources are available</li>
+<li>the script later runs on one or more compute nodes</li>
+</ol>
+<p>So a SLURM job is not just “commands to run.” It is a <strong>contract</strong> between you and the scheduler:</p>
+<blockquote>
+<p>Here is the work I want to do, here are the resources I believe it needs, and here is how long I think it should take.</p>
+</blockquote>
+<p>That is why a SLURM script is both:</p>
 <ul>
-<li>what you want to run</li>
-<li>how many resources you need</li>
-<li>how long you need them</li>
-<li>which queue or partition should be used</li>
+<li>a shell script, and</li>
+<li>a resource request document</li>
 </ul>
-<p>SLURM then decides when and where your job can run.</p>
 </div>
 <div id="why-clusters-use-schedulers" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> Why clusters use schedulers<a href="slurm-job-scheduling-on-ls6.html#why-clusters-use-schedulers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A scheduler exists because HPC systems are shared.</p>
 <p>Without a scheduler:</p>
 <ul>
-<li>users would compete chaotically for resources</li>
-<li>jobs would interfere with each other</li>
-<li>there would be little accountability for resource use</li>
+<li>users would compete chaotically for access</li>
+<li>large jobs could crowd out smaller ones</li>
+<li>there would be no orderly queue</li>
+<li>tracking usage would be difficult</li>
+<li>fairness would break down quickly</li>
 </ul>
 <p>With a scheduler:</p>
 <ul>
-<li>jobs are queued</li>
-<li>resources are allocated intentionally</li>
-<li>usage is tracked</li>
-<li>the system remains usable for many people at once</li>
+<li>work is queued</li>
+<li>resource use is explicit</li>
+<li>policies can be enforced</li>
+<li>accounting is possible</li>
+<li>compute nodes stay organized as a shared service rather than a free-for-all</li>
+</ul>
+<p>This is one reason HPC feels different from a personal workstation. On your laptop, you usually ask, “Can my machine run this?” On a cluster, you also ask, “What is the appropriate request for a shared system?”</p>
+</div>
+<div id="the-basic-batch-workflow" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> The basic batch workflow<a href="slurm-job-scheduling-on-ls6.html#the-basic-batch-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<pre class="text"><code>Write job script
+      ↓
+Submit with sbatch
+      ↓
+Job enters queue
+      ↓
+SLURM decides when resources are available
+      ↓
+Job starts on compute node(s)
+      ↓
+Output and accounting records become available</code></pre>
+<p>That workflow shows up again and again in HPC practice. Many later topics—parallel computing, containers, compiled programs, Python workflows, R workflows—still pass through the same scheduler logic.</p>
+</div>
+<div id="login-nodes-versus-compute-nodes" class="section level2 hasAnchor" number="4.5">
+<h2><span class="header-section-number">4.5</span> Login nodes versus compute nodes<a href="slurm-job-scheduling-on-ls6.html#login-nodes-versus-compute-nodes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This distinction remains central.</p>
+<div id="login-nodes-are-for" class="section level3 hasAnchor" number="4.5.1">
+<h3><span class="header-section-number">4.5.1</span> Login nodes are for:<a href="slurm-job-scheduling-on-ls6.html#login-nodes-are-for" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>editing files</li>
+<li>reading documentation</li>
+<li>small test commands</li>
+<li>moving data</li>
+<li>compiling small programs</li>
+<li>submitting jobs</li>
 </ul>
 </div>
-<div id="a-basic-batch-workflow" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> A basic batch workflow<a href="slurm-job-scheduling-on-ls6.html#a-basic-batch-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<pre class="text"><code>You write a job script
-        ↓
-Submit with sbatch
-        ↓
-Job enters SLURM queue
-        ↓
-Scheduler allocates compute resources
-        ↓
-Job runs on compute node(s)
-        ↓
-Output and job history become available</code></pre>
-<p>This is the operational heart of beginner HPC work.</p>
+<div id="compute-nodes-are-for" class="section level3 hasAnchor" number="4.5.2">
+<h3><span class="header-section-number">4.5.2</span> Compute nodes are for:<a href="slurm-job-scheduling-on-ls6.html#compute-nodes-are-for" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>real program execution</li>
+<li>long-running analyses</li>
+<li>memory-intensive work</li>
+<li>parallel workloads</li>
+<li>training or simulation runs</li>
+</ul>
+<p>A useful rule of thumb is:</p>
+<blockquote>
+<p>Use the login node to prepare work. Use compute nodes to perform work.</p>
+</blockquote>
+<p>If a task would monopolize CPU time, consume large memory, run for a long time, or scale across multiple cores, it belongs under SLURM.</p>
 </div>
-<div id="your-first-slurm-script" class="section level2 hasAnchor" number="4.5">
-<h2><span class="header-section-number">4.5</span> Your first SLURM script<a href="slurm-job-scheduling-on-ls6.html#your-first-slurm-script" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+</div>
+<div id="your-first-slurm-script" class="section level2 hasAnchor" number="4.6">
+<h2><span class="header-section-number">4.6</span> Your first SLURM script<a href="slurm-job-scheduling-on-ls6.html#your-first-slurm-script" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Create a file:</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="slurm-job-scheduling-on-ls6.html#cb43-1" tabindex="-1"></a><span class="fu">nano</span> job.slurm</span></code></pre></div>
 <p>Add:</p>
@@ -577,63 +727,64 @@ Output and job history become available</code></pre>
 <span id="cb44-7"><a href="slurm-job-scheduling-on-ls6.html#cb44-7" tabindex="-1"></a></span>
 <span id="cb44-8"><a href="slurm-job-scheduling-on-ls6.html#cb44-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Hello from compute node&quot;</span></span>
 <span id="cb44-9"><a href="slurm-job-scheduling-on-ls6.html#cb44-9" tabindex="-1"></a><span class="fu">hostname</span></span>
-<span id="cb44-10"><a href="slurm-job-scheduling-on-ls6.html#cb44-10" tabindex="-1"></a><span class="fu">date</span></span></code></pre></div>
+<span id="cb44-10"><a href="slurm-job-scheduling-on-ls6.html#cb44-10" tabindex="-1"></a><span class="fu">date</span></span>
+<span id="cb44-11"><a href="slurm-job-scheduling-on-ls6.html#cb44-11" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div>
+<p>This is intentionally simple. The goal is to make the scheduler behavior visible.</p>
 </div>
-<div id="reading-the-script-line-by-line" class="section level2 hasAnchor" number="4.6">
-<h2><span class="header-section-number">4.6</span> Reading the script line by line<a href="slurm-job-scheduling-on-ls6.html#reading-the-script-line-by-line" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="shebang" class="section level3 hasAnchor" number="4.6.1">
-<h3><span class="header-section-number">4.6.1</span> Shebang<a href="slurm-job-scheduling-on-ls6.html#shebang" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="reading-the-script-line-by-line" class="section level2 hasAnchor" number="4.7">
+<h2><span class="header-section-number">4.7</span> Reading the script line by line<a href="slurm-job-scheduling-on-ls6.html#reading-the-script-line-by-line" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="shebang" class="section level3 hasAnchor" number="4.7.1">
+<h3><span class="header-section-number">4.7.1</span> Shebang<a href="slurm-job-scheduling-on-ls6.html#shebang" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="slurm-job-scheduling-on-ls6.html#cb45-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span></code></pre></div>
 <p>Tells the system to execute the script using Bash.</p>
 </div>
-<div id="job-name" class="section level3 hasAnchor" number="4.6.2">
-<h3><span class="header-section-number">4.6.2</span> Job name<a href="slurm-job-scheduling-on-ls6.html#job-name" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="job-name" class="section level3 hasAnchor" number="4.7.2">
+<h3><span class="header-section-number">4.7.2</span> Job name<a href="slurm-job-scheduling-on-ls6.html#job-name" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb46"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="slurm-job-scheduling-on-ls6.html#cb46-1" tabindex="-1"></a><span class="co">#SBATCH -J hello_job</span></span></code></pre></div>
-<p>Gives the job a readable name.</p>
+<p>Gives your job a readable name. Good names matter because later you may have many jobs in the queue.</p>
 </div>
-<div id="nodes" class="section level3 hasAnchor" number="4.6.3">
-<h3><span class="header-section-number">4.6.3</span> Nodes<a href="slurm-job-scheduling-on-ls6.html#nodes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="nodes" class="section level3 hasAnchor" number="4.7.3">
+<h3><span class="header-section-number">4.7.3</span> Nodes<a href="slurm-job-scheduling-on-ls6.html#nodes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="slurm-job-scheduling-on-ls6.html#cb47-1" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span></code></pre></div>
 <p>Requests one node.</p>
 </div>
-<div id="tasks" class="section level3 hasAnchor" number="4.6.4">
-<h3><span class="header-section-number">4.6.4</span> Tasks<a href="slurm-job-scheduling-on-ls6.html#tasks" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="tasks" class="section level3 hasAnchor" number="4.7.4">
+<h3><span class="header-section-number">4.7.4</span> Tasks<a href="slurm-job-scheduling-on-ls6.html#tasks" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb48"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="slurm-job-scheduling-on-ls6.html#cb48-1" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span></code></pre></div>
 <p>Requests one task.</p>
+<p>At a beginner level, you can loosely think of a task as one program instance or one process slot. Later, for MPI jobs, the meaning becomes especially important.</p>
 </div>
-<div id="wall-time" class="section level3 hasAnchor" number="4.6.5">
-<h3><span class="header-section-number">4.6.5</span> Wall time<a href="slurm-job-scheduling-on-ls6.html#wall-time" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="wall-time" class="section level3 hasAnchor" number="4.7.5">
+<h3><span class="header-section-number">4.7.5</span> Wall time<a href="slurm-job-scheduling-on-ls6.html#wall-time" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="slurm-job-scheduling-on-ls6.html#cb49-1" tabindex="-1"></a><span class="co">#SBATCH -t 00:01:00</span></span></code></pre></div>
-<p>Sets the maximum runtime to one minute.</p>
+<p>Tells SLURM the job should need at most one minute.</p>
+<p>This is not a prediction made for curiosity. It is part of scheduling. If you ask for far more time than you need, the job may wait longer than necessary. If you ask for too little time, the job may be terminated before finishing.</p>
 </div>
-<div id="partition" class="section level3 hasAnchor" number="4.6.6">
-<h3><span class="header-section-number">4.6.6</span> Partition<a href="slurm-job-scheduling-on-ls6.html#partition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<div id="partition" class="section level3 hasAnchor" number="4.7.6">
+<h3><span class="header-section-number">4.7.6</span> Partition<a href="slurm-job-scheduling-on-ls6.html#partition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb50"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="slurm-job-scheduling-on-ls6.html#cb50-1" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span></code></pre></div>
 <p>Requests the <code>normal</code> partition.</p>
-<p>Even at this stage, the main idea is becoming visible: a SLURM script is both a command script and a resource request.</p>
+<p>A partition is a queue or class of resources. Different systems define partitions differently, but the main mental model is simple:</p>
+<blockquote>
+<p>A partition tells SLURM which pool of resources and policies your job should be associated with.</p>
+</blockquote>
 </div>
 </div>
-<div id="submit-the-job" class="section level2 hasAnchor" number="4.7">
-<h2><span class="header-section-number">4.7</span> Submit the job<a href="slurm-job-scheduling-on-ls6.html#submit-the-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="submit-the-job" class="section level2 hasAnchor" number="4.8">
+<h2><span class="header-section-number">4.8</span> Submit the job<a href="slurm-job-scheduling-on-ls6.html#submit-the-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div class="sourceCode" id="cb51"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a href="slurm-job-scheduling-on-ls6.html#cb51-1" tabindex="-1"></a><span class="ex">sbatch</span> job.slurm</span></code></pre></div>
 <p>Typical response:</p>
 <pre class="text"><code>Submitted batch job 123456</code></pre>
-<p>That message does <strong>not</strong> mean your job has already run. It means the job has been accepted by the scheduler.</p>
-</div>
-<div id="one-of-the-most-important-beginner-corrections" class="section level2 hasAnchor" number="4.8">
-<h2><span class="header-section-number">4.8</span> One of the most important beginner corrections<a href="slurm-job-scheduling-on-ls6.html#one-of-the-most-important-beginner-corrections" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Students often think:</p>
+<p>That message does <strong>not</strong> mean your program has already run. It means SLURM has accepted the job into the scheduling system.</p>
+<p>This is the first beginner correction that really matters:</p>
 <blockquote>
-<p>I used <code>sbatch</code>, so my program must already be running.</p>
+<p><code>sbatch</code> submits. It does not promise immediate execution.</p>
 </blockquote>
-<p>That is not necessarily true.</p>
-<p><code>sbatch</code> submits the job to the queue. The scheduler then determines when the job can start.</p>
 </div>
-<div id="monitoring-queued-and-running-jobs" class="section level2 hasAnchor" number="4.9">
-<h2><span class="header-section-number">4.9</span> Monitoring queued and running jobs<a href="slurm-job-scheduling-on-ls6.html#monitoring-queued-and-running-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="check-the-queue" class="section level2 hasAnchor" number="4.9">
+<h2><span class="header-section-number">4.9</span> Check the queue<a href="slurm-job-scheduling-on-ls6.html#check-the-queue" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Use:</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="slurm-job-scheduling-on-ls6.html#cb53-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
-<p>This lets you inspect your current jobs.</p>
 <p>Typical fields include:</p>
 <ul>
 <li>job ID</li>
@@ -641,207 +792,405 @@ Output and job history become available</code></pre>
 <li>job name</li>
 <li>state</li>
 <li>elapsed time</li>
-<li>nodes used</li>
+<li>number of nodes</li>
 </ul>
+<p>If the job starts quickly, you may barely see it. If not, <code>squeue</code> will let you observe its status.</p>
 </div>
-<div id="common-slurm-job-states" class="section level2 hasAnchor" number="4.10">
-<h2><span class="header-section-number">4.10</span> Common SLURM job states<a href="slurm-job-scheduling-on-ls6.html#common-slurm-job-states" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="common-job-states" class="section level2 hasAnchor" number="4.10">
+<h2><span class="header-section-number">4.10</span> Common job states<a href="slurm-job-scheduling-on-ls6.html#common-job-states" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
 <li><code>PD</code> = pending</li>
 <li><code>R</code> = running</li>
 <li><code>CG</code> = completing</li>
 <li><code>CD</code> = completed</li>
 </ul>
-<p>A pending job is not broken simply because it is pending. It may be waiting for resources.</p>
+<p>A pending job is not automatically a broken job. It may simply be waiting for resources, waiting behind other jobs, or waiting because your request is harder to place.</p>
 </div>
-<div id="output-files-as-evidence" class="section level2 hasAnchor" number="4.11">
-<h2><span class="header-section-number">4.11</span> Output files as evidence<a href="slurm-job-scheduling-on-ls6.html#output-files-as-evidence" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When a batch job finishes, a file like this often appears:</p>
+<div id="output-files-are-evidence" class="section level2 hasAnchor" number="4.11">
+<h2><span class="header-section-number">4.11</span> Output files are evidence<a href="slurm-job-scheduling-on-ls6.html#output-files-are-evidence" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When the batch job finishes, a file such as the following often appears:</p>
 <pre class="text"><code>slurm-123456.out</code></pre>
 <p>Inspect it with:</p>
 <div class="sourceCode" id="cb55"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb55-1"><a href="slurm-job-scheduling-on-ls6.html#cb55-1" tabindex="-1"></a><span class="fu">cat</span> slurm-123456.out</span></code></pre></div>
 <p>or:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="slurm-job-scheduling-on-ls6.html#cb56-1" tabindex="-1"></a><span class="fu">cat</span> slurm-<span class="pp">*</span>.out</span></code></pre></div>
-<p>These output files are often the first place to look during debugging.</p>
-</div>
-<div id="what-just-happened-in-the-first-example" class="section level2 hasAnchor" number="4.12">
-<h2><span class="header-section-number">4.12</span> What just happened in the first example?<a href="slurm-job-scheduling-on-ls6.html#what-just-happened-in-the-first-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When the simple <code>hello_job</code> runs, you have successfully completed an authentic cluster workflow:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="slurm-job-scheduling-on-ls6.html#cb56-1" tabindex="-1"></a><span class="fu">less</span> slurm-123456.out</span></code></pre></div>
+<p>A strong beginner habit is:</p>
 <ul>
-<li>wrote a batch script</li>
-<li>requested resources</li>
-<li>submitted the request to SLURM</li>
-<li>allowed the scheduler to place the job</li>
-<li>executed commands on a compute node</li>
-<li>collected output from the run</li>
+<li>do not guess what happened</li>
+<li>inspect the output file</li>
 </ul>
-<p>That is the core pattern you will repeat again and again.</p>
+<p>Your output file is often the fastest route from confusion to evidence.</p>
 </div>
-<div id="seeing-the-distinction-between-login-and-compute-nodes" class="section level2 hasAnchor" number="4.13">
-<h2><span class="header-section-number">4.13</span> Seeing the distinction between login and compute nodes<a href="slurm-job-scheduling-on-ls6.html#seeing-the-distinction-between-login-and-compute-nodes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Run <code>hostname</code> on the login node and compare it with the hostname printed inside a SLURM job.</p>
-<p>That difference makes the cluster architecture concrete.</p>
-<p>It helps students see that login access is not the same as compute allocation.</p>
+<div id="what-happened-in-the-first-example" class="section level2 hasAnchor" number="4.12">
+<h2><span class="header-section-number">4.12</span> What happened in the first example?<a href="slurm-job-scheduling-on-ls6.html#what-happened-in-the-first-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When <code>hello_job</code> runs successfully, you have completed a real HPC workflow:</p>
+<ul>
+<li>wrote a scheduler-aware script</li>
+<li>requested resources</li>
+<li>submitted the request</li>
+<li>waited for SLURM to place the job</li>
+<li>ran on a compute node</li>
+<li>captured output in a file</li>
+</ul>
+<p>That may seem small, but it is the foundation for almost everything else in the course.</p>
 </div>
-<div id="a-longer-running-observation-job" class="section level2 hasAnchor" number="4.14">
-<h2><span class="header-section-number">4.14</span> A longer-running observation job<a href="slurm-job-scheduling-on-ls6.html#a-longer-running-observation-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>To observe a job in the queue or running state, edit the script:</p>
+<div id="resource-requests-what-you-are-really-asking-for" class="section level2 hasAnchor" number="4.13">
+<h2><span class="header-section-number">4.13</span> Resource requests: what you are really asking for<a href="slurm-job-scheduling-on-ls6.html#resource-requests-what-you-are-really-asking-for" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A job request is best understood as a statement of workload shape.</p>
+<p>Questions you should learn to ask:</p>
+<ul>
+<li>Is this a serial job or a parallel job?</li>
+<li>Does it need one core or many?</li>
+<li>Does it need one node or several nodes?</li>
+<li>Is it short or long?</li>
+<li>Does it require a special software environment?</li>
+<li>Is the request realistic or inflated?</li>
+</ul>
+<p>These questions matter because scheduler performance depends on matching the request to the workload.</p>
+<div id="too-small-a-request-can-cause" class="section level3 hasAnchor" number="4.13.1">
+<h3><span class="header-section-number">4.13.1</span> Too small a request can cause:<a href="slurm-job-scheduling-on-ls6.html#too-small-a-request-can-cause" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>slow performance</li>
+<li>oversubscription</li>
+<li>thread/process mismatch</li>
+<li>job failure</li>
+</ul>
+</div>
+<div id="too-large-a-request-can-cause" class="section level3 hasAnchor" number="4.13.2">
+<h3><span class="header-section-number">4.13.2</span> Too large a request can cause:<a href="slurm-job-scheduling-on-ls6.html#too-large-a-request-can-cause" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>unnecessary queue delay</li>
+<li>wasted allocation</li>
+<li>poor cluster citizenship</li>
+<li>confusion when the code uses only a fraction of what was requested</li>
+</ul>
+<p>Responsible HPC practice is not “ask for everything.” It is “ask for what the workload actually needs.”</p>
+</div>
+</div>
+<div id="a-better-beginner-script-make-the-environment-visible" class="section level2 hasAnchor" number="4.14">
+<h2><span class="header-section-number">4.14</span> A better beginner script: make the environment visible<a href="slurm-job-scheduling-on-ls6.html#a-better-beginner-script-make-the-environment-visible" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A useful early script is one that prints context:</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb57-1"><a href="slurm-job-scheduling-on-ls6.html#cb57-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb57-2"><a href="slurm-job-scheduling-on-ls6.html#cb57-2" tabindex="-1"></a><span class="co">#SBATCH -J hello_job</span></span>
+<span id="cb57-2"><a href="slurm-job-scheduling-on-ls6.html#cb57-2" tabindex="-1"></a><span class="co">#SBATCH -J context_job</span></span>
 <span id="cb57-3"><a href="slurm-job-scheduling-on-ls6.html#cb57-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
 <span id="cb57-4"><a href="slurm-job-scheduling-on-ls6.html#cb57-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
 <span id="cb57-5"><a href="slurm-job-scheduling-on-ls6.html#cb57-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:02:00</span></span>
 <span id="cb57-6"><a href="slurm-job-scheduling-on-ls6.html#cb57-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
 <span id="cb57-7"><a href="slurm-job-scheduling-on-ls6.html#cb57-7" tabindex="-1"></a></span>
-<span id="cb57-8"><a href="slurm-job-scheduling-on-ls6.html#cb57-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Starting job&quot;</span></span>
-<span id="cb57-9"><a href="slurm-job-scheduling-on-ls6.html#cb57-9" tabindex="-1"></a><span class="fu">hostname</span></span>
-<span id="cb57-10"><a href="slurm-job-scheduling-on-ls6.html#cb57-10" tabindex="-1"></a><span class="fu">sleep</span> 30</span>
-<span id="cb57-11"><a href="slurm-job-scheduling-on-ls6.html#cb57-11" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Finishing job&quot;</span></span></code></pre></div>
-<p>Submit it again:</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href="slurm-job-scheduling-on-ls6.html#cb58-1" tabindex="-1"></a><span class="ex">sbatch</span> job.slurm</span></code></pre></div>
-<p>Then check:</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb59-1"><a href="slurm-job-scheduling-on-ls6.html#cb59-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
-<p>This lets you see the difference between job submission and job completion.</p>
+<span id="cb57-8"><a href="slurm-job-scheduling-on-ls6.html#cb57-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job ID: </span><span class="va">$SLURM_JOB_ID</span><span class="st">&quot;</span></span>
+<span id="cb57-9"><a href="slurm-job-scheduling-on-ls6.html#cb57-9" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job name: </span><span class="va">$SLURM_JOB_NAME</span><span class="st">&quot;</span></span>
+<span id="cb57-10"><a href="slurm-job-scheduling-on-ls6.html#cb57-10" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Running on host:&quot;</span></span>
+<span id="cb57-11"><a href="slurm-job-scheduling-on-ls6.html#cb57-11" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb57-12"><a href="slurm-job-scheduling-on-ls6.html#cb57-12" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Working directory:&quot;</span></span>
+<span id="cb57-13"><a href="slurm-job-scheduling-on-ls6.html#cb57-13" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb57-14"><a href="slurm-job-scheduling-on-ls6.html#cb57-14" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Date:&quot;</span></span>
+<span id="cb57-15"><a href="slurm-job-scheduling-on-ls6.html#cb57-15" tabindex="-1"></a><span class="fu">date</span></span></code></pre></div>
+<p>This helps students see that jobs run in a real environment with real metadata.</p>
 </div>
-<div id="looking-backward-with-job-accounting" class="section level2 hasAnchor" number="4.15">
-<h2><span class="header-section-number">4.15</span> Looking backward with job accounting<a href="slurm-job-scheduling-on-ls6.html#looking-backward-with-job-accounting" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Jobs do not stay in <code>squeue</code> forever. Once they finish, you often want history rather than live status.</p>
+<div id="the-sleep-demonstration" class="section level2 hasAnchor" number="4.15">
+<h2><span class="header-section-number">4.15</span> The “sleep” demonstration<a href="slurm-job-scheduling-on-ls6.html#the-sleep-demonstration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>To observe the queue and running state more clearly, use a job that lasts long enough to inspect.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href="slurm-job-scheduling-on-ls6.html#cb58-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb58-2"><a href="slurm-job-scheduling-on-ls6.html#cb58-2" tabindex="-1"></a><span class="co">#SBATCH -J sleep_demo</span></span>
+<span id="cb58-3"><a href="slurm-job-scheduling-on-ls6.html#cb58-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb58-4"><a href="slurm-job-scheduling-on-ls6.html#cb58-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb58-5"><a href="slurm-job-scheduling-on-ls6.html#cb58-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:03:00</span></span>
+<span id="cb58-6"><a href="slurm-job-scheduling-on-ls6.html#cb58-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb58-7"><a href="slurm-job-scheduling-on-ls6.html#cb58-7" tabindex="-1"></a></span>
+<span id="cb58-8"><a href="slurm-job-scheduling-on-ls6.html#cb58-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Starting&quot;</span></span>
+<span id="cb58-9"><a href="slurm-job-scheduling-on-ls6.html#cb58-9" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb58-10"><a href="slurm-job-scheduling-on-ls6.html#cb58-10" tabindex="-1"></a><span class="fu">date</span></span>
+<span id="cb58-11"><a href="slurm-job-scheduling-on-ls6.html#cb58-11" tabindex="-1"></a><span class="fu">sleep</span> 30</span>
+<span id="cb58-12"><a href="slurm-job-scheduling-on-ls6.html#cb58-12" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Finishing&quot;</span></span>
+<span id="cb58-13"><a href="slurm-job-scheduling-on-ls6.html#cb58-13" tabindex="-1"></a><span class="fu">date</span></span></code></pre></div>
+<p>Submit it:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb59-1"><a href="slurm-job-scheduling-on-ls6.html#cb59-1" tabindex="-1"></a><span class="ex">sbatch</span> sleep_demo.slurm</span></code></pre></div>
+<p>Then watch:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb60-1"><a href="slurm-job-scheduling-on-ls6.html#cb60-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<p>This is a small but powerful exercise because it makes the scheduler visible.</p>
+</div>
+<div id="why-queue-time-can-change" class="section level2 hasAnchor" number="4.16">
+<h2><span class="header-section-number">4.16</span> Why queue time can change<a href="slurm-job-scheduling-on-ls6.html#why-queue-time-can-change" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Students often ask why one job starts immediately while another waits.</p>
+<p>The answer is usually some combination of:</p>
+<ul>
+<li>current system load</li>
+<li>partition policies</li>
+<li>how many resources were requested</li>
+<li>wall time requested</li>
+<li>job priority</li>
+<li>the shape of the available free resources</li>
+</ul>
+<p>This is a good place to build maturity. Queue time is not usually arbitrary. It is a consequence of your request meeting a real shared system.</p>
+</div>
+<div id="output-and-error-handling" class="section level2 hasAnchor" number="4.17">
+<h2><span class="header-section-number">4.17</span> Output and error handling<a href="slurm-job-scheduling-on-ls6.html#output-and-error-handling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>By default, many simple jobs write output to a file such as:</p>
+<pre class="text"><code>slurm-123456.out</code></pre>
+<p>For more deliberate control, you can specify output files directly:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb62-1"><a href="slurm-job-scheduling-on-ls6.html#cb62-1" tabindex="-1"></a><span class="co">#SBATCH -o job_%j.out</span></span>
+<span id="cb62-2"><a href="slurm-job-scheduling-on-ls6.html#cb62-2" tabindex="-1"></a><span class="co">#SBATCH -e job_%j.err</span></span></code></pre></div>
+<p>where <code>%j</code> expands to the job ID.</p>
+<p>This helps separate standard output from standard error and makes debugging cleaner.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb63-1"><a href="slurm-job-scheduling-on-ls6.html#cb63-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb63-2"><a href="slurm-job-scheduling-on-ls6.html#cb63-2" tabindex="-1"></a><span class="co">#SBATCH -J split_output</span></span>
+<span id="cb63-3"><a href="slurm-job-scheduling-on-ls6.html#cb63-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb63-4"><a href="slurm-job-scheduling-on-ls6.html#cb63-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb63-5"><a href="slurm-job-scheduling-on-ls6.html#cb63-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:02:00</span></span>
+<span id="cb63-6"><a href="slurm-job-scheduling-on-ls6.html#cb63-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb63-7"><a href="slurm-job-scheduling-on-ls6.html#cb63-7" tabindex="-1"></a><span class="co">#SBATCH -o split_%j.out</span></span>
+<span id="cb63-8"><a href="slurm-job-scheduling-on-ls6.html#cb63-8" tabindex="-1"></a><span class="co">#SBATCH -e split_%j.err</span></span>
+<span id="cb63-9"><a href="slurm-job-scheduling-on-ls6.html#cb63-9" tabindex="-1"></a></span>
+<span id="cb63-10"><a href="slurm-job-scheduling-on-ls6.html#cb63-10" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Standard output message&quot;</span></span>
+<span id="cb63-11"><a href="slurm-job-scheduling-on-ls6.html#cb63-11" tabindex="-1"></a><span class="fu">ls</span> does_not_exist</span></code></pre></div>
+<p>This is a useful exercise because students can see that some messages belong in the output stream and others belong in the error stream.</p>
+</div>
+<div id="a-realistic-serial-job-pattern" class="section level2 hasAnchor" number="4.18">
+<h2><span class="header-section-number">4.18</span> A realistic serial job pattern<a href="slurm-job-scheduling-on-ls6.html#a-realistic-serial-job-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here is a more representative pattern for a serial program:</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb64-1"><a href="slurm-job-scheduling-on-ls6.html#cb64-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb64-2"><a href="slurm-job-scheduling-on-ls6.html#cb64-2" tabindex="-1"></a><span class="co">#SBATCH -J serial_python</span></span>
+<span id="cb64-3"><a href="slurm-job-scheduling-on-ls6.html#cb64-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb64-4"><a href="slurm-job-scheduling-on-ls6.html#cb64-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb64-5"><a href="slurm-job-scheduling-on-ls6.html#cb64-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:10:00</span></span>
+<span id="cb64-6"><a href="slurm-job-scheduling-on-ls6.html#cb64-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb64-7"><a href="slurm-job-scheduling-on-ls6.html#cb64-7" tabindex="-1"></a><span class="co">#SBATCH -o serial_%j.out</span></span>
+<span id="cb64-8"><a href="slurm-job-scheduling-on-ls6.html#cb64-8" tabindex="-1"></a><span class="co">#SBATCH -e serial_%j.err</span></span>
+<span id="cb64-9"><a href="slurm-job-scheduling-on-ls6.html#cb64-9" tabindex="-1"></a></span>
+<span id="cb64-10"><a href="slurm-job-scheduling-on-ls6.html#cb64-10" tabindex="-1"></a><span class="ex">module</span> load python</span>
+<span id="cb64-11"><a href="slurm-job-scheduling-on-ls6.html#cb64-11" tabindex="-1"></a></span>
+<span id="cb64-12"><a href="slurm-job-scheduling-on-ls6.html#cb64-12" tabindex="-1"></a><span class="ex">python</span> analysis.py</span></code></pre></div>
+<p>This script has all the basic parts of real work:</p>
+<ul>
+<li>explicit resources</li>
+<li>explicit environment</li>
+<li>explicit program launch</li>
+<li>explicit output handling</li>
+</ul>
+</div>
+<div id="a-realistic-compile-and-run-pattern" class="section level2 hasAnchor" number="4.19">
+<h2><span class="header-section-number">4.19</span> A realistic compile-and-run pattern<a href="slurm-job-scheduling-on-ls6.html#a-realistic-compile-and-run-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Sometimes the job script is used only to run an already-built executable:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb65-1"><a href="slurm-job-scheduling-on-ls6.html#cb65-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb65-2"><a href="slurm-job-scheduling-on-ls6.html#cb65-2" tabindex="-1"></a><span class="co">#SBATCH -J c_run</span></span>
+<span id="cb65-3"><a href="slurm-job-scheduling-on-ls6.html#cb65-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb65-4"><a href="slurm-job-scheduling-on-ls6.html#cb65-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb65-5"><a href="slurm-job-scheduling-on-ls6.html#cb65-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb65-6"><a href="slurm-job-scheduling-on-ls6.html#cb65-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb65-7"><a href="slurm-job-scheduling-on-ls6.html#cb65-7" tabindex="-1"></a><span class="co">#SBATCH -o c_run_%j.out</span></span>
+<span id="cb65-8"><a href="slurm-job-scheduling-on-ls6.html#cb65-8" tabindex="-1"></a><span class="co">#SBATCH -e c_run_%j.err</span></span>
+<span id="cb65-9"><a href="slurm-job-scheduling-on-ls6.html#cb65-9" tabindex="-1"></a></span>
+<span id="cb65-10"><a href="slurm-job-scheduling-on-ls6.html#cb65-10" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
+<p>The separation matters:</p>
+<ul>
+<li>build small programs on the login node</li>
+<li>execute real workloads through SLURM</li>
+</ul>
+</div>
+<div id="common-beginner-mistakes" class="section level2 hasAnchor" number="4.20">
+<h2><span class="header-section-number">4.20</span> Common beginner mistakes<a href="slurm-job-scheduling-on-ls6.html#common-beginner-mistakes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="mistake-1-assuming-sbatch-ran-the-code-right-away" class="section level3 hasAnchor" number="4.20.1">
+<h3><span class="header-section-number">4.20.1</span> Mistake 1: Assuming <code>sbatch</code> ran the code right away<a href="slurm-job-scheduling-on-ls6.html#mistake-1-assuming-sbatch-ran-the-code-right-away" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction: <code>sbatch</code> submits to the scheduler. The code may run later.</p>
+</div>
+<div id="mistake-2-running-heavy-work-directly-on-the-login-node" class="section level3 hasAnchor" number="4.20.2">
+<h3><span class="header-section-number">4.20.2</span> Mistake 2: Running heavy work directly on the login node<a href="slurm-job-scheduling-on-ls6.html#mistake-2-running-heavy-work-directly-on-the-login-node" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction: login nodes are for setup and lightweight tasks.</p>
+</div>
+<div id="mistake-3-requesting-many-tasks-for-a-serial-program" class="section level3 hasAnchor" number="4.20.3">
+<h3><span class="header-section-number">4.20.3</span> Mistake 3: Requesting many tasks for a serial program<a href="slurm-job-scheduling-on-ls6.html#mistake-3-requesting-many-tasks-for-a-serial-program" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction: more requested resources do not help if the code uses only one process.</p>
+</div>
+<div id="mistake-4-asking-for-far-too-much-wall-time" class="section level3 hasAnchor" number="4.20.4">
+<h3><span class="header-section-number">4.20.4</span> Mistake 4: Asking for far too much wall time<a href="slurm-job-scheduling-on-ls6.html#mistake-4-asking-for-far-too-much-wall-time" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction: inflated requests can delay scheduling and misrepresent workload needs.</p>
+</div>
+<div id="mistake-5-ignoring-output-files" class="section level3 hasAnchor" number="4.20.5">
+<h3><span class="header-section-number">4.20.5</span> Mistake 5: Ignoring output files<a href="slurm-job-scheduling-on-ls6.html#mistake-5-ignoring-output-files" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction: output and error files are usually the first evidence to inspect.</p>
+</div>
+<div id="mistake-6-submitting-from-the-wrong-directory" class="section level3 hasAnchor" number="4.20.6">
+<h3><span class="header-section-number">4.20.6</span> Mistake 6: Submitting from the wrong directory<a href="slurm-job-scheduling-on-ls6.html#mistake-6-submitting-from-the-wrong-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction: confirm location with <code>pwd</code> and <code>ls</code> before submission.</p>
+</div>
+</div>
+<div id="a-debugging-checklist-for-failed-jobs" class="section level2 hasAnchor" number="4.21">
+<h2><span class="header-section-number">4.21</span> A debugging checklist for failed jobs<a href="slurm-job-scheduling-on-ls6.html#a-debugging-checklist-for-failed-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When a job behaves unexpectedly, ask the following in order.</p>
+<div id="did-the-job-submit" class="section level3 hasAnchor" number="4.21.1">
+<h3><span class="header-section-number">4.21.1</span> 1. Did the job submit?<a href="slurm-job-scheduling-on-ls6.html#did-the-job-submit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Use:</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb60-1"><a href="slurm-job-scheduling-on-ls6.html#cb60-1" tabindex="-1"></a><span class="ex">sacct</span></span></code></pre></div>
-<p>To focus on a specific job:</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb61-1"><a href="slurm-job-scheduling-on-ls6.html#cb61-1" tabindex="-1"></a><span class="ex">sacct</span> <span class="at">-j</span> <span class="op">&lt;</span>jobid<span class="op">&gt;</span></span></code></pre></div>
-<p>This is valuable for post-run diagnosis.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb66-1"><a href="slurm-job-scheduling-on-ls6.html#cb66-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<p>If it is no longer there, it may have finished or failed quickly.</p>
 </div>
-<div id="cancelling-a-job" class="section level2 hasAnchor" number="4.16">
-<h2><span class="header-section-number">4.16</span> Cancelling a job<a href="slurm-job-scheduling-on-ls6.html#cancelling-a-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>If a job was submitted incorrectly or no longer needed, use:</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb62-1"><a href="slurm-job-scheduling-on-ls6.html#cb62-1" tabindex="-1"></a><span class="ex">scancel</span> <span class="op">&lt;</span>jobid<span class="op">&gt;</span></span></code></pre></div>
-<p>Common reasons to cancel a job include:</p>
+<div id="what-does-accounting-say" class="section level3 hasAnchor" number="4.21.2">
+<h3><span class="header-section-number">4.21.2</span> 2. What does accounting say?<a href="slurm-job-scheduling-on-ls6.html#what-does-accounting-say" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Use:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb67-1"><a href="slurm-job-scheduling-on-ls6.html#cb67-1" tabindex="-1"></a><span class="ex">sacct</span></span></code></pre></div>
+<p>or:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb68-1"><a href="slurm-job-scheduling-on-ls6.html#cb68-1" tabindex="-1"></a><span class="ex">sacct</span> <span class="at">-j</span> 123456</span></code></pre></div>
+<p>This helps confirm whether the job completed, failed, or was cancelled.</p>
+</div>
+<div id="what-do-the-output-and-error-files-say" class="section level3 hasAnchor" number="4.21.3">
+<h3><span class="header-section-number">4.21.3</span> 3. What do the output and error files say?<a href="slurm-job-scheduling-on-ls6.html#what-do-the-output-and-error-files-say" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Use:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb69-1"><a href="slurm-job-scheduling-on-ls6.html#cb69-1" tabindex="-1"></a><span class="fu">cat</span> slurm-123456.out</span></code></pre></div>
+<p>or your custom output/error filenames.</p>
+</div>
+<div id="was-the-intended-program-or-file-actually-present" class="section level3 hasAnchor" number="4.21.4">
+<h3><span class="header-section-number">4.21.4</span> 4. Was the intended program or file actually present?<a href="slurm-job-scheduling-on-ls6.html#was-the-intended-program-or-file-actually-present" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Use:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb70-1"><a href="slurm-job-scheduling-on-ls6.html#cb70-1" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb70-2"><a href="slurm-job-scheduling-on-ls6.html#cb70-2" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
+<p>This checks your working directory assumptions.</p>
+</div>
+<div id="was-the-required-software-environment-loaded" class="section level3 hasAnchor" number="4.21.5">
+<h3><span class="header-section-number">4.21.5</span> 5. Was the required software environment loaded?<a href="slurm-job-scheduling-on-ls6.html#was-the-required-software-environment-loaded" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If your script assumes Python, GCC, MPI, or another toolchain, verify the appropriate module commands are present.</p>
+</div>
+<div id="did-the-resource-request-match-the-program-model" class="section level3 hasAnchor" number="4.21.6">
+<h3><span class="header-section-number">4.21.6</span> 6. Did the resource request match the program model?<a href="slurm-job-scheduling-on-ls6.html#did-the-resource-request-match-the-program-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>A serial program with four tasks or an OpenMP program without thread settings may behave badly or misleadingly.</p>
+</div>
+</div>
+<div id="failure-case-study-1-misspelled-command" class="section level2 hasAnchor" number="4.22">
+<h2><span class="header-section-number">4.22</span> Failure case study 1: misspelled command<a href="slurm-job-scheduling-on-ls6.html#failure-case-study-1-misspelled-command" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suppose the script contains:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb71-1"><a href="slurm-job-scheduling-on-ls6.html#cb71-1" tabindex="-1"></a><span class="ex">pythno</span> analysis.py</span></code></pre></div>
+<p>The job may submit successfully, but the output or error file will show that the command is not found.</p>
+<p>The key lesson is important:</p>
+<blockquote>
+<p>A job can fail even when submission succeeds.</p>
+</blockquote>
+<p>SLURM accepted the job request. The program inside the job then failed.</p>
+</div>
+<div id="failure-case-study-2-missing-input-file" class="section level2 hasAnchor" number="4.23">
+<h2><span class="header-section-number">4.23</span> Failure case study 2: missing input file<a href="slurm-job-scheduling-on-ls6.html#failure-case-study-2-missing-input-file" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suppose the script expects <code>input.txt</code>, but the file is not in the working directory:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb72-1"><a href="slurm-job-scheduling-on-ls6.html#cb72-1" tabindex="-1"></a><span class="ex">python</span> analysis.py input.txt</span></code></pre></div>
+<p>If <code>input.txt</code> is missing, the program may fail immediately.</p>
+<p>The fix is not mystical. It is usually one of the following:</p>
 <ul>
-<li>wrong script</li>
-<li>bad resource request</li>
-<li>runaway test submission</li>
-<li>discovering an error immediately after submission</li>
+<li>submit from the correct directory</li>
+<li>use a correct path</li>
+<li>copy the needed input file first</li>
+</ul>
+<p>Again, <code>pwd</code> and <code>ls</code> help.</p>
+</div>
+<div id="failure-case-study-3-request-does-not-match-workload" class="section level2 hasAnchor" number="4.24">
+<h2><span class="header-section-number">4.24</span> Failure case study 3: request does not match workload<a href="slurm-job-scheduling-on-ls6.html#failure-case-study-3-request-does-not-match-workload" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Suppose the script requests four tasks:</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb73-1"><a href="slurm-job-scheduling-on-ls6.html#cb73-1" tabindex="-1"></a><span class="co">#SBATCH -n 4</span></span></code></pre></div>
+<p>but runs a plain serial script:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb74-1"><a href="slurm-job-scheduling-on-ls6.html#cb74-1" tabindex="-1"></a><span class="ex">python</span> analysis.py</span></code></pre></div>
+<p>The code itself may still run, but the request does not reflect the workload. This wastes resources and creates confusion.</p>
+<p>A good HPC user learns that job design is part of scientific and computational discipline.</p>
+</div>
+<div id="interactive-jobs-versus-batch-jobs" class="section level2 hasAnchor" number="4.25">
+<h2><span class="header-section-number">4.25</span> Interactive jobs versus batch jobs<a href="slurm-job-scheduling-on-ls6.html#interactive-jobs-versus-batch-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Although this chapter emphasizes batch submission, it is useful to understand the difference conceptually.</p>
+<div id="batch-jobs" class="section level3 hasAnchor" number="4.25.1">
+<h3><span class="header-section-number">4.25.1</span> Batch jobs<a href="slurm-job-scheduling-on-ls6.html#batch-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<ul>
+<li>good for repeatable workflows</li>
+<li>good for production runs</li>
+<li>good for recording output</li>
+<li>good for overnight or longer jobs</li>
 </ul>
 </div>
-<div id="common-failure-patterns" class="section level2 hasAnchor" number="4.17">
-<h2><span class="header-section-number">4.17</span> Common failure patterns<a href="slurm-job-scheduling-on-ls6.html#common-failure-patterns" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="the-job-never-starts" class="section level3 hasAnchor" number="4.17.1">
-<h3><span class="header-section-number">4.17.1</span> 1. The job never starts<a href="slurm-job-scheduling-on-ls6.html#the-job-never-starts" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Possible reasons include:</p>
+<div id="interactive-jobs" class="section level3 hasAnchor" number="4.25.2">
+<h3><span class="header-section-number">4.25.2</span> Interactive jobs<a href="slurm-job-scheduling-on-ls6.html#interactive-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
-<li>unrealistic resource request</li>
-<li>wrong partition</li>
-<li>excessive wall time</li>
-<li>waiting for shared resources</li>
+<li>good for exploration</li>
+<li>good for debugging</li>
+<li>good for short tests in a compute environment</li>
+</ul>
+<p>Beginners should learn batch first because it encourages deliberate, documented practice.</p>
+</div>
+</div>
+<div id="best-practices-for-slurm-scripts" class="section level2 hasAnchor" number="4.26">
+<h2><span class="header-section-number">4.26</span> Best practices for SLURM scripts<a href="slurm-job-scheduling-on-ls6.html#best-practices-for-slurm-scripts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>keep scripts readable</li>
+<li>name jobs clearly</li>
+<li>request realistic resources</li>
+<li>separate output and error when useful</li>
+<li>record environment details for debugging</li>
+<li>keep old scripts rather than rewriting from memory each time</li>
+<li>treat scripts as version-controlled workflow documents</li>
 </ul>
 </div>
-<div id="the-job-fails-immediately" class="section level3 hasAnchor" number="4.17.2">
-<h3><span class="header-section-number">4.17.2</span> 2. The job fails immediately<a href="slurm-job-scheduling-on-ls6.html#the-job-fails-immediately" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Possible reasons include:</p>
-<ul>
-<li>typo in a command</li>
-<li>missing module</li>
-<li>missing input file</li>
-<li>bad script logic</li>
-</ul>
+<div id="lab-1-your-first-real-job" class="section level2 hasAnchor" number="4.27">
+<h2><span class="header-section-number">4.27</span> Lab 1: your first real job<a href="slurm-job-scheduling-on-ls6.html#lab-1-your-first-real-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Create <code>job.slurm</code></li>
+<li>Add the minimal hello example</li>
+<li>Submit with <code>sbatch</code></li>
+<li>Monitor with <code>squeue -u $USER</code></li>
+<li>Inspect the output file</li>
+<li>Identify the hostname and explain why it differs from the login node</li>
+</ol>
 </div>
-<div id="no-output-appears-where-you-expected" class="section level3 hasAnchor" number="4.17.3">
-<h3><span class="header-section-number">4.17.3</span> 3. No output appears where you expected<a href="slurm-job-scheduling-on-ls6.html#no-output-appears-where-you-expected" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Possible reasons include:</p>
-<ul>
-<li>the job is still pending</li>
-<li>you are looking in the wrong directory</li>
-<li>output was redirected elsewhere</li>
-</ul>
+<div id="lab-2-observe-a-running-job" class="section level2 hasAnchor" number="4.28">
+<h2><span class="header-section-number">4.28</span> Lab 2: observe a running job<a href="slurm-job-scheduling-on-ls6.html#lab-2-observe-a-running-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Create a script with <code>sleep 30</code></li>
+<li>Submit it</li>
+<li>Monitor the job while it is running</li>
+<li>Record the job state you observe</li>
+<li>Inspect output after completion</li>
+</ol>
 </div>
+<div id="lab-3-separate-standard-output-and-standard-error" class="section level2 hasAnchor" number="4.29">
+<h2><span class="header-section-number">4.29</span> Lab 3: separate standard output and standard error<a href="slurm-job-scheduling-on-ls6.html#lab-3-separate-standard-output-and-standard-error" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li>Create a script with <code>-o</code> and <code>-e</code></li>
+<li>Print one normal message</li>
+<li>Intentionally run a bad command</li>
+<li>Inspect the <code>.out</code> and <code>.err</code> files separately</li>
+<li>Explain the difference between them</li>
+</ol>
 </div>
-<div id="debug-from-evidence-not-guessing" class="section level2 hasAnchor" number="4.18">
-<h2><span class="header-section-number">4.18</span> Debug from evidence, not guessing<a href="slurm-job-scheduling-on-ls6.html#debug-from-evidence-not-guessing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When a job seems wrong, use this sequence.</p>
-<div id="did-it-submit" class="section level3 hasAnchor" number="4.18.1">
-<h3><span class="header-section-number">4.18.1</span> 1. Did it submit?<a href="slurm-job-scheduling-on-ls6.html#did-it-submit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb63"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb63-1"><a href="slurm-job-scheduling-on-ls6.html#cb63-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
-</div>
-<div id="did-it-run-or-finish" class="section level3 hasAnchor" number="4.18.2">
-<h3><span class="header-section-number">4.18.2</span> 2. Did it run or finish?<a href="slurm-job-scheduling-on-ls6.html#did-it-run-or-finish" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb64"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb64-1"><a href="slurm-job-scheduling-on-ls6.html#cb64-1" tabindex="-1"></a><span class="ex">sacct</span></span></code></pre></div>
-</div>
-<div id="what-does-the-output-file-say" class="section level3 hasAnchor" number="4.18.3">
-<h3><span class="header-section-number">4.18.3</span> 3. What does the output file say?<a href="slurm-job-scheduling-on-ls6.html#what-does-the-output-file-say" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb65"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb65-1"><a href="slurm-job-scheduling-on-ls6.html#cb65-1" tabindex="-1"></a><span class="fu">cat</span> slurm-<span class="pp">*</span>.out</span></code></pre></div>
-</div>
-<div id="was-the-environment-correct" class="section level3 hasAnchor" number="4.18.4">
-<h3><span class="header-section-number">4.18.4</span> 4. Was the environment correct?<a href="slurm-job-scheduling-on-ls6.html#was-the-environment-correct" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Check the job script for <code>module load</code> lines and inspect assumptions.</p>
-</div>
-<div id="was-the-job-launched-from-the-correct-working-directory" class="section level3 hasAnchor" number="4.18.5">
-<h3><span class="header-section-number">4.18.5</span> 5. Was the job launched from the correct working directory?<a href="slurm-job-scheduling-on-ls6.html#was-the-job-launched-from-the-correct-working-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb66"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb66-1"><a href="slurm-job-scheduling-on-ls6.html#cb66-1" tabindex="-1"></a><span class="bu">pwd</span></span>
-<span id="cb66-2"><a href="slurm-job-scheduling-on-ls6.html#cb66-2" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
-<p>This checklist prevents you from inventing explanations too early.</p>
-</div>
-</div>
-<div id="failure-based-learning-exercise" class="section level2 hasAnchor" number="4.19">
-<h2><span class="header-section-number">4.19</span> Failure-based learning exercise<a href="slurm-job-scheduling-on-ls6.html#failure-based-learning-exercise" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Try breaking a script intentionally in one of these ways:</p>
+<div id="lab-4-diagnose-a-broken-job" class="section level2 hasAnchor" number="4.30">
+<h2><span class="header-section-number">4.30</span> Lab 4: diagnose a broken job<a href="slurm-job-scheduling-on-ls6.html#lab-4-diagnose-a-broken-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Break one script intentionally by doing one of the following:</p>
 <ul>
 <li>misspell a command</li>
-<li>request an unrealistic combination of resources</li>
-<li>refer to a file that does not exist</li>
-<li>load a module that is unavailable</li>
+<li>refer to a missing file</li>
+<li>omit a needed module load</li>
 </ul>
-<p>Then diagnose the result using:</p>
+<p>Then diagnose using:</p>
 <ul>
 <li><code>squeue</code></li>
 <li><code>sacct</code></li>
-<li>the output file</li>
-<li>inspection of the script itself</li>
+<li>output/error files</li>
+<li><code>pwd</code> and <code>ls</code></li>
 </ul>
-<p>This exercise is valuable because most HPC competence grows through interpreting evidence after a failure.</p>
 </div>
-<div id="chapter-lab-2" class="section level2 hasAnchor" number="4.20">
-<h2><span class="header-section-number">4.20</span> Chapter lab<a href="slurm-job-scheduling-on-ls6.html#chapter-lab-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="part-1-first-batch-job" class="section level3 hasAnchor" number="4.20.1">
-<h3><span class="header-section-number">4.20.1</span> Part 1: first batch job<a href="slurm-job-scheduling-on-ls6.html#part-1-first-batch-job" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<ol style="list-style-type: decimal">
-<li>Create <code>job.slurm</code>.</li>
-<li>Add the minimal example.</li>
-<li>Submit with <code>sbatch job.slurm</code>.</li>
-<li>Monitor with <code>squeue -u $USER</code>.</li>
-<li>Inspect the output file.</li>
-</ol>
-</div>
-<div id="part-2-observe-a-running-job" class="section level3 hasAnchor" number="4.20.2">
-<h3><span class="header-section-number">4.20.2</span> Part 2: observe a running job<a href="slurm-job-scheduling-on-ls6.html#part-2-observe-a-running-job" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Add <code>sleep 30</code>, resubmit, and watch the state change.</p>
-</div>
-<div id="part-3-change-the-resource-request" class="section level3 hasAnchor" number="4.20.3">
-<h3><span class="header-section-number">4.20.3</span> Part 3: change the resource request<a href="slurm-job-scheduling-on-ls6.html#part-3-change-the-resource-request" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Change from one task to four tasks and compare behavior.</p>
-</div>
-<div id="part-4-load-a-module-inside-the-job" class="section level3 hasAnchor" number="4.20.4">
-<h3><span class="header-section-number">4.20.4</span> Part 4: load a module inside the job<a href="slurm-job-scheduling-on-ls6.html#part-4-load-a-module-inside-the-job" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Add:</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb67-1"><a href="slurm-job-scheduling-on-ls6.html#cb67-1" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
-<span id="cb67-2"><a href="slurm-job-scheduling-on-ls6.html#cb67-2" tabindex="-1"></a><span class="fu">which</span> gcc</span>
-<span id="cb67-3"><a href="slurm-job-scheduling-on-ls6.html#cb67-3" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">--version</span></span></code></pre></div>
-<p>Submit and inspect the output.</p>
-</div>
-</div>
-<div id="best-practices-to-keep-now" class="section level2 hasAnchor" number="4.21">
-<h2><span class="header-section-number">4.21</span> Best practices to keep now<a href="slurm-job-scheduling-on-ls6.html#best-practices-to-keep-now" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="stretch-goal-1" class="section level2 hasAnchor" number="4.31">
+<h2><span class="header-section-number">4.31</span> Stretch goal<a href="slurm-job-scheduling-on-ls6.html#stretch-goal-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Modify a job script so that it:</p>
 <ul>
-<li>keep scripts small and readable</li>
-<li>name jobs clearly</li>
-<li>request realistic time and resources</li>
-<li>inspect the output after every run</li>
-<li>save working scripts rather than rebuilding them from memory</li>
+<li>prints job metadata</li>
+<li>writes separate output and error files</li>
+<li>loads a required module</li>
+<li>runs a short program</li>
+<li>records start and end times</li>
 </ul>
+<p>Then explain each line in plain English.</p>
 </div>
-<div id="looking-ahead-3" class="section level2 hasAnchor" number="4.22">
-<h2><span class="header-section-number">4.22</span> Looking ahead<a href="slurm-job-scheduling-on-ls6.html#looking-ahead-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Once students can submit and monitor jobs confidently, the next natural question is: what exactly are we running on the cluster, and how do we build it? The next chapter moves from job submission to <strong>compiling C programs and understanding toolchains</strong>.</p>
+<div id="key-takeaways" class="section level2 hasAnchor" number="4.32">
+<h2><span class="header-section-number">4.32</span> Key takeaways<a href="slurm-job-scheduling-on-ls6.html#key-takeaways" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ul>
+<li>SLURM is a scheduler and resource manager, not a direct execution command</li>
+<li>a job script is both a shell script and a resource request</li>
+<li><code>sbatch</code> submits work to the queue</li>
+<li><code>squeue</code> shows queued and running work</li>
+<li><code>sacct</code> helps interpret finished jobs</li>
+<li>output and error files are central debugging evidence</li>
+<li>thoughtful resource requests are part of responsible HPC practice</li>
+</ul>
 
 </div>
 </div>
