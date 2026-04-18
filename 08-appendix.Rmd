@@ -1,84 +1,494 @@
-# Appendix: HPC Quick Reference
+# Appendix: Quick Reference and Troubleshooting for LS6 Workflows
 
 ## Overview
 
-This appendix provides a compact quick reference for common commands and workflow patterns used throughout the course.
+This appendix is a compact reference for the commands, patterns, and reminders used throughout the course.
+
+It is **not** a replacement for the explanatory chapters. Instead, it is a quick recovery tool: when you already understand the ideas, this appendix helps you remember the exact command pattern or troubleshooting sequence.
+
+## Core workflow picture
+
+Keep this mental model in view:
+
+```text
+Laptop -> Login node -> SLURM -> Compute node(s) -> Output
+```
+
+And keep this rule visible:
+
+> Do setup on the login node. Do serious computation on compute nodes.
+
+## A safe beginner shell pattern
+
+Before doing something important, run:
+
+```bash
+pwd
+ls
+```
+
+This quickly confirms:
+
+- where you are
+- what files are present
+- whether you are about to act in the intended directory
+
+That tiny habit prevents many avoidable mistakes.
 
 ## SSH
+
+Connect to LS6:
 
 ```bash
 ssh your_username@ls6.tacc.utexas.edu
 ```
 
-## Basic Linux
+## Filesystem basics
+
+Check current directory:
 
 ```bash
 pwd
+```
+
+List files:
+
+```bash
+ls
 ls -l
+```
+
+Change directories:
+
+```bash
 cd
+cd ..
+cd my_directory
+```
+
+Create directories:
+
+```bash
 mkdir project
-cp file1 file2
-mv old new
+mkdir -p project/src project/jobs project/output
+```
+
+Copy, move, rename, remove:
+
+```bash
+cp oldfile newfile
+mv oldname newname
 rm file
+```
+
+## Editing files
+
+Use a simple editor:
+
+```bash
+nano myfile.txt
 ```
 
 ## Permissions
 
+Make a script executable:
+
 ```bash
 chmod +x script.sh
-chmod 755 script.sh
 ```
 
-## Environment and Modules
+Inspect permissions:
 
 ```bash
+ls -l script.sh
+```
+
+A common symptom of permission trouble is:
+
+- the file exists
+- but it will not run
+
+## Environment variables
+
+View the environment:
+
+```bash
+env
+```
+
+Check common variables:
+
+```bash
+echo $HOME
 echo $PATH
+echo $WORK
+echo $SCRATCH
+```
+
+Temporarily add a directory to `PATH`:
+
+```bash
+export PATH=$HOME/bin:$PATH
+```
+
+## Modules
+
+List available modules:
+
+```bash
 module avail
+```
+
+Load a module:
+
+```bash
 module load gcc
+```
+
+Inspect loaded modules:
+
+```bash
 module list
+```
+
+Unload a module:
+
+```bash
 module unload gcc
 ```
 
-## SLURM
+Check where a command comes from:
 
 ```bash
-sbatch job.slurm
-squeue -u $USER
-sacct
-scancel <jobid>
+which gcc
 ```
 
-## Compilation
+## Compilers and build commands
+
+Basic C compile:
 
 ```bash
-gcc program.c -o program -O2
-g++ program.cpp -o program
+gcc hello.c -o hello
+```
+
+Compile with warnings and optimization:
+
+```bash
+gcc -Wall -O2 hello.c -o hello
+```
+
+Basic C++ compile:
+
+```bash
+g++ hello.cpp -o hello_cpp
+```
+
+Compile an OpenMP program:
+
+```bash
+gcc -fopenmp hello_omp.c -o hello_omp
+```
+
+Compile an MPI program:
+
+```bash
+mpicc hello_mpi.c -o hello_mpi
+```
+
+Build with `make`:
+
+```bash
 make
 ```
 
-## MPI
+Clean with `make clean` if the `Makefile` provides it.
+
+## SLURM basics
+
+Submit a job:
 
 ```bash
+sbatch job.slurm
+```
+
+Monitor current jobs:
+
+```bash
+squeue -u $USER
+```
+
+Inspect job history:
+
+```bash
+sacct
+```
+
+Inspect one job:
+
+```bash
+sacct -j 123456
+```
+
+Cancel a job:
+
+```bash
+scancel 123456
+```
+
+## Common job states
+
+- `PD` = pending
+- `R` = running
+- `CG` = completing
+- `CD` = completed
+
+Remember:
+
+- `PD` does not automatically mean broken
+- `sbatch` does not mean “running right now”
+
+## Minimal serial batch script template
+
+```bash
+#!/bin/bash
+#SBATCH -J my_job
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+#SBATCH -o my_job_%j.out
+#SBATCH -e my_job_%j.err
+
+pwd
+hostname
+date
+```
+
+## Minimal MPI batch script template
+
+```bash
+#!/bin/bash
+#SBATCH -J mpi_job
+#SBATCH -N 1
+#SBATCH -n 4
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+#SBATCH -o mpi_%j.out
+#SBATCH -e mpi_%j.err
+
 module load openmpi
-mpicc program.c -o program
+mpirun ./hello_mpi
 ```
 
-## OpenMP
+## Minimal OpenMP batch script template
 
 ```bash
-gcc -fopenmp program.c -o program
+#!/bin/bash
+#SBATCH -J omp_job
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -c 4
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+#SBATCH -o omp_%j.out
+#SBATCH -e omp_%j.err
+
 export OMP_NUM_THREADS=4
+./hello_omp
 ```
 
-## Containers
+## Output files
+
+Inspect output:
+
+```bash
+cat slurm-*.out
+```
+
+Inspect a custom output file:
+
+```bash
+cat my_job_123456.out
+cat my_job_123456.err
+```
+
+Use `less` when output is long:
+
+```bash
+less my_job_123456.out
+```
+
+## Container commands
+
+Check Apptainer:
+
+```bash
+which apptainer
+```
+
+Load it if necessary:
 
 ```bash
 module load apptainer
-apptainer exec image.sif command
 ```
 
-## Final Notes
+Pull an image:
 
-This appendix provides a quick reference for common HPC workflows.
-For full explanations and examples, refer back to the main chapters.
+```bash
+apptainer pull ubuntu.sif docker://ubuntu
+```
 
+Execute a command inside the image:
+
+```bash
+apptainer exec ubuntu.sif echo "hello"
+```
+
+Start an interactive shell:
+
+```bash
+apptainer shell ubuntu.sif
+```
+
+Bind the working directory:
+
+```bash
+apptainer exec --bind $PWD ubuntu.sif ls
+```
+
+## Quick mental model table
+
+| Situation | Good first question |
+|---|---|
+| command does not run | Is the right module loaded? |
+| job fails | What do the output and error files say? |
+| build fails | What is the first real compiler error? |
+| MPI output looks wrong | Does the task count match the program model? |
+| OpenMP uses one thread | Did I set `OMP_NUM_THREADS`? |
+| container cannot find files | Did I bind the right host directory? |
+
+## Troubleshooting checklist: shell and files
+
+Use when something feels wrong immediately at the command line.
+
+```bash
+pwd
+ls
+which command_name
+module list
+```
+
+Questions:
+- am I in the right directory?
+- is the file really present?
+- is the command actually available?
+- is the right environment loaded?
+
+## Troubleshooting checklist: build failure
+
+When compilation fails:
+
+1. read the **first meaningful error**
+2. note the file and line number
+3. inspect nearby source lines
+4. fix one issue at a time
+5. recompile
+
+Helpful commands:
+
+```bash
+ls
+gcc -Wall hello.c -o hello
+make
+```
+
+Useful questions:
+- is the file name correct?
+- did I forget a semicolon or brace?
+- did I forget a source file in the build?
+- did I load the compiler module?
+
+## Troubleshooting checklist: SLURM job failure
+
+When a job fails or produces no useful result:
+
+1. check whether it is still in the queue
+2. inspect job accounting
+3. read output and error files
+4. verify current directory and input files
+5. check software environment assumptions
+
+Helpful commands:
+
+```bash
+squeue -u $USER
+sacct -j 123456
+pwd
+ls
+cat my_job_123456.out
+cat my_job_123456.err
+```
+
+Useful questions:
+- did the job actually start?
+- did the program inside the job fail?
+- am I using the right path?
+- is the right module loaded in the script?
+
+## Troubleshooting checklist: MPI and OpenMP
+
+For MPI:
+- did I compile with `mpicc`?
+- did I request the intended number of tasks?
+- does the launch command match the code?
+
+For OpenMP:
+- did I compile with `-fopenmp`?
+- did I request enough cores?
+- did I set `OMP_NUM_THREADS`?
+
+## Troubleshooting checklist: containers
+
+When container behavior is confusing:
+
+```bash
+which apptainer
+ls *.sif
+apptainer exec image.sif which python3
+apptainer exec --bind $PWD image.sif ls
+```
+
+Useful questions:
+- is Apptainer available?
+- does the image exist?
+- does the image contain the tool I need?
+- did I bind the directory containing my files?
+
+## Course workflow checklist
+
+Before running a real job, confirm:
+
+- I am in the intended directory
+- the needed files exist
+- the required module(s) are loaded
+- the build step completed successfully
+- the SLURM request matches the workload
+- the output path is clear
+- I know what success should look like
+
+## Capstone checklist
+
+Before submitting the capstone project, confirm:
+
+- the project directory is organized
+- the README explains build and run steps
+- the output files support the claims
+- the resource request is justified
+- at least one debugging reflection is included
+- another student could reproduce the workflow
+
+## Final reminder
+
+Use the explanatory chapters to understand the ideas.
+
+Use this appendix when you already know the idea and need the command pattern, checklist, or first troubleshooting step quickly.

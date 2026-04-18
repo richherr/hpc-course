@@ -1,9 +1,3 @@
----
-title: "High-Performance Computing on Lonestar6"
-author: "Rich Herrington <br> DRI, Research Computing Services"
-site: bookdown::bookdown_site
----
-
 # High-Performance Computing on Lonestar6
 
 ## Welcome

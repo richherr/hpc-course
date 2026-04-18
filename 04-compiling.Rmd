@@ -2,18 +2,27 @@
 
 ## Overview
 
-In this chapter, we move from running shell commands and SLURM scripts to **building executable software from source code**.
+In this chapter, we move from running shell commands and submitting SLURM scripts to **building executable software from source code**.
 
-This matters because many HPC workflows involve custom code, research software built from source, and toolchains that depend on specific compiler environments.
+This matters because much HPC work depends on software that is:
+
+- written by researchers
+- customized for a lab or project
+- compiled against particular libraries
+- sensitive to the compiler and environment used to build it
+
+That means compilation is not an optional side topic. It is part of the practical workflow of scientific computing.
 
 By the end of this chapter, you should be able to:
 
 - explain what compilation does
+- distinguish source files from executables
 - load a compiler module
 - verify which compiler is active
 - compile a small C program with `gcc`
-- run the resulting executable
-- prepare compiled code for SLURM execution
+- explain the difference between compiling and linking at a basic level
+- interpret common build errors
+- prepare compiled code for execution through SLURM
 
 ## Mental model: source code becomes an executable
 
@@ -22,67 +31,79 @@ A compiled workflow looks like this:
 ```text
 source code (.c)
       ↓
-compiler (gcc)
+compiler
+      ↓
+object code and linking
       ↓
 executable binary
       ↓
 run on LS6
 ```
 
-That simple picture explains a great deal of later HPC practice.
+At a beginner level, this picture is enough to build the right intuition:
 
-- source code is human-readable
-- the compiler translates source into machine-executable form
-- the executable is what the system can actually run
+- the source file is written for humans
+- the executable is written for the machine
+- the compiler translates
+- the build process may involve more than one file
+
+One of the most useful early realizations is that **editing source code does not automatically change the executable**. If you edit the source, you must rebuild the program.
 
 ## Why compilation matters on clusters
 
 Compilation matters in HPC because:
 
 - software is not always preinstalled
-- the compiler version can affect behavior
-- libraries and toolchains must often match each other
-- performance can depend strongly on how code is built
+- research code may need to be built from source
+- compiler and library versions must often match
+- toolchains affect performance and reproducibility
+- different module environments can produce different behavior
 
-For beginners, the main goal is not advanced optimization. It is understanding the workflow clearly.
+On a laptop, beginners often get used to one built-in environment. On a cluster, you should think more deliberately:
 
-## Two compilers you will hear about often
+> What compiler am I using? What libraries is it tied to? What environment is active right now?
 
-- `gcc` for C
-- `g++` for C++
+Those are normal questions in HPC.
 
-This chapter focuses on **C and `gcc`**, because it gives the cleanest first compiled example.
+## Modules come before compilers
 
-## Modules first, then compilation
-
-Before compiling, load a compiler environment:
+Before compiling, inspect the available software environment:
 
 ```bash
 module avail
+```
+
+Then load a compiler environment:
+
+```bash
 module load gcc
 module list
 ```
 
-This reinforces a central HPC idea: software is part of the environment.
+This reinforces a key course theme:
 
-## Confirm which compiler you are using
+> On an HPC system, software is usually exposed through the environment rather than assumed to be globally fixed forever.
+
+## Verify the compiler instead of guessing
+
+Use:
 
 ```bash
 which gcc
 gcc --version
 ```
 
-This is important because it replaces guessing with evidence.
-
-You now know:
+This gives you evidence for:
 
 - whether `gcc` is available
-- where the executable is coming from
+- where the executable is located
 - which version is active
+
+That matters because troubleshooting gets much easier when you know exactly which tool you are using.
 
 ## Your first C program
 
-Create the file:
+Create a file named `hello.c`:
 
 ```bash
 nano hello.c
@@ -99,7 +120,7 @@ int main() {
 }
 ```
 
-This program does very little, but it demonstrates the full compiled workflow.
+This program is intentionally tiny. The point is not complexity. The point is making the compile-and-run pipeline visible.
 
 ## Compile the program
 
@@ -124,7 +145,9 @@ Expected output:
 Hello from C on LS6
 ```
 
-## Inspect what was created
+## Inspect the directory
+
+Use:
 
 ```bash
 ls -l
@@ -135,34 +158,167 @@ You should see at least:
 - `hello.c`
 - `hello`
 
-This is an important moment for beginners: the source file and the executable are not the same thing.
+This is an important conceptual moment. The source file and executable are different artifacts with different purposes.
 
 ## What just happened?
 
 You:
 
-- wrote source code
+- wrote human-readable source code
 - invoked a compiler
-- created an executable file
-- ran that executable from the shell
+- produced machine-executable output
+- ran the resulting program
 
-That is the core compiled workflow used across much of scientific computing.
+This is the basic compiled workflow that underlies far more complex HPC software.
+
+## Compile versus link: a useful beginner distinction
+
+Students often use the word “compile” to describe the entire build process. In casual conversation that is common, but it helps to know that there are two ideas present:
+
+### Compilation
+Turning source code into lower-level object code.
+
+### Linking
+Combining object code and libraries into a final executable.
+
+At first, these steps are often hidden behind a single command like:
+
+```bash
+gcc hello.c -o hello
+```
+
+But conceptually, the compiler is doing more than one job on your behalf.
+
+Why does this matter? Because some errors are **compile-time errors** and others are **link-time errors**.
+
+## Compile-time errors
+
+These happen when the compiler cannot interpret the source correctly.
+
+Example:
+
+```c
+#include <stdio.h>
+
+int main() {
+    prinft("Hello\n");
+    return 0;
+}
+```
+
+Notice the typo: `prinft` instead of `printf`.
+
+If you compile:
+
+```bash
+gcc hello.c -o hello
+```
+
+the compiler will report a problem.
+
+A compile-time error often points to:
+
+- a typo
+- invalid syntax
+- missing punctuation
+- misuse of the language
+
+## Link-time errors
+
+Link-time errors happen when source files may compile individually, but the final program cannot be assembled correctly.
+
+A common beginner example involves a missing function definition.
+
+Suppose `main.c` calls a function `add`, but the file containing `add` is not included in the build command. Then the compiler may accept `main.c`, but the linker will complain that the referenced symbol cannot be resolved.
+
+This distinction helps students read build messages more intelligently:
+
+- syntax problems often mean compilation trouble
+- undefined reference problems often mean linking trouble
+
+## A simple multiple-file example
+
+Imagine the following files:
+
+### `main.c`
+
+```c
+#include <stdio.h>
+#include "helper.h"
+
+int main() {
+    printf("%d\n", add(2, 3));
+    return 0;
+}
+```
+
+### `helper.h`
+
+```c
+int add(int a, int b);
+```
+
+### `helper.c`
+
+```c
+int add(int a, int b) {
+    return a + b;
+}
+```
+
+Build with:
+
+```bash
+gcc main.c helper.c -o program
+```
+
+Now the interface and implementation are both included.
+
+If you forget `helper.c`, you may get a link-time error. That is a valuable teaching moment.
+
+## Header files as interfaces
+
+Headers (`.h`) are commonly used to declare what functions are available. They do not usually hold the full implementation.
+
+At a beginner level, the main takeaway is:
+
+> Headers tell the compiler what to expect. Source files provide the actual code.
+
+This makes larger projects more organized and easier to compile piece by piece.
 
 ## Optimization flags
 
-A common form is:
+A common practical compile command is:
 
 ```bash
 gcc hello.c -o hello -O2
 ```
 
-Useful levels to know:
+Useful optimization levels to know:
 
 - `-O0` = no optimization
-- `-O2` = standard practical choice
+- `-O2` = common practical default
 - `-O3` = more aggressive optimization
 
-For an introductory course, `-O2` is a good default example.
+For an introductory course, `-O2` is a reasonable example because it introduces the idea that the build process can affect performance.
+
+The important conceptual point is not to memorize every flag. It is to realize that **how** a program is compiled can matter.
+
+## Warnings are not noise
+
+Use:
+
+```bash
+gcc -Wall hello.c -o hello
+```
+
+`-Wall` asks the compiler to show a wider class of warnings.
+
+Warnings do not always stop the build, but they are often useful clues. Strong beginners learn to read them early instead of ignoring them.
+
+A good principle is:
+
+> If the compiler is trying to tell you something, pay attention before the project becomes larger.
 
 ## A brief note on C++
 
@@ -172,43 +328,18 @@ A similar pattern exists for C++:
 g++ hello.cpp -o hello_cpp
 ```
 
-The overall workflow is the same. The compiler changes because the language changes.
+The overall workflow remains familiar:
 
-## Multiple-file programs
+- write source
+- invoke compiler
+- produce executable
+- run executable
 
-Real projects often have more than one source file.
+This chapter uses C because it gives the cleanest first exposure to the build process.
 
-For example:
+## Makefiles: why build automation exists
 
-```text
-main.c
-helper.c
-helper.h
-```
-
-A simple compile step might be:
-
-```bash
-gcc main.c helper.c -o program
-```
-
-This introduces an important idea: programs can be built from multiple components.
-
-## Header files
-
-Headers (`.h`) are used to define interfaces or declarations.
-
-Example:
-
-```c
-int add(int a, int b);
-```
-
-Even if students do not yet write large C projects, it helps to see that compilation can involve several files working together.
-
-## Automating builds with `make`
-
-When builds become repetitive, use a `Makefile`.
+As projects grow, repeated build commands become tiresome and error-prone. A `Makefile` automates the process.
 
 Create:
 
@@ -220,7 +351,7 @@ Add:
 
 ```make
 all:
-	gcc hello.c -o hello
+	gcc -Wall -O2 hello.c -o hello
 ```
 
 Then run:
@@ -229,90 +360,255 @@ Then run:
 make
 ```
 
-The point of this early example is not to teach all of `make`, but to show how build steps can be automated and standardized.
+This is not just a convenience trick. It teaches a valuable lesson:
 
-## Where compilation belongs in the workflow
+> Build steps are part of the workflow and should be made repeatable.
 
-Good beginner rule:
+## A more realistic Makefile example
 
-- compile on login nodes for small builds
-- run heavier or production computations through SLURM
+```make
+CC=gcc
+CFLAGS=-Wall -O2
 
-This keeps the workflow aligned with the earlier distinction between setup and computation.
+all: program
 
-## Run compiled code through SLURM
+program: main.o helper.o
+	$(CC) $(CFLAGS) main.o helper.o -o program
 
-Create `run.slurm`:
+main.o: main.c helper.h
+	$(CC) $(CFLAGS) -c main.c
+
+helper.o: helper.c helper.h
+	$(CC) $(CFLAGS) -c helper.c
+
+clean:
+	rm -f *.o program
+```
+
+Even if students are not yet comfortable writing Makefiles from scratch, reading one helps them understand how real projects are assembled.
+
+## Where to compile
+
+For small builds, compile on the login node.
+
+That is appropriate because compilation is often part of setup work. However, very large builds or special workflows may require different strategies depending on system policy and project needs.
+
+For this course, the safe beginner pattern is:
+
+- edit on the login node
+- compile on the login node
+- run real jobs on compute nodes via SLURM
+
+## Running compiled code through SLURM
+
+Once the executable exists, a batch script can run it.
+
+Example:
 
 ```bash
 #!/bin/bash
-#SBATCH -J compile_test
+#SBATCH -J c_hello
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -t 00:05:00
 #SBATCH -p normal
+#SBATCH -o c_hello_%j.out
+#SBATCH -e c_hello_%j.err
 
 ./hello
 ```
 
-Submit it:
+Submit with:
 
 ```bash
-sbatch run.slurm
+sbatch run_hello.slurm
 ```
 
-Now the compiled workflow connects directly back to the scheduler workflow from the previous chapter.
+This connects Chapter 4 directly to Chapter 3: building and scheduling are different phases of the workflow.
 
-## Common beginner failures
+## A practical build-and-run pattern
 
-- forgot `module load gcc`
-- typo in the source code
-- forgot `-o hello`
-- tried to run from the wrong directory
-- assumed compilation worked without reading the compiler output
-
-## Debug checklist for compilation work
-
-Use this order:
+A typical beginner workflow might look like this:
 
 ```bash
-module list
-which gcc
-ls -l
-gcc hello.c -o hello
+module load gcc
+gcc -Wall -O2 hello.c -o hello
+ls -l hello
 ./hello
+sbatch run_hello.slurm
 ```
 
-If the compile step fails, read the compiler message slowly. It is often telling you exactly where the problem is.
+This order is instructional gold because it separates concerns clearly:
 
-## Chapter lab
+1. load environment
+2. build executable
+3. test executable lightly
+4. run real work through the scheduler
 
-### Part 1: compile a C program
+## Common compiler and build errors
 
-1. Create `hello.c`.
-2. Compile with `gcc hello.c -o hello`.
-3. Run `./hello`.
+### Error type 1: syntax problem
 
-### Part 2: inspect the files
+Symptoms:
+- missing semicolon
+- typo in a function name
+- unbalanced braces or parentheses
 
-Use `ls -l` and note the difference between source and executable.
+Response:
+- read the line number
+- inspect nearby lines
+- fix syntax before trying other theories
 
-### Part 3: use optimization
+### Error type 2: missing header
 
-Compile with:
+Symptoms:
+- compiler says it cannot find a header file
+
+Response:
+- check the include line
+- confirm the file exists
+- confirm search paths if using nonstandard locations
+
+### Error type 3: undefined reference
+
+Symptoms:
+- the compiler gets farther, then the linker complains
+
+Response:
+- check whether all needed `.c` files were included
+- check whether required libraries were linked
+
+### Error type 4: command not found
+
+Symptoms:
+- shell cannot find `gcc`
+
+Response:
+- check `module load gcc`
+- run `which gcc`
+
+## Failure case study 1: typo in source code
+
+Suppose you accidentally write:
+
+```c
+#include <stdio.h>
+
+int main() {
+    printf("Hello\n")
+    return 0;
+}
+```
+
+The missing semicolon after `printf` will prevent compilation.
+
+Lesson:
+- the executable cannot update until the source is valid
+
+## Failure case study 2: typo in the compile command
+
+Suppose you run:
 
 ```bash
-gcc hello.c -o hello_opt -O2
+gcc hell.c -o hello
 ```
 
-### Part 4: run through SLURM
+but the file is actually named `hello.c`.
 
-Create `run.slurm`, submit it, and inspect the output file.
+Lesson:
+- sometimes the mistake is not in the source, but in the shell command itself
 
-### Part 5: optional Makefile
+Use:
 
-Create the minimal `Makefile` and use `make`.
+```bash
+ls
+```
 
-## Looking ahead
+to confirm filenames rather than relying on memory.
 
-The next major conceptual jump is from serial execution to parallel execution. Once you understand how to compile and run one program, you are ready to ask how that work can be spread across multiple cores, threads, or nodes using MPI and OpenMP.
+## Failure case study 3: object exists, executable is stale
+
+Suppose you edit `hello.c`, forget to rebuild, and run `./hello`.
+
+You may see old behavior and think the edits failed.
+
+What really happened is simpler:
+
+- source changed
+- executable did not
+
+Lesson:
+- rebuilding is part of the development loop
+
+## Reading compiler messages calmly
+
+Compiler output can look intimidating because it is dense. A good beginner habit is to read it in layers:
+
+1. identify the first real error
+2. find the file and line number
+3. inspect the local code near that line
+4. fix one issue at a time
+5. recompile
+
+Do not scroll immediately to the bottom and panic. Often the first meaningful error is the most useful one.
+
+## Good habits for build workflows
+
+- load the compiler module explicitly
+- check `which gcc` and `gcc --version`
+- keep source files organized
+- rebuild after edits
+- use `-Wall`
+- automate repetitive builds with `make`
+- keep run scripts separate from source files
+- treat build commands as part of reproducible workflow documentation
+
+## Lab 1: build and run a first C program
+
+1. Create `hello.c`
+2. Load `gcc`
+3. Compile with `gcc hello.c -o hello`
+4. Run `./hello`
+5. Confirm the executable exists with `ls -l`
+
+## Lab 2: use warnings
+
+1. Recompile using `gcc -Wall hello.c -o hello`
+2. Introduce a small issue
+3. Observe how warnings or errors change
+4. Fix the issue and recompile
+
+## Lab 3: build a multi-file program
+
+1. Create `main.c`, `helper.c`, and `helper.h`
+2. Compile them together
+3. Run the result
+4. Remove one source file from the compile command intentionally
+5. Observe and interpret the resulting error
+
+## Lab 4: automate with `make`
+
+1. Create a simple `Makefile`
+2. Build with `make`
+3. Edit the source
+4. Build again
+5. Explain why a Makefile is useful in repeatable workflows
+
+## Stretch goal
+
+Create a small program that reads input, performs a calculation, and writes output. Then:
+
+- compile it with warnings enabled
+- create a SLURM script to run it
+- store source in `src/`
+- store the job script in `jobs/`
+- document the build and run commands in a `README.md`
+
+## Key takeaways
+
+- source code and executables are different artifacts
+- compiler modules are part of the HPC environment
+- compile-time and link-time errors are different kinds of failures
+- warnings are useful, not just noise
+- Makefiles turn repeated build steps into reproducible workflow
+- small programs can be built on the login node, but real execution belongs under SLURM

@@ -1,138 +1,255 @@
-# Containers and Reproducible HPC
+# Containers and Reproducible HPC Workflows
 
 ## Overview
 
-In this chapter, we introduce **containers** as a tool for reproducibility and portability in HPC.
+One of the most common frustrations in computational work is this sentence:
 
-You will learn:
+> It worked on my machine.
 
-- what containers are and why they matter
-- the difference between Docker and HPC containers
-- how Apptainer works
-- how to run containers on HPC systems
-- how to integrate containers with SLURM
+Containers are one of the main ways modern computing tries to solve that problem.
 
-## Mental Model: What is a Container?
+In HPC, containers help package software environments so that workflows become more portable and more reproducible. They are not magic, and they do not remove the need to understand the host system, but they are powerful when used correctly.
+
+This chapter introduces containers as a practical HPC tool. The focus is not on buzzwords. The focus is on how containers fit into real LS6-style workflow.
+
+By the end of the chapter, you should be able to:
+
+- explain what a container is
+- explain why containers matter in HPC
+- distinguish Docker from Apptainer at a practical level
+- pull or use a simple Apptainer image
+- execute commands inside a container
+- understand why directory binding matters
+- run a containerized command through SLURM
+- recognize common beginner container mistakes
+
+## Mental model: what a container actually is
 
 A container packages:
 
 - your program
-- all required libraries
-- system dependencies
-- environment configuration
+- required libraries
+- supporting software dependencies
+- environment expectations
 
-## Visual: Container Concept
+This means a container image can act like a portable execution environment.
+
+A simple mental picture is:
 
 ```text
-Your Program
-+ Libraries
-+ Dependencies
-+ Environment
------------------
-Container Image
+Your code
++ supporting software
++ libraries
++ environment assumptions
+--------------------------------
+Container image
 ```
 
-## Why Containers Matter in HPC
+The key idea is not that the container replaces the whole HPC system. It does not. Instead, it packages much of the user-space environment so that software behavior becomes more consistent across contexts.
 
-Without containers:
+## Why containers matter in HPC
 
-- dependency conflicts occur
-- software versions differ between systems
-- workflows are hard to reproduce
+Containers are useful because they can reduce or manage problems like:
 
-With containers:
+- missing dependencies
+- conflicting library versions
+- “works on one machine but not another” behavior
+- hard-to-reconstruct software setups
+- brittle custom environments
 
-- environments are consistent
-- workflows are portable
-- results are reproducible
+In research computing, this matters because reproducibility is often not just a convenience issue. It affects whether others can repeat your workflow months later.
 
-> 🧠 **Key Insight**
->
-> Containers solve the “it works on my machine” problem.
+## Containers do not eliminate the host system
 
-## Docker vs Apptainer
+A very important correction:
+
+> A container is not a full replacement for the HPC system around it.
+
+You still depend on:
+
+- the host kernel
+- the scheduler
+- the filesystem
+- cluster policies
+- the available hardware
+- the way input and output are connected to the environment
+
+So the right mental model is:
+
+- the host system provides infrastructure
+- the container provides a packaged software environment
+
+Both matter.
+
+## Docker versus Apptainer
 
 ### Docker
 
-- widely used in industry
-- typically requires privileges not appropriate on shared HPC systems
-- better suited to development and deployment workflows outside the cluster
+Docker is widely used in development and deployment environments. It is a major tool in software engineering and cloud workflows.
+
+However, on shared HPC systems, Docker often requires privileges or daemon-based behavior that are not a good fit for multi-user clusters.
 
 ### Apptainer
 
-- designed for HPC
-- runs without root access in normal use
-- integrates with SLURM
-- commonly available on clusters
+Apptainer is designed for HPC-style use.
 
-## Mental Model
+Practical advantages:
 
-```text
-Docker → development environment
-Apptainer → HPC execution environment
-```
+- better suited to shared environments
+- commonly used without root privileges during normal execution
+- integrates naturally into scheduler-based workflows
+- fits better with cluster security models
+
+For this course, the practical message is simple:
+
+> Docker is part of the broader container world, but Apptainer is the HPC-friendly execution model you are more likely to encounter directly on systems like LS6.
 
 ## Checking for Apptainer
+
+First check whether it is already available:
 
 ```bash
 which apptainer
 ```
 
-or:
+If needed, load it as a module:
 
 ```bash
 module load apptainer
 ```
 
-## Pulling a Container
+Then verify again:
+
+```bash
+which apptainer
+```
+
+This mirrors earlier course logic: software availability on HPC systems is often environment-dependent.
+
+## Pulling a simple image
+
+Example:
 
 ```bash
 apptainer pull ubuntu.sif docker://ubuntu
 ```
 
-## Running a Container
+Interpretation:
+
+- `docker://ubuntu` identifies the source image
+- `ubuntu.sif` is the output image file
+- `.sif` is a common Apptainer image format
+
+This command makes the image a tangible file in your working environment.
+
+## Run a command inside the container
+
+Use:
 
 ```bash
 apptainer exec ubuntu.sif echo "Hello from container"
 ```
 
-## Interactive Shell
+This is the cleanest way to understand container execution.
+
+You are not “booting a virtual machine.” You are asking Apptainer to run a command inside the packaged environment represented by the image.
+
+## Use an interactive shell
 
 ```bash
 apptainer shell ubuntu.sif
 ```
 
-## Mental Model: What Just Happened?
+This opens an interactive shell inside the container environment.
 
-- you downloaded a container image
-- you executed a command inside it
-- the container used the host kernel
-
-## Running Python in a Container
+Useful exploratory checks include:
 
 ```bash
-apptainer exec ubuntu.sif python3 --version
+which python3
+python3 --version
+ls /
 ```
 
-## Binding Directories
+This helps students see that the container has its own environment logic while still running on the host.
+
+## Binding directories: the most important beginner concept
+
+One of the most common container confusions is visibility of files.
+
+A container image does not automatically expose every host path the way students might expect. Often, you need to bind directories explicitly.
+
+Example:
 
 ```bash
 apptainer exec --bind $PWD ubuntu.sif ls
 ```
 
-> 💡 **Tip**
->
-> Always bind your working directory when running containerized jobs.
+This makes the current working directory visible inside the container for the command being run.
 
-## SLURM + Containers
+If your workflow depends on scripts, inputs, or outputs in the current directory, binding is often essential.
 
-Create:
+## Why binding matters
+
+Without an appropriate bind, a containerized command may not see:
+
+- your script
+- your input data
+- your working directory
+- your intended output location
+
+That often produces a confusing symptom:
+
+> The container starts fine, but it cannot find my files.
+
+Usually the container is not “broken.” The host paths simply were not connected the way you assumed.
+
+## A concrete example with a host script
+
+Suppose `script.py` exists in the current directory.
+
+You might try:
 
 ```bash
-nano container.slurm
+apptainer exec ubuntu.sif python3 script.py
 ```
 
-Add:
+If the container does not see that host directory, the script may not be found.
+
+A better pattern is:
+
+```bash
+apptainer exec --bind $PWD ubuntu.sif python3 script.py
+```
+
+This makes the relationship between host files and the container explicit.
+
+## Store images in sensible places
+
+Container images can be large. Good storage decisions matter.
+
+Practical advice:
+
+- use `$WORK` or another project-oriented location for sizable images
+- avoid cluttering small quota-limited areas like `$HOME` with large images
+- think of images as data assets that should be placed deliberately
+
+This connects containers back to the filesystem lessons earlier in the course.
+
+## Running Python inside a container
+
+Example:
+
+```bash
+apptainer exec ubuntu.sif python3 --version
+```
+
+This is useful because it shows how containers can provide software versions that may not match the default host environment.
+
+## Containerizing a workflow through SLURM
+
+A batch script can run a containerized command just as it runs other programs.
+
+Example:
 
 ```bash
 #!/bin/bash
@@ -141,143 +258,223 @@ Add:
 #SBATCH -n 1
 #SBATCH -t 00:05:00
 #SBATCH -p normal
+#SBATCH -o container_%j.out
+#SBATCH -e container_%j.err
 
 module load apptainer
 
-apptainer exec ubuntu.sif echo "Running inside container"
+apptainer exec --bind $PWD ubuntu.sif echo "Running inside container"
 ```
 
-Submit:
+Submit with:
 
 ```bash
 sbatch container.slurm
 ```
 
-Inspect output:
+This is an important conceptual bridge:
+
+> Containers do not replace SLURM. Containers are often executed *under* SLURM as part of a scheduled workflow.
+
+## A more realistic containerized script run
+
+Suppose you have a Python script in the current working directory:
 
 ```bash
-cat slurm-*.out
+#!/bin/bash
+#SBATCH -J container_python
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 00:10:00
+#SBATCH -p normal
+#SBATCH -o container_py_%j.out
+#SBATCH -e container_py_%j.err
+
+module load apptainer
+
+apptainer exec --bind $PWD ubuntu.sif python3 script.py
 ```
 
-## Running Applications in Containers
+This is a realistic pattern for teaching because it combines:
 
-Example:
+- scheduler awareness
+- software environment packaging
+- explicit path handling
+- reproducible command execution
 
+## When containers help most
+
+Containers are especially useful when:
+
+- software dependencies are awkward
+- collaborators need the same environment
+- the host system and project software differ significantly
+- reproducibility matters over time
+- modules alone are not enough or become cumbersome
+
+## When modules may be enough
+
+Not every workflow needs a container.
+
+Sometimes the module system already gives you:
+
+- a suitable compiler
+- the right Python stack
+- the right MPI stack
+- the needed application version
+
+In those cases, using modules alone may be simpler.
+
+This is an important judgment skill:
+
+> Use the tool that fits the workflow. Do not use containers just because they sound modern.
+
+## Common beginner mistakes
+
+### Mistake 1: assuming the container sees all host files automatically
+
+Correction:
+- bind the directories you actually need
+
+### Mistake 2: forgetting to load Apptainer
+
+Correction:
+- verify availability with `which apptainer`
+- load the module if needed
+
+### Mistake 3: storing large images in the wrong location
+
+Correction:
+- choose storage locations intentionally
+
+### Mistake 4: thinking a container replaces SLURM
+
+Correction:
+- scheduled execution still goes through SLURM on shared systems
+
+### Mistake 5: assuming every needed tool is already inside the image
+
+Correction:
+- inspect the image and verify commands rather than assuming
+
+## Failure case study 1: file not found inside the container
+
+Symptom:
+- the script exists on the host
+- containerized execution says the file is missing
+
+Likely cause:
+- the working directory was not bound into the container
+
+Fix:
+- add `--bind $PWD` or another appropriate bind path
+
+## Failure case study 2: command not found inside the image
+
+Symptom:
+- `python3` or another expected command is missing
+
+Likely cause:
+- the image does not actually contain that software
+
+Fix:
+- inspect the image interactively
+- choose a more appropriate image
+- build or pull a container that matches the workflow
+
+## Failure case study 3: output appears in the wrong place
+
+Symptom:
+- the job runs, but expected output is not visible where the student expects it
+
+Likely causes:
+- output path inside the container does not map to the host path
+- bind paths were incomplete or misunderstood
+
+Fix:
+- make host/container path relationships explicit
+- write outputs to bound directories intentionally
+
+## Debugging checklist for container workflows
+
+When a containerized job behaves strangely, ask:
+
+### 1. Is Apptainer available?
 ```bash
-apptainer exec ubuntu.sif python script.py
+which apptainer
 ```
 
-## Comparing Workflows
-
-### Without container
-
-- load modules
-- install dependencies
-- manage versions
-
-### With container
-
-- run container
-- everything is included in the image or explicitly bound
-
-## Reproducibility
-
-Containers allow you to:
-
-- rerun experiments later
-- share environments with others
-- ensure consistency across systems
-
-## Common Mistakes
-
-- forgetting to load the Apptainer module
-- not binding directories
-- assuming the container has every needed tool installed
-- using Docker commands directly on the cluster
-- storing large images in `$HOME`
-
-## Storage Considerations
-
-Store containers in:
-
-- `$WORK`
-- `$SCRATCH`
-
-Avoid:
-
-- `$HOME` for large image files
-
-## Debugging Containers
-
-### Check image exists
-
+### 2. Does the image exist?
 ```bash
 ls *.sif
 ```
 
-### Test interactively
-
+### 3. Can I explore it interactively?
 ```bash
 apptainer shell ubuntu.sif
 ```
 
-### Check a command
-
+### 4. Does the command I need actually exist inside the image?
 ```bash
 apptainer exec ubuntu.sif which python3
 ```
 
-## Lab 6 — Containers on HPC
+### 5. Are the needed host directories bound into the container?
+Check the `--bind` logic in the command or script.
 
-### Part 1: Pull Image
+### 6. Does the batch script still make sense as a SLURM job?
+Remember that the scheduler and the container are separate layers.
 
-```bash
-apptainer pull ubuntu.sif docker://ubuntu
-```
+## Best practices
 
-### Part 2: Run Command
+- load Apptainer explicitly when needed
+- inspect images rather than assuming contents
+- bind host directories intentionally
+- store images in appropriate storage areas
+- keep container commands inside readable SLURM scripts
+- document the image source and runtime assumptions in the project README
 
-```bash
-apptainer exec ubuntu.sif echo "Hello container"
-```
+## Lab 1: pull and inspect an image
 
-### Part 3: Interactive Mode
+1. Load Apptainer if needed
+2. Pull a simple image
+3. Run `apptainer exec` with a trivial command
+4. Enter the image with `apptainer shell`
+5. Inspect software inside the image
 
-```bash
-apptainer shell ubuntu.sif
-```
+## Lab 2: bind the working directory
 
-### Part 4: SLURM Job
+1. Create a small host file
+2. Run a container command without a bind
+3. Observe what the container can or cannot see
+4. Repeat with `--bind $PWD`
+5. Explain the difference
 
-Create `container.slurm` and run the container through SLURM.
+## Lab 3: run a containerized batch job
 
-### Part 5: Bind Directory
+1. Write a simple `container.slurm`
+2. Load Apptainer in the script
+3. Execute a containerized command
+4. Submit the job
+5. Inspect output and error files
 
-```bash
-apptainer exec --bind $PWD ubuntu.sif ls
-```
+## Lab 4: compare modules and containers
 
-## Stretch Goal
+Write a short reflection answering:
 
-- run a Python script inside a container
-- compare container vs native environment
-- document differences
+- when are modules sufficient?
+- when does a container help?
+- what new complexity does a container introduce?
 
-## Transition to Capstone
+## Stretch goal
 
-You now understand:
+Run a small script through Apptainer under SLURM, with explicit bind paths and recorded output. Then write a short note explaining how another student could reproduce the workflow from scratch.
 
-- system access
-- Linux fundamentals
-- job scheduling
-- compiling software
-- parallel computing
-- container workflows
+## Key takeaways
 
-## Key Takeaways
-
-- Containers package complete environments
-- Apptainer is designed for HPC systems
-- Containers improve reproducibility
-- SLURM can run containerized jobs
-- Containers simplify complex workflows
+- containers package software environments, not the entire HPC system
+- Apptainer is the HPC-friendly container tool in this course context
+- directory binding is one of the most important practical concepts
+- containers often run under SLURM, not instead of SLURM
+- modules and containers solve different workflow problems
+- reproducibility improves when container usage is documented clearly
