@@ -1,193 +1,604 @@
-# Linux Fundamentals and Environment Awareness
+# Linux Fundamentals for HPC
 
 ## Overview
 
-This chapter builds the Linux foundation needed for real HPC work. Many job failures that appear to be “cluster problems” are actually basic environment problems:
+In this chapter, you will build the Linux habits needed to work effectively on a shared HPC system.
 
-- wrong directory
-- missing file
-- missing execute permission
-- wrong module environment
-- command not found
+Many beginners think Linux is just a collection of commands to memorize. That is not the right way to approach it. On an HPC system, Linux is the environment in which you:
 
-By the end of this chapter, you should be able to:
+- find and organize your files
+- inspect permissions
+- prepare software environments
+- launch and monitor work
+- diagnose failure when something goes wrong
 
-- interpret the output of `ls -l`
-- change file permissions for common cases
-- inspect and reason about environment variables
-- understand what `PATH` does
-- load, list, and unload modules
-- use a practical debugging checklist before submitting work
+So the real goal of this chapter is not just command memorization. The real goal is to help you become **environment-aware**.
 
-## Mental model: an HPC system is a shared environment
+You should finish this chapter being able to answer questions like:
 
-On a personal laptop, users often assume that their preferred software, file layout, and editor are just “there.” On an HPC system, the environment is more explicit.
+- Where am I?
+- What files are here?
+- Do I have permission to use this file?
+- Is the command I need actually available?
+- Is my software environment loaded correctly?
+- Where did my output go?
+- Am I using the right storage location?
 
-You are working in a space that is:
+These questions come up constantly in real HPC work.
+
+## Why Linux matters in HPC
+
+On a laptop, you can often get away with clicking around until you find what you need. On an HPC system, that habit breaks down quickly.
+
+You are working in:
+
+- a remote environment
+- a shared filesystem
+- a shell-based workflow
+- a scheduler-managed system
+- a software environment controlled by modules
+
+That means Linux skills are not optional background knowledge. They are part of the core workflow.
+
+If you lose track of your current directory, misunderstand permissions, or assume a command exists when it does not, your job may fail before the “real” scientific work even begins.
+
+This is why Linux fundamentals belong early in the book. Many later errors are really Linux errors in disguise.
+
+## Mental model: you are working in a shared environment
+
+Unlike a personal laptop, an HPC system is:
 
 - multi-user
-- resource-managed
-- environment-driven
-- structured for repeatability
+- policy-driven
+- environment-sensitive
+- designed for repeatable workflows
 
-That means your workflow should be deliberate. You should know:
+That changes what “good habits” mean.
 
-- where you are
-- what files are present
-- what software is loaded
-- what commands are available in your environment
+On a personal machine, a messy directory or vague file naming may be annoying but manageable.
 
-## Inspecting the filesystem
+On a shared cluster, messy habits lead to:
 
-The first two commands to trust are:
+- lost files
+- wrong paths
+- broken scripts
+- quota problems
+- confusing job output
+- workflows that are hard to reproduce later
+
+A strong habit on HPC is:
+
+> inspect first, act second
+
+That one habit will prevent many avoidable mistakes.
+
+## The Linux filesystem
+
+A simplified picture looks like this:
+
+```text
+/
+├── home/
+│   └── your_username/
+├── work/
+│   └── project_space/
+├── scratch/
+│   └── temporary_files/
+```
+
+You do not need to memorize every system directory. You do need a clear working understanding of where your own files live and what each major storage area is for.
+
+## A practical storage model
+
+A useful beginner model is:
+
+- `/home` or `$HOME` → small, stable, personal files
+- `/work` or `$WORK` → active project files and larger working data
+- `/scratch` or `$SCRATCH` → high-performance temporary data
+
+These names can vary somewhat by system, but the underlying ideas are common.
+
+### `$HOME`
+
+Use it for:
+
+- shell configuration
+- small scripts
+- notes
+- small code files
+- personal settings
+
+Do **not** treat it as a dumping ground for large datasets, container images, or long-term accumulation of bulky outputs.
+
+### `$WORK`
+
+Use it for:
+
+- active project directories
+- larger inputs
+- files you expect to revisit regularly
+- project-oriented working material
+
+### `$SCRATCH`
+
+Use it for:
+
+- temporary high-performance workflow data
+- files created during active jobs
+- large intermediate outputs that do not need permanent storage
+
+Scratch is useful because it is often better suited for active job I/O, but you should never forget that it is temporary by design.
+
+## Where am I?
+
+The first Linux question you should learn to ask is:
 
 ```bash
 pwd
+```
+
+This prints your **present working directory**.
+
+This command is deceptively important. Many later failures are really just “I was in the wrong directory.”
+
+If you ever think:
+
+- “Why can’t it find my file?”
+- “Why did the output show up there?”
+- “Why is my script failing to open the input?”
+
+start with `pwd`.
+
+## What is here?
+
+Use:
+
+```bash
+ls
+```
+
+For more detail:
+
+```bash
 ls -l
 ```
 
-### `pwd`
+For hidden files too:
 
-Prints the current working directory.
+```bash
+ls -la
+```
 
-### `ls -l`
+A strong habit is to use `ls -la` more often than plain `ls`, because hidden files and permissions often matter in real workflows.
 
-Lists files with useful details such as permissions, owner, group, size, and modification time.
+## Reading `ls -l`
 
-An example permission string looks like this:
+Example output may look like:
+
+```text
+-rw-r--r-- 1 user group size date filename
+```
+
+That one line tells you several useful things:
+
+- file type
+- permissions
+- owner
+- group
+- size
+- timestamp
+- filename
+
+Instead of treating `ls -l` as clutter, learn to read it as diagnostic information.
+
+## File permissions
+
+Every file and directory has permissions for:
+
+- **owner**
+- **group**
+- **others**
+
+Each of those can have:
+
+- read (`r`)
+- write (`w`)
+- execute (`x`)
+
+### Visual reminder
 
 ```text
 -rwxr-xr--
+│││││││││
+│││││││└── others
+│││││└──── group
+││└──────── owner
 ```
 
-A good beginner interpretation is:
+## Why permissions matter
 
-- the file exists
-- it has an owner, group, and permission settings
-- some users may execute it, some may not
+Permissions directly affect whether you can:
 
-## File permissions in practice
+- run a script
+- edit a file
+- enter a directory
+- read an input file
+- share work safely
 
-Permissions matter constantly in Linux-based HPC workflows.
+In HPC, permissions matter because your jobs do not magically ignore filesystem rules. If the script cannot read a file, the scheduler will not fix that for you.
 
-You do not need a full theory of Unix security to start working productively. You do need the operational basics.
+## Common permission operations
 
-### Common actions
-
-Make a file executable:
+### Make a script executable
 
 ```bash
 chmod +x script.sh
 ```
 
-Remove write permission:
+### Remove write permission
 
 ```bash
 chmod -w file.txt
 ```
 
-Use numeric mode:
+### Use numeric mode
 
 ```bash
 chmod 755 script.sh
 ```
 
-A helpful mental model for `755` is:
+That means:
 
-- owner: read, write, execute
-- group: read, execute
-- others: read, execute
+- user: rwx
+- group: r-x
+- others: r-x
 
-## Why permissions matter on clusters
+## A real permission example
 
-Common failures include:
+Suppose you create a shell script called `run_analysis.sh` and then type:
 
-- a script exists but will not execute
-- a file cannot be edited because it is not writable
-- a shared file has the wrong permissions for collaborators
+```bash
+./run_analysis.sh
+```
 
-When a script “should work” but does not, `ls -l` is one of the fastest checks you can make.
+If the system complains, do not immediately rewrite the script.
+
+Check:
+
+```bash
+ls -l run_analysis.sh
+```
+
+If the execute bit is missing, the fix is:
+
+```bash
+chmod +x run_analysis.sh
+```
+
+This is a good example of Linux debugging on HPC:
+
+- do not guess
+- inspect the file
+- make the smallest needed correction
+- rerun
+
+## Directories also have permissions
+
+Beginners often focus only on file permissions, but directories matter too.
+
+If you cannot enter a directory, list its contents, or write files into it, directory permissions may be the reason.
+
+So when something feels “missing,” do not think only about the file. Think about the directory path that leads to it.
+
+## Moving around the filesystem
+
+### Change directory
+
+```bash
+cd my_directory
+```
+
+### Go up one level
+
+```bash
+cd ..
+```
+
+### Go to your home directory
+
+```bash
+cd ~
+```
+
+### Return to the previous directory
+
+```bash
+cd -
+```
+
+This last one is especially useful when you are switching between two working locations.
+
+## Creating and organizing directories
+
+### Make a directory
+
+```bash
+mkdir project1
+```
+
+### Make nested directories
+
+```bash
+mkdir -p project1/data project1/output project1/scripts
+```
+
+This is a good early habit because project organization matters. Strong directory structure makes debugging easier later.
+
+A clean small project structure may look like:
+
+```text
+project1/
+├── data/
+├── output/
+├── scripts/
+└── notes/
+```
+
+Even small projects benefit from this kind of organization.
+
+## Copying, moving, and deleting
+
+### Copy a file
+
+```bash
+cp file1.txt file2.txt
+```
+
+### Copy a file into a directory
+
+```bash
+cp file1.txt project1/data/
+```
+
+### Move or rename a file
+
+```bash
+mv oldname.txt newname.txt
+```
+
+### Remove a file
+
+```bash
+rm file1.txt
+```
+
+### Remove a directory and its contents
+
+```bash
+rm -r old_directory
+```
+
+Be careful with `rm`. On many Linux systems, deleting a file this way does not send it to a recycle bin.
+
+That means inspection matters before deletion.
+
+## Viewing file contents
+
+### Print a short file
+
+```bash
+cat file.txt
+```
+
+### Read interactively
+
+```bash
+less file.txt
+```
+
+### Inspect the beginning
+
+```bash
+head file.txt
+```
+
+### Inspect the end
+
+```bash
+tail file.txt
+```
+
+These commands become extremely useful once you start reading job output files.
+
+A strong habit is:
+
+- use `head` when you want the beginning quickly
+- use `tail` when you want the last lines of a long output file
+- use `less` when you want to scroll and search interactively
+
+## Searching for files
+
+Use:
+
+```bash
+find . -name "file.txt"
+```
+
+This command is one of the best ways to recover from a “Where did that file go?” problem.
+
+If output seems to be missing, `find` is often more useful than randomly changing directories and listing files.
+
+## Searching inside files
+
+Use:
+
+```bash
+grep "error" file.txt
+```
+
+This searches for lines containing a pattern.
+
+Example:
+
+```bash
+grep "warning" sample.log
+```
+
+This matters in HPC because output and error files can become long. You do not always want to read every line from top to bottom before looking for useful clues.
+
+## Pipes: connecting commands
+
+A pipe sends the output of one command into another command.
+
+Example:
+
+```bash
+cat file.txt | grep "error"
+```
+
+A better mental model is:
+
+> one command produces information, the next command filters it
+
+This is valuable because Linux tools often work best in combination rather than isolation.
+
+You will use this pattern often for output inspection.
 
 ## Environment variables
 
-Environment variables define part of the context in which commands run.
+Environment variables hold information about the current shell environment.
 
-View them with:
-
-```bash
-env
-```
-
-Two important examples are:
+Examples:
 
 ```bash
 echo $HOME
 echo $PATH
+echo $SHELL
 ```
 
-### `$HOME`
+This information helps define:
 
-Usually points to your home directory.
+- where executables are found
+- where your home directory is
+- what shell you are using
+- how your environment behaves
 
-### `$PATH`
+## Why environment variables matter
 
-Tells the shell where to search for executable programs.
+On HPC systems, many tools are activated through the environment rather than installed in one universal location.
 
-If a program is not on your `PATH`, typing its name may produce:
+That means command behavior may depend on:
+
+- loaded modules
+- shell startup files
+- path settings
+- temporary environment choices
+
+So if something works in one shell but not another, the environment may be the reason.
+
+## Understanding `PATH`
+
+`PATH` tells Linux where to search for commands.
+
+Check it with:
+
+```bash
+echo $PATH
+```
+
+If a program is not in one of those directories, the shell may answer:
 
 ```text
 command not found
 ```
 
-## A practical mental model for `PATH`
+That does not always mean the program is absent from the system. It may mean the environment is not configured to find it.
 
-Think of `PATH` as a list of directories the shell searches when you enter a command name.
-
-If `gcc` is on your `PATH`, you can type:
-
-```bash
-gcc --version
-```
-
-If not, the shell may not know where to find it.
-
-A temporary way to add your own directory is:
+## Add something to `PATH` temporarily
 
 ```bash
 export PATH=$HOME/bin:$PATH
 ```
 
-This prepends `$HOME/bin` to the front of the search path for the current shell session.
+This adds your personal `bin` directory to the front of the search path for the current shell session.
 
-## Modules: software is part of the environment
+That is useful when you write your own small scripts and want to run them by name.
 
-Clusters often use a module system rather than making every software package globally visible at all times.
+## Diagnosing a missing command
 
-That means software is often loaded **into the environment** when needed.
+Suppose you try:
 
-Common commands:
+```bash
+gcc --version
+```
+
+and see:
+
+```text
+bash: gcc: command not found
+```
+
+Do not guess wildly.
+
+Instead, work through a reasoning chain:
+
+1. Is the relevant module loaded?
+2. What does `module list` show?
+3. What does `which gcc` show?
+4. What is in `PATH`?
+
+This is much stronger than changing several unrelated settings at once.
+
+## Modules: software environments on HPC systems
+
+HPC systems often avoid putting all software into one global environment.
+
+Instead, they use **modules**.
+
+This matters because different projects may need:
+
+- different compiler versions
+- different MPI implementations
+- different library stacks
+- different dependency combinations
+
+Modules let you switch environments deliberately.
+
+## Basic module commands
+
+### Show available modules
 
 ```bash
 module avail
+```
+
+### Load a module
+
+```bash
 module load gcc
+```
+
+### Show loaded modules
+
+```bash
 module list
+```
+
+### Unload a module
+
+```bash
 module unload gcc
 ```
 
-## Why modules matter
+## Why modules matter so much
 
-On an HPC system, different projects may need:
+On a personal machine, you may be used to software simply “being installed.”
 
-- different compiler versions
-- different MPI libraries
-- different Python stacks
-- different container runtimes
+On HPC, software is often there but not active until you load the right module.
 
-Modules help manage this complexity.
+That means module management is part of basic Linux practice on the cluster, not an advanced extra topic.
 
-Instead of assuming “the system version” is correct, users load an appropriate environment for the job.
-
-## Example: loading a compiler
+## Example: using a compiler
 
 ```bash
 module load gcc
@@ -195,102 +606,83 @@ which gcc
 gcc --version
 ```
 
-This sequence is valuable because it does three things:
+This pattern is excellent because it confirms:
 
-- loads the compiler module
-- shows which executable will run
-- shows the version now active in the shell
+- the module loaded
+- the executable is now visible
+- the version is what you expect
 
-## Practical file inspection tools
+## Disk usage and quotas
 
-A few file-related commands are worth using early.
-
-Find a file:
-
-```bash
-find . -name "example.txt"
-```
-
-View a file:
-
-```bash
-cat example.txt
-less example.txt
-head example.txt
-tail example.txt
-```
-
-These tools are especially helpful when checking logs, outputs, and small configuration files.
-
-## Piping commands together
-
-One of the most useful Linux habits is combining small commands.
-
-```bash
-cat file.txt | grep "error"
-```
-
-This is a classic pipeline: one command produces output, the next filters it.
-
-You do not need to become an expert in shell pipelines immediately, but you should recognize that Linux tools are designed to be chained together.
-
-## Disk awareness matters
-
-HPC users need at least basic awareness of storage usage.
-
-Check filesystem space:
+### Check filesystem space
 
 ```bash
 df -h
 ```
 
-Check directory sizes:
+### Check directory sizes
 
 ```bash
 du -sh *
 ```
 
-These commands help prevent confusion when jobs fail because of full storage areas or because output is larger than expected.
+These commands answer different questions.
 
-## Process awareness
+- `df -h` shows overall filesystem space
+- `du -sh *` shows how much space files and directories are using in your current location
 
-Sometimes you need to inspect or stop your own processes.
+You need both perspectives.
 
-List your processes:
+If a job starts failing when writing output, storage problems are a real possibility.
+
+## Why storage awareness matters
+
+Students often discover quota or storage trouble late, after:
+
+- copying too much data
+- writing many output files
+- saving large containers in the wrong place
+- leaving temporary data to accumulate
+
+A good habit is to inspect storage before it becomes an emergency.
+
+## Processes
+
+### Show your processes
 
 ```bash
 ps -u $USER
 ```
 
-Kill a process:
+### Kill a process
 
 ```bash
 kill <pid>
 ```
 
-This becomes more useful later when dealing with editors, accidental runs, or interactive sessions.
+This is especially useful if you accidentally start something on the login node that should not keep running there.
 
-## Optional connection to R
+Later, SLURM job management becomes more important than plain process management, but this is still good Linux knowledge.
 
-If you use R heavily, it is useful to remember that environment information can also be inspected from inside R.
+## Working from inside R
+
+If you use R, remember that environment information can also be inspected from inside R.
 
 ```r
 Sys.getenv("PATH")
 ```
 
-And shell commands can be invoked from R when appropriate:
+You can also run shell commands from R:
 
 ```r
 system("echo $HOME")
 ```
 
-That said, it is still important to understand the shell environment directly rather than relying only on IDE tools.
+This is useful because R workflows on HPC still depend on the surrounding Linux environment.
 
-## A debugging mindset for Linux-based HPC work
+## A debugging mindset for Linux
 
-When something goes wrong, start with evidence.
-
-Ask these five questions in order:
+When something goes wrong, avoid random changes. Use a sequence.
 
 ### 1. Where am I?
 
@@ -301,7 +693,7 @@ pwd
 ### 2. What files are here?
 
 ```bash
-ls -l
+ls -la
 ```
 
 ### 3. Do I have the right permissions?
@@ -310,40 +702,102 @@ ls -l
 ls -l script.sh
 ```
 
-### 4. Is the program actually available?
+### 4. Is the command available?
 
 ```bash
 which gcc
 ```
 
-### 5. Is my environment what I think it is?
+### 5. Is the right environment loaded?
 
 ```bash
 module list
 ```
 
-This checklist will reappear in later chapters because it prevents premature guessing.
+### 6. Am I out of space?
 
-## Common beginner mistakes in Chapter 2
+```bash
+df -h
+du -sh .
+```
+
+That checklist is much more useful than reacting emotionally to an error message.
+
+## Mini case study: “command not found”
+
+Suppose you run:
+
+```bash
+gcc --version
+```
+
+and get:
+
+```text
+bash: gcc: command not found
+```
+
+A good response is:
+
+1. check `module list`
+2. load the compiler if needed: `module load gcc`
+3. verify with `which gcc`
+4. rerun the command
+
+This is a small example, but it captures the larger lesson:
+
+> Many Linux problems are environment problems.
+
+## Mini case study: wrong directory
+
+Suppose your job script expects `input.csv`, but the program cannot find it.
+
+Before rewriting the code, check:
+
+```bash
+pwd
+ls
+find . -name "input.csv"
+```
+
+Very often, the file exists but your current directory assumption is wrong.
+
+## Common mistakes
 
 - forgetting `chmod +x`
-- assuming `PATH` is correct without checking
-- forgetting to load a needed module
-- filling up `$HOME` and wondering why workflows behave strangely
-- treating missing commands as mysterious system failures instead of environment issues
+- working in the wrong directory
+- assuming software is available without checking modules
+- misunderstanding `PATH`
+- filling `$HOME` with large files
+- leaving important temporary data only in scratch
+- searching blindly instead of using `find`, `head`, `tail`, and `grep`
 
-## Chapter lab
+## Lab 1: permissions and execution
 
-### Part 1: permissions
+1. Create a file:
 
 ```bash
 touch test.sh
-ls -l
-chmod +x test.sh
-ls -l
 ```
 
-### Part 2: environment variables
+2. Inspect it:
+
+```bash
+ls -l test.sh
+```
+
+3. Make it executable:
+
+```bash
+chmod +x test.sh
+ls -l test.sh
+```
+
+4. Write one sentence explaining what changed.
+
+## Lab 2: environment variables
+
+Run:
 
 ```bash
 echo $HOME
@@ -352,7 +806,13 @@ export COURSE=HPC
 echo $COURSE
 ```
 
-### Part 3: modules
+Then open a new shell and test whether `COURSE` still exists.
+
+Explain why.
+
+## Lab 3: modules and command discovery
+
+Run:
 
 ```bash
 module avail
@@ -362,24 +822,51 @@ which gcc
 gcc --version
 ```
 
-### Part 4: storage awareness
+Then explain the difference between:
+
+- software existing on the system
+- software being visible in your current environment
+
+## Lab 4: file search and output inspection
+
+Run:
+
+```bash
+touch example.txt
+find . -name "example.txt"
+echo "warning: test" > sample.log
+grep "warning" sample.log
+head sample.log
+tail sample.log
+```
+
+Then explain what each command helped you learn.
+
+## Lab 5: storage awareness
+
+Run:
 
 ```bash
 df -h
 du -sh ~
 ```
 
-### Part 5: file discovery
-
-```bash
-touch example.txt
-find . -name "example.txt"
-```
+Then explain the difference between total filesystem usage and your own directory usage.
 
 ## Stretch goal
 
-Create a custom `bin/` directory in your home space, add it to `PATH`, place a small script in that directory, and run it without typing the full path.
+- create a custom `bin/` directory
+- add it to `PATH`
+- place a script inside it
+- run that script without typing the full path
+- explain why the shell can now find it
 
-## Looking ahead
+## Key takeaways
 
-The next chapter turns these Linux and environment skills into a real HPC workflow. Once you can reliably manage directories, permissions, and modules, you are ready to write a SLURM script and submit work to the scheduler.
+- Linux on HPC is about environment awareness, not just command memorization
+- `pwd`, `ls`, and `find` help you stay oriented
+- permissions affect whether files can be read, written, and executed
+- `PATH` controls how commands are discovered
+- modules control which software environment is active
+- disk usage awareness prevents avoidable failures
+- strong Linux debugging starts with inspection rather than guessing

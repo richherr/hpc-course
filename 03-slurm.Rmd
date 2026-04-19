@@ -4,19 +4,24 @@
 
 On a shared HPC system, real computational work is normally submitted through a scheduler rather than run directly on the login node. On LS6, that scheduler is **SLURM**.
 
-That sentence is easy to memorize, but the course goal is deeper than memorization. You should understand **why** a scheduler exists, **what** a job request really means, and **how** to reason about a job when it does not behave the way you expected.
+That sentence is easy to memorize, but the real goal is deeper than memorization. You should understand:
 
-This chapter develops the practical workflow for beginner and intermediate batch jobs:
+- **why** a scheduler exists
+- **what** a job request really means
+- **how** a resource request affects queue behavior
+- **what evidence** to inspect when a job does not behave the way you expected
+
+This chapter develops a practical workflow for beginner and intermediate batch jobs:
 
 - write a job script
 - request resources deliberately
 - submit with `sbatch`
 - monitor with `squeue`
 - inspect finished jobs with `sacct`
-- interpret output files
-- diagnose common failures
+- interpret output and error files
+- diagnose common failures without guessing
 
-By the end of the chapter, you should be able to submit a real job, explain the meaning of your resource request, and work through the first layer of job debugging without guessing.
+By the end of the chapter, you should be able to submit a real job, explain the meaning of your request, and work through the first layer of job debugging from evidence.
 
 ## Mental model: SLURM is a resource manager, not a launch button
 
@@ -24,9 +29,9 @@ A common beginner misunderstanding is to treat `sbatch` as if it were a special 
 
 It is not.
 
-When you run a shell script directly, the shell starts executing the script immediately in your current environment.
+When you run a shell script directly, the shell begins executing the script immediately in your current environment.
 
-When you submit with `sbatch`, you are doing something different:
+When you submit with `sbatch`, you do something different:
 
 1. you hand SLURM a script
 2. you describe the resources needed for that script
@@ -42,6 +47,8 @@ That is why a SLURM script is both:
 - a shell script, and
 - a resource request document
 
+This is one of the biggest conceptual shifts in HPC. You are no longer asking only, “What command should I run?” You are also asking, “What is the correct shape of the request for this workload?”
+
 ## Why clusters use schedulers
 
 A scheduler exists because HPC systems are shared.
@@ -51,7 +58,7 @@ Without a scheduler:
 - users would compete chaotically for access
 - large jobs could crowd out smaller ones
 - there would be no orderly queue
-- tracking usage would be difficult
+- usage tracking would be poor
 - fairness would break down quickly
 
 With a scheduler:
@@ -60,9 +67,9 @@ With a scheduler:
 - resource use is explicit
 - policies can be enforced
 - accounting is possible
-- compute nodes stay organized as a shared service rather than a free-for-all
+- compute nodes remain organized as a shared service rather than a free-for-all
 
-This is one reason HPC feels different from a personal workstation. On your laptop, you usually ask, “Can my machine run this?” On a cluster, you also ask, “What is the appropriate request for a shared system?”
+This is one reason HPC feels different from a personal workstation. On your laptop, you mostly ask, “Can my machine run this?” On a cluster, you also ask, “What is the appropriate request for a shared system?”
 
 ## The basic batch workflow
 
@@ -80,7 +87,7 @@ Job starts on compute node(s)
 Output and accounting records become available
 ```
 
-That workflow shows up again and again in HPC practice. Many later topics—parallel computing, containers, compiled programs, Python workflows, R workflows—still pass through the same scheduler logic.
+This workflow appears again and again in HPC practice. Later topics such as parallel computing, containers, compiled programs, Python workflows, and R workflows still pass through the same scheduler logic.
 
 ## Login nodes versus compute nodes
 
@@ -107,7 +114,7 @@ A useful rule of thumb is:
 
 > Use the login node to prepare work. Use compute nodes to perform work.
 
-If a task would monopolize CPU time, consume large memory, run for a long time, or scale across multiple cores, it belongs under SLURM.
+If a task would monopolize CPU time, consume substantial memory, run for a long time, or scale across multiple cores, it belongs under SLURM.
 
 ## Your first SLURM script
 
@@ -133,7 +140,7 @@ date
 pwd
 ```
 
-This is intentionally simple. The goal is to make the scheduler behavior visible.
+This script is intentionally simple. The goal is to make the scheduler behavior visible before the program logic becomes complicated.
 
 ## Reading the script line by line
 
@@ -143,7 +150,7 @@ This is intentionally simple. The goal is to make the scheduler behavior visible
 #!/bin/bash
 ```
 
-Tells the system to execute the script using Bash.
+This tells the system to execute the script using Bash.
 
 ### Job name
 
@@ -151,7 +158,7 @@ Tells the system to execute the script using Bash.
 #SBATCH -J hello_job
 ```
 
-Gives your job a readable name. Good names matter because later you may have many jobs in the queue.
+This gives the job a readable name. Good names matter because later you may have many jobs in the queue or in the accounting records.
 
 ### Nodes
 
@@ -159,7 +166,9 @@ Gives your job a readable name. Good names matter because later you may have man
 #SBATCH -N 1
 ```
 
-Requests one node.
+This requests one node.
+
+At a beginner level, think of a node as one full machine in the cluster.
 
 ### Tasks
 
@@ -167,9 +176,9 @@ Requests one node.
 #SBATCH -n 1
 ```
 
-Requests one task.
+This requests one task.
 
-At a beginner level, you can loosely think of a task as one program instance or one process slot. Later, for MPI jobs, the meaning becomes especially important.
+For a simple serial job, that means one process slot. Later, for MPI jobs, this becomes more important because task count often maps to the number of MPI ranks.
 
 ### Wall time
 
@@ -177,9 +186,9 @@ At a beginner level, you can loosely think of a task as one program instance or 
 #SBATCH -t 00:01:00
 ```
 
-Tells SLURM the job should need at most one minute.
+This tells SLURM the job should need at most one minute.
 
-This is not a prediction made for curiosity. It is part of scheduling. If you ask for far more time than you need, the job may wait longer than necessary. If you ask for too little time, the job may be terminated before finishing.
+This is not a casual estimate. It is part of scheduling. If you ask for far more time than needed, the job may wait longer than necessary. If you ask for too little time, the job may be terminated before it finishes.
 
 ### Partition
 
@@ -187,11 +196,11 @@ This is not a prediction made for curiosity. It is part of scheduling. If you as
 #SBATCH -p normal
 ```
 
-Requests the `normal` partition.
+This requests the `normal` partition.
 
-A partition is a queue or class of resources. Different systems define partitions differently, but the main mental model is simple:
+A partition is a queue or class of resources. Different systems define partitions differently, but the key mental model is simple:
 
-> A partition tells SLURM which pool of resources and policies your job should be associated with.
+> A partition tells SLURM which pool of resources and policies your job belongs to.
 
 ## Submit the job
 
@@ -228,7 +237,7 @@ Typical fields include:
 - elapsed time
 - number of nodes
 
-If the job starts quickly, you may barely see it. If not, `squeue` will let you observe its status.
+If the job starts quickly, you may barely see it. If not, `squeue` lets you observe the job state.
 
 ## Common job states
 
@@ -259,12 +268,12 @@ or:
 less slurm-123456.out
 ```
 
-A strong beginner habit is:
+A strong habit is:
 
 - do not guess what happened
 - inspect the output file
 
-Your output file is often the fastest route from confusion to evidence.
+Your output file is often the fastest path from confusion to evidence.
 
 ## What happened in the first example?
 
@@ -277,7 +286,7 @@ When `hello_job` runs successfully, you have completed a real HPC workflow:
 - ran on a compute node
 - captured output in a file
 
-That may seem small, but it is the foundation for almost everything else in the course.
+That may seem small, but it is the foundation for almost everything else in the book.
 
 ## Resource requests: what you are really asking for
 
@@ -298,7 +307,7 @@ These questions matter because scheduler performance depends on matching the req
 
 - slow performance
 - oversubscription
-- thread/process mismatch
+- thread or process mismatch
 - job failure
 
 ### Too large a request can cause:
@@ -332,7 +341,7 @@ echo "Date:"
 date
 ```
 
-This helps you see that jobs run in a real environment with real metadata.
+This helps you see that jobs run in a real environment with real metadata. It also makes debugging easier because you are recording context rather than assuming it.
 
 ## The “sleep” demonstration
 
@@ -379,9 +388,9 @@ The answer is usually some combination of:
 - how many resources were requested
 - wall time requested
 - job priority
-- the shape of the available free resources
+- the shape of the free resources
 
-This is a good place to build maturity. Queue time is not usually arbitrary. It is a consequence of your request meeting a real shared system.
+This is a good place to build maturity. Queue time is usually not arbitrary. It is the consequence of your request meeting a real shared system.
 
 ## Output and error handling
 
@@ -418,7 +427,7 @@ echo "Standard output message"
 ls does_not_exist
 ```
 
-This is a useful exercise because it helps you see that some messages belong in the output stream and others belong in the error stream.
+This helps you see that some messages belong in the output stream and others belong in the error stream.
 
 ## A realistic serial job pattern
 
@@ -532,7 +541,7 @@ Use:
 cat slurm-123456.out
 ```
 
-or your custom output/error filenames.
+or your custom output and error filenames.
 
 ### 4. Was the intended program or file actually present?
 
@@ -563,7 +572,7 @@ pythno analysis.py
 
 The job may submit successfully, but the output or error file will show that the command is not found.
 
-The key lesson is important:
+The key lesson is:
 
 > A job can fail even when submission succeeds.
 
@@ -579,7 +588,7 @@ python analysis.py input.txt
 
 If `input.txt` is missing, the program may fail immediately.
 
-The fix is not mystical. It is usually one of the following:
+The fix is usually one of the following:
 
 - submit from the correct directory
 - use a correct path
@@ -603,24 +612,26 @@ python analysis.py
 
 The code itself may still run, but the request does not reflect the workload. This wastes resources and creates confusion.
 
-A good HPC user learns that job design is part of scientific and computational discipline.
+A good HPC user learns that job design is part of computational discipline.
 
 ## Interactive jobs versus batch jobs
 
 Although this chapter emphasizes batch submission, it is useful to understand the difference conceptually.
 
 ### Batch jobs
+
 - good for repeatable workflows
 - good for production runs
-- good for recording output
-- good for overnight or longer jobs
+- good for recorded output
+- good for longer jobs
 
 ### Interactive jobs
+
 - good for exploration
 - good for debugging
 - good for short tests in a compute environment
 
-Beginners should learn batch first because it encourages deliberate, documented practice.
+Learn batch first because it encourages deliberate, documented practice.
 
 ## Best practices for SLURM scripts
 
@@ -630,7 +641,7 @@ Beginners should learn batch first because it encourages deliberate, documented 
 - separate output and error when useful
 - record environment details for debugging
 - keep old scripts rather than rewriting from memory each time
-- treat scripts as version-controlled workflow documents
+- treat scripts as workflow documents
 
 ## Lab 1: your first real job
 
@@ -669,7 +680,7 @@ Then diagnose using:
 
 - `squeue`
 - `sacct`
-- output/error files
+- output and error files
 - `pwd` and `ls`
 
 ## Stretch goal

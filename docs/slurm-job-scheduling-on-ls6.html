@@ -29,7 +29,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="linux-fundamentals-and-environment-awareness.html"/>
+<link rel="prev" href="linux-fundamentals-for-hpc.html"/>
 <link rel="next" href="modules-compilers-and-your-first-c-program.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
@@ -191,53 +191,110 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.15" data-path="introduction-to-high-performance-computing-on-ls6.html"><a href="introduction-to-high-performance-computing-on-ls6.html#reflection-questions"><i class="fa fa-check"></i><b>2.15</b> Reflection questions</a></li>
 <li class="chapter" data-level="2.16" data-path="introduction-to-high-performance-computing-on-ls6.html"><a href="introduction-to-high-performance-computing-on-ls6.html#looking-ahead-1"><i class="fa fa-check"></i><b>2.16</b> Looking ahead</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html"><i class="fa fa-check"></i><b>3</b> Linux Fundamentals and Environment Awareness</a>
+<li class="chapter" data-level="3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html"><i class="fa fa-check"></i><b>3</b> Linux Fundamentals for HPC</a>
 <ul>
-<li class="chapter" data-level="3.1" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#overview-2"><i class="fa fa-check"></i><b>3.1</b> Overview</a></li>
-<li class="chapter" data-level="3.2" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#mental-model-an-hpc-system-is-a-shared-environment"><i class="fa fa-check"></i><b>3.2</b> Mental model: an HPC system is a shared environment</a></li>
-<li class="chapter" data-level="3.3" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#inspecting-the-filesystem"><i class="fa fa-check"></i><b>3.3</b> Inspecting the filesystem</a>
+<li class="chapter" data-level="3.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#overview-2"><i class="fa fa-check"></i><b>3.1</b> Overview</a></li>
+<li class="chapter" data-level="3.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#why-linux-matters-in-hpc"><i class="fa fa-check"></i><b>3.2</b> Why Linux matters in HPC</a></li>
+<li class="chapter" data-level="3.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#mental-model-you-are-working-in-a-shared-environment"><i class="fa fa-check"></i><b>3.3</b> Mental model: you are working in a shared environment</a></li>
+<li class="chapter" data-level="3.4" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#the-linux-filesystem"><i class="fa fa-check"></i><b>3.4</b> The Linux filesystem</a></li>
+<li class="chapter" data-level="3.5" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#a-practical-storage-model"><i class="fa fa-check"></i><b>3.5</b> A practical storage model</a>
 <ul>
-<li class="chapter" data-level="3.3.1" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#pwd"><i class="fa fa-check"></i><b>3.3.1</b> <code>pwd</code></a></li>
-<li class="chapter" data-level="3.3.2" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#ls--l"><i class="fa fa-check"></i><b>3.3.2</b> <code>ls -l</code></a></li>
+<li class="chapter" data-level="3.5.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#home-1"><i class="fa fa-check"></i><b>3.5.1</b> <code>$HOME</code></a></li>
+<li class="chapter" data-level="3.5.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#work-1"><i class="fa fa-check"></i><b>3.5.2</b> <code>$WORK</code></a></li>
+<li class="chapter" data-level="3.5.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#scratch-1"><i class="fa fa-check"></i><b>3.5.3</b> <code>$SCRATCH</code></a></li>
 </ul></li>
-<li class="chapter" data-level="3.4" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#file-permissions-in-practice"><i class="fa fa-check"></i><b>3.4</b> File permissions in practice</a>
+<li class="chapter" data-level="3.6" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#where-am-i"><i class="fa fa-check"></i><b>3.6</b> Where am I?</a></li>
+<li class="chapter" data-level="3.7" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#what-is-here"><i class="fa fa-check"></i><b>3.7</b> What is here?</a></li>
+<li class="chapter" data-level="3.8" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#reading-ls--l"><i class="fa fa-check"></i><b>3.8</b> Reading <code>ls -l</code></a></li>
+<li class="chapter" data-level="3.9" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#file-permissions"><i class="fa fa-check"></i><b>3.9</b> File permissions</a>
 <ul>
-<li class="chapter" data-level="3.4.1" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#common-actions"><i class="fa fa-check"></i><b>3.4.1</b> Common actions</a></li>
+<li class="chapter" data-level="3.9.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#visual-reminder"><i class="fa fa-check"></i><b>3.9.1</b> Visual reminder</a></li>
 </ul></li>
-<li class="chapter" data-level="3.5" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#why-permissions-matter-on-clusters"><i class="fa fa-check"></i><b>3.5</b> Why permissions matter on clusters</a></li>
-<li class="chapter" data-level="3.6" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#environment-variables"><i class="fa fa-check"></i><b>3.6</b> Environment variables</a>
+<li class="chapter" data-level="3.10" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#why-permissions-matter"><i class="fa fa-check"></i><b>3.10</b> Why permissions matter</a></li>
+<li class="chapter" data-level="3.11" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#common-permission-operations"><i class="fa fa-check"></i><b>3.11</b> Common permission operations</a>
 <ul>
-<li class="chapter" data-level="3.6.1" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#home-1"><i class="fa fa-check"></i><b>3.6.1</b> <code>$HOME</code></a></li>
-<li class="chapter" data-level="3.6.2" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#path"><i class="fa fa-check"></i><b>3.6.2</b> <code>$PATH</code></a></li>
+<li class="chapter" data-level="3.11.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#make-a-script-executable"><i class="fa fa-check"></i><b>3.11.1</b> Make a script executable</a></li>
+<li class="chapter" data-level="3.11.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#remove-write-permission"><i class="fa fa-check"></i><b>3.11.2</b> Remove write permission</a></li>
+<li class="chapter" data-level="3.11.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#use-numeric-mode"><i class="fa fa-check"></i><b>3.11.3</b> Use numeric mode</a></li>
 </ul></li>
-<li class="chapter" data-level="3.7" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#a-practical-mental-model-for-path"><i class="fa fa-check"></i><b>3.7</b> A practical mental model for <code>PATH</code></a></li>
-<li class="chapter" data-level="3.8" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#modules-software-is-part-of-the-environment"><i class="fa fa-check"></i><b>3.8</b> Modules: software is part of the environment</a></li>
-<li class="chapter" data-level="3.9" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#why-modules-matter"><i class="fa fa-check"></i><b>3.9</b> Why modules matter</a></li>
-<li class="chapter" data-level="3.10" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#example-loading-a-compiler"><i class="fa fa-check"></i><b>3.10</b> Example: loading a compiler</a></li>
-<li class="chapter" data-level="3.11" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#practical-file-inspection-tools"><i class="fa fa-check"></i><b>3.11</b> Practical file inspection tools</a></li>
-<li class="chapter" data-level="3.12" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#piping-commands-together"><i class="fa fa-check"></i><b>3.12</b> Piping commands together</a></li>
-<li class="chapter" data-level="3.13" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#disk-awareness-matters"><i class="fa fa-check"></i><b>3.13</b> Disk awareness matters</a></li>
-<li class="chapter" data-level="3.14" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#process-awareness"><i class="fa fa-check"></i><b>3.14</b> Process awareness</a></li>
-<li class="chapter" data-level="3.15" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#optional-connection-to-r"><i class="fa fa-check"></i><b>3.15</b> Optional connection to R</a></li>
-<li class="chapter" data-level="3.16" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#a-debugging-mindset-for-linux-based-hpc-work"><i class="fa fa-check"></i><b>3.16</b> A debugging mindset for Linux-based HPC work</a>
+<li class="chapter" data-level="3.12" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#a-real-permission-example"><i class="fa fa-check"></i><b>3.12</b> A real permission example</a></li>
+<li class="chapter" data-level="3.13" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#directories-also-have-permissions"><i class="fa fa-check"></i><b>3.13</b> Directories also have permissions</a></li>
+<li class="chapter" data-level="3.14" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#moving-around-the-filesystem"><i class="fa fa-check"></i><b>3.14</b> Moving around the filesystem</a>
 <ul>
-<li class="chapter" data-level="3.16.1" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#where-am-i"><i class="fa fa-check"></i><b>3.16.1</b> 1. Where am I?</a></li>
-<li class="chapter" data-level="3.16.2" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#what-files-are-here"><i class="fa fa-check"></i><b>3.16.2</b> 2. What files are here?</a></li>
-<li class="chapter" data-level="3.16.3" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#do-i-have-the-right-permissions"><i class="fa fa-check"></i><b>3.16.3</b> 3. Do I have the right permissions?</a></li>
-<li class="chapter" data-level="3.16.4" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#is-the-program-actually-available"><i class="fa fa-check"></i><b>3.16.4</b> 4. Is the program actually available?</a></li>
-<li class="chapter" data-level="3.16.5" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#is-my-environment-what-i-think-it-is"><i class="fa fa-check"></i><b>3.16.5</b> 5. Is my environment what I think it is?</a></li>
+<li class="chapter" data-level="3.14.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#change-directory"><i class="fa fa-check"></i><b>3.14.1</b> Change directory</a></li>
+<li class="chapter" data-level="3.14.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#go-up-one-level"><i class="fa fa-check"></i><b>3.14.2</b> Go up one level</a></li>
+<li class="chapter" data-level="3.14.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#go-to-your-home-directory"><i class="fa fa-check"></i><b>3.14.3</b> Go to your home directory</a></li>
+<li class="chapter" data-level="3.14.4" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#return-to-the-previous-directory"><i class="fa fa-check"></i><b>3.14.4</b> Return to the previous directory</a></li>
 </ul></li>
-<li class="chapter" data-level="3.17" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#common-beginner-mistakes-in-chapter-2"><i class="fa fa-check"></i><b>3.17</b> Common beginner mistakes in Chapter 2</a></li>
-<li class="chapter" data-level="3.18" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#chapter-lab-1"><i class="fa fa-check"></i><b>3.18</b> Chapter lab</a>
+<li class="chapter" data-level="3.15" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#creating-and-organizing-directories"><i class="fa fa-check"></i><b>3.15</b> Creating and organizing directories</a>
 <ul>
-<li class="chapter" data-level="3.18.1" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#part-1-permissions"><i class="fa fa-check"></i><b>3.18.1</b> Part 1: permissions</a></li>
-<li class="chapter" data-level="3.18.2" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#part-2-environment-variables"><i class="fa fa-check"></i><b>3.18.2</b> Part 2: environment variables</a></li>
-<li class="chapter" data-level="3.18.3" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#part-3-modules"><i class="fa fa-check"></i><b>3.18.3</b> Part 3: modules</a></li>
-<li class="chapter" data-level="3.18.4" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#part-4-storage-awareness"><i class="fa fa-check"></i><b>3.18.4</b> Part 4: storage awareness</a></li>
-<li class="chapter" data-level="3.18.5" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#part-5-file-discovery"><i class="fa fa-check"></i><b>3.18.5</b> Part 5: file discovery</a></li>
+<li class="chapter" data-level="3.15.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#make-a-directory"><i class="fa fa-check"></i><b>3.15.1</b> Make a directory</a></li>
+<li class="chapter" data-level="3.15.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#make-nested-directories"><i class="fa fa-check"></i><b>3.15.2</b> Make nested directories</a></li>
 </ul></li>
-<li class="chapter" data-level="3.19" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#stretch-goal"><i class="fa fa-check"></i><b>3.19</b> Stretch goal</a></li>
-<li class="chapter" data-level="3.20" data-path="linux-fundamentals-and-environment-awareness.html"><a href="linux-fundamentals-and-environment-awareness.html#looking-ahead-2"><i class="fa fa-check"></i><b>3.20</b> Looking ahead</a></li>
+<li class="chapter" data-level="3.16" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#copying-moving-and-deleting"><i class="fa fa-check"></i><b>3.16</b> Copying, moving, and deleting</a>
+<ul>
+<li class="chapter" data-level="3.16.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#copy-a-file"><i class="fa fa-check"></i><b>3.16.1</b> Copy a file</a></li>
+<li class="chapter" data-level="3.16.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#copy-a-file-into-a-directory"><i class="fa fa-check"></i><b>3.16.2</b> Copy a file into a directory</a></li>
+<li class="chapter" data-level="3.16.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#move-or-rename-a-file"><i class="fa fa-check"></i><b>3.16.3</b> Move or rename a file</a></li>
+<li class="chapter" data-level="3.16.4" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#remove-a-file"><i class="fa fa-check"></i><b>3.16.4</b> Remove a file</a></li>
+<li class="chapter" data-level="3.16.5" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#remove-a-directory-and-its-contents"><i class="fa fa-check"></i><b>3.16.5</b> Remove a directory and its contents</a></li>
+</ul></li>
+<li class="chapter" data-level="3.17" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#viewing-file-contents"><i class="fa fa-check"></i><b>3.17</b> Viewing file contents</a>
+<ul>
+<li class="chapter" data-level="3.17.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#print-a-short-file"><i class="fa fa-check"></i><b>3.17.1</b> Print a short file</a></li>
+<li class="chapter" data-level="3.17.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#read-interactively"><i class="fa fa-check"></i><b>3.17.2</b> Read interactively</a></li>
+<li class="chapter" data-level="3.17.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#inspect-the-beginning"><i class="fa fa-check"></i><b>3.17.3</b> Inspect the beginning</a></li>
+<li class="chapter" data-level="3.17.4" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#inspect-the-end"><i class="fa fa-check"></i><b>3.17.4</b> Inspect the end</a></li>
+</ul></li>
+<li class="chapter" data-level="3.18" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#searching-for-files"><i class="fa fa-check"></i><b>3.18</b> Searching for files</a></li>
+<li class="chapter" data-level="3.19" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#searching-inside-files"><i class="fa fa-check"></i><b>3.19</b> Searching inside files</a></li>
+<li class="chapter" data-level="3.20" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#pipes-connecting-commands"><i class="fa fa-check"></i><b>3.20</b> Pipes: connecting commands</a></li>
+<li class="chapter" data-level="3.21" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#environment-variables"><i class="fa fa-check"></i><b>3.21</b> Environment variables</a></li>
+<li class="chapter" data-level="3.22" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#why-environment-variables-matter"><i class="fa fa-check"></i><b>3.22</b> Why environment variables matter</a></li>
+<li class="chapter" data-level="3.23" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#understanding-path"><i class="fa fa-check"></i><b>3.23</b> Understanding <code>PATH</code></a></li>
+<li class="chapter" data-level="3.24" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#add-something-to-path-temporarily"><i class="fa fa-check"></i><b>3.24</b> Add something to <code>PATH</code> temporarily</a></li>
+<li class="chapter" data-level="3.25" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#diagnosing-a-missing-command"><i class="fa fa-check"></i><b>3.25</b> Diagnosing a missing command</a></li>
+<li class="chapter" data-level="3.26" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#modules-software-environments-on-hpc-systems"><i class="fa fa-check"></i><b>3.26</b> Modules: software environments on HPC systems</a></li>
+<li class="chapter" data-level="3.27" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#basic-module-commands"><i class="fa fa-check"></i><b>3.27</b> Basic module commands</a>
+<ul>
+<li class="chapter" data-level="3.27.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#show-available-modules"><i class="fa fa-check"></i><b>3.27.1</b> Show available modules</a></li>
+<li class="chapter" data-level="3.27.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#load-a-module"><i class="fa fa-check"></i><b>3.27.2</b> Load a module</a></li>
+<li class="chapter" data-level="3.27.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#show-loaded-modules"><i class="fa fa-check"></i><b>3.27.3</b> Show loaded modules</a></li>
+<li class="chapter" data-level="3.27.4" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#unload-a-module"><i class="fa fa-check"></i><b>3.27.4</b> Unload a module</a></li>
+</ul></li>
+<li class="chapter" data-level="3.28" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#why-modules-matter-so-much"><i class="fa fa-check"></i><b>3.28</b> Why modules matter so much</a></li>
+<li class="chapter" data-level="3.29" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#example-using-a-compiler"><i class="fa fa-check"></i><b>3.29</b> Example: using a compiler</a></li>
+<li class="chapter" data-level="3.30" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#disk-usage-and-quotas"><i class="fa fa-check"></i><b>3.30</b> Disk usage and quotas</a>
+<ul>
+<li class="chapter" data-level="3.30.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#check-filesystem-space"><i class="fa fa-check"></i><b>3.30.1</b> Check filesystem space</a></li>
+<li class="chapter" data-level="3.30.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#check-directory-sizes"><i class="fa fa-check"></i><b>3.30.2</b> Check directory sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="3.31" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#why-storage-awareness-matters"><i class="fa fa-check"></i><b>3.31</b> Why storage awareness matters</a></li>
+<li class="chapter" data-level="3.32" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#processes"><i class="fa fa-check"></i><b>3.32</b> Processes</a>
+<ul>
+<li class="chapter" data-level="3.32.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#show-your-processes"><i class="fa fa-check"></i><b>3.32.1</b> Show your processes</a></li>
+<li class="chapter" data-level="3.32.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#kill-a-process"><i class="fa fa-check"></i><b>3.32.2</b> Kill a process</a></li>
+</ul></li>
+<li class="chapter" data-level="3.33" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#working-from-inside-r"><i class="fa fa-check"></i><b>3.33</b> Working from inside R</a></li>
+<li class="chapter" data-level="3.34" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#a-debugging-mindset-for-linux"><i class="fa fa-check"></i><b>3.34</b> A debugging mindset for Linux</a>
+<ul>
+<li class="chapter" data-level="3.34.1" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#where-am-i-1"><i class="fa fa-check"></i><b>3.34.1</b> 1. Where am I?</a></li>
+<li class="chapter" data-level="3.34.2" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#what-files-are-here"><i class="fa fa-check"></i><b>3.34.2</b> 2. What files are here?</a></li>
+<li class="chapter" data-level="3.34.3" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#do-i-have-the-right-permissions"><i class="fa fa-check"></i><b>3.34.3</b> 3. Do I have the right permissions?</a></li>
+<li class="chapter" data-level="3.34.4" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#is-the-command-available"><i class="fa fa-check"></i><b>3.34.4</b> 4. Is the command available?</a></li>
+<li class="chapter" data-level="3.34.5" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#is-the-right-environment-loaded"><i class="fa fa-check"></i><b>3.34.5</b> 5. Is the right environment loaded?</a></li>
+<li class="chapter" data-level="3.34.6" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#am-i-out-of-space"><i class="fa fa-check"></i><b>3.34.6</b> 6. Am I out of space?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.35" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#mini-case-study-command-not-found"><i class="fa fa-check"></i><b>3.35</b> Mini case study: “command not found”</a></li>
+<li class="chapter" data-level="3.36" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#mini-case-study-wrong-directory"><i class="fa fa-check"></i><b>3.36</b> Mini case study: wrong directory</a></li>
+<li class="chapter" data-level="3.37" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#common-mistakes"><i class="fa fa-check"></i><b>3.37</b> Common mistakes</a></li>
+<li class="chapter" data-level="3.38" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#lab-1-permissions-and-execution"><i class="fa fa-check"></i><b>3.38</b> Lab 1: permissions and execution</a></li>
+<li class="chapter" data-level="3.39" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#lab-2-environment-variables"><i class="fa fa-check"></i><b>3.39</b> Lab 2: environment variables</a></li>
+<li class="chapter" data-level="3.40" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#lab-3-modules-and-command-discovery"><i class="fa fa-check"></i><b>3.40</b> Lab 3: modules and command discovery</a></li>
+<li class="chapter" data-level="3.41" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#lab-4-file-search-and-output-inspection"><i class="fa fa-check"></i><b>3.41</b> Lab 4: file search and output inspection</a></li>
+<li class="chapter" data-level="3.42" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#lab-5-storage-awareness"><i class="fa fa-check"></i><b>3.42</b> Lab 5: storage awareness</a></li>
+<li class="chapter" data-level="3.43" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#stretch-goal"><i class="fa fa-check"></i><b>3.43</b> Stretch goal</a></li>
+<li class="chapter" data-level="3.44" data-path="linux-fundamentals-for-hpc.html"><a href="linux-fundamentals-for-hpc.html#key-takeaways"><i class="fa fa-check"></i><b>3.44</b> Key takeaways</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html"><i class="fa fa-check"></i><b>4</b> SLURM Job Scheduling on LS6</a>
 <ul>
@@ -308,7 +365,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.29" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#lab-3-separate-standard-output-and-standard-error"><i class="fa fa-check"></i><b>4.29</b> Lab 3: separate standard output and standard error</a></li>
 <li class="chapter" data-level="4.30" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#lab-4-diagnose-a-broken-job"><i class="fa fa-check"></i><b>4.30</b> Lab 4: diagnose a broken job</a></li>
 <li class="chapter" data-level="4.31" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#stretch-goal-1"><i class="fa fa-check"></i><b>4.31</b> Stretch goal</a></li>
-<li class="chapter" data-level="4.32" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#key-takeaways"><i class="fa fa-check"></i><b>4.32</b> Key takeaways</a></li>
+<li class="chapter" data-level="4.32" data-path="slurm-job-scheduling-on-ls6.html"><a href="slurm-job-scheduling-on-ls6.html#key-takeaways-1"><i class="fa fa-check"></i><b>4.32</b> Key takeaways</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html"><i class="fa fa-check"></i><b>5</b> Modules, Compilers, and Your First C Program</a>
 <ul>
@@ -361,7 +418,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.32" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#lab-3-build-a-multi-file-program"><i class="fa fa-check"></i><b>5.32</b> Lab 3: build a multi-file program</a></li>
 <li class="chapter" data-level="5.33" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#lab-4-automate-with-make"><i class="fa fa-check"></i><b>5.33</b> Lab 4: automate with <code>make</code></a></li>
 <li class="chapter" data-level="5.34" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#stretch-goal-2"><i class="fa fa-check"></i><b>5.34</b> Stretch goal</a></li>
-<li class="chapter" data-level="5.35" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#key-takeaways-1"><i class="fa fa-check"></i><b>5.35</b> Key takeaways</a></li>
+<li class="chapter" data-level="5.35" data-path="modules-compilers-and-your-first-c-program.html"><a href="modules-compilers-and-your-first-c-program.html#key-takeaways-2"><i class="fa fa-check"></i><b>5.35</b> Key takeaways</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html"><i class="fa fa-check"></i><b>6</b> Parallel Computing with MPI and OpenMP on LS6</a>
 <ul>
@@ -435,7 +492,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6.31" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-3-compare-the-models-conceptually"><i class="fa fa-check"></i><b>6.31</b> Lab 3: compare the models conceptually</a></li>
 <li class="chapter" data-level="6.32" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#lab-4-measure-a-tiny-scaling-experiment"><i class="fa fa-check"></i><b>6.32</b> Lab 4: measure a tiny scaling experiment</a></li>
 <li class="chapter" data-level="6.33" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#stretch-goal-3"><i class="fa fa-check"></i><b>6.33</b> Stretch goal</a></li>
-<li class="chapter" data-level="6.34" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#key-takeaways-2"><i class="fa fa-check"></i><b>6.34</b> Key takeaways</a></li>
+<li class="chapter" data-level="6.34" data-path="parallel-computing-with-mpi-and-openmp-on-ls6.html"><a href="parallel-computing-with-mpi-and-openmp-on-ls6.html#key-takeaways-3"><i class="fa fa-check"></i><b>6.34</b> Key takeaways</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html"><i class="fa fa-check"></i><b>7</b> Containers and Reproducible HPC Workflows</a>
 <ul>
@@ -487,7 +544,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.27" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#lab-3-run-a-containerized-batch-job"><i class="fa fa-check"></i><b>7.27</b> Lab 3: run a containerized batch job</a></li>
 <li class="chapter" data-level="7.28" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#lab-4-compare-modules-and-containers"><i class="fa fa-check"></i><b>7.28</b> Lab 4: compare modules and containers</a></li>
 <li class="chapter" data-level="7.29" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#stretch-goal-4"><i class="fa fa-check"></i><b>7.29</b> Stretch goal</a></li>
-<li class="chapter" data-level="7.30" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#key-takeaways-3"><i class="fa fa-check"></i><b>7.30</b> Key takeaways</a></li>
+<li class="chapter" data-level="7.30" data-path="containers-and-reproducible-hpc-workflows.html"><a href="containers-and-reproducible-hpc-workflows.html#key-takeaways-4"><i class="fa fa-check"></i><b>7.30</b> Key takeaways</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html"><i class="fa fa-check"></i><b>8</b> Capstone Project: Building an End-to-End HPC Workflow</a>
 <ul>
@@ -556,7 +613,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.22" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#final-submission-checklist"><i class="fa fa-check"></i><b>8.22</b> Final submission checklist</a></li>
 <li class="chapter" data-level="8.23" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#lab-draft-your-capstone-plan"><i class="fa fa-check"></i><b>8.23</b> Lab: draft your capstone plan</a></li>
 <li class="chapter" data-level="8.24" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#stretch-goal-5"><i class="fa fa-check"></i><b>8.24</b> Stretch goal</a></li>
-<li class="chapter" data-level="8.25" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#key-takeaways-4"><i class="fa fa-check"></i><b>8.25</b> Key takeaways</a></li>
+<li class="chapter" data-level="8.25" data-path="capstone-project-building-an-end-to-end-hpc-workflow.html"><a href="capstone-project-building-an-end-to-end-hpc-workflow.html#key-takeaways-5"><i class="fa fa-check"></i><b>8.25</b> Key takeaways</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><a href="appendix-quick-reference-and-troubleshooting-for-ls6-workflows.html"><i class="fa fa-check"></i><b>9</b> Appendix: Quick Reference and Troubleshooting for LS6 Workflows</a>
 <ul>
@@ -609,25 +666,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="overview-3" class="section level2 hasAnchor" number="4.1">
 <h2><span class="header-section-number">4.1</span> Overview<a href="slurm-job-scheduling-on-ls6.html#overview-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>On a shared HPC system, real computational work is normally submitted through a scheduler rather than run directly on the login node. On LS6, that scheduler is <strong>SLURM</strong>.</p>
-<p>That sentence is easy to memorize, but the course goal is deeper than memorization. You should understand <strong>why</strong> a scheduler exists, <strong>what</strong> a job request really means, and <strong>how</strong> to reason about a job when it does not behave the way you expected.</p>
-<p>This chapter develops the practical workflow for beginner and intermediate batch jobs:</p>
+<p>That sentence is easy to memorize, but the real goal is deeper than memorization. You should understand:</p>
+<ul>
+<li><strong>why</strong> a scheduler exists</li>
+<li><strong>what</strong> a job request really means</li>
+<li><strong>how</strong> a resource request affects queue behavior</li>
+<li><strong>what evidence</strong> to inspect when a job does not behave the way you expected</li>
+</ul>
+<p>This chapter develops a practical workflow for beginner and intermediate batch jobs:</p>
 <ul>
 <li>write a job script</li>
 <li>request resources deliberately</li>
 <li>submit with <code>sbatch</code></li>
 <li>monitor with <code>squeue</code></li>
 <li>inspect finished jobs with <code>sacct</code></li>
-<li>interpret output files</li>
-<li>diagnose common failures</li>
+<li>interpret output and error files</li>
+<li>diagnose common failures without guessing</li>
 </ul>
-<p>By the end of the chapter, you should be able to submit a real job, explain the meaning of your resource request, and work through the first layer of job debugging without guessing.</p>
+<p>By the end of the chapter, you should be able to submit a real job, explain the meaning of your request, and work through the first layer of job debugging from evidence.</p>
 </div>
 <div id="mental-model-slurm-is-a-resource-manager-not-a-launch-button" class="section level2 hasAnchor" number="4.2">
 <h2><span class="header-section-number">4.2</span> Mental model: SLURM is a resource manager, not a launch button<a href="slurm-job-scheduling-on-ls6.html#mental-model-slurm-is-a-resource-manager-not-a-launch-button" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A common beginner misunderstanding is to treat <code>sbatch</code> as if it were a special version of <code>bash</code>.</p>
 <p>It is not.</p>
-<p>When you run a shell script directly, the shell starts executing the script immediately in your current environment.</p>
-<p>When you submit with <code>sbatch</code>, you are doing something different:</p>
+<p>When you run a shell script directly, the shell begins executing the script immediately in your current environment.</p>
+<p>When you submit with <code>sbatch</code>, you do something different:</p>
 <ol style="list-style-type: decimal">
 <li>you hand SLURM a script</li>
 <li>you describe the resources needed for that script</li>
@@ -643,6 +706,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>a shell script, and</li>
 <li>a resource request document</li>
 </ul>
+<p>This is one of the biggest conceptual shifts in HPC. You are no longer asking only, “What command should I run?” You are also asking, “What is the correct shape of the request for this workload?”</p>
 </div>
 <div id="why-clusters-use-schedulers" class="section level2 hasAnchor" number="4.3">
 <h2><span class="header-section-number">4.3</span> Why clusters use schedulers<a href="slurm-job-scheduling-on-ls6.html#why-clusters-use-schedulers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -652,7 +716,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>users would compete chaotically for access</li>
 <li>large jobs could crowd out smaller ones</li>
 <li>there would be no orderly queue</li>
-<li>tracking usage would be difficult</li>
+<li>usage tracking would be poor</li>
 <li>fairness would break down quickly</li>
 </ul>
 <p>With a scheduler:</p>
@@ -661,9 +725,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>resource use is explicit</li>
 <li>policies can be enforced</li>
 <li>accounting is possible</li>
-<li>compute nodes stay organized as a shared service rather than a free-for-all</li>
+<li>compute nodes remain organized as a shared service rather than a free-for-all</li>
 </ul>
-<p>This is one reason HPC feels different from a personal workstation. On your laptop, you usually ask, “Can my machine run this?” On a cluster, you also ask, “What is the appropriate request for a shared system?”</p>
+<p>This is one reason HPC feels different from a personal workstation. On your laptop, you mostly ask, “Can my machine run this?” On a cluster, you also ask, “What is the appropriate request for a shared system?”</p>
 </div>
 <div id="the-basic-batch-workflow" class="section level2 hasAnchor" number="4.4">
 <h2><span class="header-section-number">4.4</span> The basic batch workflow<a href="slurm-job-scheduling-on-ls6.html#the-basic-batch-workflow" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -678,7 +742,7 @@ SLURM decides when resources are available
 Job starts on compute node(s)
       ↓
 Output and accounting records become available</code></pre>
-<p>That workflow shows up again and again in HPC practice. Many later topics—parallel computing, containers, compiled programs, Python workflows, R workflows—still pass through the same scheduler logic.</p>
+<p>This workflow appears again and again in HPC practice. Later topics such as parallel computing, containers, compiled programs, Python workflows, and R workflows still pass through the same scheduler logic.</p>
 </div>
 <div id="login-nodes-versus-compute-nodes" class="section level2 hasAnchor" number="4.5">
 <h2><span class="header-section-number">4.5</span> Login nodes versus compute nodes<a href="slurm-job-scheduling-on-ls6.html#login-nodes-versus-compute-nodes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -707,69 +771,70 @@ Output and accounting records become available</code></pre>
 <blockquote>
 <p>Use the login node to prepare work. Use compute nodes to perform work.</p>
 </blockquote>
-<p>If a task would monopolize CPU time, consume large memory, run for a long time, or scale across multiple cores, it belongs under SLURM.</p>
+<p>If a task would monopolize CPU time, consume substantial memory, run for a long time, or scale across multiple cores, it belongs under SLURM.</p>
 </div>
 </div>
 <div id="your-first-slurm-script" class="section level2 hasAnchor" number="4.6">
 <h2><span class="header-section-number">4.6</span> Your first SLURM script<a href="slurm-job-scheduling-on-ls6.html#your-first-slurm-script" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Create a file:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb43-1"><a href="slurm-job-scheduling-on-ls6.html#cb43-1" tabindex="-1"></a><span class="fu">nano</span> job.slurm</span></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb78-1"><a href="slurm-job-scheduling-on-ls6.html#cb78-1" tabindex="-1"></a><span class="fu">nano</span> job.slurm</span></code></pre></div>
 <p>Add:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="slurm-job-scheduling-on-ls6.html#cb44-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb44-2"><a href="slurm-job-scheduling-on-ls6.html#cb44-2" tabindex="-1"></a><span class="co">#SBATCH -J hello_job</span></span>
-<span id="cb44-3"><a href="slurm-job-scheduling-on-ls6.html#cb44-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
-<span id="cb44-4"><a href="slurm-job-scheduling-on-ls6.html#cb44-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
-<span id="cb44-5"><a href="slurm-job-scheduling-on-ls6.html#cb44-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:01:00</span></span>
-<span id="cb44-6"><a href="slurm-job-scheduling-on-ls6.html#cb44-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
-<span id="cb44-7"><a href="slurm-job-scheduling-on-ls6.html#cb44-7" tabindex="-1"></a></span>
-<span id="cb44-8"><a href="slurm-job-scheduling-on-ls6.html#cb44-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Hello from compute node&quot;</span></span>
-<span id="cb44-9"><a href="slurm-job-scheduling-on-ls6.html#cb44-9" tabindex="-1"></a><span class="fu">hostname</span></span>
-<span id="cb44-10"><a href="slurm-job-scheduling-on-ls6.html#cb44-10" tabindex="-1"></a><span class="fu">date</span></span>
-<span id="cb44-11"><a href="slurm-job-scheduling-on-ls6.html#cb44-11" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div>
-<p>This is intentionally simple. The goal is to make the scheduler behavior visible.</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb79-1"><a href="slurm-job-scheduling-on-ls6.html#cb79-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb79-2"><a href="slurm-job-scheduling-on-ls6.html#cb79-2" tabindex="-1"></a><span class="co">#SBATCH -J hello_job</span></span>
+<span id="cb79-3"><a href="slurm-job-scheduling-on-ls6.html#cb79-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb79-4"><a href="slurm-job-scheduling-on-ls6.html#cb79-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb79-5"><a href="slurm-job-scheduling-on-ls6.html#cb79-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:01:00</span></span>
+<span id="cb79-6"><a href="slurm-job-scheduling-on-ls6.html#cb79-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb79-7"><a href="slurm-job-scheduling-on-ls6.html#cb79-7" tabindex="-1"></a></span>
+<span id="cb79-8"><a href="slurm-job-scheduling-on-ls6.html#cb79-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Hello from compute node&quot;</span></span>
+<span id="cb79-9"><a href="slurm-job-scheduling-on-ls6.html#cb79-9" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb79-10"><a href="slurm-job-scheduling-on-ls6.html#cb79-10" tabindex="-1"></a><span class="fu">date</span></span>
+<span id="cb79-11"><a href="slurm-job-scheduling-on-ls6.html#cb79-11" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div>
+<p>This script is intentionally simple. The goal is to make the scheduler behavior visible before the program logic becomes complicated.</p>
 </div>
 <div id="reading-the-script-line-by-line" class="section level2 hasAnchor" number="4.7">
 <h2><span class="header-section-number">4.7</span> Reading the script line by line<a href="slurm-job-scheduling-on-ls6.html#reading-the-script-line-by-line" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <div id="shebang" class="section level3 hasAnchor" number="4.7.1">
 <h3><span class="header-section-number">4.7.1</span> Shebang<a href="slurm-job-scheduling-on-ls6.html#shebang" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb45"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb45-1"><a href="slurm-job-scheduling-on-ls6.html#cb45-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span></code></pre></div>
-<p>Tells the system to execute the script using Bash.</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb80-1"><a href="slurm-job-scheduling-on-ls6.html#cb80-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span></code></pre></div>
+<p>This tells the system to execute the script using Bash.</p>
 </div>
 <div id="job-name" class="section level3 hasAnchor" number="4.7.2">
 <h3><span class="header-section-number">4.7.2</span> Job name<a href="slurm-job-scheduling-on-ls6.html#job-name" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb46"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb46-1"><a href="slurm-job-scheduling-on-ls6.html#cb46-1" tabindex="-1"></a><span class="co">#SBATCH -J hello_job</span></span></code></pre></div>
-<p>Gives your job a readable name. Good names matter because later you may have many jobs in the queue.</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb81-1"><a href="slurm-job-scheduling-on-ls6.html#cb81-1" tabindex="-1"></a><span class="co">#SBATCH -J hello_job</span></span></code></pre></div>
+<p>This gives the job a readable name. Good names matter because later you may have many jobs in the queue or in the accounting records.</p>
 </div>
 <div id="nodes" class="section level3 hasAnchor" number="4.7.3">
 <h3><span class="header-section-number">4.7.3</span> Nodes<a href="slurm-job-scheduling-on-ls6.html#nodes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a href="slurm-job-scheduling-on-ls6.html#cb47-1" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span></code></pre></div>
-<p>Requests one node.</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb82-1"><a href="slurm-job-scheduling-on-ls6.html#cb82-1" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span></code></pre></div>
+<p>This requests one node.</p>
+<p>At a beginner level, think of a node as one full machine in the cluster.</p>
 </div>
 <div id="tasks" class="section level3 hasAnchor" number="4.7.4">
 <h3><span class="header-section-number">4.7.4</span> Tasks<a href="slurm-job-scheduling-on-ls6.html#tasks" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb48"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb48-1"><a href="slurm-job-scheduling-on-ls6.html#cb48-1" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span></code></pre></div>
-<p>Requests one task.</p>
-<p>At a beginner level, you can loosely think of a task as one program instance or one process slot. Later, for MPI jobs, the meaning becomes especially important.</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb83-1"><a href="slurm-job-scheduling-on-ls6.html#cb83-1" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span></code></pre></div>
+<p>This requests one task.</p>
+<p>For a simple serial job, that means one process slot. Later, for MPI jobs, this becomes more important because task count often maps to the number of MPI ranks.</p>
 </div>
 <div id="wall-time" class="section level3 hasAnchor" number="4.7.5">
 <h3><span class="header-section-number">4.7.5</span> Wall time<a href="slurm-job-scheduling-on-ls6.html#wall-time" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="slurm-job-scheduling-on-ls6.html#cb49-1" tabindex="-1"></a><span class="co">#SBATCH -t 00:01:00</span></span></code></pre></div>
-<p>Tells SLURM the job should need at most one minute.</p>
-<p>This is not a prediction made for curiosity. It is part of scheduling. If you ask for far more time than you need, the job may wait longer than necessary. If you ask for too little time, the job may be terminated before finishing.</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb84-1"><a href="slurm-job-scheduling-on-ls6.html#cb84-1" tabindex="-1"></a><span class="co">#SBATCH -t 00:01:00</span></span></code></pre></div>
+<p>This tells SLURM the job should need at most one minute.</p>
+<p>This is not a casual estimate. It is part of scheduling. If you ask for far more time than needed, the job may wait longer than necessary. If you ask for too little time, the job may be terminated before it finishes.</p>
 </div>
 <div id="partition" class="section level3 hasAnchor" number="4.7.6">
 <h3><span class="header-section-number">4.7.6</span> Partition<a href="slurm-job-scheduling-on-ls6.html#partition" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb50"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="slurm-job-scheduling-on-ls6.html#cb50-1" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span></code></pre></div>
-<p>Requests the <code>normal</code> partition.</p>
-<p>A partition is a queue or class of resources. Different systems define partitions differently, but the main mental model is simple:</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb85-1"><a href="slurm-job-scheduling-on-ls6.html#cb85-1" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span></code></pre></div>
+<p>This requests the <code>normal</code> partition.</p>
+<p>A partition is a queue or class of resources. Different systems define partitions differently, but the key mental model is simple:</p>
 <blockquote>
-<p>A partition tells SLURM which pool of resources and policies your job should be associated with.</p>
+<p>A partition tells SLURM which pool of resources and policies your job belongs to.</p>
 </blockquote>
 </div>
 </div>
 <div id="submit-the-job" class="section level2 hasAnchor" number="4.8">
 <h2><span class="header-section-number">4.8</span> Submit the job<a href="slurm-job-scheduling-on-ls6.html#submit-the-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb51"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a href="slurm-job-scheduling-on-ls6.html#cb51-1" tabindex="-1"></a><span class="ex">sbatch</span> job.slurm</span></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb86-1"><a href="slurm-job-scheduling-on-ls6.html#cb86-1" tabindex="-1"></a><span class="ex">sbatch</span> job.slurm</span></code></pre></div>
 <p>Typical response:</p>
 <pre class="text"><code>Submitted batch job 123456</code></pre>
 <p>That message does <strong>not</strong> mean your program has already run. It means SLURM has accepted the job into the scheduling system.</p>
@@ -781,7 +846,7 @@ Output and accounting records become available</code></pre>
 <div id="check-the-queue" class="section level2 hasAnchor" number="4.9">
 <h2><span class="header-section-number">4.9</span> Check the queue<a href="slurm-job-scheduling-on-ls6.html#check-the-queue" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Use:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="slurm-job-scheduling-on-ls6.html#cb53-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb88-1"><a href="slurm-job-scheduling-on-ls6.html#cb88-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
 <p>Typical fields include:</p>
 <ul>
 <li>job ID</li>
@@ -791,7 +856,7 @@ Output and accounting records become available</code></pre>
 <li>elapsed time</li>
 <li>number of nodes</li>
 </ul>
-<p>If the job starts quickly, you may barely see it. If not, <code>squeue</code> will let you observe its status.</p>
+<p>If the job starts quickly, you may barely see it. If not, <code>squeue</code> lets you observe the job state.</p>
 </div>
 <div id="common-job-states" class="section level2 hasAnchor" number="4.10">
 <h2><span class="header-section-number">4.10</span> Common job states<a href="slurm-job-scheduling-on-ls6.html#common-job-states" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -808,15 +873,15 @@ Output and accounting records become available</code></pre>
 <p>When the batch job finishes, a file such as the following often appears:</p>
 <pre class="text"><code>slurm-123456.out</code></pre>
 <p>Inspect it with:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb55-1"><a href="slurm-job-scheduling-on-ls6.html#cb55-1" tabindex="-1"></a><span class="fu">cat</span> slurm-123456.out</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb90-1"><a href="slurm-job-scheduling-on-ls6.html#cb90-1" tabindex="-1"></a><span class="fu">cat</span> slurm-123456.out</span></code></pre></div>
 <p>or:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="slurm-job-scheduling-on-ls6.html#cb56-1" tabindex="-1"></a><span class="fu">less</span> slurm-123456.out</span></code></pre></div>
-<p>A strong beginner habit is:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb91-1"><a href="slurm-job-scheduling-on-ls6.html#cb91-1" tabindex="-1"></a><span class="fu">less</span> slurm-123456.out</span></code></pre></div>
+<p>A strong habit is:</p>
 <ul>
 <li>do not guess what happened</li>
 <li>inspect the output file</li>
 </ul>
-<p>Your output file is often the fastest route from confusion to evidence.</p>
+<p>Your output file is often the fastest path from confusion to evidence.</p>
 </div>
 <div id="what-happened-in-the-first-example" class="section level2 hasAnchor" number="4.12">
 <h2><span class="header-section-number">4.12</span> What happened in the first example?<a href="slurm-job-scheduling-on-ls6.html#what-happened-in-the-first-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -829,7 +894,7 @@ Output and accounting records become available</code></pre>
 <li>ran on a compute node</li>
 <li>captured output in a file</li>
 </ul>
-<p>That may seem small, but it is the foundation for almost everything else in the course.</p>
+<p>That may seem small, but it is the foundation for almost everything else in the book.</p>
 </div>
 <div id="resource-requests-what-you-are-really-asking-for" class="section level2 hasAnchor" number="4.13">
 <h2><span class="header-section-number">4.13</span> Resource requests: what you are really asking for<a href="slurm-job-scheduling-on-ls6.html#resource-requests-what-you-are-really-asking-for" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -849,7 +914,7 @@ Output and accounting records become available</code></pre>
 <ul>
 <li>slow performance</li>
 <li>oversubscription</li>
-<li>thread/process mismatch</li>
+<li>thread or process mismatch</li>
 <li>job failure</li>
 </ul>
 </div>
@@ -867,43 +932,43 @@ Output and accounting records become available</code></pre>
 <div id="a-better-beginner-script-make-the-environment-visible" class="section level2 hasAnchor" number="4.14">
 <h2><span class="header-section-number">4.14</span> A better beginner script: make the environment visible<a href="slurm-job-scheduling-on-ls6.html#a-better-beginner-script-make-the-environment-visible" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>A useful early script is one that prints context:</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb57-1"><a href="slurm-job-scheduling-on-ls6.html#cb57-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb57-2"><a href="slurm-job-scheduling-on-ls6.html#cb57-2" tabindex="-1"></a><span class="co">#SBATCH -J context_job</span></span>
-<span id="cb57-3"><a href="slurm-job-scheduling-on-ls6.html#cb57-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
-<span id="cb57-4"><a href="slurm-job-scheduling-on-ls6.html#cb57-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
-<span id="cb57-5"><a href="slurm-job-scheduling-on-ls6.html#cb57-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:02:00</span></span>
-<span id="cb57-6"><a href="slurm-job-scheduling-on-ls6.html#cb57-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
-<span id="cb57-7"><a href="slurm-job-scheduling-on-ls6.html#cb57-7" tabindex="-1"></a></span>
-<span id="cb57-8"><a href="slurm-job-scheduling-on-ls6.html#cb57-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job ID: </span><span class="va">$SLURM_JOB_ID</span><span class="st">&quot;</span></span>
-<span id="cb57-9"><a href="slurm-job-scheduling-on-ls6.html#cb57-9" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job name: </span><span class="va">$SLURM_JOB_NAME</span><span class="st">&quot;</span></span>
-<span id="cb57-10"><a href="slurm-job-scheduling-on-ls6.html#cb57-10" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Running on host:&quot;</span></span>
-<span id="cb57-11"><a href="slurm-job-scheduling-on-ls6.html#cb57-11" tabindex="-1"></a><span class="fu">hostname</span></span>
-<span id="cb57-12"><a href="slurm-job-scheduling-on-ls6.html#cb57-12" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Working directory:&quot;</span></span>
-<span id="cb57-13"><a href="slurm-job-scheduling-on-ls6.html#cb57-13" tabindex="-1"></a><span class="bu">pwd</span></span>
-<span id="cb57-14"><a href="slurm-job-scheduling-on-ls6.html#cb57-14" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Date:&quot;</span></span>
-<span id="cb57-15"><a href="slurm-job-scheduling-on-ls6.html#cb57-15" tabindex="-1"></a><span class="fu">date</span></span></code></pre></div>
-<p>This helps you see that jobs run in a real environment with real metadata.</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb92-1"><a href="slurm-job-scheduling-on-ls6.html#cb92-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb92-2"><a href="slurm-job-scheduling-on-ls6.html#cb92-2" tabindex="-1"></a><span class="co">#SBATCH -J context_job</span></span>
+<span id="cb92-3"><a href="slurm-job-scheduling-on-ls6.html#cb92-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb92-4"><a href="slurm-job-scheduling-on-ls6.html#cb92-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb92-5"><a href="slurm-job-scheduling-on-ls6.html#cb92-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:02:00</span></span>
+<span id="cb92-6"><a href="slurm-job-scheduling-on-ls6.html#cb92-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb92-7"><a href="slurm-job-scheduling-on-ls6.html#cb92-7" tabindex="-1"></a></span>
+<span id="cb92-8"><a href="slurm-job-scheduling-on-ls6.html#cb92-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job ID: </span><span class="va">$SLURM_JOB_ID</span><span class="st">&quot;</span></span>
+<span id="cb92-9"><a href="slurm-job-scheduling-on-ls6.html#cb92-9" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Job name: </span><span class="va">$SLURM_JOB_NAME</span><span class="st">&quot;</span></span>
+<span id="cb92-10"><a href="slurm-job-scheduling-on-ls6.html#cb92-10" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Running on host:&quot;</span></span>
+<span id="cb92-11"><a href="slurm-job-scheduling-on-ls6.html#cb92-11" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb92-12"><a href="slurm-job-scheduling-on-ls6.html#cb92-12" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Working directory:&quot;</span></span>
+<span id="cb92-13"><a href="slurm-job-scheduling-on-ls6.html#cb92-13" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb92-14"><a href="slurm-job-scheduling-on-ls6.html#cb92-14" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Date:&quot;</span></span>
+<span id="cb92-15"><a href="slurm-job-scheduling-on-ls6.html#cb92-15" tabindex="-1"></a><span class="fu">date</span></span></code></pre></div>
+<p>This helps you see that jobs run in a real environment with real metadata. It also makes debugging easier because you are recording context rather than assuming it.</p>
 </div>
 <div id="the-sleep-demonstration" class="section level2 hasAnchor" number="4.15">
 <h2><span class="header-section-number">4.15</span> The “sleep” demonstration<a href="slurm-job-scheduling-on-ls6.html#the-sleep-demonstration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>To observe the queue and running state more clearly, use a job that lasts long enough to inspect.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href="slurm-job-scheduling-on-ls6.html#cb58-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb58-2"><a href="slurm-job-scheduling-on-ls6.html#cb58-2" tabindex="-1"></a><span class="co">#SBATCH -J sleep_demo</span></span>
-<span id="cb58-3"><a href="slurm-job-scheduling-on-ls6.html#cb58-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
-<span id="cb58-4"><a href="slurm-job-scheduling-on-ls6.html#cb58-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
-<span id="cb58-5"><a href="slurm-job-scheduling-on-ls6.html#cb58-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:03:00</span></span>
-<span id="cb58-6"><a href="slurm-job-scheduling-on-ls6.html#cb58-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
-<span id="cb58-7"><a href="slurm-job-scheduling-on-ls6.html#cb58-7" tabindex="-1"></a></span>
-<span id="cb58-8"><a href="slurm-job-scheduling-on-ls6.html#cb58-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Starting&quot;</span></span>
-<span id="cb58-9"><a href="slurm-job-scheduling-on-ls6.html#cb58-9" tabindex="-1"></a><span class="fu">hostname</span></span>
-<span id="cb58-10"><a href="slurm-job-scheduling-on-ls6.html#cb58-10" tabindex="-1"></a><span class="fu">date</span></span>
-<span id="cb58-11"><a href="slurm-job-scheduling-on-ls6.html#cb58-11" tabindex="-1"></a><span class="fu">sleep</span> 30</span>
-<span id="cb58-12"><a href="slurm-job-scheduling-on-ls6.html#cb58-12" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Finishing&quot;</span></span>
-<span id="cb58-13"><a href="slurm-job-scheduling-on-ls6.html#cb58-13" tabindex="-1"></a><span class="fu">date</span></span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb93-1"><a href="slurm-job-scheduling-on-ls6.html#cb93-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb93-2"><a href="slurm-job-scheduling-on-ls6.html#cb93-2" tabindex="-1"></a><span class="co">#SBATCH -J sleep_demo</span></span>
+<span id="cb93-3"><a href="slurm-job-scheduling-on-ls6.html#cb93-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb93-4"><a href="slurm-job-scheduling-on-ls6.html#cb93-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb93-5"><a href="slurm-job-scheduling-on-ls6.html#cb93-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:03:00</span></span>
+<span id="cb93-6"><a href="slurm-job-scheduling-on-ls6.html#cb93-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb93-7"><a href="slurm-job-scheduling-on-ls6.html#cb93-7" tabindex="-1"></a></span>
+<span id="cb93-8"><a href="slurm-job-scheduling-on-ls6.html#cb93-8" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Starting&quot;</span></span>
+<span id="cb93-9"><a href="slurm-job-scheduling-on-ls6.html#cb93-9" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb93-10"><a href="slurm-job-scheduling-on-ls6.html#cb93-10" tabindex="-1"></a><span class="fu">date</span></span>
+<span id="cb93-11"><a href="slurm-job-scheduling-on-ls6.html#cb93-11" tabindex="-1"></a><span class="fu">sleep</span> 30</span>
+<span id="cb93-12"><a href="slurm-job-scheduling-on-ls6.html#cb93-12" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Finishing&quot;</span></span>
+<span id="cb93-13"><a href="slurm-job-scheduling-on-ls6.html#cb93-13" tabindex="-1"></a><span class="fu">date</span></span></code></pre></div>
 <p>Submit it:</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb59-1"><a href="slurm-job-scheduling-on-ls6.html#cb59-1" tabindex="-1"></a><span class="ex">sbatch</span> sleep_demo.slurm</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb94-1"><a href="slurm-job-scheduling-on-ls6.html#cb94-1" tabindex="-1"></a><span class="ex">sbatch</span> sleep_demo.slurm</span></code></pre></div>
 <p>Then watch:</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb60-1"><a href="slurm-job-scheduling-on-ls6.html#cb60-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb95-1"><a href="slurm-job-scheduling-on-ls6.html#cb95-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
 <p>This is a small but powerful exercise because it makes the scheduler visible.</p>
 </div>
 <div id="why-queue-time-can-change" class="section level2 hasAnchor" number="4.16">
@@ -916,48 +981,48 @@ Output and accounting records become available</code></pre>
 <li>how many resources were requested</li>
 <li>wall time requested</li>
 <li>job priority</li>
-<li>the shape of the available free resources</li>
+<li>the shape of the free resources</li>
 </ul>
-<p>This is a good place to build maturity. Queue time is not usually arbitrary. It is a consequence of your request meeting a real shared system.</p>
+<p>This is a good place to build maturity. Queue time is usually not arbitrary. It is the consequence of your request meeting a real shared system.</p>
 </div>
 <div id="output-and-error-handling" class="section level2 hasAnchor" number="4.17">
 <h2><span class="header-section-number">4.17</span> Output and error handling<a href="slurm-job-scheduling-on-ls6.html#output-and-error-handling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>By default, many simple jobs write output to a file such as:</p>
 <pre class="text"><code>slurm-123456.out</code></pre>
 <p>For more deliberate control, you can specify output files directly:</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb62-1"><a href="slurm-job-scheduling-on-ls6.html#cb62-1" tabindex="-1"></a><span class="co">#SBATCH -o job_%j.out</span></span>
-<span id="cb62-2"><a href="slurm-job-scheduling-on-ls6.html#cb62-2" tabindex="-1"></a><span class="co">#SBATCH -e job_%j.err</span></span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb97-1"><a href="slurm-job-scheduling-on-ls6.html#cb97-1" tabindex="-1"></a><span class="co">#SBATCH -o job_%j.out</span></span>
+<span id="cb97-2"><a href="slurm-job-scheduling-on-ls6.html#cb97-2" tabindex="-1"></a><span class="co">#SBATCH -e job_%j.err</span></span></code></pre></div>
 <p>where <code>%j</code> expands to the job ID.</p>
 <p>This helps separate standard output from standard error and makes debugging cleaner.</p>
 <p>Example:</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb63-1"><a href="slurm-job-scheduling-on-ls6.html#cb63-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb63-2"><a href="slurm-job-scheduling-on-ls6.html#cb63-2" tabindex="-1"></a><span class="co">#SBATCH -J split_output</span></span>
-<span id="cb63-3"><a href="slurm-job-scheduling-on-ls6.html#cb63-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
-<span id="cb63-4"><a href="slurm-job-scheduling-on-ls6.html#cb63-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
-<span id="cb63-5"><a href="slurm-job-scheduling-on-ls6.html#cb63-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:02:00</span></span>
-<span id="cb63-6"><a href="slurm-job-scheduling-on-ls6.html#cb63-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
-<span id="cb63-7"><a href="slurm-job-scheduling-on-ls6.html#cb63-7" tabindex="-1"></a><span class="co">#SBATCH -o split_%j.out</span></span>
-<span id="cb63-8"><a href="slurm-job-scheduling-on-ls6.html#cb63-8" tabindex="-1"></a><span class="co">#SBATCH -e split_%j.err</span></span>
-<span id="cb63-9"><a href="slurm-job-scheduling-on-ls6.html#cb63-9" tabindex="-1"></a></span>
-<span id="cb63-10"><a href="slurm-job-scheduling-on-ls6.html#cb63-10" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Standard output message&quot;</span></span>
-<span id="cb63-11"><a href="slurm-job-scheduling-on-ls6.html#cb63-11" tabindex="-1"></a><span class="fu">ls</span> does_not_exist</span></code></pre></div>
-<p>This is a useful exercise because it helps you see that some messages belong in the output stream and others belong in the error stream.</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb98-1"><a href="slurm-job-scheduling-on-ls6.html#cb98-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb98-2"><a href="slurm-job-scheduling-on-ls6.html#cb98-2" tabindex="-1"></a><span class="co">#SBATCH -J split_output</span></span>
+<span id="cb98-3"><a href="slurm-job-scheduling-on-ls6.html#cb98-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb98-4"><a href="slurm-job-scheduling-on-ls6.html#cb98-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb98-5"><a href="slurm-job-scheduling-on-ls6.html#cb98-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:02:00</span></span>
+<span id="cb98-6"><a href="slurm-job-scheduling-on-ls6.html#cb98-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb98-7"><a href="slurm-job-scheduling-on-ls6.html#cb98-7" tabindex="-1"></a><span class="co">#SBATCH -o split_%j.out</span></span>
+<span id="cb98-8"><a href="slurm-job-scheduling-on-ls6.html#cb98-8" tabindex="-1"></a><span class="co">#SBATCH -e split_%j.err</span></span>
+<span id="cb98-9"><a href="slurm-job-scheduling-on-ls6.html#cb98-9" tabindex="-1"></a></span>
+<span id="cb98-10"><a href="slurm-job-scheduling-on-ls6.html#cb98-10" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Standard output message&quot;</span></span>
+<span id="cb98-11"><a href="slurm-job-scheduling-on-ls6.html#cb98-11" tabindex="-1"></a><span class="fu">ls</span> does_not_exist</span></code></pre></div>
+<p>This helps you see that some messages belong in the output stream and others belong in the error stream.</p>
 </div>
 <div id="a-realistic-serial-job-pattern" class="section level2 hasAnchor" number="4.18">
 <h2><span class="header-section-number">4.18</span> A realistic serial job pattern<a href="slurm-job-scheduling-on-ls6.html#a-realistic-serial-job-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Here is a more representative pattern for a serial program:</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb64-1"><a href="slurm-job-scheduling-on-ls6.html#cb64-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb64-2"><a href="slurm-job-scheduling-on-ls6.html#cb64-2" tabindex="-1"></a><span class="co">#SBATCH -J serial_python</span></span>
-<span id="cb64-3"><a href="slurm-job-scheduling-on-ls6.html#cb64-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
-<span id="cb64-4"><a href="slurm-job-scheduling-on-ls6.html#cb64-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
-<span id="cb64-5"><a href="slurm-job-scheduling-on-ls6.html#cb64-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:10:00</span></span>
-<span id="cb64-6"><a href="slurm-job-scheduling-on-ls6.html#cb64-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
-<span id="cb64-7"><a href="slurm-job-scheduling-on-ls6.html#cb64-7" tabindex="-1"></a><span class="co">#SBATCH -o serial_%j.out</span></span>
-<span id="cb64-8"><a href="slurm-job-scheduling-on-ls6.html#cb64-8" tabindex="-1"></a><span class="co">#SBATCH -e serial_%j.err</span></span>
-<span id="cb64-9"><a href="slurm-job-scheduling-on-ls6.html#cb64-9" tabindex="-1"></a></span>
-<span id="cb64-10"><a href="slurm-job-scheduling-on-ls6.html#cb64-10" tabindex="-1"></a><span class="ex">module</span> load python</span>
-<span id="cb64-11"><a href="slurm-job-scheduling-on-ls6.html#cb64-11" tabindex="-1"></a></span>
-<span id="cb64-12"><a href="slurm-job-scheduling-on-ls6.html#cb64-12" tabindex="-1"></a><span class="ex">python</span> analysis.py</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb99-1"><a href="slurm-job-scheduling-on-ls6.html#cb99-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb99-2"><a href="slurm-job-scheduling-on-ls6.html#cb99-2" tabindex="-1"></a><span class="co">#SBATCH -J serial_python</span></span>
+<span id="cb99-3"><a href="slurm-job-scheduling-on-ls6.html#cb99-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb99-4"><a href="slurm-job-scheduling-on-ls6.html#cb99-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb99-5"><a href="slurm-job-scheduling-on-ls6.html#cb99-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:10:00</span></span>
+<span id="cb99-6"><a href="slurm-job-scheduling-on-ls6.html#cb99-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb99-7"><a href="slurm-job-scheduling-on-ls6.html#cb99-7" tabindex="-1"></a><span class="co">#SBATCH -o serial_%j.out</span></span>
+<span id="cb99-8"><a href="slurm-job-scheduling-on-ls6.html#cb99-8" tabindex="-1"></a><span class="co">#SBATCH -e serial_%j.err</span></span>
+<span id="cb99-9"><a href="slurm-job-scheduling-on-ls6.html#cb99-9" tabindex="-1"></a></span>
+<span id="cb99-10"><a href="slurm-job-scheduling-on-ls6.html#cb99-10" tabindex="-1"></a><span class="ex">module</span> load python</span>
+<span id="cb99-11"><a href="slurm-job-scheduling-on-ls6.html#cb99-11" tabindex="-1"></a></span>
+<span id="cb99-12"><a href="slurm-job-scheduling-on-ls6.html#cb99-12" tabindex="-1"></a><span class="ex">python</span> analysis.py</span></code></pre></div>
 <p>This script has all the basic parts of real work:</p>
 <ul>
 <li>explicit resources</li>
@@ -969,16 +1034,16 @@ Output and accounting records become available</code></pre>
 <div id="a-realistic-compile-and-run-pattern" class="section level2 hasAnchor" number="4.19">
 <h2><span class="header-section-number">4.19</span> A realistic compile-and-run pattern<a href="slurm-job-scheduling-on-ls6.html#a-realistic-compile-and-run-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Sometimes the job script is used only to run an already-built executable:</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb65-1"><a href="slurm-job-scheduling-on-ls6.html#cb65-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb65-2"><a href="slurm-job-scheduling-on-ls6.html#cb65-2" tabindex="-1"></a><span class="co">#SBATCH -J c_run</span></span>
-<span id="cb65-3"><a href="slurm-job-scheduling-on-ls6.html#cb65-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
-<span id="cb65-4"><a href="slurm-job-scheduling-on-ls6.html#cb65-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
-<span id="cb65-5"><a href="slurm-job-scheduling-on-ls6.html#cb65-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
-<span id="cb65-6"><a href="slurm-job-scheduling-on-ls6.html#cb65-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
-<span id="cb65-7"><a href="slurm-job-scheduling-on-ls6.html#cb65-7" tabindex="-1"></a><span class="co">#SBATCH -o c_run_%j.out</span></span>
-<span id="cb65-8"><a href="slurm-job-scheduling-on-ls6.html#cb65-8" tabindex="-1"></a><span class="co">#SBATCH -e c_run_%j.err</span></span>
-<span id="cb65-9"><a href="slurm-job-scheduling-on-ls6.html#cb65-9" tabindex="-1"></a></span>
-<span id="cb65-10"><a href="slurm-job-scheduling-on-ls6.html#cb65-10" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb100-1"><a href="slurm-job-scheduling-on-ls6.html#cb100-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb100-2"><a href="slurm-job-scheduling-on-ls6.html#cb100-2" tabindex="-1"></a><span class="co">#SBATCH -J c_run</span></span>
+<span id="cb100-3"><a href="slurm-job-scheduling-on-ls6.html#cb100-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
+<span id="cb100-4"><a href="slurm-job-scheduling-on-ls6.html#cb100-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
+<span id="cb100-5"><a href="slurm-job-scheduling-on-ls6.html#cb100-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
+<span id="cb100-6"><a href="slurm-job-scheduling-on-ls6.html#cb100-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
+<span id="cb100-7"><a href="slurm-job-scheduling-on-ls6.html#cb100-7" tabindex="-1"></a><span class="co">#SBATCH -o c_run_%j.out</span></span>
+<span id="cb100-8"><a href="slurm-job-scheduling-on-ls6.html#cb100-8" tabindex="-1"></a><span class="co">#SBATCH -e c_run_%j.err</span></span>
+<span id="cb100-9"><a href="slurm-job-scheduling-on-ls6.html#cb100-9" tabindex="-1"></a></span>
+<span id="cb100-10"><a href="slurm-job-scheduling-on-ls6.html#cb100-10" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
 <p>The separation matters:</p>
 <ul>
 <li>build small programs on the login node</li>
@@ -1018,28 +1083,28 @@ Output and accounting records become available</code></pre>
 <div id="did-the-job-submit" class="section level3 hasAnchor" number="4.21.1">
 <h3><span class="header-section-number">4.21.1</span> 1. Did the job submit?<a href="slurm-job-scheduling-on-ls6.html#did-the-job-submit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Use:</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb66-1"><a href="slurm-job-scheduling-on-ls6.html#cb66-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb101-1"><a href="slurm-job-scheduling-on-ls6.html#cb101-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
 <p>If it is no longer there, it may have finished or failed quickly.</p>
 </div>
 <div id="what-does-accounting-say" class="section level3 hasAnchor" number="4.21.2">
 <h3><span class="header-section-number">4.21.2</span> 2. What does accounting say?<a href="slurm-job-scheduling-on-ls6.html#what-does-accounting-say" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Use:</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb67-1"><a href="slurm-job-scheduling-on-ls6.html#cb67-1" tabindex="-1"></a><span class="ex">sacct</span></span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb102-1"><a href="slurm-job-scheduling-on-ls6.html#cb102-1" tabindex="-1"></a><span class="ex">sacct</span></span></code></pre></div>
 <p>or:</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb68-1"><a href="slurm-job-scheduling-on-ls6.html#cb68-1" tabindex="-1"></a><span class="ex">sacct</span> <span class="at">-j</span> 123456</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb103-1"><a href="slurm-job-scheduling-on-ls6.html#cb103-1" tabindex="-1"></a><span class="ex">sacct</span> <span class="at">-j</span> 123456</span></code></pre></div>
 <p>This helps confirm whether the job completed, failed, or was cancelled.</p>
 </div>
 <div id="what-do-the-output-and-error-files-say" class="section level3 hasAnchor" number="4.21.3">
 <h3><span class="header-section-number">4.21.3</span> 3. What do the output and error files say?<a href="slurm-job-scheduling-on-ls6.html#what-do-the-output-and-error-files-say" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Use:</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb69-1"><a href="slurm-job-scheduling-on-ls6.html#cb69-1" tabindex="-1"></a><span class="fu">cat</span> slurm-123456.out</span></code></pre></div>
-<p>or your custom output/error filenames.</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb104-1"><a href="slurm-job-scheduling-on-ls6.html#cb104-1" tabindex="-1"></a><span class="fu">cat</span> slurm-123456.out</span></code></pre></div>
+<p>or your custom output and error filenames.</p>
 </div>
 <div id="was-the-intended-program-or-file-actually-present" class="section level3 hasAnchor" number="4.21.4">
 <h3><span class="header-section-number">4.21.4</span> 4. Was the intended program or file actually present?<a href="slurm-job-scheduling-on-ls6.html#was-the-intended-program-or-file-actually-present" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Use:</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb70-1"><a href="slurm-job-scheduling-on-ls6.html#cb70-1" tabindex="-1"></a><span class="bu">pwd</span></span>
-<span id="cb70-2"><a href="slurm-job-scheduling-on-ls6.html#cb70-2" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb105-1"><a href="slurm-job-scheduling-on-ls6.html#cb105-1" tabindex="-1"></a><span class="bu">pwd</span></span>
+<span id="cb105-2"><a href="slurm-job-scheduling-on-ls6.html#cb105-2" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
 <p>This checks your working directory assumptions.</p>
 </div>
 <div id="was-the-required-software-environment-loaded" class="section level3 hasAnchor" number="4.21.5">
@@ -1054,9 +1119,9 @@ Output and accounting records become available</code></pre>
 <div id="failure-case-study-1-misspelled-command" class="section level2 hasAnchor" number="4.22">
 <h2><span class="header-section-number">4.22</span> Failure case study 1: misspelled command<a href="slurm-job-scheduling-on-ls6.html#failure-case-study-1-misspelled-command" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Suppose the script contains:</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb71-1"><a href="slurm-job-scheduling-on-ls6.html#cb71-1" tabindex="-1"></a><span class="ex">pythno</span> analysis.py</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb106-1"><a href="slurm-job-scheduling-on-ls6.html#cb106-1" tabindex="-1"></a><span class="ex">pythno</span> analysis.py</span></code></pre></div>
 <p>The job may submit successfully, but the output or error file will show that the command is not found.</p>
-<p>The key lesson is important:</p>
+<p>The key lesson is:</p>
 <blockquote>
 <p>A job can fail even when submission succeeds.</p>
 </blockquote>
@@ -1065,9 +1130,9 @@ Output and accounting records become available</code></pre>
 <div id="failure-case-study-2-missing-input-file" class="section level2 hasAnchor" number="4.23">
 <h2><span class="header-section-number">4.23</span> Failure case study 2: missing input file<a href="slurm-job-scheduling-on-ls6.html#failure-case-study-2-missing-input-file" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Suppose the script expects <code>input.txt</code>, but the file is not in the working directory:</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb72-1"><a href="slurm-job-scheduling-on-ls6.html#cb72-1" tabindex="-1"></a><span class="ex">python</span> analysis.py input.txt</span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb107-1"><a href="slurm-job-scheduling-on-ls6.html#cb107-1" tabindex="-1"></a><span class="ex">python</span> analysis.py input.txt</span></code></pre></div>
 <p>If <code>input.txt</code> is missing, the program may fail immediately.</p>
-<p>The fix is not mystical. It is usually one of the following:</p>
+<p>The fix is usually one of the following:</p>
 <ul>
 <li>submit from the correct directory</li>
 <li>use a correct path</li>
@@ -1078,11 +1143,11 @@ Output and accounting records become available</code></pre>
 <div id="failure-case-study-3-request-does-not-match-workload" class="section level2 hasAnchor" number="4.24">
 <h2><span class="header-section-number">4.24</span> Failure case study 3: request does not match workload<a href="slurm-job-scheduling-on-ls6.html#failure-case-study-3-request-does-not-match-workload" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>Suppose the script requests four tasks:</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb73-1"><a href="slurm-job-scheduling-on-ls6.html#cb73-1" tabindex="-1"></a><span class="co">#SBATCH -n 4</span></span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb108-1"><a href="slurm-job-scheduling-on-ls6.html#cb108-1" tabindex="-1"></a><span class="co">#SBATCH -n 4</span></span></code></pre></div>
 <p>but runs a plain serial script:</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb74-1"><a href="slurm-job-scheduling-on-ls6.html#cb74-1" tabindex="-1"></a><span class="ex">python</span> analysis.py</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb109-1"><a href="slurm-job-scheduling-on-ls6.html#cb109-1" tabindex="-1"></a><span class="ex">python</span> analysis.py</span></code></pre></div>
 <p>The code itself may still run, but the request does not reflect the workload. This wastes resources and creates confusion.</p>
-<p>A good HPC user learns that job design is part of scientific and computational discipline.</p>
+<p>A good HPC user learns that job design is part of computational discipline.</p>
 </div>
 <div id="interactive-jobs-versus-batch-jobs" class="section level2 hasAnchor" number="4.25">
 <h2><span class="header-section-number">4.25</span> Interactive jobs versus batch jobs<a href="slurm-job-scheduling-on-ls6.html#interactive-jobs-versus-batch-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -1092,8 +1157,8 @@ Output and accounting records become available</code></pre>
 <ul>
 <li>good for repeatable workflows</li>
 <li>good for production runs</li>
-<li>good for recording output</li>
-<li>good for overnight or longer jobs</li>
+<li>good for recorded output</li>
+<li>good for longer jobs</li>
 </ul>
 </div>
 <div id="interactive-jobs" class="section level3 hasAnchor" number="4.25.2">
@@ -1103,7 +1168,7 @@ Output and accounting records become available</code></pre>
 <li>good for debugging</li>
 <li>good for short tests in a compute environment</li>
 </ul>
-<p>Beginners should learn batch first because it encourages deliberate, documented practice.</p>
+<p>Learn batch first because it encourages deliberate, documented practice.</p>
 </div>
 </div>
 <div id="best-practices-for-slurm-scripts" class="section level2 hasAnchor" number="4.26">
@@ -1115,7 +1180,7 @@ Output and accounting records become available</code></pre>
 <li>separate output and error when useful</li>
 <li>record environment details for debugging</li>
 <li>keep old scripts rather than rewriting from memory each time</li>
-<li>treat scripts as version-controlled workflow documents</li>
+<li>treat scripts as workflow documents</li>
 </ul>
 </div>
 <div id="lab-1-your-first-real-job" class="section level2 hasAnchor" number="4.27">
@@ -1161,7 +1226,7 @@ Output and accounting records become available</code></pre>
 <ul>
 <li><code>squeue</code></li>
 <li><code>sacct</code></li>
-<li>output/error files</li>
+<li>output and error files</li>
 <li><code>pwd</code> and <code>ls</code></li>
 </ul>
 </div>
@@ -1177,8 +1242,8 @@ Output and accounting records become available</code></pre>
 </ul>
 <p>Then explain each line in plain English.</p>
 </div>
-<div id="key-takeaways" class="section level2 hasAnchor" number="4.32">
-<h2><span class="header-section-number">4.32</span> Key takeaways<a href="slurm-job-scheduling-on-ls6.html#key-takeaways" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="key-takeaways-1" class="section level2 hasAnchor" number="4.32">
+<h2><span class="header-section-number">4.32</span> Key takeaways<a href="slurm-job-scheduling-on-ls6.html#key-takeaways-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
 <li>SLURM is a scheduler and resource manager, not a direct execution command</li>
 <li>a job script is both a shell script and a resource request</li>
@@ -1196,7 +1261,7 @@ Output and accounting records become available</code></pre>
           </div>
         </div>
       </div>
-<a href="linux-fundamentals-and-environment-awareness.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="linux-fundamentals-for-hpc.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="modules-compilers-and-your-first-c-program.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
