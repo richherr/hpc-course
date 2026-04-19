@@ -742,11 +742,25 @@ SLURM decides when resources are available
 Job starts on compute node(s)
       ↓
 Output and accounting records become available</code></pre>
+<p>This small picture is worth slowing down for. Each step answers a different question.</p>
+<ul>
+<li><strong>Write job script</strong> means you decide what should happen and what resources are needed.</li>
+<li><strong>Submit with sbatch</strong> means you hand that plan to the scheduler.</li>
+<li><strong>Job enters queue</strong> means the job is now waiting to be placed.</li>
+<li><strong>SLURM decides when resources are available</strong> means the system is matching your request to real hardware and current demand.</li>
+<li><strong>Job starts on compute node(s)</strong> means the job finally runs in the environment you asked for.</li>
+<li><strong>Output and accounting records become available</strong> means you can inspect what happened instead of guessing.</li>
+</ul>
 <p>This workflow appears again and again in HPC practice. Later topics such as parallel computing, containers, compiled programs, Python workflows, and R workflows still pass through the same scheduler logic.</p>
 </div>
 <div id="login-nodes-versus-compute-nodes" class="section level2 hasAnchor" number="4.5">
 <h2><span class="header-section-number">4.5</span> Login nodes versus compute nodes<a href="slurm-job-scheduling-on-ls6.html#login-nodes-versus-compute-nodes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>This distinction remains central.</p>
+<p>If you forget everything else in the chapter, keep this rule:</p>
+<blockquote>
+<p>Use the login node to prepare work. Use compute nodes to perform work.</p>
+</blockquote>
+<p>A login node is a front door into the cluster. It is meant for light, short, interactive work.</p>
 <div id="login-nodes-are-for" class="section level3 hasAnchor" number="4.5.1">
 <h3><span class="header-section-number">4.5.1</span> Login nodes are for:<a href="slurm-job-scheduling-on-ls6.html#login-nodes-are-for" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
@@ -767,11 +781,8 @@ Output and accounting records become available</code></pre>
 <li>parallel workloads</li>
 <li>training or simulation runs</li>
 </ul>
-<p>A useful rule of thumb is:</p>
-<blockquote>
-<p>Use the login node to prepare work. Use compute nodes to perform work.</p>
-</blockquote>
 <p>If a task would monopolize CPU time, consume substantial memory, run for a long time, or scale across multiple cores, it belongs under SLURM.</p>
+<p>This matters both technically and socially. Technically, the compute nodes are where the real resources live. Socially, the login nodes are shared by many users, and heavy work there makes the system worse for everyone.</p>
 </div>
 </div>
 <div id="your-first-slurm-script" class="section level2 hasAnchor" number="4.6">
@@ -791,30 +802,39 @@ Output and accounting records become available</code></pre>
 <span id="cb79-10"><a href="slurm-job-scheduling-on-ls6.html#cb79-10" tabindex="-1"></a><span class="fu">date</span></span>
 <span id="cb79-11"><a href="slurm-job-scheduling-on-ls6.html#cb79-11" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div>
 <p>This script is intentionally simple. The goal is to make the scheduler behavior visible before the program logic becomes complicated.</p>
+<p>At this stage, a simple script is better than a “realistic” but confusing script. You want to see the scheduler, the compute node, and the output file clearly.</p>
 </div>
 <div id="reading-the-script-line-by-line" class="section level2 hasAnchor" number="4.7">
 <h2><span class="header-section-number">4.7</span> Reading the script line by line<a href="slurm-job-scheduling-on-ls6.html#reading-the-script-line-by-line" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Before rushing to submission, it is worth learning how to read a job script calmly. A good job script is not mysterious. It is a small document that answers two questions:</p>
+<ol style="list-style-type: decimal">
+<li>What resources are being requested?</li>
+<li>What commands should run once the job starts?</li>
+</ol>
+<p>The <code>#SBATCH</code> lines answer the first question. The ordinary shell commands answer the second.</p>
 <div id="shebang" class="section level3 hasAnchor" number="4.7.1">
 <h3><span class="header-section-number">4.7.1</span> Shebang<a href="slurm-job-scheduling-on-ls6.html#shebang" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb80"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb80-1"><a href="slurm-job-scheduling-on-ls6.html#cb80-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span></code></pre></div>
 <p>This tells the system to execute the script using Bash.</p>
+<p>Even though this line looks familiar from ordinary shell scripting, it still matters here because a SLURM job script is still, at bottom, a shell script.</p>
 </div>
 <div id="job-name" class="section level3 hasAnchor" number="4.7.2">
 <h3><span class="header-section-number">4.7.2</span> Job name<a href="slurm-job-scheduling-on-ls6.html#job-name" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb81"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb81-1"><a href="slurm-job-scheduling-on-ls6.html#cb81-1" tabindex="-1"></a><span class="co">#SBATCH -J hello_job</span></span></code></pre></div>
-<p>This gives the job a readable name. Good names matter because later you may have many jobs in the queue or in the accounting records.</p>
+<p>This gives the job a readable name.</p>
+<p>Good names matter because later you may have many jobs in the queue or in the accounting records. A name like <code>hello_job</code> is fine for a first test. A name like <code>analysis_run</code> or <code>omp_test_4threads</code> becomes more useful later.</p>
 </div>
 <div id="nodes" class="section level3 hasAnchor" number="4.7.3">
 <h3><span class="header-section-number">4.7.3</span> Nodes<a href="slurm-job-scheduling-on-ls6.html#nodes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb82"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb82-1"><a href="slurm-job-scheduling-on-ls6.html#cb82-1" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span></code></pre></div>
 <p>This requests one node.</p>
-<p>At a beginner level, think of a node as one full machine in the cluster.</p>
+<p>At a beginner level, think of a node as one full machine in the cluster. For a simple serial or small shared-memory job, one node is often enough.</p>
 </div>
 <div id="tasks" class="section level3 hasAnchor" number="4.7.4">
 <h3><span class="header-section-number">4.7.4</span> Tasks<a href="slurm-job-scheduling-on-ls6.html#tasks" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb83"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb83-1"><a href="slurm-job-scheduling-on-ls6.html#cb83-1" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span></code></pre></div>
 <p>This requests one task.</p>
-<p>For a simple serial job, that means one process slot. Later, for MPI jobs, this becomes more important because task count often maps to the number of MPI ranks.</p>
+<p>For a simple serial job, that usually means one process slot. Later, for MPI jobs, this becomes more important because task count often maps to the number of MPI ranks.</p>
 </div>
 <div id="wall-time" class="section level3 hasAnchor" number="4.7.5">
 <h3><span class="header-section-number">4.7.5</span> Wall time<a href="slurm-job-scheduling-on-ls6.html#wall-time" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -842,6 +862,7 @@ Output and accounting records become available</code></pre>
 <blockquote>
 <p><code>sbatch</code> submits. It does not promise immediate execution.</p>
 </blockquote>
+<p>A lot of early confusion disappears once you understand this. Submission success and program success are not the same thing.</p>
 </div>
 <div id="check-the-queue" class="section level2 hasAnchor" number="4.9">
 <h2><span class="header-section-number">4.9</span> Check the queue<a href="slurm-job-scheduling-on-ls6.html#check-the-queue" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -857,6 +878,11 @@ Output and accounting records become available</code></pre>
 <li>number of nodes</li>
 </ul>
 <p>If the job starts quickly, you may barely see it. If not, <code>squeue</code> lets you observe the job state.</p>
+<p>This command matters because it answers a very practical question:</p>
+<blockquote>
+<p>Is my job still waiting, running, or gone?</p>
+</blockquote>
+<p>That is often the first thing to establish before you do any deeper debugging.</p>
 </div>
 <div id="common-job-states" class="section level2 hasAnchor" number="4.10">
 <h2><span class="header-section-number">4.10</span> Common job states<a href="slurm-job-scheduling-on-ls6.html#common-job-states" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -867,6 +893,7 @@ Output and accounting records become available</code></pre>
 <li><code>CD</code> = completed</li>
 </ul>
 <p>A pending job is not automatically a broken job. It may simply be waiting for resources, waiting behind other jobs, or waiting because your request is harder to place.</p>
+<p>If a job is pending, do not jump immediately to the conclusion that the script is wrong. First ask whether the scheduler has simply not placed it yet.</p>
 </div>
 <div id="output-files-are-evidence" class="section level2 hasAnchor" number="4.11">
 <h2><span class="header-section-number">4.11</span> Output files are evidence<a href="slurm-job-scheduling-on-ls6.html#output-files-are-evidence" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -913,10 +940,11 @@ Output and accounting records become available</code></pre>
 <h3><span class="header-section-number">4.13.1</span> Too small a request can cause:<a href="slurm-job-scheduling-on-ls6.html#too-small-a-request-can-cause" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
 <li>slow performance</li>
-<li>oversubscription</li>
 <li>thread or process mismatch</li>
-<li>job failure</li>
+<li>jobs that terminate early</li>
+<li>poor behavior once the code actually scales up</li>
 </ul>
+<p>A request that is too small is not necessarily “efficient.” Sometimes it is simply wrong.</p>
 </div>
 <div id="too-large-a-request-can-cause" class="section level3 hasAnchor" number="4.13.2">
 <h3><span class="header-section-number">4.13.2</span> Too large a request can cause:<a href="slurm-job-scheduling-on-ls6.html#too-large-a-request-can-cause" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1006,7 +1034,11 @@ Output and accounting records become available</code></pre>
 <span id="cb98-9"><a href="slurm-job-scheduling-on-ls6.html#cb98-9" tabindex="-1"></a></span>
 <span id="cb98-10"><a href="slurm-job-scheduling-on-ls6.html#cb98-10" tabindex="-1"></a><span class="bu">echo</span> <span class="st">&quot;Standard output message&quot;</span></span>
 <span id="cb98-11"><a href="slurm-job-scheduling-on-ls6.html#cb98-11" tabindex="-1"></a><span class="fu">ls</span> does_not_exist</span></code></pre></div>
-<p>This helps you see that some messages belong in the output stream and others belong in the error stream.</p>
+<p>This is useful because the output and the error now go to different places. When you inspect them, you can tell the difference between:</p>
+<ul>
+<li>ordinary progress messages</li>
+<li>failure messages that need attention</li>
+</ul>
 </div>
 <div id="a-realistic-serial-job-pattern" class="section level2 hasAnchor" number="4.18">
 <h2><span class="header-section-number">4.18</span> A realistic serial job pattern<a href="slurm-job-scheduling-on-ls6.html#a-realistic-serial-job-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -1030,6 +1062,7 @@ Output and accounting records become available</code></pre>
 <li>explicit program launch</li>
 <li>explicit output handling</li>
 </ul>
+<p>The more your scripts look like this, the easier they become to understand and reuse later.</p>
 </div>
 <div id="a-realistic-compile-and-run-pattern" class="section level2 hasAnchor" number="4.19">
 <h2><span class="header-section-number">4.19</span> A realistic compile-and-run pattern<a href="slurm-job-scheduling-on-ls6.html#a-realistic-compile-and-run-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -1049,9 +1082,11 @@ Output and accounting records become available</code></pre>
 <li>build small programs on the login node</li>
 <li>execute real workloads through SLURM</li>
 </ul>
+<p>Keeping those roles distinct will make later chapters easier to understand.</p>
 </div>
 <div id="common-beginner-mistakes" class="section level2 hasAnchor" number="4.20">
 <h2><span class="header-section-number">4.20</span> Common beginner mistakes<a href="slurm-job-scheduling-on-ls6.html#common-beginner-mistakes" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>These mistakes happen often enough that you should expect to see some of them in your own early work. The goal is not to avoid every mistake forever. The goal is to recognize them quickly and diagnose them calmly.</p>
 <div id="mistake-1-assuming-sbatch-ran-the-code-right-away" class="section level3 hasAnchor" number="4.20.1">
 <h3><span class="header-section-number">4.20.1</span> Mistake 1: Assuming <code>sbatch</code> ran the code right away<a href="slurm-job-scheduling-on-ls6.html#mistake-1-assuming-sbatch-ran-the-code-right-away" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Correction: <code>sbatch</code> submits to the scheduler. The code may run later.</p>
@@ -1079,12 +1114,13 @@ Output and accounting records become available</code></pre>
 </div>
 <div id="a-debugging-checklist-for-failed-jobs" class="section level2 hasAnchor" number="4.21">
 <h2><span class="header-section-number">4.21</span> A debugging checklist for failed jobs<a href="slurm-job-scheduling-on-ls6.html#a-debugging-checklist-for-failed-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>When a job behaves unexpectedly, ask the following in order.</p>
+<p>When a job behaves unexpectedly, work through the following checklist in order. This matters because debugging is much easier when you move from simple evidence to deeper interpretation instead of jumping randomly between ideas.</p>
 <div id="did-the-job-submit" class="section level3 hasAnchor" number="4.21.1">
 <h3><span class="header-section-number">4.21.1</span> 1. Did the job submit?<a href="slurm-job-scheduling-on-ls6.html#did-the-job-submit" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Use:</p>
 <div class="sourceCode" id="cb101"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb101-1"><a href="slurm-job-scheduling-on-ls6.html#cb101-1" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
-<p>If it is no longer there, it may have finished or failed quickly.</p>
+<p>If the job is there, it is either queued or running.</p>
+<p>If it is not there, the job may have finished already or failed quickly.</p>
 </div>
 <div id="what-does-accounting-say" class="section level3 hasAnchor" number="4.21.2">
 <h3><span class="header-section-number">4.21.2</span> 2. What does accounting say?<a href="slurm-job-scheduling-on-ls6.html#what-does-accounting-say" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1092,13 +1128,14 @@ Output and accounting records become available</code></pre>
 <div class="sourceCode" id="cb102"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb102-1"><a href="slurm-job-scheduling-on-ls6.html#cb102-1" tabindex="-1"></a><span class="ex">sacct</span></span></code></pre></div>
 <p>or:</p>
 <div class="sourceCode" id="cb103"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb103-1"><a href="slurm-job-scheduling-on-ls6.html#cb103-1" tabindex="-1"></a><span class="ex">sacct</span> <span class="at">-j</span> 123456</span></code></pre></div>
-<p>This helps confirm whether the job completed, failed, or was cancelled.</p>
+<p>This helps confirm whether the job completed, failed, or was cancelled. It is especially useful when the queue is empty and you are trying to figure out what happened after the fact.</p>
 </div>
 <div id="what-do-the-output-and-error-files-say" class="section level3 hasAnchor" number="4.21.3">
 <h3><span class="header-section-number">4.21.3</span> 3. What do the output and error files say?<a href="slurm-job-scheduling-on-ls6.html#what-do-the-output-and-error-files-say" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>Use:</p>
 <div class="sourceCode" id="cb104"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb104-1"><a href="slurm-job-scheduling-on-ls6.html#cb104-1" tabindex="-1"></a><span class="fu">cat</span> slurm-123456.out</span></code></pre></div>
 <p>or your custom output and error filenames.</p>
+<p>Do not skip this step. The output file often contains the most direct explanation of what went wrong.</p>
 </div>
 <div id="was-the-intended-program-or-file-actually-present" class="section level3 hasAnchor" number="4.21.4">
 <h3><span class="header-section-number">4.21.4</span> 4. Was the intended program or file actually present?<a href="slurm-job-scheduling-on-ls6.html#was-the-intended-program-or-file-actually-present" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1106,14 +1143,17 @@ Output and accounting records become available</code></pre>
 <div class="sourceCode" id="cb105"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb105-1"><a href="slurm-job-scheduling-on-ls6.html#cb105-1" tabindex="-1"></a><span class="bu">pwd</span></span>
 <span id="cb105-2"><a href="slurm-job-scheduling-on-ls6.html#cb105-2" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
 <p>This checks your working directory assumptions.</p>
+<p>A surprising number of job failures are really path failures.</p>
 </div>
 <div id="was-the-required-software-environment-loaded" class="section level3 hasAnchor" number="4.21.5">
 <h3><span class="header-section-number">4.21.5</span> 5. Was the required software environment loaded?<a href="slurm-job-scheduling-on-ls6.html#was-the-required-software-environment-loaded" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>If your script assumes Python, GCC, MPI, or another toolchain, verify the appropriate module commands are present.</p>
+<p>If your script assumes Python, GCC, MPI, or another toolchain, verify that the appropriate module commands are present.</p>
+<p>The scheduler does not automatically guess the environment you intended.</p>
 </div>
 <div id="did-the-resource-request-match-the-program-model" class="section level3 hasAnchor" number="4.21.6">
 <h3><span class="header-section-number">4.21.6</span> 6. Did the resource request match the program model?<a href="slurm-job-scheduling-on-ls6.html#did-the-resource-request-match-the-program-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>A serial program with four tasks or an OpenMP program without thread settings may behave badly or misleadingly.</p>
+<p>If the request and the code do not match, the job may still run, but it may not run in the way you think it does.</p>
 </div>
 </div>
 <div id="failure-case-study-1-misspelled-command" class="section level2 hasAnchor" number="4.22">
@@ -1151,7 +1191,8 @@ Output and accounting records become available</code></pre>
 </div>
 <div id="interactive-jobs-versus-batch-jobs" class="section level2 hasAnchor" number="4.25">
 <h2><span class="header-section-number">4.25</span> Interactive jobs versus batch jobs<a href="slurm-job-scheduling-on-ls6.html#interactive-jobs-versus-batch-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Although this chapter emphasizes batch submission, it is useful to understand the difference conceptually.</p>
+<p>Although this chapter emphasizes batch submission, it is still useful to understand the difference conceptually.</p>
+<p>Both interactive and batch jobs run on compute resources. The difference is mostly in how you interact with them.</p>
 <div id="batch-jobs" class="section level3 hasAnchor" number="4.25.1">
 <h3><span class="header-section-number">4.25.1</span> Batch jobs<a href="slurm-job-scheduling-on-ls6.html#batch-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <ul>
@@ -1160,6 +1201,7 @@ Output and accounting records become available</code></pre>
 <li>good for recorded output</li>
 <li>good for longer jobs</li>
 </ul>
+<p>Batch jobs are the default model for most serious work because they encourage planning, documentation, and repeatability.</p>
 </div>
 <div id="interactive-jobs" class="section level3 hasAnchor" number="4.25.2">
 <h3><span class="header-section-number">4.25.2</span> Interactive jobs<a href="slurm-job-scheduling-on-ls6.html#interactive-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -1168,6 +1210,7 @@ Output and accounting records become available</code></pre>
 <li>good for debugging</li>
 <li>good for short tests in a compute environment</li>
 </ul>
+<p>Interactive jobs are helpful when you need to test behavior live, but they are not a substitute for a well-designed batch workflow.</p>
 <p>Learn batch first because it encourages deliberate, documented practice.</p>
 </div>
 </div>
@@ -1179,9 +1222,10 @@ Output and accounting records become available</code></pre>
 <li>request realistic resources</li>
 <li>separate output and error when useful</li>
 <li>record environment details for debugging</li>
-<li>keep old scripts rather than rewriting from memory each time</li>
+<li>keep useful scripts rather than rewriting from memory each time</li>
 <li>treat scripts as workflow documents</li>
 </ul>
+<p>If you build this habit early, later chapters become easier because you are not inventing your workflow from scratch each time.</p>
 </div>
 <div id="lab-1-your-first-real-job" class="section level2 hasAnchor" number="4.27">
 <h2><span class="header-section-number">4.27</span> Lab 1: your first real job<a href="slurm-job-scheduling-on-ls6.html#lab-1-your-first-real-job" class="anchor-section" aria-label="Anchor link to header"></a></h2>

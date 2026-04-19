@@ -87,11 +87,26 @@ Job starts on compute node(s)
 Output and accounting records become available
 ```
 
+This small picture is worth slowing down for. Each step answers a different question.
+
+- **Write job script** means you decide what should happen and what resources are needed.
+- **Submit with sbatch** means you hand that plan to the scheduler.
+- **Job enters queue** means the job is now waiting to be placed.
+- **SLURM decides when resources are available** means the system is matching your request to real hardware and current demand.
+- **Job starts on compute node(s)** means the job finally runs in the environment you asked for.
+- **Output and accounting records become available** means you can inspect what happened instead of guessing.
+
 This workflow appears again and again in HPC practice. Later topics such as parallel computing, containers, compiled programs, Python workflows, and R workflows still pass through the same scheduler logic.
 
 ## Login nodes versus compute nodes
 
 This distinction remains central.
+
+If you forget everything else in the chapter, keep this rule:
+
+> Use the login node to prepare work. Use compute nodes to perform work.
+
+A login node is a front door into the cluster. It is meant for light, short, interactive work.
 
 ### Login nodes are for:
 
@@ -110,11 +125,9 @@ This distinction remains central.
 - parallel workloads
 - training or simulation runs
 
-A useful rule of thumb is:
-
-> Use the login node to prepare work. Use compute nodes to perform work.
-
 If a task would monopolize CPU time, consume substantial memory, run for a long time, or scale across multiple cores, it belongs under SLURM.
+
+This matters both technically and socially. Technically, the compute nodes are where the real resources live. Socially, the login nodes are shared by many users, and heavy work there makes the system worse for everyone.
 
 ## Your first SLURM script
 
@@ -142,7 +155,16 @@ pwd
 
 This script is intentionally simple. The goal is to make the scheduler behavior visible before the program logic becomes complicated.
 
+At this stage, a simple script is better than a “realistic” but confusing script. You want to see the scheduler, the compute node, and the output file clearly.
+
 ## Reading the script line by line
+
+Before rushing to submission, it is worth learning how to read a job script calmly. A good job script is not mysterious. It is a small document that answers two questions:
+
+1. What resources are being requested?
+2. What commands should run once the job starts?
+
+The `#SBATCH` lines answer the first question. The ordinary shell commands answer the second.
 
 ### Shebang
 
@@ -152,13 +174,17 @@ This script is intentionally simple. The goal is to make the scheduler behavior 
 
 This tells the system to execute the script using Bash.
 
+Even though this line looks familiar from ordinary shell scripting, it still matters here because a SLURM job script is still, at bottom, a shell script.
+
 ### Job name
 
 ```bash
 #SBATCH -J hello_job
 ```
 
-This gives the job a readable name. Good names matter because later you may have many jobs in the queue or in the accounting records.
+This gives the job a readable name.
+
+Good names matter because later you may have many jobs in the queue or in the accounting records. A name like `hello_job` is fine for a first test. A name like `analysis_run` or `omp_test_4threads` becomes more useful later.
 
 ### Nodes
 
@@ -168,7 +194,7 @@ This gives the job a readable name. Good names matter because later you may have
 
 This requests one node.
 
-At a beginner level, think of a node as one full machine in the cluster.
+At a beginner level, think of a node as one full machine in the cluster. For a simple serial or small shared-memory job, one node is often enough.
 
 ### Tasks
 
@@ -178,7 +204,7 @@ At a beginner level, think of a node as one full machine in the cluster.
 
 This requests one task.
 
-For a simple serial job, that means one process slot. Later, for MPI jobs, this becomes more important because task count often maps to the number of MPI ranks.
+For a simple serial job, that usually means one process slot. Later, for MPI jobs, this becomes more important because task count often maps to the number of MPI ranks.
 
 ### Wall time
 
@@ -220,6 +246,8 @@ This is the first beginner correction that really matters:
 
 > `sbatch` submits. It does not promise immediate execution.
 
+A lot of early confusion disappears once you understand this. Submission success and program success are not the same thing.
+
 ## Check the queue
 
 Use:
@@ -239,6 +267,12 @@ Typical fields include:
 
 If the job starts quickly, you may barely see it. If not, `squeue` lets you observe the job state.
 
+This command matters because it answers a very practical question:
+
+> Is my job still waiting, running, or gone?
+
+That is often the first thing to establish before you do any deeper debugging.
+
 ## Common job states
 
 - `PD` = pending
@@ -247,6 +281,8 @@ If the job starts quickly, you may barely see it. If not, `squeue` lets you obse
 - `CD` = completed
 
 A pending job is not automatically a broken job. It may simply be waiting for resources, waiting behind other jobs, or waiting because your request is harder to place.
+
+If a job is pending, do not jump immediately to the conclusion that the script is wrong. First ask whether the scheduler has simply not placed it yet.
 
 ## Output files are evidence
 
@@ -306,9 +342,11 @@ These questions matter because scheduler performance depends on matching the req
 ### Too small a request can cause:
 
 - slow performance
-- oversubscription
 - thread or process mismatch
-- job failure
+- jobs that terminate early
+- poor behavior once the code actually scales up
+
+A request that is too small is not necessarily “efficient.” Sometimes it is simply wrong.
 
 ### Too large a request can cause:
 
@@ -427,7 +465,10 @@ echo "Standard output message"
 ls does_not_exist
 ```
 
-This helps you see that some messages belong in the output stream and others belong in the error stream.
+This is useful because the output and the error now go to different places. When you inspect them, you can tell the difference between:
+
+- ordinary progress messages
+- failure messages that need attention
 
 ## A realistic serial job pattern
 
@@ -455,6 +496,8 @@ This script has all the basic parts of real work:
 - explicit program launch
 - explicit output handling
 
+The more your scripts look like this, the easier they become to understand and reuse later.
+
 ## A realistic compile-and-run pattern
 
 Sometimes the job script is used only to run an already-built executable:
@@ -477,7 +520,11 @@ The separation matters:
 - build small programs on the login node
 - execute real workloads through SLURM
 
+Keeping those roles distinct will make later chapters easier to understand.
+
 ## Common beginner mistakes
+
+These mistakes happen often enough that you should expect to see some of them in your own early work. The goal is not to avoid every mistake forever. The goal is to recognize them quickly and diagnose them calmly.
 
 ### Mistake 1: Assuming `sbatch` ran the code right away
 
@@ -505,7 +552,7 @@ Correction: confirm location with `pwd` and `ls` before submission.
 
 ## A debugging checklist for failed jobs
 
-When a job behaves unexpectedly, ask the following in order.
+When a job behaves unexpectedly, work through the following checklist in order. This matters because debugging is much easier when you move from simple evidence to deeper interpretation instead of jumping randomly between ideas.
 
 ### 1. Did the job submit?
 
@@ -515,7 +562,9 @@ Use:
 squeue -u $USER
 ```
 
-If it is no longer there, it may have finished or failed quickly.
+If the job is there, it is either queued or running.
+
+If it is not there, the job may have finished already or failed quickly.
 
 ### 2. What does accounting say?
 
@@ -531,7 +580,7 @@ or:
 sacct -j 123456
 ```
 
-This helps confirm whether the job completed, failed, or was cancelled.
+This helps confirm whether the job completed, failed, or was cancelled. It is especially useful when the queue is empty and you are trying to figure out what happened after the fact.
 
 ### 3. What do the output and error files say?
 
@@ -542,6 +591,8 @@ cat slurm-123456.out
 ```
 
 or your custom output and error filenames.
+
+Do not skip this step. The output file often contains the most direct explanation of what went wrong.
 
 ### 4. Was the intended program or file actually present?
 
@@ -554,13 +605,19 @@ ls
 
 This checks your working directory assumptions.
 
+A surprising number of job failures are really path failures.
+
 ### 5. Was the required software environment loaded?
 
-If your script assumes Python, GCC, MPI, or another toolchain, verify the appropriate module commands are present.
+If your script assumes Python, GCC, MPI, or another toolchain, verify that the appropriate module commands are present.
+
+The scheduler does not automatically guess the environment you intended.
 
 ### 6. Did the resource request match the program model?
 
 A serial program with four tasks or an OpenMP program without thread settings may behave badly or misleadingly.
+
+If the request and the code do not match, the job may still run, but it may not run in the way you think it does.
 
 ## Failure case study 1: misspelled command
 
@@ -616,7 +673,9 @@ A good HPC user learns that job design is part of computational discipline.
 
 ## Interactive jobs versus batch jobs
 
-Although this chapter emphasizes batch submission, it is useful to understand the difference conceptually.
+Although this chapter emphasizes batch submission, it is still useful to understand the difference conceptually.
+
+Both interactive and batch jobs run on compute resources. The difference is mostly in how you interact with them.
 
 ### Batch jobs
 
@@ -625,11 +684,15 @@ Although this chapter emphasizes batch submission, it is useful to understand th
 - good for recorded output
 - good for longer jobs
 
+Batch jobs are the default model for most serious work because they encourage planning, documentation, and repeatability.
+
 ### Interactive jobs
 
 - good for exploration
 - good for debugging
 - good for short tests in a compute environment
+
+Interactive jobs are helpful when you need to test behavior live, but they are not a substitute for a well-designed batch workflow.
 
 Learn batch first because it encourages deliberate, documented practice.
 
@@ -640,8 +703,10 @@ Learn batch first because it encourages deliberate, documented practice.
 - request realistic resources
 - separate output and error when useful
 - record environment details for debugging
-- keep old scripts rather than rewriting from memory each time
+- keep useful scripts rather than rewriting from memory each time
 - treat scripts as workflow documents
+
+If you build this habit early, later chapters become easier because you are not inventing your workflow from scratch each time.
 
 ## Lab 1: your first real job
 
