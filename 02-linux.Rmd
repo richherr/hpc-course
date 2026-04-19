@@ -714,6 +714,107 @@ kill <pid>
 
 Use this when you need to stop a process by its process ID. This is most useful for accidental or lightweight shell-side processes; for scheduled jobs, you will usually use SLURM commands such as `scancel` instead.
 
+
+## Repeating a command with `watch`
+
+Sometimes you do not want to run the same command over and over by hand. You want to see how something changes over time.
+
+That is exactly what `watch` is for.
+
+### Basic use
+
+```bash
+watch squeue -u $USER
+```
+
+This reruns the command every few seconds and refreshes the screen so you can watch the output change.
+
+This is especially useful when:
+
+- you are waiting for a job to leave the queue
+- you want to see a running job disappear when it finishes
+- you want to monitor file growth, disk usage, or another changing value
+
+### Why `watch` is useful on HPC
+
+On an HPC system, many things change while you are working:
+
+- a queued job becomes running
+- a running job completes
+- a log file grows
+- disk usage increases during output generation
+
+Instead of typing the same command repeatedly, `watch` lets you see those changes live.
+
+### Choose a shorter interval
+
+```bash
+watch -n 2 squeue -u $USER
+```
+
+The `-n 2` option tells `watch` to refresh every two seconds.
+
+That is often a good compromise: fast enough to be useful, but not so fast that the display becomes noisy.
+
+### Another good example
+
+```bash
+watch -n 2 'ls -lh output/'
+```
+
+This lets you see whether files in a directory are appearing or growing while a workflow is running.
+
+### A caution about `watch`
+
+`watch` is useful because it saves effort, but it is still repeatedly running a command. Use it deliberately rather than leaving many `watch` sessions running without reason.
+
+## Measuring runtime with `time`
+
+Another very useful command is `time`.
+
+Use it when you want a quick answer to a simple question:
+
+> How long did that command actually take?
+
+### Basic use
+
+```bash
+time ./hello
+```
+
+This runs the command and reports timing information after it finishes.
+
+For small tests, this is often the simplest way to compare one version of a command or program against another.
+
+### Why `time` matters
+
+Even before you get to formal performance analysis, you should start building the habit of measuring instead of guessing.
+
+For example, `time` can help you compare:
+
+- one program version versus another
+- one compiler option versus another
+- one input size versus another
+- one small serial test before moving to a larger run
+
+### A practical example
+
+```bash
+time grep "error" big_log.txt
+```
+
+That example is small, but it reinforces the larger idea: Linux can help you measure behavior directly instead of relying on intuition.
+
+### A note for later chapters
+
+`time` is especially useful later when you begin comparing:
+
+- serial and parallel programs
+- optimized and non-optimized builds
+- different workflow designs
+
+At this stage, you do not need a deep theory of performance. You just need the habit of checking real runtime when it matters.
+
 This is especially useful if you accidentally start something on the login node that should not keep running there.
 
 Later, SLURM job management becomes more important than plain process management, but this is still good Linux knowledge.
@@ -918,6 +1019,36 @@ du -sh ~
 ```
 
 Then explain the difference between total filesystem usage and your own directory usage.
+
+## Lab 6: `watch` and `time`
+
+### Part 1: Watch a changing command
+
+Run:
+
+```bash
+watch -n 2 squeue -u $USER
+```
+
+If you do not currently have a job in the queue, try it anyway so you can see how the screen refreshes.
+
+Then explain what problem `watch` solves better than typing the same command repeatedly by hand.
+
+### Part 2: Measure a command with `time`
+
+Run:
+
+```bash
+time ls -l
+```
+
+Then run:
+
+```bash
+time find . -name "example.txt"
+```
+
+Write one or two sentences explaining what `time` tells you and why it is better to measure runtime than to guess.
 
 ## Stretch goal
 

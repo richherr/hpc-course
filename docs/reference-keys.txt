@@ -100,6 +100,17 @@ why-storage-awareness-matters
 processes
 show-your-processes
 kill-a-process
+repeating-a-command-with-watch
+basic-use
+why-watch-is-useful-on-hpc
+choose-a-shorter-interval
+another-good-example
+a-caution-about-watch
+measuring-runtime-with-time
+basic-use-1
+why-time-matters
+a-practical-example
+a-note-for-later-chapters
 working-from-inside-r
 a-debugging-mindset-for-linux
 where-am-i-1
@@ -116,6 +127,9 @@ lab-2-environment-variables
 lab-3-modules-and-command-discovery
 lab-4-file-search-and-output-inspection
 lab-5-storage-awareness
+lab-6-watch-and-time
+part-1-watch-a-changing-command
+part-2-measure-a-command-with-time
 stretch-goal
 key-takeaways
 slurm-job-scheduling-on-ls6
