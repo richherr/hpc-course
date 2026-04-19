@@ -6,124 +6,111 @@ site: bookdown::bookdown_site
 
 # High-Performance Computing on Lonestar6
 
-## Welcome
+## Overview
 
-This book is a practical introduction to high-performance computing using the **Lonestar6 (LS6)** system at the Texas Advanced Computing Center (TACC). It is written for students, researchers, and new cluster users who need an operational path from first login to confident job submission.
+This book is a practical introduction to high-performance computing using the **Lonestar6 (LS6)** system at the Texas Advanced Computing Center (TACC).
 
-Rather than treating HPC as an abstract subject, this book treats it as a workflow:
+Use it as:
 
-1. understand the cluster
-2. work safely in Linux
-3. manage your environment
-4. submit jobs through SLURM
-5. compile programs
-6. scale to parallel work
-7. use containers for reproducibility
-8. complete an end-to-end capstone project
+- your course text
+- your guided lab manual
+- your workflow reference when you need to remember how to do something correctly on the cluster
 
-## What this book is
+The goal is not only to help you run commands. The goal is to help you build good HPC habits: inspecting the environment, organizing files, requesting resources responsibly, interpreting output, and debugging from evidence rather than guesswork.
 
-This book is designed to function as:
+Across the book you will move from:
 
-- a textbook for a short course or workshop series
-- a lab manual for hands-on LS6 exercises
-- a reference guide for new HPC users
-- a bridge from beginner Linux to production cluster workflows
+- first login and basic HPC ideas
+- to Linux fundamentals
+- to SLURM job scheduling
+- to compiling software
+- to parallel computing
+- to containers and reproducible workflows
+- to a capstone project that brings the workflow together
 
-## Who this book is for
+## What You Should Learn from This Book
 
-This material is appropriate for:
-
-- upper-level undergraduates
-- graduate students beginning computational research
-- faculty and staff new to HPC
-- workshop participants who need a practical guide after class
-- self-paced learners who want an LS6-centered path into HPC
-
-No prior cluster experience is assumed. Some command-line exposure is helpful, but the early chapters are written to reduce the barrier to entry.
-
-## Learning goals
-
-By the end of the book, readers should be able to:
+By the end of the book, you should be able to:
 
 - explain the difference between login nodes and compute nodes
-- connect to LS6 and work within the Linux shell
-- manage files, directories, permissions, and environment variables
-- use modules to load software into the current environment
+- navigate Linux confidently on a shared system
+- manage files, permissions, and environment variables
+- use modules to access software and compilers
 - write, submit, monitor, and debug SLURM jobs
-- compile and run simple C programs on the cluster
-- distinguish serial, shared-memory, and distributed-memory workflows
-- understand the role of containers in reproducible HPC work
-- document a complete workflow so another researcher can repeat it
+- compile and run C and C++ programs on an HPC system
+- distinguish between serial, threaded, and distributed execution
+- explain the roles of MPI, OpenMP, and containers in HPC workflows
+- document an HPC workflow clearly enough that another user can reproduce it
 
-## Course philosophy
+## What This Book Emphasizes
 
-A common beginner mistake is to treat HPC as “a bigger computer.” It is better to think of HPC as a **shared, scheduled, resource-managed environment**.
+Each chapter returns to the same core questions:
 
-That idea affects everything in this book:
+1. What is this concept or tool for?
+2. What mental model should you use to understand it?
+3. What commands do you actually run?
+4. What usually goes wrong?
+5. How do you debug it when it fails?
 
-- you do not do serious computation on login nodes
-- your environment matters because software is often module-based
-- your working directory matters because jobs run in specific locations
-- your resource request matters because the scheduler allocates shared infrastructure
-- your documentation matters because reproducibility is part of responsible computing
+HPC rewards careful, inspectable, repeatable work. If you can run one successful job but cannot explain the environment, correct a resource request, or diagnose a failed run, you are not yet working independently. This book is meant to help you cross that gap.
 
-## How chapters are organized
+## How to Use the Chapters
 
-Most chapters follow a common pattern:
+Most chapters include some or all of the following:
 
 - overview
 - mental model
-- command examples
-- walkthrough
+- worked examples
 - common mistakes
-- debugging checklist
-- hands-on lab
-- stretch goal
+- lab exercises
+- stretch goals
+- summary points
 
-That structure is intentional. Many new users can reproduce commands but still feel uncertain about what the system is doing. The “mental model” sections are there to explain the logic behind the commands.
+The repetition is deliberate. Strong HPC work usually follows a pattern:
 
-## Recommended use in a course
+1. inspect the system
+2. make or edit a file
+3. run a small test
+4. scale up through the scheduler
+5. inspect output
+6. revise and rerun if needed
 
-A natural workshop sequence is:
+This pattern matters because HPC work is rarely one big leap. It is usually a series of small, checkable steps.
 
-- **Workshop 1**: first login, minimal Linux, first SLURM job
-- **Workshop 2**: job monitoring and debugging
-- **Workshop 3**: modules, compilers, first C program
-- **Workshop 4**: MPI and OpenMP foundations
-- **Workshop 5**: containers and reproducibility
-- **Workshop 6**: capstone project work session
+## How to Study from This Book
 
-This book can also be taught over several weeks as an onboarding course for a research computing program.
+A good way to use the book is:
 
-## What you need before starting
+- read the overview first
+- pay attention to the mental model
+- type and run the examples yourself
+- complete the lab at the end of the chapter
+- keep the appendix nearby as a quick reference
+- return to earlier chapters when something fails later
 
-Before working through the book, you should have:
+Do not treat the book as something to read once and set aside. Use it while you work.
 
-- an LS6 account or equivalent training account
-- SSH access from your laptop or desktop
-- a terminal application
-- a text editor you are comfortable using, or willingness to use `nano`
-- a place to keep notes on commands, directory paths, and job IDs
+## Working Assumptions
 
-## What success looks like
+You do **not** need prior experience with:
 
-Success in this course is not memorizing every SLURM option or every Linux command. Success looks like this:
+- cluster computing
+- batch scheduling
+- software compilation
+- parallel programming
+- containers
 
-- you know where you are in the filesystem
-- you know whether work belongs on a login node or compute node
-- you can inspect your environment instead of guessing
-- you can submit a job and interpret what happened
-- you can recover from common failures by reading evidence
+You do need patience, attention to detail, and a willingness to test things incrementally. On HPC systems, small mistakes are normal. What matters is learning how to find them and correct them.
 
-That is the mindset of an effective HPC user.
+## A Practical Rule for the Whole Book
 
-## A note on reproducibility
+Keep this rule visible as you work:
 
-Throughout the book, you will be encouraged to save scripts, keep meaningful file names, and write down the commands you used. These are not extra tasks. They are part of the workflow itself.
+> Do setup on the login node.  
+> Do serious computation on compute nodes through the scheduler.
 
-In research computing, a good result that cannot be reproduced later is far less valuable than a modest result that can be rerun, explained, and shared.
+That one distinction will help you avoid many of the most common beginner mistakes.
 
-## Looking ahead
+## Looking Ahead
 
-We begin with the most important conceptual distinction in cluster computing: **login nodes versus compute nodes**. From there, we build the smallest practical Linux toolkit needed to complete a real workflow on LS6.
+The first chapter begins with the most basic question: what makes an HPC system different from an ordinary computer, and how should you orient yourself inside that environment?

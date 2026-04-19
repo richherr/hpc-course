@@ -173,7 +173,7 @@ This is the basic compiled workflow that underlies far more complex HPC software
 
 ## Compile versus link: a useful beginner distinction
 
-Students often use the word “compile” to describe the entire build process. In casual conversation that is common, but it helps to know that there are two ideas present:
+You will often hear the word “compile” used to describe the entire build process. In casual conversation that is common, but it helps to know that there are two ideas present:
 
 ### Compilation
 Turning source code into lower-level object code.
@@ -231,7 +231,7 @@ A common beginner example involves a missing function definition.
 
 Suppose `main.c` calls a function `add`, but the file containing `add` is not included in the build command. Then the compiler may accept `main.c`, but the linker will complain that the referenced symbol cannot be resolved.
 
-This distinction helps students read build messages more intelligently:
+This distinction helps you read build messages more intelligently:
 
 - syntax problems often mean compilation trouble
 - undefined reference problems often mean linking trouble
@@ -385,7 +385,7 @@ clean:
 	rm -f *.o program
 ```
 
-Even if students are not yet comfortable writing Makefiles from scratch, reading one helps them understand how real projects are assembled.
+Even if you are not yet comfortable writing Makefiles from scratch, reading one helps you understand how real projects are assembled.
 
 ## Where to compile
 

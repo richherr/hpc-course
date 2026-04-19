@@ -485,7 +485,7 @@ Before submitting the capstone project, confirm:
 - the output files support the claims
 - the resource request is justified
 - at least one debugging reflection is included
-- another student could reproduce the workflow
+- another user could reproduce the workflow
 
 ## Final reminder
 

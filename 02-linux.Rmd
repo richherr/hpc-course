@@ -272,7 +272,7 @@ This becomes more useful later when dealing with editors, accidental runs, or in
 
 ## Optional connection to R
 
-For students who use R heavily, it is useful to remember that environment information can also be inspected from inside R.
+If you use R heavily, it is useful to remember that environment information can also be inspected from inside R.
 
 ```r
 Sys.getenv("PATH")

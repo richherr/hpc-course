@@ -170,13 +170,13 @@ python3 --version
 ls /
 ```
 
-This helps students see that the container has its own environment logic while still running on the host.
+This helps you see that the container has its own environment logic while still running on the host.
 
 ## Binding directories: the most important beginner concept
 
 One of the most common container confusions is visibility of files.
 
-A container image does not automatically expose every host path the way students might expect. Often, you need to bind directories explicitly.
+A container image does not automatically expose every host path the way you might expect. Often, you need to bind directories explicitly.
 
 Example:
 
@@ -385,7 +385,7 @@ Fix:
 ## Failure case study 3: output appears in the wrong place
 
 Symptom:
-- the job runs, but expected output is not visible where the student expects it
+- the job runs, but expected output is not visible where you expect it
 
 Likely causes:
 - output path inside the container does not map to the host path
@@ -468,7 +468,7 @@ Write a short reflection answering:
 
 ## Stretch goal
 
-Run a small script through Apptainer under SLURM, with explicit bind paths and recorded output. Then write a short note explaining how another student could reproduce the workflow from scratch.
+Run a small script through Apptainer under SLURM, with explicit bind paths and recorded output. Then write a short note explaining how another user could reproduce the workflow from scratch.
 
 ## Key takeaways
 

@@ -332,7 +332,7 @@ echo "Date:"
 date
 ```
 
-This helps students see that jobs run in a real environment with real metadata.
+This helps you see that jobs run in a real environment with real metadata.
 
 ## The “sleep” demonstration
 
@@ -370,7 +370,7 @@ This is a small but powerful exercise because it makes the scheduler visible.
 
 ## Why queue time can change
 
-Students often ask why one job starts immediately while another waits.
+You may wonder why one job starts immediately while another waits.
 
 The answer is usually some combination of:
 
@@ -418,7 +418,7 @@ echo "Standard output message"
 ls does_not_exist
 ```
 
-This is a useful exercise because students can see that some messages belong in the output stream and others belong in the error stream.
+This is a useful exercise because it helps you see that some messages belong in the output stream and others belong in the error stream.
 
 ## A realistic serial job pattern
 

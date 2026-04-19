@@ -333,7 +333,7 @@ This is the key beginner OpenMP pattern:
 
 ## Tasks versus cores: why this confuses people
 
-This is where many students get mixed up.
+This is where many beginners get mixed up.
 
 ### MPI-like pattern
 - several tasks
@@ -463,7 +463,7 @@ Correction:
 
 ## Failure case study 1: resource request does not match the MPI code
 
-Suppose an MPI program is launched with only one task, but the student expects four processes to appear.
+Suppose an MPI program is launched with only one task, but you expect four processes to appear.
 
 Possible causes:
 - `-n` was set incorrectly
@@ -495,7 +495,7 @@ Lesson:
 
 ## Failure case study 3: parallel job is slower than the serial version
 
-Students are often surprised by this.
+This often surprises people the first time they see it.
 
 Possible reasons:
 - the problem is too small

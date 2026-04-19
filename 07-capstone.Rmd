@@ -38,7 +38,7 @@ A strong HPC workflow should also be:
 - repeatable
 - resource-aware
 - debuggable
-- explainable to another researcher or student
+- explainable to another user
 
 This is why the capstone is not only about output. It is about workflow maturity.
 
@@ -156,11 +156,11 @@ Examples:
 - serial and parallel versions of the same program
 - workflow with build, execution, and post-run inspection documented end to end
 
-This option is excellent for stronger students, but it should not become complicated just for show.
+This option is useful if it genuinely fits your project, but it should not become complicated just for show.
 
 ## Project scale: how big is “big enough”?
 
-A common student fear is that the project must be impressive in scope.
+A common worry is that the project must be impressive in scope.
 
 That is not the right goal.
 
@@ -335,7 +335,7 @@ output/container_py_123456.out
 - scheduler plus container interaction
 - path-awareness
 
-## A grading rubric you can actually use
+## How Your Work Will Be Evaluated
 
 ### Workflow correctness (30%)
 - does the build/run path work?
@@ -354,12 +354,12 @@ output/container_py_123456.out
 
 ### Resource awareness (15%)
 - do the scheduler requests make sense?
-- does the student understand tasks, threads, and wall time?
+- do you show that you understand tasks, threads, and wall time?
 
 ### Debugging reflection (10%)
 - is there an honest description of a problem and how it was fixed?
 
-This rubric rewards the habits the course actually teaches.
+This evaluation rewards the habits the course is trying to build.
 
 ## Common capstone mistakes
 
@@ -413,7 +413,7 @@ Before turning in a capstone, ask:
 - do the output files support my claims?
 - have I documented build and run steps?
 - have I included at least one debugging reflection?
-- could another student reproduce this?
+- could another user reproduce this?
 
 ## Lab: draft your capstone plan
 
