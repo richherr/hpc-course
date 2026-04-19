@@ -14,21 +14,7 @@ You need to:
 - load the software environment needed for your workflow
 - move from interactive validation to stable batch execution
 
-This chapter introduces the basic workflow for GPU work on LS6.
-
-## Why GPU work needs its own chapter
-
-A GPU workflow is not just a faster version of a CPU workflow.
-
-It changes several things at once:
-
-- the queue you request
-- the node type you need
-- the hardware you expect to see
-- the software stack you may need
-- the debugging steps you should run first
-
-That is why GPU computing should be treated explicitly rather than hidden inside a general SLURM or interactive chapter.
+In this chapter, you will learn the basic workflow for GPU work on LS6.
 
 ## GPU resources on LS6
 
@@ -36,7 +22,7 @@ LS6 includes both A100 and H100 GPU resources.
 
 The most important practical point is that GPU work must be directed to GPU-capable queues rather than ordinary CPU queues.
 
-For this course, the key LS6 GPU queues to recognize are:
+The key LS6 GPU queues to recognize are:
 
 - `gpu-a100`
 - `gpu-a100-dev`
@@ -51,7 +37,7 @@ qlimits
 
 ## Development versus production GPU queues
 
-It helps to separate two goals:
+It helps to separate two different situations.
 
 ### Development GPU work
 
@@ -59,7 +45,6 @@ Use a development-oriented GPU queue when you want to:
 
 - test whether a framework sees the GPU
 - validate a CUDA environment
-- demo software live
 - run a short exploratory session
 
 ### Production GPU work
@@ -80,7 +65,7 @@ A good LS6 pattern for short interactive GPU work is:
 idev -p gpu-a100-dev -N 1 -n 1 -t 1:00:00
 ```
 
-This is a development-style GPU request. Once the interactive session starts, you should verify the node and the GPUs before doing anything else.
+Once the interactive session starts, verify the node and the GPUs before doing anything else.
 
 Run:
 
@@ -95,7 +80,7 @@ nvidia-smi
 
 It helps you answer questions like:
 
-- Am I actually on a GPU node?
+- Are you actually on a GPU node?
 - How many GPUs are visible?
 - Which GPU model is present?
 - Is the NVIDIA driver stack active enough for basic GPU inspection?
@@ -131,7 +116,7 @@ The exact toolkit you load will depend on your workflow, but the main habit is t
 - verify the environment
 - only then begin serious testing
 
-## A short example: checking the GPU node before doing anything else
+## A short example: check the GPU node first
 
 After an interactive GPU request, you might do this first:
 
@@ -159,9 +144,9 @@ A production GPU workflow normally means writing a SLURM script that targets the
 
 The point of the interactive session is to shorten the path to a correct production script.
 
-## A100 versus H100: what matters most for this course
+## A100 versus H100: what matters most here
 
-For this course, you do not need a deep hardware comparison.
+You do not need a deep hardware comparison yet.
 
 What matters most is that you learn to distinguish:
 
@@ -193,12 +178,12 @@ Correction: inspect modules and CUDA-related tools before assuming the framework
 
 When you start GPU work, check:
 
-1. What queue did I request?
-2. Am I on a GPU node now?
+1. What queue did you request?
+2. Are you on a GPU node now?
 3. Does `hostname` look correct?
-4. Does `nvidia-smi` show the GPUs I expected?
+4. Does `nvidia-smi` show the GPUs you expected?
 5. Is the software environment loaded correctly?
-6. Am I still in validation mode, or is this ready to become a production batch workflow?
+6. Is this still a validation run, or is it ready to become a production batch workflow?
 
 ## Lab 1: first GPU validation session
 
@@ -231,13 +216,13 @@ Identify the queues most relevant to:
 - A100 production work
 - H100 work
 
-The point is not to memorize the entire queue table. The point is to learn how to check the live queue information before launching accelerator workloads.
+The point is to learn how to check the live queue information before launching accelerator workloads.
 
 ## Stretch goal
 
-Start an interactive GPU session, verify the GPUs with `nvidia-smi`, load the environment you need for a short software demo, and then outline the batch-script version you would use for the same work in production.
+Start an interactive GPU session, verify the GPUs with `nvidia-smi`, load the environment you need for a short software test, and then outline the batch-script version you would use for the same work in production.
 
-That exercise connects:
+This helps you connect:
 
 - hardware verification
 - environment validation
@@ -249,4 +234,4 @@ That exercise connects:
 - LS6 GPU workflows should begin with explicit verification
 - `nvidia-smi` is a fast, practical GPU check
 - `qlimits` is the right place to verify current queue configuration
-- the right pattern is: validate first, then move stable work into batch scripts
+- the right pattern is: validate first, then move stable work into batch jobs

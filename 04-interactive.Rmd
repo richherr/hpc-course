@@ -2,64 +2,53 @@
 
 ## Overview
 
-So far, you have learned how to log in, work in Linux, and submit batch jobs through SLURM.
-
-That is the normal production workflow on an HPC system.
-
-But sometimes you are not ready for a full production run yet. Sometimes you need to:
+Sometimes you are not ready for a full production batch job yet. You may need to:
 
 - test software on a real compute node
 - validate an environment before submitting a longer batch job
-- demo a tool live during a workshop or class
 - run a short development session while you debug a workflow
+- demonstrate software on the correct hardware
 
-That is where **interactive computing** matters.
+In those situations, an interactive compute session is useful.
 
-This chapter introduces:
+In this chapter, you will learn:
 
-- how interactive compute-node access fits into HPC workflows
 - how to use `idev`
+- how to request an interactive compute node
 - how to verify that you are really on a compute node
-- how to use interactive sessions for software demos and debugging
+- how to use interactive sessions to test and validate software before moving to a batch workflow
 
-The point is not to replace batch jobs. The point is to give you a safe, structured way to test, inspect, and demonstrate software on the correct hardware before you scale up.
+Interactive work is not a replacement for batch work. It is a way to reduce uncertainty before you submit a longer or more formal job.
 
 ## Why interactive compute sessions matter
 
-A common beginner mistake is to treat the login node like an all-purpose machine.
+A login node is for setup, editing, organization, and lightweight command-line work. A compute node is where real execution belongs.
 
-That is not what it is for.
+That rule still applies when you are developing or debugging.
 
-You already know that heavy or sustained computation belongs on compute nodes. The same rule applies to:
+If you need to:
 
-- development that really needs node resources
-- software demos that require cluster-side hardware
-- environment validation
-- short tests that should run on the same class of machine as later production work
+- test whether software launches correctly
+- verify an environment on real cluster hardware
+- check how a workflow behaves on a compute node
+- run a short live demonstration
 
-An interactive session gives you a middle ground between:
+then an interactive session is often the right tool.
 
-- lightweight login-node preparation, and
-- full batch submission
+## Mental model: `idev` works through the scheduler
 
-It lets you work on a real compute node while still typing commands directly.
-
-## Mental model: `idev` is interactive access through the scheduler
-
-The most important thing to understand is that `idev` is not a loophole around SLURM.
+The most important thing to understand is that `idev` is not a way around SLURM.
 
 It still works **through** the batch system.
 
 Conceptually, `idev` does the following:
 
-1. submits a job through the scheduler
+1. submits a request through the scheduler
 2. waits for the requested resources to become available
 3. recreates the batch environment
 4. connects you to the allocated compute node interactively
 
-That means interactive work is still scheduler-controlled work.
-
-This is good because it keeps your behavior aligned with normal HPC practice. You are not bypassing policy. You are using the system the way it was designed to be used.
+So interactive work is still scheduler-controlled work. You are using real compute resources in the normal system, just with an interactive shell instead of a fully unattended batch script.
 
 ## A short CPU interactive session
 
@@ -76,17 +65,15 @@ This requests:
 - 1 task
 - 30 minutes of wall time
 
-This is a good starting pattern when you want to test code on a compute node without waiting for a long production job.
+This is a good starting pattern when you want to test code on a compute node without waiting for a long production run.
 
 ## What you should expect after `idev`
 
-When `idev` starts, you will see it report queue progress.
+When `idev` starts, it reports queue progress.
 
-After the resources are granted, your prompt will change and you will land on a compute node.
+After the resources are granted, your prompt changes and you land on a compute node.
 
-At that point, you should verify where you are.
-
-Run:
+At that point, verify where you are:
 
 ```bash
 hostname
@@ -95,76 +82,58 @@ pwd
 
 The hostname should now be a compute-node hostname rather than a login-node hostname.
 
-That small check matters because it confirms that you are now testing on the correct class of resource.
-
-## Why `idev` is good for demos and software validation
-
-Interactive sessions are especially useful when you want to:
-
-- test whether modules load the way you expect
-- verify that an executable launches
-- run a quick compile-and-test cycle
-- demo software live without pretending the login node is a compute node
-
-That makes `idev` a practical teaching and debugging tool.
-
-It is not the final form of a workflow. It is the place where you reduce uncertainty before writing or refining a batch script.
+That check matters because it confirms that you are testing in the correct environment.
 
 ## Queue awareness on LS6
 
-Before choosing a queue, remember an important rule:
-
-> queue limits can change, and `qlimits` is the real-time source of queue configuration.
-
-So when you want the latest live information, run:
+Queue limits can change, so the best real-time source of queue configuration is:
 
 ```bash
 qlimits
 ```
 
-That command is worth teaching directly because it reminds you that the scheduler's live state matters more than a stale memory of documentation.
+Get in the habit of using `qlimits` when you need current queue information instead of relying on memory or an old screenshot.
 
-## Interactive sessions and software demos
+## A good interactive workflow
 
-A good sequence for demoing software correctly is:
+A strong interactive workflow looks like this:
 
 1. request an interactive compute node
 2. confirm the hostname
 3. load the needed modules or activate the environment
-4. run a short example
-5. explain how this would later become a batch script
+4. run a short test
+5. confirm that the software behaves correctly
+6. move stable work into a batch script
 
-That pattern teaches the right lesson:
-
-> interactive sessions are for validation and development, not an excuse to skip the scheduler mindset.
+That sequence helps you use interactive sessions for validation without losing the discipline of batch workflows.
 
 ## Common mistakes
 
-### Mistake 1: Treating the login node like a demo machine
+### Mistake 1: Treating the login node like a demo or development machine
 
 Correction: request an interactive compute node first.
 
-### Mistake 2: Assuming a session is on the right node type without checking
+### Mistake 2: Assuming you are on the right node type without checking
 
 Correction: run `hostname`.
 
 ### Mistake 3: Treating `idev` as a permanent working style
 
-Correction: use it for development, debugging, and demos, then move stable workflows into batch scripts.
+Correction: use it for development, debugging, and validation, then move stable workflows into batch scripts.
 
 ### Mistake 4: Forgetting that queue limits can change
 
-Correction: use `qlimits` instead of trusting old screenshots or memory.
+Correction: use `qlimits` instead of trusting memory.
 
 ## Interactive-computing checklist
 
 When you start an interactive session, check:
 
-1. What queue did I request?
-2. Am I on a compute node now?
+1. What queue did you request?
+2. Are you on a compute node now?
 3. Does `hostname` look like a compute-node hostname?
 4. Is the software environment loaded correctly?
-5. Am I using this session for development rather than pretending it is a final production workflow?
+5. Is this session helping you validate a workflow that will later be run in batch mode?
 
 ## Lab 1: first interactive compute-node session
 
@@ -197,13 +166,13 @@ Identify the queues most relevant to:
 - short CPU development
 - normal CPU production work
 
-The point of the exercise is not rote memorization. The point is learning where to verify queue information correctly.
+The point is to learn where to verify queue information correctly.
 
 ## Stretch goal
 
-Start an interactive session, load the environment you need for a short software demo, and then write down the batch-script version you would use for the same work in production.
+Start an interactive session, load the environment you need for a short software test, and then write down the batch-script version you would use for the same work in production.
 
-That exercise forces you to connect:
+This helps you connect:
 
 - interactive development
 - environment validation
@@ -212,6 +181,6 @@ That exercise forces you to connect:
 ## Key takeaways
 
 - `idev` provides interactive compute-node access through the scheduler
-- interactive work is useful for development, debugging, and demos
+- interactive work is useful for development, debugging, and validation
 - `qlimits` is the best real-time source of queue configuration
-- the right workflow is: verify interactively, then move stable work into batch jobs
+- the right workflow is: validate interactively, then move stable work into batch jobs
