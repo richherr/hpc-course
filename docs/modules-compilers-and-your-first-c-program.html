@@ -942,7 +942,7 @@ run on LS6</code></pre>
 <p>Build with:</p>
 <div class="sourceCode" id="cb149"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb149-1"><a href="modules-compilers-and-your-first-c-program.html#cb149-1" tabindex="-1"></a><span class="fu">gcc</span> main.c helper.c <span class="at">-o</span> program</span></code></pre></div>
 <p>Now the interface and implementation are both included.</p>
-<p>If you forget <code>helper.c</code>, you may get a link-time error. That is a valuable teaching moment.</p>
+<p>If you forget <code>helper.c</code>, you may get a link-time error. That is a valuable working moment.</p>
 </div>
 </div>
 <div id="header-files-as-interfaces" class="section level2 hasAnchor" number="7.15">
@@ -1030,7 +1030,7 @@ clean:
 <h2><span class="header-section-number">7.21</span> Where to compile<a href="modules-compilers-and-your-first-c-program.html#where-to-compile" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>For small builds, compile on the login node.</p>
 <p>That is appropriate because compilation is often part of setup work. However, very large builds or special workflows may require different strategies depending on system policy and project needs.</p>
-<p>For this course, the safe beginner pattern is:</p>
+<p>A safe beginner pattern is:</p>
 <ul>
 <li>edit on the login node</li>
 <li>compile on the login node</li>

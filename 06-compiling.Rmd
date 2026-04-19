@@ -274,7 +274,7 @@ gcc main.c helper.c -o program
 
 Now the interface and implementation are both included.
 
-If you forget `helper.c`, you may get a link-time error. That is a valuable teaching moment.
+If you forget `helper.c`, you may get a link-time error. That is a valuable working moment.
 
 ## Header files as interfaces
 
@@ -393,7 +393,7 @@ For small builds, compile on the login node.
 
 That is appropriate because compilation is often part of setup work. However, very large builds or special workflows may require different strategies depending on system policy and project needs.
 
-For this course, the safe beginner pattern is:
+A safe beginner pattern is:
 
 - edit on the login node
 - compile on the login node

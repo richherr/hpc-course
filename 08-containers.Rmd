@@ -100,7 +100,7 @@ Practical advantages:
 - integrates naturally into scheduler-based workflows
 - fits better with cluster security models
 
-For this course, the practical message is simple:
+The practical message is simple:
 
 > Docker is part of the broader container world, but Apptainer is the HPC-friendly execution model you are more likely to encounter directly on systems like LS6.
 
@@ -295,7 +295,7 @@ module load apptainer
 apptainer exec --bind $PWD ubuntu.sif python3 script.py
 ```
 
-This is a realistic pattern for teaching because it combines:
+This is a realistic pattern for working because it combines:
 
 - scheduler awareness
 - software environment packaging

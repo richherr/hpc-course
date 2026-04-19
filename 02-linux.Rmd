@@ -687,7 +687,7 @@ If a job starts failing when writing output, storage problems are a real possibi
 
 ## Why storage awareness matters
 
-Students often discover quota or storage trouble late, after:
+People often discover quota or storage trouble late, after:
 
 - copying too much data
 - writing many output files
