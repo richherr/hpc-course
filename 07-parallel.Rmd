@@ -1,0 +1,601 @@
+# Parallel Computing with MPI and OpenMP on LS6
+
+## Overview
+
+Up to this point, the course has focused on a basic but essential HPC workflow:
+
+- connect to the system
+- work safely on the login node
+- manage files and environment modules
+- submit jobs through SLURM
+- compile programs from source
+
+The next conceptual step is **parallel computing**.
+
+Parallel computing is one of the main reasons HPC systems exist. A cluster is valuable not only because it is larger than a laptop, but because it allows work to be spread across multiple cores, multiple processes, and sometimes multiple nodes.
+
+This chapter introduces the two most common beginner models:
+
+- **MPI** for distributed-memory parallelism
+- **OpenMP** for shared-memory parallelism
+
+By the end of the chapter, you should be able to:
+
+- explain the difference between serial and parallel execution
+- explain the difference between processes and threads
+- distinguish tasks, cores, and threads in a practical way
+- describe when MPI and OpenMP are appropriate
+- compile a small MPI program
+- compile a small OpenMP program
+- connect SLURM resource requests to the program model being used
+
+## Why parallel computing matters
+
+A single CPU core can execute only one stream of instructions at a time. For small tasks, that may be enough. For larger tasks, it becomes a bottleneck.
+
+Parallel computing helps when:
+
+- the work can be broken into pieces
+- those pieces can be done at the same time
+- the time to solution matters
+- the dataset or simulation is large
+- many repeated calculations must be carried out efficiently
+
+In practice, HPC workloads often take one of these forms:
+
+- many independent jobs
+- one program using multiple processes
+- one program using multiple threads
+- hybrid workflows combining both processes and threads
+
+One of the most important learning goals here is to stop treating “parallel” as one vague idea. There are different models, and the resource request should reflect the model.
+
+## Mental model: serial versus parallel
+
+A serial program performs one step after another:
+
+```text
+Task 1 -> Task 2 -> Task 3 -> Task 4
+```
+
+A parallel program attempts to perform multiple pieces of work concurrently:
+
+```text
+Task 1
+Task 2    -> running at the same time
+Task 3
+Task 4
+```
+
+This does **not** automatically guarantee a speedup. Parallelism introduces overhead, coordination, and sometimes communication cost.
+
+That is why the real question is not just:
+
+> Can I use more cores?
+
+It is:
+
+> Does this workload benefit from more cores, and which model fits it best?
+
+## Processes, threads, tasks, and cores
+
+These terms often get blurred together. It is better to separate them.
+
+### Core
+A hardware execution unit on a CPU.
+
+### Process
+An independent running program instance with its own memory space.
+
+### Thread
+A lighter-weight execution path within a process, usually sharing memory with other threads in that same process.
+
+### Task (in SLURM)
+A scheduler concept often used to represent one process slot or one program instance in parallel execution.
+
+For beginners, the practical takeaway is:
+
+- MPI usually maps naturally to **multiple processes/tasks**
+- OpenMP usually maps naturally to **multiple threads on one process**
+- cores are the hardware resources underneath both models
+
+## Two main models
+
+## MPI: distributed-memory parallelism
+
+MPI stands for **Message Passing Interface**.
+
+Mental model:
+
+- you run multiple processes
+- each process has its own memory space
+- processes communicate by sending messages
+
+This model is especially useful when work is distributed across multiple processes and possibly multiple nodes.
+
+### Why MPI matters
+MPI is a standard approach when:
+
+- the program is written for distributed memory
+- processes must cooperate across one or more nodes
+- the workload scales beyond the memory or cores of a single process
+
+### Key idea
+MPI processes do not automatically share memory the way threads do. Communication must be explicit.
+
+## OpenMP: shared-memory parallelism
+
+OpenMP is a threading model.
+
+Mental model:
+
+- one program starts
+- that program creates multiple threads
+- the threads share memory inside the same node
+
+This model is especially useful when:
+
+- the program is running on one node
+- shared-memory parallelism is sufficient
+- the work can be split across loops or sections without needing message passing
+
+## A decision rule for beginners
+
+A useful first approximation is:
+
+- use **MPI** when the workload is designed as multiple communicating processes
+- use **OpenMP** when the workload is designed as multiple threads sharing memory on a node
+
+That is not the whole world of parallel computing, but it is a strong start.
+
+## Parallelism is not the same as “asking for more resources”
+
+A repeated beginner mistake is to request more tasks or cores without changing the program.
+
+If a plain serial program is run like this:
+
+```bash
+python analysis.py
+```
+
+then asking for four tasks does not magically make it parallel.
+
+Similarly, an OpenMP program may request four cores, but if `OMP_NUM_THREADS` is never set, the program may not use them as intended.
+
+The scheduler grants resources. It does not rewrite your code.
+
+## MPI hello world
+
+Load an MPI environment:
+
+```bash
+module load openmpi
+```
+
+Create `hello_mpi.c`:
+
+```c
+#include <mpi.h>
+#include <stdio.h>
+
+int main(int argc, char** argv) {
+    MPI_Init(&argc, &argv);
+
+    int rank, size;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    printf("Hello from process %d of %d\n", rank, size);
+
+    MPI_Finalize();
+    return 0;
+}
+```
+
+Compile with:
+
+```bash
+mpicc hello_mpi.c -o hello_mpi
+```
+
+`mpicc` is a compiler wrapper that helps build MPI programs with the appropriate MPI libraries.
+
+## A quick local-style test
+
+A short test might use:
+
+```bash
+mpirun -np 4 ./hello_mpi
+```
+
+However, on a shared HPC system, real runs should usually go through SLURM so that resource allocation remains explicit and appropriate.
+
+## MPI through SLURM
+
+Example script:
+
+```bash
+#!/bin/bash
+#SBATCH -J mpi_hello
+#SBATCH -N 1
+#SBATCH -n 4
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+#SBATCH -o mpi_%j.out
+#SBATCH -e mpi_%j.err
+
+module load openmpi
+
+mpirun ./hello_mpi
+```
+
+Interpretation:
+
+- `-N 1` requests one node
+- `-n 4` requests four tasks
+- the MPI program runs as four cooperating processes
+
+This is a good place to reinforce the mental model:
+
+> In an MPI job, tasks usually correspond to processes.
+
+## What should the output look like?
+
+You might see something like:
+
+```text
+Hello from process 0 of 4
+Hello from process 1 of 4
+Hello from process 2 of 4
+Hello from process 3 of 4
+```
+
+The order may vary because parallel processes do not necessarily print in rank order.
+
+That in itself is an important lesson: parallel execution can produce nondeterministic ordering in output.
+
+## OpenMP hello world
+
+Create `hello_omp.c`:
+
+```c
+#include <stdio.h>
+#include <omp.h>
+
+int main() {
+    #pragma omp parallel
+    {
+        int id = omp_get_thread_num();
+        int nthreads = omp_get_num_threads();
+        printf("Hello from thread %d of %d\n", id, nthreads);
+    }
+    return 0;
+}
+```
+
+Compile with:
+
+```bash
+gcc -fopenmp hello_omp.c -o hello_omp
+```
+
+The `-fopenmp` flag enables OpenMP support.
+
+## Run the OpenMP program
+
+Set the number of threads:
+
+```bash
+export OMP_NUM_THREADS=4
+./hello_omp
+```
+
+Expected pattern:
+
+```text
+Hello from thread 0 of 4
+Hello from thread 1 of 4
+Hello from thread 2 of 4
+Hello from thread 3 of 4
+```
+
+Again, output order may vary.
+
+## OpenMP through SLURM
+
+Example script:
+
+```bash
+#!/bin/bash
+#SBATCH -J omp_hello
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -c 4
+#SBATCH -t 00:05:00
+#SBATCH -p normal
+#SBATCH -o omp_%j.out
+#SBATCH -e omp_%j.err
+
+export OMP_NUM_THREADS=4
+
+./hello_omp
+```
+
+Interpretation:
+
+- `-n 1` requests one task/process
+- `-c 4` requests four CPU cores for that task
+- `OMP_NUM_THREADS=4` tells the program to use four threads
+
+This is the key beginner OpenMP pattern:
+
+> one process, multiple threads, one shared-memory node context
+
+## Tasks versus cores: why this confuses people
+
+This is where many beginners get mixed up.
+
+### MPI-like pattern
+- several tasks
+- usually one process per task
+- communication among processes
+- potentially across multiple nodes
+
+### OpenMP-like pattern
+- one task
+- several cores for that task
+- one process creates multiple threads
+- usually within one node
+
+If you remember only one practical distinction, make it this:
+
+> MPI usually scales by adding processes. OpenMP usually scales by adding threads.
+
+## A side-by-side comparison
+
+### MPI script pattern
+
+```bash
+#SBATCH -N 1
+#SBATCH -n 4
+module load openmpi
+mpirun ./hello_mpi
+```
+
+### OpenMP script pattern
+
+```bash
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -c 4
+export OMP_NUM_THREADS=4
+./hello_omp
+```
+
+The resource requests are different because the program models are different.
+
+## Hybrid thinking
+
+Some applications use both MPI and OpenMP.
+
+Mental model:
+
+```text
+Multiple MPI processes
+        ↓
+Each process creates multiple threads
+```
+
+That can be useful, but it also makes the resource request more complex. For an introductory course, it is enough to understand the concept without requiring deep hybrid optimization.
+
+## Strong scaling and weak scaling
+
+Performance discussions often use two ideas.
+
+### Strong scaling
+Same problem size, more resources.
+
+Question:
+- does runtime decrease when cores increase?
+
+### Weak scaling
+Problem size grows as resources grow.
+
+Question:
+- can the workload size increase while runtime stays roughly manageable?
+
+These ideas matter because “faster with more cores” is not the whole story. Parallel performance depends on how the workload and resources interact.
+
+## Why speedup is not automatic
+
+Beginners often imagine that doubling cores should cut time in half. Real life is more complicated.
+
+Reasons speedup may fall short:
+
+- communication overhead
+- synchronization cost
+- load imbalance
+- memory bottlenecks
+- serial parts of the code
+- poor match between program and requested resources
+
+This is why performance thinking matters as much as syntax.
+
+## A simple timing habit
+
+Use:
+
+```bash
+time ./hello
+```
+
+or time the relevant production code in a more meaningful example.
+
+The key lesson is that parallel claims should be supported by evidence, not assumption.
+
+## Common beginner mistakes
+
+### Mistake 1: requesting four tasks for a serial program
+
+Correction:
+- the code remains serial unless it is written or launched in a parallel way
+
+### Mistake 2: confusing tasks with threads
+
+Correction:
+- tasks usually correspond to processes
+- threads are created within a process
+
+### Mistake 3: using OpenMP code without setting `OMP_NUM_THREADS`
+
+Correction:
+- thread count must usually be specified deliberately
+
+### Mistake 4: running MPI directly on the login node as a habit
+
+Correction:
+- small tests may be possible, but real runs belong under SLURM
+
+### Mistake 5: assuming output order reveals execution order cleanly
+
+Correction:
+- parallel output can interleave unpredictably
+
+## Failure case study 1: resource request does not match the MPI code
+
+Suppose an MPI program is launched with only one task, but you expect four processes to appear.
+
+Possible causes:
+- `-n` was set incorrectly
+- the launch command did not match the intended run
+- the program was built or run under the wrong assumptions
+
+Lesson:
+- in MPI workflows, process count is a real design parameter, not a decorative number
+
+## Failure case study 2: OpenMP script requests four cores but uses one thread
+
+Suppose the job script includes:
+
+```bash
+#SBATCH -c 4
+```
+
+but never sets:
+
+```bash
+export OMP_NUM_THREADS=4
+```
+
+The job may use only one thread.
+
+Lesson:
+- the scheduler grants cores
+- the program still needs to be told how many threads to create
+
+## Failure case study 3: parallel job is slower than the serial version
+
+This often surprises people the first time they see it.
+
+Possible reasons:
+- the problem is too small
+- communication overhead dominates
+- startup overhead dominates
+- the implementation is inefficient
+- the resource request does not fit the code
+
+Lesson:
+- parallelism is a strategy, not a magic spell
+
+## Debugging checklist for parallel jobs
+
+When a parallel run looks wrong, ask:
+
+### 1. What model am I using?
+- serial
+- MPI
+- OpenMP
+- hybrid
+
+### 2. Does the compile step match the model?
+- `mpicc` for MPI
+- `gcc -fopenmp` for OpenMP
+
+### 3. Does the SLURM request match the model?
+- tasks for MPI
+- cores/threads for OpenMP
+
+### 4. Are the relevant environment variables set?
+- especially `OMP_NUM_THREADS`
+
+### 5. What does the output file actually show?
+- process counts
+- thread counts
+- unexpected ordering
+- crashes or missing output
+
+### 6. Is the workload large enough to reveal meaningful parallel behavior?
+Small toy problems often hide or distort scaling.
+
+## Best practices
+
+- decide first whether the code is serial, MPI, or OpenMP
+- request resources that match the model
+- make process and thread counts visible in output
+- begin with small tests
+- measure rather than assume speedup
+- keep job scripts readable and explicit
+
+## Lab 1: MPI hello world
+
+1. Create `hello_mpi.c`
+2. Load the MPI environment
+3. Compile with `mpicc`
+4. Create a SLURM script requesting four tasks
+5. Submit the job
+6. Inspect the output and explain rank and size
+
+## Lab 2: OpenMP hello world
+
+1. Create `hello_omp.c`
+2. Compile with `gcc -fopenmp`
+3. Create a SLURM script with one task and four cores
+4. Set `OMP_NUM_THREADS=4`
+5. Submit the job
+6. Inspect the output and explain thread count
+
+## Lab 3: compare the models conceptually
+
+Create a small written comparison answering:
+
+- what is a process?
+- what is a thread?
+- how do the SLURM requests differ for MPI and OpenMP?
+- when would you choose each model?
+
+## Lab 4: measure a tiny scaling experiment
+
+For a simple parallel program:
+
+- run with 1, 2, and 4 processes or threads
+- record runtimes
+- explain whether the results are convincing or limited
+- discuss why the speedup may not be perfectly linear
+
+## Stretch goal
+
+Create a small compute kernel that performs repeated arithmetic or loop work. Implement either:
+
+- an MPI version using multiple ranks, or
+- an OpenMP version using multiple threads
+
+Then write a short reflection on whether the parallel model actually helped.
+
+## Key takeaways
+
+- parallel computing is about matching workload structure to resource use
+- MPI uses multiple processes and explicit communication
+- OpenMP uses multiple threads in shared memory
+- tasks, cores, and threads are related but not interchangeable terms
+- SLURM grants resources; it does not automatically parallelize your program
+- speedup should be measured, not assumed

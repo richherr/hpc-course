@@ -4,18 +4,18 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 7 Modules, Compilers, and Your First C Program | High-Performance Computing on Lonestar6</title>
-  <meta name="description" content="Chapter 7 Modules, Compilers, and Your First C Program | High-Performance Computing on Lonestar6" />
+  <title>Chapter 6 GPU Computing on LS6 | High-Performance Computing on Lonestar6</title>
+  <meta name="description" content="Chapter 6 GPU Computing on LS6 | High-Performance Computing on Lonestar6" />
   <meta name="generator" content="bookdown 0.45 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 7 Modules, Compilers, and Your First C Program | High-Performance Computing on Lonestar6" />
+  <meta property="og:title" content="Chapter 6 GPU Computing on LS6 | High-Performance Computing on Lonestar6" />
   <meta property="og:type" content="book" />
   
   
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 Modules, Compilers, and Your First C Program | High-Performance Computing on Lonestar6" />
+  <meta name="twitter:title" content="Chapter 6 GPU Computing on LS6 | High-Performance Computing on Lonestar6" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="gpu-computing-on-ls6.html"/>
-<link rel="next" href="parallel-computing-with-mpi-and-openmp-on-ls6.html"/>
+<link rel="prev" href="interactive-computing-on-ls6.html"/>
+<link rel="next" href="modules-compilers-and-your-first-c-program.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -733,505 +733,219 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="modules-compilers-and-your-first-c-program" class="section level1 hasAnchor" number="7">
-<h1><span class="header-section-number">Chapter 7</span> Modules, Compilers, and Your First C Program<a href="modules-compilers-and-your-first-c-program.html#modules-compilers-and-your-first-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<div id="overview-6" class="section level2 hasAnchor" number="7.1">
-<h2><span class="header-section-number">7.1</span> Overview<a href="modules-compilers-and-your-first-c-program.html#overview-6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>In this chapter, we move from running shell commands and submitting SLURM scripts to <strong>building executable software from source code</strong>.</p>
-<p>This matters because much HPC work depends on software that is:</p>
+<div id="gpu-computing-on-ls6" class="section level1 hasAnchor" number="6">
+<h1><span class="header-section-number">Chapter 6</span> GPU Computing on LS6<a href="gpu-computing-on-ls6.html#gpu-computing-on-ls6" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="overview-5" class="section level2 hasAnchor" number="6.1">
+<h2><span class="header-section-number">6.1</span> Overview<a href="gpu-computing-on-ls6.html#overview-5" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>GPU computing is different from ordinary CPU computing because the hardware, the queues, and the software environment all matter.</p>
+<p>It is not enough to “run code on the cluster” and hope a GPU is present.</p>
+<p>You need to:</p>
 <ul>
-<li>written by researchers</li>
-<li>customized for a lab or project</li>
-<li>compiled against particular libraries</li>
-<li>sensitive to the compiler and environment used to build it</li>
+<li>request the correct GPU queue</li>
+<li>verify that you are on a GPU-equipped node</li>
+<li>confirm that the NVIDIA toolchain can see the GPUs</li>
+<li>load the software environment needed for your workflow</li>
+<li>move from interactive validation to stable batch execution</li>
 </ul>
-<p>That means compilation is not an optional side topic. It is part of the practical workflow of scientific computing.</p>
-<p>By the end of this chapter, you should be able to:</p>
+<p>This chapter introduces the basic workflow for GPU work on LS6.</p>
+</div>
+<div id="why-gpu-work-needs-its-own-chapter" class="section level2 hasAnchor" number="6.2">
+<h2><span class="header-section-number">6.2</span> Why GPU work needs its own chapter<a href="gpu-computing-on-ls6.html#why-gpu-work-needs-its-own-chapter" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A GPU workflow is not just a faster version of a CPU workflow.</p>
+<p>It changes several things at once:</p>
 <ul>
-<li>explain what compilation does</li>
-<li>distinguish source files from executables</li>
-<li>load a compiler module</li>
-<li>verify which compiler is active</li>
-<li>compile a small C program with <code>gcc</code></li>
-<li>explain the difference between compiling and linking at a basic level</li>
-<li>interpret common build errors</li>
-<li>prepare compiled code for execution through SLURM</li>
+<li>the queue you request</li>
+<li>the node type you need</li>
+<li>the hardware you expect to see</li>
+<li>the software stack you may need</li>
+<li>the debugging steps you should run first</li>
 </ul>
+<p>That is why GPU computing should be treated explicitly rather than hidden inside a general SLURM or interactive chapter.</p>
 </div>
-<div id="mental-model-source-code-becomes-an-executable" class="section level2 hasAnchor" number="7.2">
-<h2><span class="header-section-number">7.2</span> Mental model: source code becomes an executable<a href="modules-compilers-and-your-first-c-program.html#mental-model-source-code-becomes-an-executable" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A compiled workflow looks like this:</p>
-<pre class="text"><code>source code (.c)
-      ↓
-compiler
-      ↓
-object code and linking
-      ↓
-executable binary
-      ↓
-run on LS6</code></pre>
-<p>At a beginner level, this picture is enough to build the right intuition:</p>
+<div id="gpu-resources-on-ls6" class="section level2 hasAnchor" number="6.3">
+<h2><span class="header-section-number">6.3</span> GPU resources on LS6<a href="gpu-computing-on-ls6.html#gpu-resources-on-ls6" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>LS6 includes both A100 and H100 GPU resources.</p>
+<p>The most important practical point is that GPU work must be directed to GPU-capable queues rather than ordinary CPU queues.</p>
+<p>For this course, the key LS6 GPU queues to recognize are:</p>
 <ul>
-<li>the source file is written for humans</li>
-<li>the executable is written for the machine</li>
-<li>the compiler translates</li>
-<li>the build process may involve more than one file</li>
+<li><code>gpu-a100</code></li>
+<li><code>gpu-a100-dev</code></li>
+<li><code>gpu-a100-small</code></li>
+<li><code>gpu-h100</code></li>
 </ul>
-<p>One of the most useful early realizations is that <strong>editing source code does not automatically change the executable</strong>. If you edit the source, you must rebuild the program.</p>
+<p>You do not need to memorize every queue limit. You do need to learn to verify the current queue configuration with:</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb124-1"><a href="gpu-computing-on-ls6.html#cb124-1" tabindex="-1"></a><span class="ex">qlimits</span></span></code></pre></div>
 </div>
-<div id="why-compilation-matters-on-clusters" class="section level2 hasAnchor" number="7.3">
-<h2><span class="header-section-number">7.3</span> Why compilation matters on clusters<a href="modules-compilers-and-your-first-c-program.html#why-compilation-matters-on-clusters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Compilation matters in HPC because:</p>
+<div id="development-versus-production-gpu-queues" class="section level2 hasAnchor" number="6.4">
+<h2><span class="header-section-number">6.4</span> Development versus production GPU queues<a href="gpu-computing-on-ls6.html#development-versus-production-gpu-queues" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>It helps to separate two goals:</p>
+<div id="development-gpu-work" class="section level3 hasAnchor" number="6.4.1">
+<h3><span class="header-section-number">6.4.1</span> Development GPU work<a href="gpu-computing-on-ls6.html#development-gpu-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Use a development-oriented GPU queue when you want to:</p>
 <ul>
-<li>software is not always preinstalled</li>
-<li>research code may need to be built from source</li>
-<li>compiler and library versions must often match</li>
-<li>toolchains affect performance and reproducibility</li>
-<li>different module environments can produce different behavior</li>
-</ul>
-<p>On a laptop, beginners often get used to one built-in environment. On a cluster, you should think more deliberately:</p>
-<blockquote>
-<p>What compiler am I using? What libraries is it tied to? What environment is active right now?</p>
-</blockquote>
-<p>Those are normal questions in HPC.</p>
-</div>
-<div id="modules-come-before-compilers" class="section level2 hasAnchor" number="7.4">
-<h2><span class="header-section-number">7.4</span> Modules come before compilers<a href="modules-compilers-and-your-first-c-program.html#modules-come-before-compilers" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Before compiling, inspect the available software environment:</p>
-<div class="sourceCode" id="cb134"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb134-1"><a href="modules-compilers-and-your-first-c-program.html#cb134-1" tabindex="-1"></a><span class="ex">module</span> avail</span></code></pre></div>
-<p>Then load a compiler environment:</p>
-<div class="sourceCode" id="cb135"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb135-1"><a href="modules-compilers-and-your-first-c-program.html#cb135-1" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
-<span id="cb135-2"><a href="modules-compilers-and-your-first-c-program.html#cb135-2" tabindex="-1"></a><span class="ex">module</span> list</span></code></pre></div>
-<p>This reinforces a key course theme:</p>
-<blockquote>
-<p>On an HPC system, software is usually exposed through the environment rather than assumed to be globally fixed forever.</p>
-</blockquote>
-</div>
-<div id="verify-the-compiler-instead-of-guessing" class="section level2 hasAnchor" number="7.5">
-<h2><span class="header-section-number">7.5</span> Verify the compiler instead of guessing<a href="modules-compilers-and-your-first-c-program.html#verify-the-compiler-instead-of-guessing" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Use:</p>
-<div class="sourceCode" id="cb136"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb136-1"><a href="modules-compilers-and-your-first-c-program.html#cb136-1" tabindex="-1"></a><span class="fu">which</span> gcc</span>
-<span id="cb136-2"><a href="modules-compilers-and-your-first-c-program.html#cb136-2" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">--version</span></span></code></pre></div>
-<p>This gives you evidence for:</p>
-<ul>
-<li>whether <code>gcc</code> is available</li>
-<li>where the executable is located</li>
-<li>which version is active</li>
-</ul>
-<p>That matters because troubleshooting gets much easier when you know exactly which tool you are using.</p>
-</div>
-<div id="your-first-c-program" class="section level2 hasAnchor" number="7.6">
-<h2><span class="header-section-number">7.6</span> Your first C program<a href="modules-compilers-and-your-first-c-program.html#your-first-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Create a file named <code>hello.c</code>:</p>
-<div class="sourceCode" id="cb137"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb137-1"><a href="modules-compilers-and-your-first-c-program.html#cb137-1" tabindex="-1"></a><span class="fu">nano</span> hello.c</span></code></pre></div>
-<p>Add:</p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb138-1"><a href="modules-compilers-and-your-first-c-program.html#cb138-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb138-2"><a href="modules-compilers-and-your-first-c-program.html#cb138-2" tabindex="-1"></a></span>
-<span id="cb138-3"><a href="modules-compilers-and-your-first-c-program.html#cb138-3" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb138-4"><a href="modules-compilers-and-your-first-c-program.html#cb138-4" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello from C on LS6</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb138-5"><a href="modules-compilers-and-your-first-c-program.html#cb138-5" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb138-6"><a href="modules-compilers-and-your-first-c-program.html#cb138-6" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>This program is intentionally tiny. The point is not complexity. The point is making the compile-and-run pipeline visible.</p>
-</div>
-<div id="compile-the-program" class="section level2 hasAnchor" number="7.7">
-<h2><span class="header-section-number">7.7</span> Compile the program<a href="modules-compilers-and-your-first-c-program.html#compile-the-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb139"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb139-1"><a href="modules-compilers-and-your-first-c-program.html#cb139-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
-<p>Interpretation:</p>
-<ul>
-<li><code>hello.c</code> is the source file</li>
-<li><code>-o hello</code> names the output executable <code>hello</code></li>
+<li>test whether a framework sees the GPU</li>
+<li>validate a CUDA environment</li>
+<li>demo software live</li>
+<li>run a short exploratory session</li>
 </ul>
 </div>
-<div id="run-the-executable" class="section level2 hasAnchor" number="7.8">
-<h2><span class="header-section-number">7.8</span> Run the executable<a href="modules-compilers-and-your-first-c-program.html#run-the-executable" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div class="sourceCode" id="cb140"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb140-1"><a href="modules-compilers-and-your-first-c-program.html#cb140-1" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
-<p>Expected output:</p>
-<pre class="text"><code>Hello from C on LS6</code></pre>
-</div>
-<div id="inspect-the-directory" class="section level2 hasAnchor" number="7.9">
-<h2><span class="header-section-number">7.9</span> Inspect the directory<a href="modules-compilers-and-your-first-c-program.html#inspect-the-directory" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Use:</p>
-<div class="sourceCode" id="cb142"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb142-1"><a href="modules-compilers-and-your-first-c-program.html#cb142-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span></span></code></pre></div>
-<p>You should see at least:</p>
+<div id="production-gpu-work" class="section level3 hasAnchor" number="6.4.2">
+<h3><span class="header-section-number">6.4.2</span> Production GPU work<a href="gpu-computing-on-ls6.html#production-gpu-work" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Use a production GPU queue when you want to:</p>
 <ul>
-<li><code>hello.c</code></li>
-<li><code>hello</code></li>
+<li>run a real training job</li>
+<li>run a longer accelerator workload</li>
+<li>perform sustained computation on A100 or H100 nodes</li>
 </ul>
-<p>This is an important conceptual moment. The source file and executable are different artifacts with different purposes.</p>
+<p>This distinction matters because interactive validation and final production execution are not the same kind of workflow.</p>
 </div>
-<div id="what-just-happened-1" class="section level2 hasAnchor" number="7.10">
-<h2><span class="header-section-number">7.10</span> What just happened?<a href="modules-compilers-and-your-first-c-program.html#what-just-happened-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>You:</p>
+</div>
+<div id="interactive-gpu-validation" class="section level2 hasAnchor" number="6.5">
+<h2><span class="header-section-number">6.5</span> Interactive GPU validation<a href="gpu-computing-on-ls6.html#interactive-gpu-validation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>A good LS6 pattern for short interactive GPU work is:</p>
+<div class="sourceCode" id="cb125"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb125-1"><a href="gpu-computing-on-ls6.html#cb125-1" tabindex="-1"></a><span class="ex">idev</span> <span class="at">-p</span> gpu-a100-dev <span class="at">-N</span> 1 <span class="at">-n</span> 1 <span class="at">-t</span> 1:00:00</span></code></pre></div>
+<p>This is a development-style GPU request. Once the interactive session starts, you should verify the node and the GPUs before doing anything else.</p>
+<p>Run:</p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb126-1"><a href="gpu-computing-on-ls6.html#cb126-1" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb126-2"><a href="gpu-computing-on-ls6.html#cb126-2" tabindex="-1"></a><span class="ex">nvidia-smi</span></span></code></pre></div>
+</div>
+<div id="why-nvidia-smi-matters" class="section level2 hasAnchor" number="6.6">
+<h2><span class="header-section-number">6.6</span> Why <code>nvidia-smi</code> matters<a href="gpu-computing-on-ls6.html#why-nvidia-smi-matters" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><code>nvidia-smi</code> is one of the fastest reality checks in a GPU workflow.</p>
+<p>It helps you answer questions like:</p>
 <ul>
-<li>wrote human-readable source code</li>
-<li>invoked a compiler</li>
-<li>produced machine-executable output</li>
-<li>ran the resulting program</li>
+<li>Am I actually on a GPU node?</li>
+<li>How many GPUs are visible?</li>
+<li>Which GPU model is present?</li>
+<li>Is the NVIDIA driver stack active enough for basic GPU inspection?</li>
 </ul>
-<p>This is the basic compiled workflow that underlies far more complex HPC software.</p>
-</div>
-<div id="compile-versus-link-a-useful-beginner-distinction" class="section level2 hasAnchor" number="7.11">
-<h2><span class="header-section-number">7.11</span> Compile versus link: a useful beginner distinction<a href="modules-compilers-and-your-first-c-program.html#compile-versus-link-a-useful-beginner-distinction" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>You will often hear the word “compile” used to describe the entire build process. In casual conversation that is common, but it helps to know that there are two ideas present:</p>
-<div id="compilation" class="section level3 hasAnchor" number="7.11.1">
-<h3><span class="header-section-number">7.11.1</span> Compilation<a href="modules-compilers-and-your-first-c-program.html#compilation" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Turning source code into lower-level object code.</p>
-</div>
-<div id="linking" class="section level3 hasAnchor" number="7.11.2">
-<h3><span class="header-section-number">7.11.2</span> Linking<a href="modules-compilers-and-your-first-c-program.html#linking" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Combining object code and libraries into a final executable.</p>
-<p>At first, these steps are often hidden behind a single command like:</p>
-<div class="sourceCode" id="cb143"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb143-1"><a href="modules-compilers-and-your-first-c-program.html#cb143-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
-<p>But conceptually, the compiler is doing more than one job on your behalf.</p>
-<p>Why does this matter? Because some errors are <strong>compile-time errors</strong> and others are <strong>link-time errors</strong>.</p>
-</div>
-</div>
-<div id="compile-time-errors" class="section level2 hasAnchor" number="7.12">
-<h2><span class="header-section-number">7.12</span> Compile-time errors<a href="modules-compilers-and-your-first-c-program.html#compile-time-errors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>These happen when the compiler cannot interpret the source correctly.</p>
-<p>Example:</p>
-<div class="sourceCode" id="cb144"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb144-1"><a href="modules-compilers-and-your-first-c-program.html#cb144-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb144-2"><a href="modules-compilers-and-your-first-c-program.html#cb144-2" tabindex="-1"></a></span>
-<span id="cb144-3"><a href="modules-compilers-and-your-first-c-program.html#cb144-3" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb144-4"><a href="modules-compilers-and-your-first-c-program.html#cb144-4" tabindex="-1"></a>    prinft<span class="op">(</span><span class="st">&quot;Hello</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">);</span></span>
-<span id="cb144-5"><a href="modules-compilers-and-your-first-c-program.html#cb144-5" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb144-6"><a href="modules-compilers-and-your-first-c-program.html#cb144-6" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Notice the typo: <code>prinft</code> instead of <code>printf</code>.</p>
-<p>If you compile:</p>
-<div class="sourceCode" id="cb145"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb145-1"><a href="modules-compilers-and-your-first-c-program.html#cb145-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
-<p>the compiler will report a problem.</p>
-<p>A compile-time error often points to:</p>
+<p>If <code>nvidia-smi</code> shows GPUs, that is strong evidence that you are on the right kind of node.</p>
+<p>If it does not, then one of your assumptions is probably wrong:</p>
 <ul>
-<li>a typo</li>
-<li>invalid syntax</li>
-<li>missing punctuation</li>
-<li>misuse of the language</li>
+<li>you may still be on a CPU node</li>
+<li>you may be in the wrong queue</li>
+<li>the session may not be what you thought it was</li>
 </ul>
 </div>
-<div id="link-time-errors" class="section level2 hasAnchor" number="7.13">
-<h2><span class="header-section-number">7.13</span> Link-time errors<a href="modules-compilers-and-your-first-c-program.html#link-time-errors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Link-time errors happen when source files may compile individually, but the final program cannot be assembled correctly.</p>
-<p>A common beginner example involves a missing function definition.</p>
-<p>Suppose <code>main.c</code> calls a function <code>add</code>, but the file containing <code>add</code> is not included in the build command. Then the compiler may accept <code>main.c</code>, but the linker will complain that the referenced symbol cannot be resolved.</p>
-<p>This distinction helps you read build messages more intelligently:</p>
+<div id="a-simple-gpu-verification-checklist" class="section level2 hasAnchor" number="6.7">
+<h2><span class="header-section-number">6.7</span> A simple GPU verification checklist<a href="gpu-computing-on-ls6.html#a-simple-gpu-verification-checklist" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>After landing on a GPU node, run these checks:</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb127-1"><a href="gpu-computing-on-ls6.html#cb127-1" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb127-2"><a href="gpu-computing-on-ls6.html#cb127-2" tabindex="-1"></a><span class="ex">nvidia-smi</span></span></code></pre></div>
+<p>You can also inspect the software environment:</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb128-1"><a href="gpu-computing-on-ls6.html#cb128-1" tabindex="-1"></a><span class="ex">module</span> list</span>
+<span id="cb128-2"><a href="gpu-computing-on-ls6.html#cb128-2" tabindex="-1"></a><span class="ex">module</span> avail cuda</span></code></pre></div>
+<p>The exact toolkit you load will depend on your workflow, but the main habit is the same:</p>
 <ul>
-<li>syntax problems often mean compilation trouble</li>
-<li>undefined reference problems often mean linking trouble</li>
+<li>verify the node</li>
+<li>verify the GPU</li>
+<li>verify the environment</li>
+<li>only then begin serious testing</li>
 </ul>
 </div>
-<div id="a-simple-multiple-file-example" class="section level2 hasAnchor" number="7.14">
-<h2><span class="header-section-number">7.14</span> A simple multiple-file example<a href="modules-compilers-and-your-first-c-program.html#a-simple-multiple-file-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Imagine the following files:</p>
-<div id="main.c" class="section level3 hasAnchor" number="7.14.1">
-<h3><span class="header-section-number">7.14.1</span> <code>main.c</code><a href="modules-compilers-and-your-first-c-program.html#main.c" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb146"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb146-1"><a href="modules-compilers-and-your-first-c-program.html#cb146-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb146-2"><a href="modules-compilers-and-your-first-c-program.html#cb146-2" tabindex="-1"></a><span class="pp">#include </span><span class="im">&quot;helper.h&quot;</span></span>
-<span id="cb146-3"><a href="modules-compilers-and-your-first-c-program.html#cb146-3" tabindex="-1"></a></span>
-<span id="cb146-4"><a href="modules-compilers-and-your-first-c-program.html#cb146-4" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb146-5"><a href="modules-compilers-and-your-first-c-program.html#cb146-5" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;</span><span class="sc">%d\n</span><span class="st">&quot;</span><span class="op">,</span> add<span class="op">(</span><span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">));</span></span>
-<span id="cb146-6"><a href="modules-compilers-and-your-first-c-program.html#cb146-6" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb146-7"><a href="modules-compilers-and-your-first-c-program.html#cb146-7" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-</div>
-<div id="helper.h" class="section level3 hasAnchor" number="7.14.2">
-<h3><span class="header-section-number">7.14.2</span> <code>helper.h</code><a href="modules-compilers-and-your-first-c-program.html#helper.h" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb147"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb147-1"><a href="modules-compilers-and-your-first-c-program.html#cb147-1" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">);</span></span></code></pre></div>
-</div>
-<div id="helper.c" class="section level3 hasAnchor" number="7.14.3">
-<h3><span class="header-section-number">7.14.3</span> <code>helper.c</code><a href="modules-compilers-and-your-first-c-program.html#helper.c" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<div class="sourceCode" id="cb148"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb148-1"><a href="modules-compilers-and-your-first-c-program.html#cb148-1" tabindex="-1"></a><span class="dt">int</span> add<span class="op">(</span><span class="dt">int</span> a<span class="op">,</span> <span class="dt">int</span> b<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb148-2"><a href="modules-compilers-and-your-first-c-program.html#cb148-2" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b<span class="op">;</span></span>
-<span id="cb148-3"><a href="modules-compilers-and-your-first-c-program.html#cb148-3" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>Build with:</p>
-<div class="sourceCode" id="cb149"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb149-1"><a href="modules-compilers-and-your-first-c-program.html#cb149-1" tabindex="-1"></a><span class="fu">gcc</span> main.c helper.c <span class="at">-o</span> program</span></code></pre></div>
-<p>Now the interface and implementation are both included.</p>
-<p>If you forget <code>helper.c</code>, you may get a link-time error. That is a valuable teaching moment.</p>
-</div>
-</div>
-<div id="header-files-as-interfaces" class="section level2 hasAnchor" number="7.15">
-<h2><span class="header-section-number">7.15</span> Header files as interfaces<a href="modules-compilers-and-your-first-c-program.html#header-files-as-interfaces" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Headers (<code>.h</code>) are commonly used to declare what functions are available. They do not usually hold the full implementation.</p>
-<p>At a beginner level, the main takeaway is:</p>
-<blockquote>
-<p>Headers tell the compiler what to expect. Source files provide the actual code.</p>
-</blockquote>
-<p>This makes larger projects more organized and easier to compile piece by piece.</p>
-</div>
-<div id="optimization-flags" class="section level2 hasAnchor" number="7.16">
-<h2><span class="header-section-number">7.16</span> Optimization flags<a href="modules-compilers-and-your-first-c-program.html#optimization-flags" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A common practical compile command is:</p>
-<div class="sourceCode" id="cb150"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb150-1"><a href="modules-compilers-and-your-first-c-program.html#cb150-1" tabindex="-1"></a><span class="fu">gcc</span> hello.c <span class="at">-o</span> hello <span class="at">-O2</span></span></code></pre></div>
-<p>Useful optimization levels to know:</p>
+<div id="a-short-example-checking-the-gpu-node-before-doing-anything-else" class="section level2 hasAnchor" number="6.8">
+<h2><span class="header-section-number">6.8</span> A short example: checking the GPU node before doing anything else<a href="gpu-computing-on-ls6.html#a-short-example-checking-the-gpu-node-before-doing-anything-else" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>After an interactive GPU request, you might do this first:</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb129-1"><a href="gpu-computing-on-ls6.html#cb129-1" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb129-2"><a href="gpu-computing-on-ls6.html#cb129-2" tabindex="-1"></a><span class="ex">nvidia-smi</span></span>
+<span id="cb129-3"><a href="gpu-computing-on-ls6.html#cb129-3" tabindex="-1"></a><span class="fu">date</span></span>
+<span id="cb129-4"><a href="gpu-computing-on-ls6.html#cb129-4" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div>
+<p>That is a strong beginner habit because it records:</p>
 <ul>
-<li><code>-O0</code> = no optimization</li>
-<li><code>-O2</code> = common practical default</li>
-<li><code>-O3</code> = more aggressive optimization</li>
+<li>where you are</li>
+<li>what hardware is visible</li>
+<li>when the session is happening</li>
+<li>what directory you are in</li>
 </ul>
-<p>For an introductory course, <code>-O2</code> is a reasonable example because it introduces the idea that the build process can affect performance.</p>
-<p>The important conceptual point is not to memorize every flag. It is to realize that <strong>how</strong> a program is compiled can matter.</p>
+<p>Those checks are simple, but they reduce confusion dramatically.</p>
 </div>
-<div id="warnings-are-not-noise" class="section level2 hasAnchor" number="7.17">
-<h2><span class="header-section-number">7.17</span> Warnings are not noise<a href="modules-compilers-and-your-first-c-program.html#warnings-are-not-noise" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Use:</p>
-<div class="sourceCode" id="cb151"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb151-1"><a href="modules-compilers-and-your-first-c-program.html#cb151-1" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-Wall</span> hello.c <span class="at">-o</span> hello</span></code></pre></div>
-<p><code>-Wall</code> asks the compiler to show a wider class of warnings.</p>
-<p>Warnings do not always stop the build, but they are often useful clues. Strong beginners learn to read them early instead of ignoring them.</p>
-<p>A good principle is:</p>
-<blockquote>
-<p>If the compiler is trying to tell you something, pay attention before the project becomes larger.</p>
-</blockquote>
+<div id="batch-gpu-jobs" class="section level2 hasAnchor" number="6.9">
+<h2><span class="header-section-number">6.9</span> Batch GPU jobs<a href="gpu-computing-on-ls6.html#batch-gpu-jobs" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Interactive validation is useful, but stable GPU work usually belongs in a batch script.</p>
+<p>A production GPU workflow normally means writing a SLURM script that targets the appropriate GPU queue, loads the needed software environment, and launches the program explicitly.</p>
+<p>The point of the interactive session is to shorten the path to a correct production script.</p>
 </div>
-<div id="a-brief-note-on-c" class="section level2 hasAnchor" number="7.18">
-<h2><span class="header-section-number">7.18</span> A brief note on C++<a href="modules-compilers-and-your-first-c-program.html#a-brief-note-on-c" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A similar pattern exists for C++:</p>
-<div class="sourceCode" id="cb152"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb152-1"><a href="modules-compilers-and-your-first-c-program.html#cb152-1" tabindex="-1"></a><span class="ex">g++</span> hello.cpp <span class="at">-o</span> hello_cpp</span></code></pre></div>
-<p>The overall workflow remains familiar:</p>
+<div id="a100-versus-h100-what-matters-most-for-this-course" class="section level2 hasAnchor" number="6.10">
+<h2><span class="header-section-number">6.10</span> A100 versus H100: what matters most for this course<a href="gpu-computing-on-ls6.html#a100-versus-h100-what-matters-most-for-this-course" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>For this course, you do not need a deep hardware comparison.</p>
+<p>What matters most is that you learn to distinguish:</p>
 <ul>
-<li>write source</li>
-<li>invoke compiler</li>
-<li>produce executable</li>
-<li>run executable</li>
+<li>CPU queues from GPU queues</li>
+<li>A100 queues from H100 queues</li>
+<li>development queues from production queues</li>
 </ul>
-<p>This chapter uses C because it gives the cleanest first exposure to the build process.</p>
+<p>That distinction alone will help you avoid many costly mistakes.</p>
 </div>
-<div id="makefiles-why-build-automation-exists" class="section level2 hasAnchor" number="7.19">
-<h2><span class="header-section-number">7.19</span> Makefiles: why build automation exists<a href="modules-compilers-and-your-first-c-program.html#makefiles-why-build-automation-exists" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>As projects grow, repeated build commands become tiresome and error-prone. A <code>Makefile</code> automates the process.</p>
-<p>Create:</p>
-<div class="sourceCode" id="cb153"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb153-1"><a href="modules-compilers-and-your-first-c-program.html#cb153-1" tabindex="-1"></a><span class="fu">nano</span> Makefile</span></code></pre></div>
-<p>Add:</p>
-<pre class="make"><code>all:
-    gcc -Wall -O2 hello.c -o hello</code></pre>
-<p>Then run:</p>
-<div class="sourceCode" id="cb155"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb155-1"><a href="modules-compilers-and-your-first-c-program.html#cb155-1" tabindex="-1"></a><span class="fu">make</span></span></code></pre></div>
-<p>This is not just a convenience trick. It teaches a valuable lesson:</p>
-<blockquote>
-<p>Build steps are part of the workflow and should be made repeatable.</p>
-</blockquote>
+<div id="common-mistakes-2" class="section level2 hasAnchor" number="6.11">
+<h2><span class="header-section-number">6.11</span> Common mistakes<a href="gpu-computing-on-ls6.html#common-mistakes-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="mistake-1-trying-to-test-gpu-software-on-a-login-node" class="section level3 hasAnchor" number="6.11.1">
+<h3><span class="header-section-number">6.11.1</span> Mistake 1: Trying to test GPU software on a login node<a href="gpu-computing-on-ls6.html#mistake-1-trying-to-test-gpu-software-on-a-login-node" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction: request an interactive or batch GPU node first.</p>
 </div>
-<div id="a-more-realistic-makefile-example" class="section level2 hasAnchor" number="7.20">
-<h2><span class="header-section-number">7.20</span> A more realistic Makefile example<a href="modules-compilers-and-your-first-c-program.html#a-more-realistic-makefile-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<pre class="make"><code>CC=gcc
-CFLAGS=-Wall -O2
-
-all: program
-
-program: main.o helper.o
-    $(CC) $(CFLAGS) main.o helper.o -o program
-
-main.o: main.c helper.h
-    $(CC) $(CFLAGS) -c main.c
-
-helper.o: helper.c helper.h
-    $(CC) $(CFLAGS) -c helper.c
-
-clean:
-    rm -f *.o program</code></pre>
-<p>Even if you are not yet comfortable writing Makefiles from scratch, reading one helps you understand how real projects are assembled.</p>
+<div id="mistake-2-assuming-a-session-is-on-the-right-node-type-without-checking-1" class="section level3 hasAnchor" number="6.11.2">
+<h3><span class="header-section-number">6.11.2</span> Mistake 2: Assuming a session is on the right node type without checking<a href="gpu-computing-on-ls6.html#mistake-2-assuming-a-session-is-on-the-right-node-type-without-checking-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction: run <code>hostname</code> and <code>nvidia-smi</code>.</p>
 </div>
-<div id="where-to-compile" class="section level2 hasAnchor" number="7.21">
-<h2><span class="header-section-number">7.21</span> Where to compile<a href="modules-compilers-and-your-first-c-program.html#where-to-compile" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>For small builds, compile on the login node.</p>
-<p>That is appropriate because compilation is often part of setup work. However, very large builds or special workflows may require different strategies depending on system policy and project needs.</p>
-<p>For this course, the safe beginner pattern is:</p>
-<ul>
-<li>edit on the login node</li>
-<li>compile on the login node</li>
-<li>run real jobs on compute nodes via SLURM</li>
-</ul>
+<div id="mistake-3-choosing-a-gpu-queue-without-matching-the-intended-hardware" class="section level3 hasAnchor" number="6.11.3">
+<h3><span class="header-section-number">6.11.3</span> Mistake 3: Choosing a GPU queue without matching the intended hardware<a href="gpu-computing-on-ls6.html#mistake-3-choosing-a-gpu-queue-without-matching-the-intended-hardware" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction: know whether you want A100 or H100 resources, and request the queue deliberately.</p>
 </div>
-<div id="running-compiled-code-through-slurm" class="section level2 hasAnchor" number="7.22">
-<h2><span class="header-section-number">7.22</span> Running compiled code through SLURM<a href="modules-compilers-and-your-first-c-program.html#running-compiled-code-through-slurm" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Once the executable exists, a batch script can run it.</p>
-<p>Example:</p>
-<div class="sourceCode" id="cb157"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb157-1"><a href="modules-compilers-and-your-first-c-program.html#cb157-1" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
-<span id="cb157-2"><a href="modules-compilers-and-your-first-c-program.html#cb157-2" tabindex="-1"></a><span class="co">#SBATCH -J c_hello</span></span>
-<span id="cb157-3"><a href="modules-compilers-and-your-first-c-program.html#cb157-3" tabindex="-1"></a><span class="co">#SBATCH -N 1</span></span>
-<span id="cb157-4"><a href="modules-compilers-and-your-first-c-program.html#cb157-4" tabindex="-1"></a><span class="co">#SBATCH -n 1</span></span>
-<span id="cb157-5"><a href="modules-compilers-and-your-first-c-program.html#cb157-5" tabindex="-1"></a><span class="co">#SBATCH -t 00:05:00</span></span>
-<span id="cb157-6"><a href="modules-compilers-and-your-first-c-program.html#cb157-6" tabindex="-1"></a><span class="co">#SBATCH -p normal</span></span>
-<span id="cb157-7"><a href="modules-compilers-and-your-first-c-program.html#cb157-7" tabindex="-1"></a><span class="co">#SBATCH -o c_hello_%j.out</span></span>
-<span id="cb157-8"><a href="modules-compilers-and-your-first-c-program.html#cb157-8" tabindex="-1"></a><span class="co">#SBATCH -e c_hello_%j.err</span></span>
-<span id="cb157-9"><a href="modules-compilers-and-your-first-c-program.html#cb157-9" tabindex="-1"></a></span>
-<span id="cb157-10"><a href="modules-compilers-and-your-first-c-program.html#cb157-10" tabindex="-1"></a><span class="ex">./hello</span></span></code></pre></div>
-<p>Submit with:</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb158-1"><a href="modules-compilers-and-your-first-c-program.html#cb158-1" tabindex="-1"></a><span class="ex">sbatch</span> run_hello.slurm</span></code></pre></div>
-<p>This connects Chapter 4 directly to Chapter 3: building and scheduling are different phases of the workflow.</p>
+<div id="mistake-4-forgetting-to-validate-the-environment" class="section level3 hasAnchor" number="6.11.4">
+<h3><span class="header-section-number">6.11.4</span> Mistake 4: Forgetting to validate the environment<a href="gpu-computing-on-ls6.html#mistake-4-forgetting-to-validate-the-environment" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Correction: inspect modules and CUDA-related tools before assuming the framework is ready.</p>
 </div>
-<div id="a-practical-build-and-run-pattern" class="section level2 hasAnchor" number="7.23">
-<h2><span class="header-section-number">7.23</span> A practical build-and-run pattern<a href="modules-compilers-and-your-first-c-program.html#a-practical-build-and-run-pattern" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>A typical beginner workflow might look like this:</p>
-<div class="sourceCode" id="cb159"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb159-1"><a href="modules-compilers-and-your-first-c-program.html#cb159-1" tabindex="-1"></a><span class="ex">module</span> load gcc</span>
-<span id="cb159-2"><a href="modules-compilers-and-your-first-c-program.html#cb159-2" tabindex="-1"></a><span class="fu">gcc</span> <span class="at">-Wall</span> <span class="at">-O2</span> hello.c <span class="at">-o</span> hello</span>
-<span id="cb159-3"><a href="modules-compilers-and-your-first-c-program.html#cb159-3" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> hello</span>
-<span id="cb159-4"><a href="modules-compilers-and-your-first-c-program.html#cb159-4" tabindex="-1"></a><span class="ex">./hello</span></span>
-<span id="cb159-5"><a href="modules-compilers-and-your-first-c-program.html#cb159-5" tabindex="-1"></a><span class="ex">sbatch</span> run_hello.slurm</span></code></pre></div>
-<p>This order is instructional gold because it separates concerns clearly:</p>
+</div>
+<div id="gpu-computing-checklist" class="section level2 hasAnchor" number="6.12">
+<h2><span class="header-section-number">6.12</span> GPU-computing checklist<a href="gpu-computing-on-ls6.html#gpu-computing-checklist" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When you start GPU work, check:</p>
 <ol style="list-style-type: decimal">
-<li>load environment</li>
-<li>build executable</li>
-<li>test executable lightly</li>
-<li>run real work through the scheduler</li>
+<li>What queue did I request?</li>
+<li>Am I on a GPU node now?</li>
+<li>Does <code>hostname</code> look correct?</li>
+<li>Does <code>nvidia-smi</code> show the GPUs I expected?</li>
+<li>Is the software environment loaded correctly?</li>
+<li>Am I still in validation mode, or is this ready to become a production batch workflow?</li>
 </ol>
 </div>
-<div id="common-compiler-and-build-errors" class="section level2 hasAnchor" number="7.24">
-<h2><span class="header-section-number">7.24</span> Common compiler and build errors<a href="modules-compilers-and-your-first-c-program.html#common-compiler-and-build-errors" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<div id="error-type-1-syntax-problem" class="section level3 hasAnchor" number="7.24.1">
-<h3><span class="header-section-number">7.24.1</span> Error type 1: syntax problem<a href="modules-compilers-and-your-first-c-program.html#error-type-1-syntax-problem" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Symptoms:
-- missing semicolon
-- typo in a function name
-- unbalanced braces or parentheses</p>
-<p>Response:
-- read the line number
-- inspect nearby lines
-- fix syntax before trying other theories</p>
+<div id="lab-1-first-gpu-validation-session" class="section level2 hasAnchor" number="6.13">
+<h2><span class="header-section-number">6.13</span> Lab 1: first GPU validation session<a href="gpu-computing-on-ls6.html#lab-1-first-gpu-validation-session" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Run:</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb130-1"><a href="gpu-computing-on-ls6.html#cb130-1" tabindex="-1"></a><span class="ex">idev</span> <span class="at">-p</span> gpu-a100-dev <span class="at">-N</span> 1 <span class="at">-n</span> 1 <span class="at">-t</span> 1:00:00</span></code></pre></div>
+<p>Then, once connected, run:</p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb131-1"><a href="gpu-computing-on-ls6.html#cb131-1" tabindex="-1"></a><span class="fu">hostname</span></span>
+<span id="cb131-2"><a href="gpu-computing-on-ls6.html#cb131-2" tabindex="-1"></a><span class="ex">nvidia-smi</span></span></code></pre></div>
+<p>Write a short explanation of what <code>nvidia-smi</code> confirmed for you.</p>
 </div>
-<div id="error-type-2-missing-header" class="section level3 hasAnchor" number="7.24.2">
-<h3><span class="header-section-number">7.24.2</span> Error type 2: missing header<a href="modules-compilers-and-your-first-c-program.html#error-type-2-missing-header" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Symptoms:
-- compiler says it cannot find a header file</p>
-<p>Response:
-- check the include line
-- confirm the file exists
-- confirm search paths if using nonstandard locations</p>
-</div>
-<div id="error-type-3-undefined-reference" class="section level3 hasAnchor" number="7.24.3">
-<h3><span class="header-section-number">7.24.3</span> Error type 3: undefined reference<a href="modules-compilers-and-your-first-c-program.html#error-type-3-undefined-reference" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Symptoms:
-- the compiler gets farther, then the linker complains</p>
-<p>Response:
-- check whether all needed <code>.c</code> files were included
-- check whether required libraries were linked</p>
-</div>
-<div id="error-type-4-command-not-found" class="section level3 hasAnchor" number="7.24.4">
-<h3><span class="header-section-number">7.24.4</span> Error type 4: command not found<a href="modules-compilers-and-your-first-c-program.html#error-type-4-command-not-found" class="anchor-section" aria-label="Anchor link to header"></a></h3>
-<p>Symptoms:
-- shell cannot find <code>gcc</code></p>
-<p>Response:
-- check <code>module load gcc</code>
-- run <code>which gcc</code></p>
-</div>
-</div>
-<div id="failure-case-study-1-typo-in-source-code" class="section level2 hasAnchor" number="7.25">
-<h2><span class="header-section-number">7.25</span> Failure case study 1: typo in source code<a href="modules-compilers-and-your-first-c-program.html#failure-case-study-1-typo-in-source-code" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Suppose you accidentally write:</p>
-<div class="sourceCode" id="cb160"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb160-1"><a href="modules-compilers-and-your-first-c-program.html#cb160-1" tabindex="-1"></a><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span></span>
-<span id="cb160-2"><a href="modules-compilers-and-your-first-c-program.html#cb160-2" tabindex="-1"></a></span>
-<span id="cb160-3"><a href="modules-compilers-and-your-first-c-program.html#cb160-3" tabindex="-1"></a><span class="dt">int</span> main<span class="op">()</span> <span class="op">{</span></span>
-<span id="cb160-4"><a href="modules-compilers-and-your-first-c-program.html#cb160-4" tabindex="-1"></a>    printf<span class="op">(</span><span class="st">&quot;Hello</span><span class="sc">\n</span><span class="st">&quot;</span><span class="op">)</span></span>
-<span id="cb160-5"><a href="modules-compilers-and-your-first-c-program.html#cb160-5" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb160-6"><a href="modules-compilers-and-your-first-c-program.html#cb160-6" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>The missing semicolon after <code>printf</code> will prevent compilation.</p>
-<p>Lesson:
-- the executable cannot update until the source is valid</p>
-</div>
-<div id="failure-case-study-2-typo-in-the-compile-command" class="section level2 hasAnchor" number="7.26">
-<h2><span class="header-section-number">7.26</span> Failure case study 2: typo in the compile command<a href="modules-compilers-and-your-first-c-program.html#failure-case-study-2-typo-in-the-compile-command" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Suppose you run:</p>
-<div class="sourceCode" id="cb161"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb161-1"><a href="modules-compilers-and-your-first-c-program.html#cb161-1" tabindex="-1"></a><span class="fu">gcc</span> hell.c <span class="at">-o</span> hello</span></code></pre></div>
-<p>but the file is actually named <code>hello.c</code>.</p>
-<p>Lesson:
-- sometimes the mistake is not in the source, but in the shell command itself</p>
-<p>Use:</p>
-<div class="sourceCode" id="cb162"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb162-1"><a href="modules-compilers-and-your-first-c-program.html#cb162-1" tabindex="-1"></a><span class="fu">ls</span></span></code></pre></div>
-<p>to confirm filenames rather than relying on memory.</p>
-</div>
-<div id="failure-case-study-3-object-exists-executable-is-stale" class="section level2 hasAnchor" number="7.27">
-<h2><span class="header-section-number">7.27</span> Failure case study 3: object exists, executable is stale<a href="modules-compilers-and-your-first-c-program.html#failure-case-study-3-object-exists-executable-is-stale" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Suppose you edit <code>hello.c</code>, forget to rebuild, and run <code>./hello</code>.</p>
-<p>You may see old behavior and think the edits failed.</p>
-<p>What really happened is simpler:</p>
+<div id="lab-2-queue-inspection-for-gpu-work" class="section level2 hasAnchor" number="6.14">
+<h2><span class="header-section-number">6.14</span> Lab 2: queue inspection for GPU work<a href="gpu-computing-on-ls6.html#lab-2-queue-inspection-for-gpu-work" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>From a login node, run:</p>
+<div class="sourceCode" id="cb132"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb132-1"><a href="gpu-computing-on-ls6.html#cb132-1" tabindex="-1"></a><span class="ex">qlimits</span></span></code></pre></div>
+<p>Identify the queues most relevant to:</p>
 <ul>
-<li>source changed</li>
-<li>executable did not</li>
+<li>A100 development work</li>
+<li>A100 production work</li>
+<li>H100 work</li>
 </ul>
-<p>Lesson:
-- rebuilding is part of the development loop</p>
+<p>The point is not to memorize the entire queue table. The point is to learn how to check the live queue information before launching accelerator workloads.</p>
 </div>
-<div id="reading-compiler-messages-calmly" class="section level2 hasAnchor" number="7.28">
-<h2><span class="header-section-number">7.28</span> Reading compiler messages calmly<a href="modules-compilers-and-your-first-c-program.html#reading-compiler-messages-calmly" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Compiler output can look intimidating because it is dense. A good beginner habit is to read it in layers:</p>
-<ol style="list-style-type: decimal">
-<li>identify the first real error</li>
-<li>find the file and line number</li>
-<li>inspect the local code near that line</li>
-<li>fix one issue at a time</li>
-<li>recompile</li>
-</ol>
-<p>Do not scroll immediately to the bottom and panic. Often the first meaningful error is the most useful one.</p>
-</div>
-<div id="good-habits-for-build-workflows" class="section level2 hasAnchor" number="7.29">
-<h2><span class="header-section-number">7.29</span> Good habits for build workflows<a href="modules-compilers-and-your-first-c-program.html#good-habits-for-build-workflows" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="stretch-goal-3" class="section level2 hasAnchor" number="6.15">
+<h2><span class="header-section-number">6.15</span> Stretch goal<a href="gpu-computing-on-ls6.html#stretch-goal-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Start an interactive GPU session, verify the GPUs with <code>nvidia-smi</code>, load the environment you need for a short software demo, and then outline the batch-script version you would use for the same work in production.</p>
+<p>That exercise connects:</p>
 <ul>
-<li>load the compiler module explicitly</li>
-<li>check <code>which gcc</code> and <code>gcc --version</code></li>
-<li>keep source files organized</li>
-<li>rebuild after edits</li>
-<li>use <code>-Wall</code></li>
-<li>automate repetitive builds with <code>make</code></li>
-<li>keep run scripts separate from source files</li>
-<li>treat build commands as part of reproducible workflow documentation</li>
+<li>hardware verification</li>
+<li>environment validation</li>
+<li>reproducible GPU execution</li>
 </ul>
 </div>
-<div id="lab-1-build-and-run-a-first-c-program" class="section level2 hasAnchor" number="7.30">
-<h2><span class="header-section-number">7.30</span> Lab 1: build and run a first C program<a href="modules-compilers-and-your-first-c-program.html#lab-1-build-and-run-a-first-c-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ol style="list-style-type: decimal">
-<li>Create <code>hello.c</code></li>
-<li>Load <code>gcc</code></li>
-<li>Compile with <code>gcc hello.c -o hello</code></li>
-<li>Run <code>./hello</code></li>
-<li>Confirm the executable exists with <code>ls -l</code></li>
-</ol>
-</div>
-<div id="lab-2-use-warnings" class="section level2 hasAnchor" number="7.31">
-<h2><span class="header-section-number">7.31</span> Lab 2: use warnings<a href="modules-compilers-and-your-first-c-program.html#lab-2-use-warnings" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ol style="list-style-type: decimal">
-<li>Recompile using <code>gcc -Wall hello.c -o hello</code></li>
-<li>Introduce a small issue</li>
-<li>Observe how warnings or errors change</li>
-<li>Fix the issue and recompile</li>
-</ol>
-</div>
-<div id="lab-3-build-a-multi-file-program" class="section level2 hasAnchor" number="7.32">
-<h2><span class="header-section-number">7.32</span> Lab 3: build a multi-file program<a href="modules-compilers-and-your-first-c-program.html#lab-3-build-a-multi-file-program" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ol style="list-style-type: decimal">
-<li>Create <code>main.c</code>, <code>helper.c</code>, and <code>helper.h</code></li>
-<li>Compile them together</li>
-<li>Run the result</li>
-<li>Remove one source file from the compile command intentionally</li>
-<li>Observe and interpret the resulting error</li>
-</ol>
-</div>
-<div id="lab-4-automate-with-make" class="section level2 hasAnchor" number="7.33">
-<h2><span class="header-section-number">7.33</span> Lab 4: automate with <code>make</code><a href="modules-compilers-and-your-first-c-program.html#lab-4-automate-with-make" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ol style="list-style-type: decimal">
-<li>Create a simple <code>Makefile</code></li>
-<li>Build with <code>make</code></li>
-<li>Edit the source</li>
-<li>Build again</li>
-<li>Explain why a Makefile is useful in repeatable workflows</li>
-</ol>
-</div>
-<div id="stretch-goal-4" class="section level2 hasAnchor" number="7.34">
-<h2><span class="header-section-number">7.34</span> Stretch goal<a href="modules-compilers-and-your-first-c-program.html#stretch-goal-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>Create a small program that reads input, performs a calculation, and writes output. Then:</p>
+<div id="key-takeaways-3" class="section level2 hasAnchor" number="6.16">
+<h2><span class="header-section-number">6.16</span> Key takeaways<a href="gpu-computing-on-ls6.html#key-takeaways-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <ul>
-<li>compile it with warnings enabled</li>
-<li>create a SLURM script to run it</li>
-<li>store source in <code>src/</code></li>
-<li>store the job script in <code>jobs/</code></li>
-<li>document the build and run commands in a <code>README.md</code></li>
-</ul>
-</div>
-<div id="key-takeaways-4" class="section level2 hasAnchor" number="7.35">
-<h2><span class="header-section-number">7.35</span> Key takeaways<a href="modules-compilers-and-your-first-c-program.html#key-takeaways-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<ul>
-<li>source code and executables are different artifacts</li>
-<li>compiler modules are part of the HPC environment</li>
-<li>compile-time and link-time errors are different kinds of failures</li>
-<li>warnings are useful, not just noise</li>
-<li>Makefiles turn repeated build steps into reproducible workflow</li>
-<li>small programs can be built on the login node, but real execution belongs under SLURM</li>
+<li>GPU work needs the correct queue, correct node type, and correct environment</li>
+<li>LS6 GPU workflows should begin with explicit verification</li>
+<li><code>nvidia-smi</code> is a fast, practical GPU check</li>
+<li><code>qlimits</code> is the right place to verify current queue configuration</li>
+<li>the right pattern is: validate first, then move stable work into batch scripts</li>
 </ul>
 
 </div>
@@ -1241,8 +955,8 @@ clean:
           </div>
         </div>
       </div>
-<a href="gpu-computing-on-ls6.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="parallel-computing-with-mpi-and-openmp-on-ls6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="interactive-computing-on-ls6.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="modules-compilers-and-your-first-c-program.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

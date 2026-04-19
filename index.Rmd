@@ -23,6 +23,8 @@ Across the book you will move from:
 - first login and basic HPC ideas
 - to Linux fundamentals
 - to SLURM job scheduling
+- to interactive compute-node work
+- to GPU computing on LS6
 - to compiling software
 - to parallel computing
 - to containers and reproducible workflows
@@ -38,6 +40,8 @@ By the end of the book, you should be able to:
 - use modules to access software and compilers
 - write, submit, monitor, and debug SLURM jobs
 - compile and run C and C++ programs on an HPC system
+- explain when to use `idev` for interactive compute-node work
+- verify GPU access on LS6 with `hostname`, `qlimits`, and `nvidia-smi`
 - distinguish between serial, threaded, and distributed execution
 - explain the roles of MPI, OpenMP, and containers in HPC workflows
 - document an HPC workflow clearly enough that another user can reproduce it

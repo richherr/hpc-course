@@ -11,8 +11,10 @@ rmd_files:
   - 01-intro.Rmd
   - 02-linux.Rmd
   - 03-slurm.Rmd
-  - 04-compiling.Rmd
-  - 05-parallel.Rmd
-  - 06-containers.Rmd
-  - 07-capstone.Rmd
-  - 08-appendix.Rmd
+  - 04-interactive.Rmd
+  - 05-gpu.Rmd
+  - 06-compiling.Rmd
+  - 07-parallel.Rmd
+  - 08-containers.Rmd
+  - 09-capstone.Rmd
+  - 10-appendix.Rmd

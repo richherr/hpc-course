@@ -1,0 +1,449 @@
+# Capstone Project: Building an End-to-End HPC Workflow
+
+## Overview
+
+The capstone project is where the course stops being a list of isolated skills and becomes a coherent workflow.
+
+Earlier chapters asked you to learn pieces:
+
+- navigate LS6 through the shell
+- work deliberately in the filesystem
+- manage environment modules
+- write and submit SLURM jobs
+- inspect output and debug failures
+- compile software
+- run parallel programs
+- use containers for reproducible execution
+
+The capstone asks you to assemble those pieces into one documented project that another person could understand and repeat.
+
+This chapter explains:
+
+- what a good capstone project looks like
+- how large or small it should be
+- how to structure the project directory
+- what deliverables should be included
+- how to demonstrate reproducibility and resource awareness
+- how to write a useful debugging reflection
+
+## The philosophy of the capstone
+
+A beginner sometimes thinks the goal of HPC is simply to “make code run.”
+
+That is not enough.
+
+A strong HPC workflow should also be:
+
+- understandable
+- repeatable
+- resource-aware
+- debuggable
+- explainable to another user
+
+This is why the capstone is not only about output. It is about workflow maturity.
+
+You are showing that you can move from:
+
+> “I got something to work somehow”
+
+to:
+
+> “I understand the environment, the build process, the scheduler request, the output, and the choices I made.”
+
+## What counts as a successful capstone
+
+A successful capstone does **not** need to be huge.
+
+A modest project can be excellent if it is:
+
+- organized clearly
+- run correctly through SLURM
+- documented honestly
+- accompanied by output and evidence
+- explicit about what was learned
+
+A small project with strong workflow discipline is often much better than a giant project held together by copy-paste and guesswork.
+
+## What the capstone should demonstrate
+
+At minimum, a capstone should show that you can:
+
+- organize a project directory on LS6
+- prepare code or scripts intentionally
+- load the needed environment
+- submit at least one real job
+- capture output and inspect it
+- explain the resources requested
+- diagnose or reflect on at least one issue encountered
+- write enough documentation that another person could follow the workflow
+
+That last point matters. In research computing, documentation is part of the work.
+
+## Four capstone styles
+
+The course supports several project styles. Choose one that fits the skills you want to emphasize.
+
+## Option 1: compile and run a C or C++ program
+
+This is a good fit if you want to emphasize:
+
+- compiler modules
+- source files and executables
+- Makefiles or build commands
+- job submission of compiled code
+
+### Minimum ingredients
+- source code
+- compile command or Makefile
+- SLURM job script
+- output file
+- README describing the workflow
+
+### Strong additions
+- warnings enabled in the build
+- small input/output example
+- note about why the resource request is appropriate
+
+## Option 2: parallel program
+
+This is a good fit if you want to emphasize:
+
+- MPI or OpenMP
+- tasks versus threads
+- matching resource requests to program structure
+- basic scaling or comparison runs
+
+### Minimum ingredients
+- parallel source code
+- compile step
+- SLURM job script
+- output from at least one successful run
+- reflection on the parallel model used
+
+### Strong additions
+- compare 1 versus 2 versus 4 tasks or threads
+- explain whether the result was convincing
+- discuss overhead or scaling limitations
+
+## Option 3: containerized workflow
+
+This is a good fit if you want to emphasize:
+
+- reproducibility
+- environment portability
+- Apptainer execution
+- explicit bind-path thinking
+
+### Minimum ingredients
+- container image or source description
+- script or workflow executed inside the container
+- SLURM job script
+- explanation of bind paths
+- output from a successful run
+
+### Strong additions
+- comparison to a module-only workflow
+- note about why the container was useful
+- clear documentation of image source and assumptions
+
+## Option 4: hybrid workflow
+
+This option combines course ideas.
+
+Examples:
+- compiled MPI program run through SLURM
+- compiled program executed in a container
+- serial and parallel versions of the same program
+- workflow with build, execution, and post-run inspection documented end to end
+
+This option is useful if it genuinely fits your project, but it should not become complicated just for show.
+
+## Project scale: how big is “big enough”?
+
+A common worry is that the project must be impressive in scope.
+
+That is not the right goal.
+
+A capstone is big enough when it:
+
+- demonstrates real HPC workflow
+- includes documented evidence
+- shows conscious resource use
+- contains enough moving parts to reveal understanding
+
+A one-file serial program with a careful SLURM script and excellent documentation can be a better capstone than an overambitious project that no one can reproduce.
+
+## A recommended directory structure
+
+A clean project structure helps the reader understand the workflow.
+
+Example:
+
+```text
+project/
+├── src/
+├── scripts/
+├── jobs/
+├── output/
+├── env/
+└── README.md
+```
+
+Suggested meanings:
+
+- `src/` for source code
+- `scripts/` for helper scripts
+- `jobs/` for SLURM submission files
+- `output/` for job output and result files
+- `env/` for notes about modules, build steps, or container images
+- `README.md` for project explanation
+
+The exact names can vary, but the project should communicate structure clearly.
+
+## What belongs in the README
+
+The README is one of the most important deliverables.
+
+At minimum, it should answer:
+
+- What does this project do?
+- What files matter most?
+- What software environment is required?
+- How do you build it?
+- How do you run it?
+- What output should the user expect?
+- What did you learn or debug along the way?
+
+A README turns your project from a private memory into a reproducible artifact.
+
+## Reproducibility: the real standard
+
+A project is reproducible when another person could follow the documented steps and obtain the same workflow behavior.
+
+That means avoiding hidden assumptions such as:
+
+- “just run this from the right place”
+- “use whatever module works”
+- “it should already be installed”
+- “I forgot exactly how I built it”
+
+Reproducibility is improved when you write down:
+
+- module loads
+- build commands
+- job submission commands
+- expected outputs
+- known limitations
+
+## Resource awareness is part of the grade
+
+The capstone should show that you understand the scheduler request, not just the program.
+
+You should be able to explain:
+
+- why you requested a certain number of nodes or tasks
+- why the wall time is reasonable
+- whether the workload is serial, threaded, or process-based
+- whether the request fits the program
+
+A capstone that asks for four tasks and runs a plain serial job should be treated as incomplete understanding, even if the job technically runs.
+
+## Debugging reflection is required
+
+Almost every real computational workflow includes some kind of failure, revision, or adjustment.
+
+That is normal.
+
+Your project should include at least one concise debugging reflection, such as:
+
+- a missing module load caused command failure
+- a compile error came from a typo
+- the job was submitted from the wrong directory
+- an MPI task count did not match the expected process count
+- a container could not see the intended files until a bind path was added
+
+The goal is not to pretend nothing went wrong. The goal is to show that you can diagnose and respond intelligently.
+
+## Example capstone template 1: compiled serial program
+
+### Files
+```text
+src/hello.c
+jobs/run_hello.slurm
+README.md
+output/slurm-123456.out
+```
+
+### Workflow
+1. load `gcc`
+2. compile `hello.c`
+3. run `./hello` as a short test
+4. submit `jobs/run_hello.slurm`
+5. inspect the output file
+6. document the steps in `README.md`
+
+### What this demonstrates
+- compilation
+- executable management
+- SLURM submission
+- output inspection
+- reproducibility basics
+
+## Example capstone template 2: OpenMP program
+
+### Files
+```text
+src/hello_omp.c
+jobs/run_omp.slurm
+README.md
+output/omp_123456.out
+```
+
+### Workflow
+1. compile with `gcc -fopenmp`
+2. request one task and multiple cores
+3. set `OMP_NUM_THREADS`
+4. run through SLURM
+5. inspect output showing thread IDs
+6. explain why `-n 1` and `-c 4` make sense
+
+### What this demonstrates
+- thread-based parallelism
+- scheduler-resource alignment
+- explanation of model choice
+
+## Example capstone template 3: containerized Python script
+
+### Files
+```text
+scripts/script.py
+jobs/run_container.slurm
+env/container_notes.txt
+README.md
+output/container_py_123456.out
+```
+
+### Workflow
+1. identify or pull an image
+2. load Apptainer
+3. bind the working directory
+4. run `script.py` through the container in a SLURM job
+5. document the image source and bind assumptions
+
+### What this demonstrates
+- reproducible environment thinking
+- scheduler plus container interaction
+- path-awareness
+
+## How Your Work Will Be Evaluated
+
+### Workflow correctness (30%)
+- does the build/run path work?
+- does the SLURM job complete?
+- is output present?
+
+### Documentation quality (25%)
+- is the README clear?
+- are commands and files explained?
+- can a reader follow the workflow?
+
+### Reproducibility (20%)
+- are environment assumptions explicit?
+- are steps repeatable?
+- are hidden dependencies minimized?
+
+### Resource awareness (15%)
+- do the scheduler requests make sense?
+- do you show that you understand tasks, threads, and wall time?
+
+### Debugging reflection (10%)
+- is there an honest description of a problem and how it was fixed?
+
+This evaluation rewards the habits the course is trying to build.
+
+## Common capstone mistakes
+
+### Mistake 1: no README
+Without documentation, the project becomes difficult to interpret or reproduce.
+
+### Mistake 2: output exists, but no explanation
+A result file without workflow context is incomplete.
+
+### Mistake 3: wrong resource request
+The project may run, but the request reveals misunderstanding.
+
+### Mistake 4: hidden assumptions
+If the project depends on unstated directory locations, modules, or files, reproducibility suffers.
+
+### Mistake 5: debugging omitted
+Real workflows involve corrections. Omitting them often hides the most educational part of the work.
+
+## How to write the debugging reflection
+
+A good debugging reflection is short and specific.
+
+Useful structure:
+
+1. **Problem**  
+   What went wrong?
+
+2. **Evidence**  
+   What output, error file, or observation revealed it?
+
+3. **Diagnosis**  
+   What caused the issue?
+
+4. **Fix**  
+   What did you change?
+
+5. **Lesson learned**  
+   What will you do differently next time?
+
+Example:
+
+> The initial job failed because the script assumed the executable was in the current directory, but I had submitted the job from a different location. I noticed the error in the output file when the executable could not be found. I fixed the issue by submitting from the project root and using a clearer path. The lesson was that working directory assumptions should be made explicit.
+
+## Final submission checklist
+
+Before turning in a capstone, ask:
+
+- does the project directory make sense?
+- are the important files clearly named?
+- can I explain the resource request?
+- do the output files support my claims?
+- have I documented build and run steps?
+- have I included at least one debugging reflection?
+- could another user reproduce this?
+
+## Lab: draft your capstone plan
+
+Before building the final project, write a one-page project plan answering:
+
+- which capstone option will I choose?
+- what files will I need?
+- what environment will I load?
+- how will I run the job?
+- what output will I collect?
+- what resource request makes sense?
+- what might go wrong?
+
+This planning exercise often prevents weak project structure later.
+
+## Stretch goal
+
+Add a second run or variation that compares:
+
+- serial versus parallel
+- containerized versus module-based
+- one task versus several tasks
+- one optimization level versus another
+
+Then discuss what changed and why.
+
+## Key takeaways
+
+- the capstone is a workflow demonstration, not just an output demonstration
+- smaller, clearer, more reproducible projects are often better than overambitious ones
+- README quality is a major part of project quality
+- resource awareness and debugging reflection are essential
+- a successful capstone shows that you understand the full path from environment setup to output interpretation
