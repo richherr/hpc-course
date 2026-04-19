@@ -1,17 +1,14 @@
 high-performance-computing-on-lonestar6
-welcome
-what-this-book-is
-who-this-book-is-for
-learning-goals
-course-philosophy
-how-chapters-are-organized
-recommended-use-in-a-course
-what-you-need-before-starting
-what-success-looks-like
-a-note-on-reproducibility
+overview
+what-you-should-learn-from-this-book
+what-this-book-emphasizes
+how-to-use-the-chapters
+how-to-study-from-this-book
+working-assumptions
+a-practical-rule-for-the-whole-book
 looking-ahead
 introduction-to-high-performance-computing-on-ls6
-overview
+overview-1
 why-people-use-hpc
 the-job-is-too-slow-on-one-machine
 the-job-needs-more-memory
@@ -41,7 +38,7 @@ chapter-lab
 reflection-questions
 looking-ahead-1
 linux-fundamentals-and-environment-awareness
-overview-1
+overview-2
 mental-model-an-hpc-system-is-a-shared-environment
 inspecting-the-filesystem
 pwd
@@ -77,7 +74,7 @@ part-5-file-discovery
 stretch-goal
 looking-ahead-2
 slurm-job-scheduling-on-ls6
-overview-2
+overview-3
 mental-model-slurm-is-a-resource-manager-not-a-launch-button
 why-clusters-use-schedulers
 the-basic-batch-workflow
@@ -134,7 +131,7 @@ lab-4-diagnose-a-broken-job
 stretch-goal-1
 key-takeaways
 modules-compilers-and-your-first-c-program
-overview-3
+overview-4
 mental-model-source-code-becomes-an-executable
 why-compilation-matters-on-clusters
 modules-come-before-compilers
@@ -179,7 +176,7 @@ lab-4-automate-with-make
 stretch-goal-2
 key-takeaways-1
 parallel-computing-with-mpi-and-openmp-on-ls6
-overview-4
+overview-5
 why-parallel-computing-matters
 mental-model-serial-versus-parallel
 processes-threads-tasks-and-cores
@@ -237,7 +234,7 @@ lab-4-measure-a-tiny-scaling-experiment
 stretch-goal-3
 key-takeaways-2
 containers-and-reproducible-hpc-workflows
-overview-5
+overview-6
 mental-model-what-a-container-actually-is
 why-containers-matter-in-hpc
 containers-do-not-eliminate-the-host-system
@@ -281,7 +278,7 @@ lab-4-compare-modules-and-containers
 stretch-goal-4
 key-takeaways-3
 capstone-project-building-an-end-to-end-hpc-workflow
-overview-6
+overview-7
 the-philosophy-of-the-capstone
 what-counts-as-a-successful-capstone
 what-the-capstone-should-demonstrate
@@ -314,7 +311,7 @@ example-capstone-template-3-containerized-python-script
 files-2
 workflow-2
 what-this-demonstrates-2
-a-grading-rubric-you-can-actually-use
+how-your-work-will-be-evaluated
 workflow-correctness-30
 documentation-quality-25
 reproducibility-20
@@ -332,7 +329,7 @@ lab-draft-your-capstone-plan
 stretch-goal-5
 key-takeaways-4
 appendix-quick-reference-and-troubleshooting-for-ls6-workflows
-overview-7
+overview-8
 core-workflow-picture
 a-safe-beginner-shell-pattern
 ssh
