@@ -235,17 +235,25 @@ In HPC, permissions matter because your jobs do not magically ignore filesystem 
 chmod +x script.sh
 ```
 
+Use this when a file should behave like a runnable script rather than ordinary text. On Linux, the system does not assume that every text file containing commands is meant to be executed. The execute bit makes that intention explicit.
+
+This is one of the most common beginner fixes on HPC systems, especially when a job script or helper script exists, looks correct, but refuses to run.
+
 ### Remove write permission
 
 ```bash
 chmod -w file.txt
 ```
 
+This is useful when you want to protect a file from accidental edits. For example, once an input file or reference script is finalized, removing write permission can reduce the chance that you accidentally change it during a later session.
+
 ### Use numeric mode
 
 ```bash
 chmod 755 script.sh
 ```
+
+Numeric permission notation is compact and common in documentation, scripts, and examples. You do not need to love it immediately, but you do need to recognize what it is doing when you see it in real workflows.
 
 That means:
 
@@ -298,17 +306,23 @@ So when something feels “missing,” do not think only about the file. Think a
 cd my_directory
 ```
 
+This moves your shell into another directory. Because so many commands act on the current working directory, `cd` quietly changes the meaning of everything you do next.
+
 ### Go up one level
 
 ```bash
 cd ..
 ```
 
+This moves you to the parent directory. It is especially useful when you realize you have gone too deep into a project tree and want to step back up without typing a full path.
+
 ### Go to your home directory
 
 ```bash
 cd ~
 ```
+
+This is a reliable way to reset yourself to a familiar location. When you feel disoriented, going home and checking `pwd` is often better than guessing where you are.
 
 ### Return to the previous directory
 
@@ -326,11 +340,15 @@ This last one is especially useful when you are switching between two working lo
 mkdir project1
 ```
 
+This creates a new directory with the name you provide. On HPC systems, deliberate directory structure matters because it helps separate scripts, data, logs, and outputs before your workflow grows messy.
+
 ### Make nested directories
 
 ```bash
 mkdir -p project1/data project1/output project1/scripts
 ```
+
+The `-p` option is helpful because it creates intermediate directories when needed and does not complain if some of them already exist. This makes it a good pattern for setting up a project structure quickly and repeatably.
 
 This is a good early habit because project organization matters. Strong directory structure makes debugging easier later.
 
@@ -354,11 +372,15 @@ Even small projects benefit from this kind of organization.
 cp file1.txt file2.txt
 ```
 
+This makes a duplicate of a file. It is useful when you want to preserve an original version before experimenting, editing, or moving the file elsewhere.
+
 ### Copy a file into a directory
 
 ```bash
 cp file1.txt project1/data/
 ```
+
+This keeps the original file and places a copy into the target directory. That is a good pattern when you are staging input files for a project without destroying the original location.
 
 ### Move or rename a file
 
@@ -366,17 +388,23 @@ cp file1.txt project1/data/
 mv oldname.txt newname.txt
 ```
 
+`mv` is used both for renaming and for moving files. That dual role is useful, but it also means you should pay attention to the destination because the same command can either tidy your naming or relocate the file entirely.
+
 ### Remove a file
 
 ```bash
 rm file1.txt
 ```
 
+This permanently removes the file in the usual command-line sense. Because there is often no easy undo, it is worth checking the filename carefully before pressing Enter.
+
 ### Remove a directory and its contents
 
 ```bash
 rm -r old_directory
 ```
+
+The `-r` option means recursive removal. That is powerful and potentially dangerous because it removes the directory and everything inside it, not just the top-level folder name.
 
 Be careful with `rm`. On many Linux systems, deleting a file this way does not send it to a recycle bin.
 
@@ -390,11 +418,15 @@ That means inspection matters before deletion.
 cat file.txt
 ```
 
+Use `cat` when the file is short enough to read in one burst. It is convenient for quick checks, but not ideal for long output because it dumps everything to the screen immediately.
+
 ### Read interactively
 
 ```bash
 less file.txt
 ```
+
+Use `less` when you want to scroll, search, and inspect a file without flooding the terminal. It is especially useful for job output, log files, and other text that may be longer than one screen.
 
 ### Inspect the beginning
 
@@ -402,11 +434,15 @@ less file.txt
 head file.txt
 ```
 
+`head` is useful when you want a quick look at the first lines of a file. That often helps you confirm whether the file is the one you expected, whether it has a header, or whether the beginning of a log already shows a problem.
+
 ### Inspect the end
 
 ```bash
 tail file.txt
 ```
+
+`tail` is useful because many programs report final status messages, recent progress, or fatal errors near the end of the file. It is often the fastest way to inspect the newest information in a log.
 
 These commands become extremely useful once you start reading job output files.
 
@@ -475,6 +511,8 @@ echo $HOME
 echo $PATH
 echo $SHELL
 ```
+
+These variables are not just trivia. They tell you where your home directory is, how commands are discovered, and what shell is interpreting your session. When something behaves differently from what you expected, environment variables are often part of the explanation.
 
 This information helps define:
 
@@ -572,11 +610,15 @@ Modules let you switch environments deliberately.
 module avail
 ```
 
+This helps you answer the question, “What software environments could I activate right now?” It is often the first command to run when you know what tool you need but do not yet know its exact module name.
+
 ### Load a module
 
 ```bash
 module load gcc
 ```
+
+This changes your current environment so that the requested software stack becomes active. Loading a module is not just “opening a program.” It often updates `PATH`, libraries, and related environment settings at the same time.
 
 ### Show loaded modules
 
@@ -584,11 +626,15 @@ module load gcc
 module list
 ```
 
+This tells you what software environment is currently active. It is one of the best quick checks to run when a command behaves differently than you expected or when you need to document the environment you used.
+
 ### Unload a module
 
 ```bash
 module unload gcc
 ```
+
+This removes the module from the current environment. It is useful when you want to switch toolchains, reduce environment clutter, or verify that a command really depends on that module being loaded.
 
 ## Why modules matter so much
 
@@ -620,11 +666,15 @@ This pattern is excellent because it confirms:
 df -h
 ```
 
+Use this when you want a broad view of available space on mounted filesystems. If a job starts failing while writing output, this command helps you check whether the problem might be lack of free space rather than a code bug.
+
 ### Check directory sizes
 
 ```bash
 du -sh *
 ```
+
+Use this when you want to know which files or directories are consuming space in your current location. This is especially useful when a project directory becomes unexpectedly large and you need to find the main offenders quickly.
 
 These commands answer different questions.
 
@@ -654,11 +704,15 @@ A good habit is to inspect storage before it becomes an emergency.
 ps -u $USER
 ```
 
+This shows the processes currently running under your username. It is useful when you are trying to confirm whether something is still running, whether you accidentally launched a task on the login node, or whether a process you expected to finish is still active.
+
 ### Kill a process
 
 ```bash
 kill <pid>
 ```
+
+Use this when you need to stop a process by its process ID. This is most useful for accidental or lightweight shell-side processes; for scheduled jobs, you will usually use SLURM commands such as `scancel` instead.
 
 This is especially useful if you accidentally start something on the login node that should not keep running there.
 
@@ -690,11 +744,15 @@ When something goes wrong, avoid random changes. Use a sequence.
 pwd
 ```
 
+This is the first grounding question. Before you do anything more complicated, make sure you know your current directory.
+
 ### 2. What files are here?
 
 ```bash
 ls -la
 ```
+
+This helps you verify whether the files you think are present are actually present, and whether any hidden files might matter.
 
 ### 3. Do I have the right permissions?
 
@@ -702,11 +760,15 @@ ls -la
 ls -l script.sh
 ```
 
+If a script will not run, a file will not open, or a directory seems inaccessible, inspect permissions before changing anything else.
+
 ### 4. Is the command available?
 
 ```bash
 which gcc
 ```
+
+This checks whether the command can actually be found in the current environment. It is much better than assuming a program is installed just because you expect it to be.
 
 ### 5. Is the right environment loaded?
 
@@ -714,12 +776,16 @@ which gcc
 module list
 ```
 
+This checks whether the software environment you intended to use is actually active. Many “mystery” failures are really just environment mismatches.
+
 ### 6. Am I out of space?
 
 ```bash
 df -h
 du -sh .
 ```
+
+These two checks help you decide whether the problem is global free space or local directory growth. Storage issues can look like program failures if you are not watching for them.
 
 That checklist is much more useful than reacting emotionally to an error message.
 

@@ -862,14 +862,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="make-a-script-executable" class="section level3 hasAnchor" number="3.11.1">
 <h3><span class="header-section-number">3.11.1</span> Make a script executable<a href="linux-fundamentals-for-hpc.html#make-a-script-executable" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="linux-fundamentals-for-hpc.html#cb18-1" tabindex="-1"></a><span class="fu">chmod</span> +x script.sh</span></code></pre></div>
+<p>Use this when a file should behave like a runnable script rather than ordinary text. On Linux, the system does not assume that every text file containing commands is meant to be executed. The execute bit makes that intention explicit.</p>
+<p>This is one of the most common beginner fixes on HPC systems, especially when a job script or helper script exists, looks correct, but refuses to run.</p>
 </div>
 <div id="remove-write-permission" class="section level3 hasAnchor" number="3.11.2">
 <h3><span class="header-section-number">3.11.2</span> Remove write permission<a href="linux-fundamentals-for-hpc.html#remove-write-permission" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="linux-fundamentals-for-hpc.html#cb19-1" tabindex="-1"></a><span class="fu">chmod</span> <span class="at">-w</span> file.txt</span></code></pre></div>
+<p>This is useful when you want to protect a file from accidental edits. For example, once an input file or reference script is finalized, removing write permission can reduce the chance that you accidentally change it during a later session.</p>
 </div>
 <div id="use-numeric-mode" class="section level3 hasAnchor" number="3.11.3">
 <h3><span class="header-section-number">3.11.3</span> Use numeric mode<a href="linux-fundamentals-for-hpc.html#use-numeric-mode" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="linux-fundamentals-for-hpc.html#cb20-1" tabindex="-1"></a><span class="fu">chmod</span> 755 script.sh</span></code></pre></div>
+<p>Numeric permission notation is compact and common in documentation, scripts, and examples. You do not need to love it immediately, but you do need to recognize what it is doing when you see it in real workflows.</p>
 <p>That means:</p>
 <ul>
 <li>user: rwx</li>
@@ -906,14 +910,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="change-directory" class="section level3 hasAnchor" number="3.14.1">
 <h3><span class="header-section-number">3.14.1</span> Change directory<a href="linux-fundamentals-for-hpc.html#change-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="linux-fundamentals-for-hpc.html#cb24-1" tabindex="-1"></a><span class="bu">cd</span> my_directory</span></code></pre></div>
+<p>This moves your shell into another directory. Because so many commands act on the current working directory, <code>cd</code> quietly changes the meaning of everything you do next.</p>
 </div>
 <div id="go-up-one-level" class="section level3 hasAnchor" number="3.14.2">
 <h3><span class="header-section-number">3.14.2</span> Go up one level<a href="linux-fundamentals-for-hpc.html#go-up-one-level" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="linux-fundamentals-for-hpc.html#cb25-1" tabindex="-1"></a><span class="bu">cd</span> ..</span></code></pre></div>
+<p>This moves you to the parent directory. It is especially useful when you realize you have gone too deep into a project tree and want to step back up without typing a full path.</p>
 </div>
 <div id="go-to-your-home-directory" class="section level3 hasAnchor" number="3.14.3">
 <h3><span class="header-section-number">3.14.3</span> Go to your home directory<a href="linux-fundamentals-for-hpc.html#go-to-your-home-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="linux-fundamentals-for-hpc.html#cb26-1" tabindex="-1"></a><span class="bu">cd</span> ~</span></code></pre></div>
+<p>This is a reliable way to reset yourself to a familiar location. When you feel disoriented, going home and checking <code>pwd</code> is often better than guessing where you are.</p>
 </div>
 <div id="return-to-the-previous-directory" class="section level3 hasAnchor" number="3.14.4">
 <h3><span class="header-section-number">3.14.4</span> Return to the previous directory<a href="linux-fundamentals-for-hpc.html#return-to-the-previous-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
@@ -926,10 +933,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="make-a-directory" class="section level3 hasAnchor" number="3.15.1">
 <h3><span class="header-section-number">3.15.1</span> Make a directory<a href="linux-fundamentals-for-hpc.html#make-a-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="linux-fundamentals-for-hpc.html#cb28-1" tabindex="-1"></a><span class="fu">mkdir</span> project1</span></code></pre></div>
+<p>This creates a new directory with the name you provide. On HPC systems, deliberate directory structure matters because it helps separate scripts, data, logs, and outputs before your workflow grows messy.</p>
 </div>
 <div id="make-nested-directories" class="section level3 hasAnchor" number="3.15.2">
 <h3><span class="header-section-number">3.15.2</span> Make nested directories<a href="linux-fundamentals-for-hpc.html#make-nested-directories" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="linux-fundamentals-for-hpc.html#cb29-1" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> project1/data project1/output project1/scripts</span></code></pre></div>
+<p>The <code>-p</code> option is helpful because it creates intermediate directories when needed and does not complain if some of them already exist. This makes it a good pattern for setting up a project structure quickly and repeatably.</p>
 <p>This is a good early habit because project organization matters. Strong directory structure makes debugging easier later.</p>
 <p>A clean small project structure may look like:</p>
 <pre class="text"><code>project1/
@@ -945,22 +954,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="copy-a-file" class="section level3 hasAnchor" number="3.16.1">
 <h3><span class="header-section-number">3.16.1</span> Copy a file<a href="linux-fundamentals-for-hpc.html#copy-a-file" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a href="linux-fundamentals-for-hpc.html#cb31-1" tabindex="-1"></a><span class="fu">cp</span> file1.txt file2.txt</span></code></pre></div>
+<p>This makes a duplicate of a file. It is useful when you want to preserve an original version before experimenting, editing, or moving the file elsewhere.</p>
 </div>
 <div id="copy-a-file-into-a-directory" class="section level3 hasAnchor" number="3.16.2">
 <h3><span class="header-section-number">3.16.2</span> Copy a file into a directory<a href="linux-fundamentals-for-hpc.html#copy-a-file-into-a-directory" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="linux-fundamentals-for-hpc.html#cb32-1" tabindex="-1"></a><span class="fu">cp</span> file1.txt project1/data/</span></code></pre></div>
+<p>This keeps the original file and places a copy into the target directory. That is a good pattern when you are staging input files for a project without destroying the original location.</p>
 </div>
 <div id="move-or-rename-a-file" class="section level3 hasAnchor" number="3.16.3">
 <h3><span class="header-section-number">3.16.3</span> Move or rename a file<a href="linux-fundamentals-for-hpc.html#move-or-rename-a-file" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb33"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb33-1"><a href="linux-fundamentals-for-hpc.html#cb33-1" tabindex="-1"></a><span class="fu">mv</span> oldname.txt newname.txt</span></code></pre></div>
+<p><code>mv</code> is used both for renaming and for moving files. That dual role is useful, but it also means you should pay attention to the destination because the same command can either tidy your naming or relocate the file entirely.</p>
 </div>
 <div id="remove-a-file" class="section level3 hasAnchor" number="3.16.4">
 <h3><span class="header-section-number">3.16.4</span> Remove a file<a href="linux-fundamentals-for-hpc.html#remove-a-file" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb34"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb34-1"><a href="linux-fundamentals-for-hpc.html#cb34-1" tabindex="-1"></a><span class="fu">rm</span> file1.txt</span></code></pre></div>
+<p>This permanently removes the file in the usual command-line sense. Because there is often no easy undo, it is worth checking the filename carefully before pressing Enter.</p>
 </div>
 <div id="remove-a-directory-and-its-contents" class="section level3 hasAnchor" number="3.16.5">
 <h3><span class="header-section-number">3.16.5</span> Remove a directory and its contents<a href="linux-fundamentals-for-hpc.html#remove-a-directory-and-its-contents" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a href="linux-fundamentals-for-hpc.html#cb35-1" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> old_directory</span></code></pre></div>
+<p>The <code>-r</code> option means recursive removal. That is powerful and potentially dangerous because it removes the directory and everything inside it, not just the top-level folder name.</p>
 <p>Be careful with <code>rm</code>. On many Linux systems, deleting a file this way does not send it to a recycle bin.</p>
 <p>That means inspection matters before deletion.</p>
 </div>
@@ -970,18 +984,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="print-a-short-file" class="section level3 hasAnchor" number="3.17.1">
 <h3><span class="header-section-number">3.17.1</span> Print a short file<a href="linux-fundamentals-for-hpc.html#print-a-short-file" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb36"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb36-1"><a href="linux-fundamentals-for-hpc.html#cb36-1" tabindex="-1"></a><span class="fu">cat</span> file.txt</span></code></pre></div>
+<p>Use <code>cat</code> when the file is short enough to read in one burst. It is convenient for quick checks, but not ideal for long output because it dumps everything to the screen immediately.</p>
 </div>
 <div id="read-interactively" class="section level3 hasAnchor" number="3.17.2">
 <h3><span class="header-section-number">3.17.2</span> Read interactively<a href="linux-fundamentals-for-hpc.html#read-interactively" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb37"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb37-1"><a href="linux-fundamentals-for-hpc.html#cb37-1" tabindex="-1"></a><span class="fu">less</span> file.txt</span></code></pre></div>
+<p>Use <code>less</code> when you want to scroll, search, and inspect a file without flooding the terminal. It is especially useful for job output, log files, and other text that may be longer than one screen.</p>
 </div>
 <div id="inspect-the-beginning" class="section level3 hasAnchor" number="3.17.3">
 <h3><span class="header-section-number">3.17.3</span> Inspect the beginning<a href="linux-fundamentals-for-hpc.html#inspect-the-beginning" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb38"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="linux-fundamentals-for-hpc.html#cb38-1" tabindex="-1"></a><span class="fu">head</span> file.txt</span></code></pre></div>
+<p><code>head</code> is useful when you want a quick look at the first lines of a file. That often helps you confirm whether the file is the one you expected, whether it has a header, or whether the beginning of a log already shows a problem.</p>
 </div>
 <div id="inspect-the-end" class="section level3 hasAnchor" number="3.17.4">
 <h3><span class="header-section-number">3.17.4</span> Inspect the end<a href="linux-fundamentals-for-hpc.html#inspect-the-end" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb39"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="linux-fundamentals-for-hpc.html#cb39-1" tabindex="-1"></a><span class="fu">tail</span> file.txt</span></code></pre></div>
+<p><code>tail</code> is useful because many programs report final status messages, recent progress, or fatal errors near the end of the file. It is often the fastest way to inspect the newest information in a log.</p>
 <p>These commands become extremely useful once you start reading job output files.</p>
 <p>A strong habit is:</p>
 <ul>
@@ -1026,6 +1044,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb44"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb44-1"><a href="linux-fundamentals-for-hpc.html#cb44-1" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$HOME</span></span>
 <span id="cb44-2"><a href="linux-fundamentals-for-hpc.html#cb44-2" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$PATH</span></span>
 <span id="cb44-3"><a href="linux-fundamentals-for-hpc.html#cb44-3" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$SHELL</span></span></code></pre></div>
+<p>These variables are not just trivia. They tell you where your home directory is, how commands are discovered, and what shell is interpreting your session. When something behaves differently from what you expected, environment variables are often part of the explanation.</p>
 <p>This information helps define:</p>
 <ul>
 <li>where executables are found</li>
@@ -1095,18 +1114,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="show-available-modules" class="section level3 hasAnchor" number="3.27.1">
 <h3><span class="header-section-number">3.27.1</span> Show available modules<a href="linux-fundamentals-for-hpc.html#show-available-modules" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb50"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb50-1"><a href="linux-fundamentals-for-hpc.html#cb50-1" tabindex="-1"></a><span class="ex">module</span> avail</span></code></pre></div>
+<p>This helps you answer the question, “What software environments could I activate right now?” It is often the first command to run when you know what tool you need but do not yet know its exact module name.</p>
 </div>
 <div id="load-a-module" class="section level3 hasAnchor" number="3.27.2">
 <h3><span class="header-section-number">3.27.2</span> Load a module<a href="linux-fundamentals-for-hpc.html#load-a-module" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb51"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a href="linux-fundamentals-for-hpc.html#cb51-1" tabindex="-1"></a><span class="ex">module</span> load gcc</span></code></pre></div>
+<p>This changes your current environment so that the requested software stack becomes active. Loading a module is not just “opening a program.” It often updates <code>PATH</code>, libraries, and related environment settings at the same time.</p>
 </div>
 <div id="show-loaded-modules" class="section level3 hasAnchor" number="3.27.3">
 <h3><span class="header-section-number">3.27.3</span> Show loaded modules<a href="linux-fundamentals-for-hpc.html#show-loaded-modules" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb52"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb52-1"><a href="linux-fundamentals-for-hpc.html#cb52-1" tabindex="-1"></a><span class="ex">module</span> list</span></code></pre></div>
+<p>This tells you what software environment is currently active. It is one of the best quick checks to run when a command behaves differently than you expected or when you need to document the environment you used.</p>
 </div>
 <div id="unload-a-module" class="section level3 hasAnchor" number="3.27.4">
 <h3><span class="header-section-number">3.27.4</span> Unload a module<a href="linux-fundamentals-for-hpc.html#unload-a-module" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="linux-fundamentals-for-hpc.html#cb53-1" tabindex="-1"></a><span class="ex">module</span> unload gcc</span></code></pre></div>
+<p>This removes the module from the current environment. It is useful when you want to switch toolchains, reduce environment clutter, or verify that a command really depends on that module being loaded.</p>
 </div>
 </div>
 <div id="why-modules-matter-so-much" class="section level2 hasAnchor" number="3.28">
@@ -1132,10 +1155,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="check-filesystem-space" class="section level3 hasAnchor" number="3.30.1">
 <h3><span class="header-section-number">3.30.1</span> Check filesystem space<a href="linux-fundamentals-for-hpc.html#check-filesystem-space" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb55"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb55-1"><a href="linux-fundamentals-for-hpc.html#cb55-1" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span></span></code></pre></div>
+<p>Use this when you want a broad view of available space on mounted filesystems. If a job starts failing while writing output, this command helps you check whether the problem might be lack of free space rather than a code bug.</p>
 </div>
 <div id="check-directory-sizes" class="section level3 hasAnchor" number="3.30.2">
 <h3><span class="header-section-number">3.30.2</span> Check directory sizes<a href="linux-fundamentals-for-hpc.html#check-directory-sizes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb56"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb56-1"><a href="linux-fundamentals-for-hpc.html#cb56-1" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> <span class="pp">*</span></span></code></pre></div>
+<p>Use this when you want to know which files or directories are consuming space in your current location. This is especially useful when a project directory becomes unexpectedly large and you need to find the main offenders quickly.</p>
 <p>These commands answer different questions.</p>
 <ul>
 <li><code>df -h</code> shows overall filesystem space</li>
@@ -1161,10 +1186,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="show-your-processes" class="section level3 hasAnchor" number="3.32.1">
 <h3><span class="header-section-number">3.32.1</span> Show your processes<a href="linux-fundamentals-for-hpc.html#show-your-processes" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb57"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb57-1"><a href="linux-fundamentals-for-hpc.html#cb57-1" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-u</span> <span class="va">$USER</span></span></code></pre></div>
+<p>This shows the processes currently running under your username. It is useful when you are trying to confirm whether something is still running, whether you accidentally launched a task on the login node, or whether a process you expected to finish is still active.</p>
 </div>
 <div id="kill-a-process" class="section level3 hasAnchor" number="3.32.2">
 <h3><span class="header-section-number">3.32.2</span> Kill a process<a href="linux-fundamentals-for-hpc.html#kill-a-process" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb58"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb58-1"><a href="linux-fundamentals-for-hpc.html#cb58-1" tabindex="-1"></a><span class="bu">kill</span> <span class="op">&lt;</span>pid<span class="op">&gt;</span></span></code></pre></div>
+<p>Use this when you need to stop a process by its process ID. This is most useful for accidental or lightweight shell-side processes; for scheduled jobs, you will usually use SLURM commands such as <code>scancel</code> instead.</p>
 <p>This is especially useful if you accidentally start something on the login node that should not keep running there.</p>
 <p>Later, SLURM job management becomes more important than plain process management, but this is still good Linux knowledge.</p>
 </div>
@@ -1183,27 +1210,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="where-am-i-1" class="section level3 hasAnchor" number="3.34.1">
 <h3><span class="header-section-number">3.34.1</span> 1. Where am I?<a href="linux-fundamentals-for-hpc.html#where-am-i-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb61"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb61-1"><a href="linux-fundamentals-for-hpc.html#cb61-1" tabindex="-1"></a><span class="bu">pwd</span></span></code></pre></div>
+<p>This is the first grounding question. Before you do anything more complicated, make sure you know your current directory.</p>
 </div>
 <div id="what-files-are-here" class="section level3 hasAnchor" number="3.34.2">
 <h3><span class="header-section-number">3.34.2</span> 2. What files are here?<a href="linux-fundamentals-for-hpc.html#what-files-are-here" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb62"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb62-1"><a href="linux-fundamentals-for-hpc.html#cb62-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-la</span></span></code></pre></div>
+<p>This helps you verify whether the files you think are present are actually present, and whether any hidden files might matter.</p>
 </div>
 <div id="do-i-have-the-right-permissions" class="section level3 hasAnchor" number="3.34.3">
 <h3><span class="header-section-number">3.34.3</span> 3. Do I have the right permissions?<a href="linux-fundamentals-for-hpc.html#do-i-have-the-right-permissions" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb63"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb63-1"><a href="linux-fundamentals-for-hpc.html#cb63-1" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-l</span> script.sh</span></code></pre></div>
+<p>If a script will not run, a file will not open, or a directory seems inaccessible, inspect permissions before changing anything else.</p>
 </div>
 <div id="is-the-command-available" class="section level3 hasAnchor" number="3.34.4">
 <h3><span class="header-section-number">3.34.4</span> 4. Is the command available?<a href="linux-fundamentals-for-hpc.html#is-the-command-available" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb64"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb64-1"><a href="linux-fundamentals-for-hpc.html#cb64-1" tabindex="-1"></a><span class="fu">which</span> gcc</span></code></pre></div>
+<p>This checks whether the command can actually be found in the current environment. It is much better than assuming a program is installed just because you expect it to be.</p>
 </div>
 <div id="is-the-right-environment-loaded" class="section level3 hasAnchor" number="3.34.5">
 <h3><span class="header-section-number">3.34.5</span> 5. Is the right environment loaded?<a href="linux-fundamentals-for-hpc.html#is-the-right-environment-loaded" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb65"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb65-1"><a href="linux-fundamentals-for-hpc.html#cb65-1" tabindex="-1"></a><span class="ex">module</span> list</span></code></pre></div>
+<p>This checks whether the software environment you intended to use is actually active. Many “mystery” failures are really just environment mismatches.</p>
 </div>
 <div id="am-i-out-of-space" class="section level3 hasAnchor" number="3.34.6">
 <h3><span class="header-section-number">3.34.6</span> 6. Am I out of space?<a href="linux-fundamentals-for-hpc.html#am-i-out-of-space" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <div class="sourceCode" id="cb66"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb66-1"><a href="linux-fundamentals-for-hpc.html#cb66-1" tabindex="-1"></a><span class="fu">df</span> <span class="at">-h</span></span>
 <span id="cb66-2"><a href="linux-fundamentals-for-hpc.html#cb66-2" tabindex="-1"></a><span class="fu">du</span> <span class="at">-sh</span> .</span></code></pre></div>
+<p>These two checks help you decide whether the problem is global free space or local directory growth. Storage issues can look like program failures if you are not watching for them.</p>
 <p>That checklist is much more useful than reacting emotionally to an error message.</p>
 </div>
 </div>
